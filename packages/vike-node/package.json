@@ -3,9 +3,9 @@
   "version": "0.0.1",
   "type": "module",
   "exports": {
-    "./server": "./dist/index.js",
+    "./connect": "./dist/connect.js",
     "./fastify": "./dist/fastify.js",
-    "./plugin": "./dist/plugin/index.js"
+    "./config": "./dist/+config.js"
   },
   "scripts": {
     "dev": "tsc --watch",
@@ -35,14 +35,14 @@
   },
   "typesVersions": {
     "*": {
-      "server": [
-        "./dist/index.d.ts"
+      "connect": [
+        "./dist/connect.d.ts"
       ],
       "fastify": [
         "./dist/fastify.d.ts"
       ],
-      "plugin": [
-        "./dist/plugin/index.d.ts"
+      "config": [
+        "./dist/+config.d.ts"
       ]
     }
   },
