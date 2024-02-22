@@ -1,4 +1,4 @@
-import { Config } from 'vike/types'
+import type { Config } from 'vike/types'
 import vikeNode from './plugin/index.js'
 import type { ConfigVikeNode } from './types.js'
 
