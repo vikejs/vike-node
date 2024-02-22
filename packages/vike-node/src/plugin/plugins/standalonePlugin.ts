@@ -7,11 +7,13 @@ import { Plugin, searchForWorkspaceRoot } from 'vite'
 import type { ConfigVikeNodeResolved } from '../../types.js'
 import { assert, assertUsage } from '../../utils/assert.js'
 import { toPosixPath } from '../utils/filesystemPathHandling.js'
+import { getConfigVikeNode } from '../utils/getConfigVikeNode.js'
 import { pLimit } from '../utils/pLimit.js'
 import { unique } from '../utils/unique.js'
 
-function standalonePlugin(resolvedConfig: ConfigVikeNodeResolved): Plugin {
-  assert(resolvedConfig.server.standalone)
+function standalonePlugin(): Plugin {
+  let resolvedConfig: ConfigVikeNodeResolved
+  let enabled = false
 
   let root = ''
   let outDir = ''
@@ -35,20 +37,27 @@ function standalonePlugin(resolvedConfig: ConfigVikeNodeResolved): Plugin {
       return !!env.isSsrBuild
     },
     async configResolved(config) {
+      resolvedConfig = getConfigVikeNode(config)
+      assert(typeof resolvedConfig.server.standalone === 'boolean')
+      enabled = resolvedConfig.server.standalone
+      if (!enabled) return
       root = toPosixPath(config.root)
       outDir = toPosixPath(config.build.outDir)
       outDirAbs = path.posix.join(root, outDir)
     },
     buildStart() {
+      if (!enabled) return
       rollupResolve = this.resolve.bind(this)
     },
     writeBundle(_, bundle) {
+      if (!enabled) return
       const entries = findRollupBundleEntries(bundle, resolvedConfig, root)
       rollupEntryFilePaths = entries.map((e) => path.posix.join(outDirAbs, e.fileName))
     },
     // closeBundle() + `enforce: 'post'` in order to start the final build step as late as possible
     enforce: 'post',
     async closeBundle() {
+      if (!enabled) return
       const base = toPosixPath(searchForWorkspaceRoot(root))
       const relativeRoot = path.posix.relative(base, root)
       const relativeOutDir = path.posix.join(relativeRoot, outDir)

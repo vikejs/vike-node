@@ -4,18 +4,19 @@ import pc from '@brillout/picocolors'
 import { createRequire } from 'module'
 import path from 'path'
 import type { Plugin } from 'vite'
-import type { ConfigVikeNodeResolved } from '../../types.js'
 import { assert, assertUsage } from '../../utils/assert.js'
+import { getConfigVikeNode } from '../utils/getConfigVikeNode.js'
 import { injectRollupInputs } from '../utils/injectRollupInputs.js'
 import { viteIsSSR } from '../utils/viteIsSSR.js'
 
 const require_ = createRequire(import.meta.url)
 
-function serverEntryPlugin(resolvedConfig: ConfigVikeNodeResolved): Plugin {
+function serverEntryPlugin(): Plugin {
   return {
     enforce: 'pre',
     name: 'vike-node:serverEntry',
     async configResolved(config) {
+      const resolvedConfig = getConfigVikeNode(config)
       const { entry } = resolvedConfig.server
       const entries = Object.entries(entry)
       assert(entries.length)

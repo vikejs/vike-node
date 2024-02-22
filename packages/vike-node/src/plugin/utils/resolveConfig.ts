@@ -36,7 +36,7 @@ function resolveConfig(configVike: ConfigVikeNode): ConfigVikeNodeResolved {
     }
   }
 
-  assertUsage(typeof configVike.server === 'string', 'server should be a string')
+  assertUsage(typeof configVike.server === 'string', 'config.server should be defined')
   return {
     server: {
       entry: { index: configVike.server },

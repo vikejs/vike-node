@@ -6,6 +6,7 @@ import { ChildProcess, fork } from 'child_process'
 import { HMRChannel, ModuleNode, Plugin, ViteDevServer } from 'vite'
 import { ConfigVikeNodeResolved } from '../../../types.js'
 import { assert } from '../../../utils/assert.js'
+import { getConfigVikeNode } from '../../utils/getConfigVikeNode.js'
 import { logViteInfo } from '../../utils/logVite.js'
 import { viteHmrPort, viteMiddlewareProxyPort } from './constants.js'
 import { bindCLIShortcuts } from './shortcuts.js'
@@ -18,8 +19,8 @@ let vite: ViteDevServer
 let rpc: BirpcReturn<ClientFunctions, ServerFunctions>
 let cp: ChildProcess | undefined
 
-function devServerPlugin(resolvedConfig: ConfigVikeNodeResolved): Plugin {
-  assert(resolvedConfig.server)
+function devServerPlugin(): Plugin {
+  let resolvedConfig: ConfigVikeNodeResolved
   return {
     name: 'vike-node:devserver',
     apply: 'serve',
@@ -34,6 +35,10 @@ function devServerPlugin(resolvedConfig: ConfigVikeNodeResolved): Plugin {
           }
         }
       }
+    },
+    configResolved(config) {
+      resolvedConfig = getConfigVikeNode(config)
+      assert(resolvedConfig.server)
     },
     async handleHotUpdate(ctx) {
       if (!cp) {
