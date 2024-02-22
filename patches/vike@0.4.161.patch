@@ -1,0 +1,34 @@
+diff --git a/dist/esm/node/plugin/plugins/devConfig/index.js b/dist/esm/node/plugin/plugins/devConfig/index.js
+index c5c10c82335216a90e21cf57bcc54f30fc83357d..4616c38cc7cd94f76fb83c9b8ac8652333e78819 100644
+--- a/dist/esm/node/plugin/plugins/devConfig/index.js
++++ b/dist/esm/node/plugin/plugins/devConfig/index.js
+@@ -75,11 +75,11 @@ function devConfig() {
+             configureServer: {
+                 order: 'post',
+                 handler(server) {
+-                    if (config.server.middlewareMode)
+-                        return;
+-                    return () => {
+-                        addSsrMiddleware(server.middlewares);
+-                    };
++                    // if (config.server.middlewareMode)
++                    //     return;
++                    // return () => {
++                    //     addSsrMiddleware(server.middlewares);
++                    // };
+                 }
+             },
+             // Setting `configResolved.clearScreen = false` doesn't work
+diff --git a/dist/esm/node/runtime/renderPage/getPageAssets/retrieveAssetsDev.js b/dist/esm/node/runtime/renderPage/getPageAssets/retrieveAssetsDev.js
+index 0639ba92628c4cda6195b4dc6816f043b5523130..f2da977ae4480a5b3b02fbf92dc0168f63511e90 100644
+--- a/dist/esm/node/runtime/renderPage/getPageAssets/retrieveAssetsDev.js
++++ b/dist/esm/node/runtime/renderPage/getPageAssets/retrieveAssetsDev.js
+@@ -10,7 +10,7 @@ async function retrieveAssetsDev(clientDependencies, viteDevServer) {
+         const { moduleGraph } = viteDevServer;
+         const [_, graphId] = await moduleGraph.resolveUrl(id);
+         assert(graphId, { id });
+-        const mod = moduleGraph.getModuleById(graphId);
++        const mod = await moduleGraph.getModuleById(graphId);
+         if (!mod) {
+             /* Not sure when the assertion fails. So let's just remove it for now.
+              *  - https://github.com/vikejs/vike/issues/391
