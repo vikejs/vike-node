@@ -84,7 +84,7 @@ export const parseHeaders = (headers: HeadersProvided): [string, string][] => {
   return result
 }
 
-function convertToHttpHeaders(headers: [string, string | string[]][]): Record<string, string | string[]> {
+export function convertToHttpHeaders(headers: [string, string | string[]][]): Record<string, string | string[]> {
   const result: Record<string, string | string[]> = {}
   for (const [key, value] of headers) {
     if (result[key]) {

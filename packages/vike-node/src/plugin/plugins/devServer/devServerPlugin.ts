@@ -46,6 +46,7 @@ function devServerPlugin(): Plugin {
         return
       }
       const mods = ctx.modules.map((m) => m.id).filter(Boolean) as string[]
+      if (!mods.length) return
       const shouldRestart = await rpc.invalidateDepTree(mods)
       if (shouldRestart) {
         await restartWorker()
@@ -90,14 +91,11 @@ function devServerPlugin(): Plugin {
       return originalInvalidateModule(mod, ...rest)
     }
 
-    const entryAbs = await vite.pluginContainer.resolveId(index)
-    assert(entryAbs?.id)
-
     //@ts-ignore
     const configVikePromise = await vite.config.configVikePromise
 
     const workerData: WorkerData = {
-      entry: entryAbs.id,
+      entry: index,
       viteConfig: { root: vite.config.root, configVikePromise }
     }
     cp = fork(workerPath, {

@@ -8,10 +8,13 @@ import type { Config } from 'vike/types'
 function commonConfig(): Plugin {
   return {
     name: 'vike-node:commonConfig',
+    enforce: 'pre',
     configResolved(config) {
-      const { server } = (config as Record<string, unknown>)._vikeConfig as Config
+      const server = { entry: './server/index-hattip.ts', standalone: true }
       const resolvedConfig: ConfigVikeNodeResolved = resolveConfig({ server })
       ;(config as Record<string, unknown>).configVikeNode = resolvedConfig
+
+      console.log(resolvedConfig)
 
       if (typeof config.ssr.external !== 'boolean') {
         config.ssr.external ??= []

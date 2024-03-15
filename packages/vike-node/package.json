@@ -5,7 +5,8 @@
   "exports": {
     "./connect": "./dist/connect.js",
     "./fastify": "./dist/fastify.js",
-    "./config": "./dist/+config.js"
+    "./web": "./dist/web.js",
+    "./plugin": "./dist/plugin/index.js"
   },
   "scripts": {
     "dev": "tsc --watch",
@@ -31,7 +32,7 @@
     "fastify": "^4.26.1",
     "typescript": "^5.3.3",
     "vike": "^0.4.161",
-    "vite": "^5.1.3"
+    "vite": "npm:@nitedani/vite@5.1.4-commit-42fd11c"
   },
   "typesVersions": {
     "*": {
@@ -41,8 +42,11 @@
       "fastify": [
         "./dist/fastify.d.ts"
       ],
-      "config": [
-        "./dist/+config.d.ts"
+      "web": [
+        "./dist/web.d.ts"
+      ],
+      "plugin": [
+        "./dist/plugin/index.d.ts"
       ]
     }
   },

@@ -58,20 +58,12 @@ const rpc = createBirpc<ServerFunctions, ClientFunctions>(
       await runtime.executeUrl(entry)
     },
     invalidateDepTree(mods) {
-      const importersStr = new Set(mods)
-      let shouldRestart = false
-      for (let importer of importersStr) {
-        const moduleCache = runtime.moduleCache.get(importer)
-        if (moduleCache.meta && 'file' in moduleCache.meta && moduleCache.meta.file === entry_) {
-          shouldRestart = true
-        }
-        if (moduleCache.importers) {
-          for (const importerInner of moduleCache.importers) {
-            importersStr.add(importerInner)
-          }
-        }
-      }
-
+      console.log(entry_, runtime.moduleCache.normalize(entry_), mods[0]!, runtime.moduleCache.normalize(mods[0]!));
+      
+      let shouldRestart = runtime.moduleCache.isImported({
+        importedBy: entry_,
+        importedId: mods[0]!
+      })
       runtime.moduleCache.invalidateDepTree(mods)
       return shouldRestart
     },

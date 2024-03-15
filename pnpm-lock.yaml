@@ -42,7 +42,7 @@ importers:
         version: 18.2.19
       '@vitejs/plugin-react':
         specifier: ^4.2.1
-        version: 4.2.1(vite@5.1.3)
+        version: 4.2.1(@nitedani/vite@5.1.4-commit-42fd11c)
       cross-env:
         specifier: ^7.0.3
         version: 7.0.3
@@ -72,13 +72,13 @@ importers:
         version: 5.3.3
       vike:
         specifier: ^0.4.161
-        version: 0.4.161(patch_hash=4x6h4gn45u3smxaalew7bffdpm)(vite@5.1.3)
+        version: 0.4.161(patch_hash=4x6h4gn45u3smxaalew7bffdpm)(@nitedani/vite@5.1.4-commit-42fd11c)
       vike-node:
         specifier: link:../../packages/vike-node
         version: link:../../packages/vike-node
       vite:
-        specifier: ^5.1.3
-        version: 5.1.3(@types/node@20.11.19)
+        specifier: npm:@nitedani/vite@5.1.4-commit-42fd11c
+        version: /@nitedani/vite@5.1.4-commit-42fd11c(@types/node@20.11.19)
 
   packages/vike-node:
     dependencies:
@@ -115,10 +115,10 @@ importers:
         version: 5.3.3
       vike:
         specifier: ^0.4.161
-        version: 0.4.161(patch_hash=4x6h4gn45u3smxaalew7bffdpm)(vite@5.1.3)
+        version: 0.4.161(patch_hash=4x6h4gn45u3smxaalew7bffdpm)(@nitedani/vite@5.1.4-commit-42fd11c)
       vite:
-        specifier: ^5.1.3
-        version: 5.1.3(@types/node@20.11.19)
+        specifier: npm:@nitedani/vite@5.1.4-commit-42fd11c
+        version: /@nitedani/vite@5.1.4-commit-42fd11c(@types/node@20.11.19)
 
 packages:
 
@@ -903,6 +903,41 @@ packages:
       - supports-color
     dev: false
 
+  /@nitedani/vite@5.1.4-commit-42fd11c(@types/node@20.11.19):
+    resolution: {integrity: sha512-cmkBTNPaP31wHD8s7XnkWAkU46rJpHlm1TaN0X8DbvSYZM4zjTmvL0f2CjvwwgHylAGQooZEOg/1Yz6KDjD/vw==}
+    engines: {node: ^18.0.0 || >=20.0.0}
+    hasBin: true
+    peerDependencies:
+      '@types/node': ^18.0.0 || >=20.0.0
+      less: '*'
+      lightningcss: ^1.21.0
+      sass: '*'
+      stylus: '*'
+      sugarss: '*'
+      terser: ^5.4.0
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+      less:
+        optional: true
+      lightningcss:
+        optional: true
+      sass:
+        optional: true
+      stylus:
+        optional: true
+      sugarss:
+        optional: true
+      terser:
+        optional: true
+    dependencies:
+      '@types/node': 20.11.19
+      esbuild: 0.19.12
+      postcss: 8.4.35
+      rollup: 4.12.0
+    optionalDependencies:
+      fsevents: 2.3.3
+
   /@node-rs/argon2-android-arm-eabi@1.7.2:
     resolution: {integrity: sha512-WhW84XOzdR4AOGc4BJvIg5lCRVBL0pXp/PPCe8QCyWw493p7VdNCdYpr2xdtjS/0zImmY85HNB/6zpzjLRTT/A==}
     engines: {node: '>= 10'}
@@ -1383,7 +1418,7 @@ packages:
       - supports-color
     dev: false
 
-  /@vitejs/plugin-react@4.2.1(vite@5.1.3):
+  /@vitejs/plugin-react@4.2.1(@nitedani/vite@5.1.4-commit-42fd11c):
     resolution: {integrity: sha512-oojO9IDc4nCUUi8qIR11KoQm0XFFLIwsRBwHRR4d/88IWghn1y6ckz/bJ8GHDCsYEJee8mDzqtJxh15/cisJNQ==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
@@ -1394,7 +1429,7 @@ packages:
       '@babel/plugin-transform-react-jsx-source': 7.23.3(@babel/core@7.23.9)
       '@types/babel__core': 7.20.5
       react-refresh: 0.14.0
-      vite: 5.1.3(@types/node@20.11.19)
+      vite: /@nitedani/vite@5.1.4-commit-42fd11c(@types/node@20.11.19)
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -3631,7 +3666,7 @@ packages:
     engines: {node: '>= 0.8'}
     dev: false
 
-  /vike@0.4.161(patch_hash=4x6h4gn45u3smxaalew7bffdpm)(vite@5.1.3):
+  /vike@0.4.161(patch_hash=4x6h4gn45u3smxaalew7bffdpm)(@nitedani/vite@5.1.4-commit-42fd11c):
     resolution: {integrity: sha512-APiNZS9AuK9JpoJNvxXFxQ6arj3frJzx1kp+gzmXztq8QHa1Sbl5EDUqEGEz3waqO/Q4H0ebRx/W+/UwDk38iQ==}
     engines: {node: '>=16.0.0'}
     hasBin: true
@@ -3654,43 +3689,8 @@ packages:
       fast-glob: 3.3.2
       sirv: 2.0.4
       source-map-support: 0.5.21
-      vite: 5.1.3(@types/node@20.11.19)
+      vite: /@nitedani/vite@5.1.4-commit-42fd11c(@types/node@20.11.19)
     patched: true
-
-  /vite@5.1.3(@types/node@20.11.19):
-    resolution: {integrity: sha512-UfmUD36DKkqhi/F75RrxvPpry+9+tTkrXfMNZD+SboZqBCMsxKtO52XeGzzuh7ioz+Eo/SYDBbdb0Z7vgcDJew==}
-    engines: {node: ^18.0.0 || >=20.0.0}
-    hasBin: true
-    peerDependencies:
-      '@types/node': ^18.0.0 || >=20.0.0
-      less: '*'
-      lightningcss: ^1.21.0
-      sass: '*'
-      stylus: '*'
-      sugarss: '*'
-      terser: ^5.4.0
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
-      less:
-        optional: true
-      lightningcss:
-        optional: true
-      sass:
-        optional: true
-      stylus:
-        optional: true
-      sugarss:
-        optional: true
-      terser:
-        optional: true
-    dependencies:
-      '@types/node': 20.11.19
-      esbuild: 0.19.12
-      postcss: 8.4.35
-      rollup: 4.12.0
-    optionalDependencies:
-      fsevents: 2.3.3
 
   /webidl-conversions@3.0.1:
     resolution: {integrity: sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==}

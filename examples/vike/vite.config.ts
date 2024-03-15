@@ -7,9 +7,7 @@ export default {
   plugins: [
     react(),
     vike(),
-    vikeNode({
-      server: { entry: { index: './server/index-fastify.ts', worker: './server/worker.mjs' }, standalone: true }
-    }),
+    vikeNode(),
     telefunc()
   ]
 }
