@@ -17,6 +17,7 @@ type RenderAssetHttpResponse = {
 
 function renderAsset(url: string, headers: HeadersProvided): Promise<RenderAssetHttpResponse> {
   assertUsage(getIsWorkerEnv(), `${pc.cyan('renderAsset')} should only be called in development mode`)
+
   const parsedHeaders = parseHeaders(headers)
   const isUpgradeRequest = parsedHeaders.some(([key]) => key.toLowerCase() === 'upgrade')
   if (isUpgradeRequest) {

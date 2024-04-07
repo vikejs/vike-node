@@ -1,10 +1,10 @@
 import { createBirpc } from 'birpc'
-import { ESModulesRunner, ViteRuntime } from 'vite/runtime'
+import { ESModulesEvaluator, ModuleRunner } from 'vite/module-runner'
 import { setIsWorkerEnv } from '../../../runtime/env.js'
 import { logViteInfo } from '../../utils/logVite.js'
 import type { ClientFunctions, ServerFunctions, WorkerData } from './types.js'
 
-let runtime: ViteRuntime
+let runner: ModuleRunner
 let entry_: string
 
 const rpc = createBirpc<ServerFunctions, ClientFunctions>(
@@ -23,7 +23,7 @@ const rpc = createBirpc<ServerFunctions, ClientFunctions>(
               hasErrorLogged: () => false
             }
           },
-          ssrLoadModule: (id: string) => runtime.executeUrl(id),
+          ssrLoadModule: (id: string) => runner.import(id),
           // called by telefunc
           ssrFixStacktrace: (_err: unknown) => {},
           transformIndexHtml: rpc.transformIndexHtml,
@@ -45,29 +45,21 @@ const rpc = createBirpc<ServerFunctions, ClientFunctions>(
         viteDevServer: globalObject.viteDevServer
       }
 
-      runtime = new ViteRuntime(
+      runner = new ModuleRunner(
         {
-          fetchModule: rpc.fetchModule,
           root: viteConfig.root,
+          transport: { fetchModule: rpc.fetchModule },
           hmr: false
         },
-        new ESModulesRunner()
+        new ESModulesEvaluator()
       )
-
       logViteInfo('Loading server entry')
-      await runtime.executeUrl(entry)
+      await runner.import(entry)
     },
-    invalidateDepTree(mods) {
-      console.log(entry_, runtime.moduleCache.normalize(entry_), mods[0]!, runtime.moduleCache.normalize(mods[0]!));
-      
-      let shouldRestart = runtime.moduleCache.isImported({
-        importedBy: entry_,
-        importedId: mods[0]!
-      })
-      runtime.moduleCache.invalidateDepTree(mods)
-      return shouldRestart
+    async invalidateDepTree(mods) {
+      await runner.moduleCache.invalidateDepTree(mods)
     },
-    deleteByModuleId: (mod) => runtime.moduleCache.deleteByModuleId(mod)
+    deleteByModuleId: (mod) => runner.moduleCache.deleteByModuleId(mod)
   },
   {
     post: (data) => {

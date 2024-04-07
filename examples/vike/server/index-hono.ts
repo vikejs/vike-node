@@ -1,20 +1,20 @@
 import { telefunc } from 'telefunc'
 import { vike } from 'vike-node/web'
 import { init } from '../database/todoItems.js'
-import { createServer } from '@hattip/adapter-node'
-import { createRouter } from '@hattip/router'
+import { createAdaptorServer } from '@hono/node-server'
+import { Hono } from 'hono'
 
 startServer()
 
 async function startServer() {
   await init()
-  const app = createRouter()
+  const app = new Hono()
 
   app.use('/_telefunc', async (ctx) => {
     const httpResponse = await telefunc({
-      url: ctx.request.url,
-      method: ctx.request.method,
-      body: await ctx.request.text()
+      url: ctx.req.url,
+      method: ctx.req.method,
+      body: await ctx.req.text()
     })
     return new Response(httpResponse.body, {
       status: httpResponse.statusCode,
@@ -26,8 +26,8 @@ async function startServer() {
 
   app.use('*', async (ctx) => {
     const res = await vike({
-      url: ctx.request.url,
-      headers: ctx.request.headers
+      url: ctx.req.url,
+      headers: ctx.req.header()
     })
     if (!res) return new Response('Not Found', { status: 404 })
     return new Response(res.body, {
@@ -36,7 +36,7 @@ async function startServer() {
     })
   })
 
-  const server = createServer(app.buildHandler())
+  const server = createAdaptorServer(app)
   const port = process.env.PORT || 3000
   server.listen(+port)
   console.log(`Server running at http://localhost:${port}`)

@@ -31,8 +31,8 @@
     "@types/node": "^20.11.19",
     "fastify": "^4.26.1",
     "typescript": "^5.3.3",
-    "vike": "^0.4.161",
-    "vite": "npm:@nitedani/vite@5.1.4-commit-42fd11c"
+    "vike": "0.4.161",
+    "vite": "6.0.0-alpha.0"
   },
   "typesVersions": {
     "*": {

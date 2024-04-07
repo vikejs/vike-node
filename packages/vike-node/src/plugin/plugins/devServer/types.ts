@@ -1,7 +1,6 @@
 export type { ClientFunctions, MinimalModuleNode, ServerFunctions, WorkerData }
 
-import type { ModuleNode, ResolvedUrl } from 'vite'
-import type { FetchResult } from 'vite/runtime'
+import type { FetchResult, EnvironmentModuleNode, ResolvedUrl } from 'vite'
 
 type WorkerData = {
   entry: string
@@ -14,10 +13,12 @@ type WorkerData = {
 type ClientFunctions = {
   start(workerData: WorkerData): void
   deleteByModuleId(modulePath: string): boolean
-  invalidateDepTree(ids: string[]): boolean
+  invalidateDepTree(ids: string[]): void
 }
 
-type MinimalModuleNode = Pick<ModuleNode, 'id' | 'url' | 'type'> & { importedModules: Set<MinimalModuleNode> }
+type MinimalModuleNode = Pick<EnvironmentModuleNode, 'id' | 'url' | 'type'> & {
+  importedModules: Set<MinimalModuleNode>
+}
 
 type ServerFunctions = {
   fetchModule(id: string, importer?: string): Promise<FetchResult>

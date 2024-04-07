@@ -3,7 +3,7 @@ export { devServerPlugin }
 import pc from '@brillout/picocolors'
 import { BirpcReturn, createBirpc } from 'birpc'
 import { ChildProcess, fork } from 'child_process'
-import { HMRChannel, ModuleNode, Plugin, ViteDevServer } from 'vite'
+import { EnvironmentModuleNode, HMRChannel, ModuleNode, Plugin, ViteDevServer } from 'vite'
 import { ConfigVikeNodeResolved } from '../../../types.js'
 import { assert } from '../../../utils/assert.js'
 import { getConfigVikeNode } from '../../utils/getConfigVikeNode.js'
@@ -18,6 +18,7 @@ let ws: HMRChannel | undefined
 let vite: ViteDevServer
 let rpc: BirpcReturn<ClientFunctions, ServerFunctions>
 let cp: ChildProcess | undefined
+let entryAbs: string
 
 function devServerPlugin(): Plugin {
   let resolvedConfig: ConfigVikeNodeResolved
@@ -40,22 +41,45 @@ function devServerPlugin(): Plugin {
       resolvedConfig = getConfigVikeNode(config)
       assert(resolvedConfig.server)
     },
-    async handleHotUpdate(ctx) {
-      if (!cp) {
-        await restartWorker()
+    async hotUpdate(ctx) {
+      console.log(ctx.environment.name, ctx.modules, ctx.type)
+      if (ctx.environment.name !== 'ssr') {
         return
       }
+
+      if (!cp) {
+        await restartWorker()
+        ctx.server.environments.client.hot.send({ type: 'full-reload' })
+        return []
+      }
+
+      if (!ctx.modules.length) return []
       const mods = ctx.modules.map((m) => m.id).filter(Boolean) as string[]
-      if (!mods.length) return
-      const shouldRestart = await rpc.invalidateDepTree(mods)
+      await rpc.invalidateDepTree(mods)
+      const modules = new Set(ctx.modules)
+      let shouldRestart = false
+      for (const module of modules) {
+        if (module.file === entryAbs) {
+          shouldRestart = true
+          break
+        }
+
+        for (const importerInner of module.importers) {
+          modules.add(importerInner)
+        }
+      }
+
       if (shouldRestart) {
         await restartWorker()
+        ctx.server.environments.client.hot.send({ type: 'full-reload' })
       }
+
+      return []
     },
     // called on start & vite.config.js changes
     configureServer(vite_) {
       vite = vite_
-      ws = vite.hot.channels.find((ch) => ch.name === 'ws')
+      ws = vite.environments.client.hot
       vite.bindCLIShortcuts = () =>
         bindCLIShortcuts({
           onRestart: async () => {
@@ -91,11 +115,15 @@ function devServerPlugin(): Plugin {
       return originalInvalidateModule(mod, ...rest)
     }
 
+    const indexResolved = await vite.pluginContainer.resolveId(index, undefined)
+    assert(indexResolved?.id)
+    entryAbs = indexResolved.id
+
     //@ts-ignore
     const configVikePromise = await vite.config.configVikePromise
 
     const workerData: WorkerData = {
-      entry: index,
+      entry: entryAbs,
       viteConfig: { root: vite.config.root, configVikePromise }
     }
     cp = fork(workerPath, {
@@ -107,7 +135,7 @@ function devServerPlugin(): Plugin {
     rpc = createBirpc<ClientFunctions, ServerFunctions>(
       {
         async fetchModule(id, importer) {
-          const result = await vite.ssrFetchModule(id, importer)
+          const result = await vite.environments.ssr.fetchModule(id, importer)
           if (resolvedConfig.server.native.includes(id)) {
             // sharp needs to load the .node file on this thread for some reason
             // maybe it's the case for other natives as well
@@ -117,10 +145,10 @@ function devServerPlugin(): Plugin {
           return result
         },
         moduleGraphResolveUrl(url: string) {
-          return vite.moduleGraph.resolveUrl(url)
+          return vite.environments.ssr.moduleGraph.resolveUrl(url)
         },
         moduleGraphGetModuleById(id: string) {
-          const module = vite.moduleGraph.getModuleById(id)
+          const module = vite.environments.ssr.moduleGraph.getModuleById(id)
           if (!module) {
             return module
           }
@@ -156,8 +184,8 @@ function devServerPlugin(): Plugin {
 
 // This is the minimal representation the Vike runtime needs
 function convertToMinimalModuleNode(
-  node: ModuleNode,
-  cache: Map<ModuleNode, MinimalModuleNode> = new Map()
+  node: EnvironmentModuleNode ,
+  cache: Map<EnvironmentModuleNode, MinimalModuleNode> = new Map()
 ): MinimalModuleNode {
   // If the node is in the cache, return the cached version
   if (cache.has(node)) {
