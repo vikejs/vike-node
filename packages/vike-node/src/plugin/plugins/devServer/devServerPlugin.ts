@@ -3,7 +3,14 @@ export { devServerPlugin }
 import pc from '@brillout/picocolors'
 import { BirpcReturn, createBirpc } from 'birpc'
 import { ChildProcess, fork } from 'child_process'
-import { EnvironmentModuleNode, HMRChannel, ModuleNode, Plugin, ViteDevServer } from 'vite'
+import {
+  DevEnvironment,
+  EnvironmentModuleNode,
+  HMRChannel,
+  Plugin,
+  RemoteEnvironmentTransport,
+  ViteDevServer
+} from 'vite'
 import { ConfigVikeNodeResolved } from '../../../types.js'
 import { assert } from '../../../utils/assert.js'
 import { getConfigVikeNode } from '../../utils/getConfigVikeNode.js'
@@ -19,6 +26,8 @@ let vite: ViteDevServer
 let rpc: BirpcReturn<ClientFunctions, ServerFunctions>
 let cp: ChildProcess | undefined
 let entryAbs: string
+let onMessageHandler: (data: any) => void
+let hmrHandler: ((data: any) => void) | undefined
 
 function devServerPlugin(): Plugin {
   let resolvedConfig: ConfigVikeNodeResolved
@@ -34,6 +43,40 @@ function devServerPlugin(): Plugin {
             // this needs to be exposed in containers
             port: viteHmrPort
           }
+        },
+        environments: {
+          ssr: {
+            dev: {
+              createEnvironment(name, config) {
+                const hot = createSimpleHMRChannel({
+                  name,
+                  post: (data) => rpc.onHmrReceive(data),
+                  on: (listener) => {
+                    hmrHandler = listener
+                    return () => {
+                      hmrHandler = undefined
+                    }
+                  },
+                  async onRestartWorker() {
+                    await restartWorker()
+                    vite.environments.client.hot.send({ type: 'full-reload' })
+                  }
+                })
+
+                return new DevEnvironment('ssr', config, {
+                  runner: {
+                    transport: new RemoteEnvironmentTransport({
+                      send: (data) => rpc.onViteTransportMessage(data),
+                      onMessage: (handler) => {
+                        onMessageHandler = handler
+                      }
+                    })
+                  },
+                  hot
+                })
+              }
+            }
+          }
         }
       }
     },
@@ -42,7 +85,7 @@ function devServerPlugin(): Plugin {
       assert(resolvedConfig.server)
     },
     async hotUpdate(ctx) {
-      console.log(ctx.environment.name, ctx.modules, ctx.type)
+      // console.log(ctx.environment.name, ctx.modules, ctx.type)
       if (ctx.environment.name !== 'ssr') {
         return
       }
@@ -52,29 +95,6 @@ function devServerPlugin(): Plugin {
         ctx.server.environments.client.hot.send({ type: 'full-reload' })
         return []
       }
-
-      if (!ctx.modules.length) return []
-      const mods = ctx.modules.map((m) => m.id).filter(Boolean) as string[]
-      await rpc.invalidateDepTree(mods)
-      const modules = new Set(ctx.modules)
-      let shouldRestart = false
-      for (const module of modules) {
-        if (module.file === entryAbs) {
-          shouldRestart = true
-          break
-        }
-
-        for (const importerInner of module.importers) {
-          modules.add(importerInner)
-        }
-      }
-
-      if (shouldRestart) {
-        await restartWorker()
-        ctx.server.environments.client.hot.send({ type: 'full-reload' })
-      }
-
-      return []
     },
     // called on start & vite.config.js changes
     configureServer(vite_) {
@@ -90,6 +110,7 @@ function devServerPlugin(): Plugin {
             }
           }
         })
+
       vite.printUrls = () => {}
       restartWorker()
     }
@@ -106,16 +127,7 @@ function devServerPlugin(): Plugin {
     assert(resolvedConfig.server)
     const index = resolvedConfig.server.entry.index
 
-    const originalInvalidateModule = vite.moduleGraph.invalidateModule.bind(vite.moduleGraph)
-    vite.moduleGraph.invalidateModule = (mod, ...rest) => {
-      if (mod.id) {
-        // timeout error
-        rpc.deleteByModuleId(mod.id).catch(() => {})
-      }
-      return originalInvalidateModule(mod, ...rest)
-    }
-
-    const indexResolved = await vite.pluginContainer.resolveId(index, undefined)
+    const indexResolved = await vite.environments.ssr.pluginContainer.resolveId(index, undefined)
     assert(indexResolved?.id)
     entryAbs = indexResolved.id
 
@@ -134,16 +146,11 @@ function devServerPlugin(): Plugin {
 
     rpc = createBirpc<ClientFunctions, ServerFunctions>(
       {
-        async fetchModule(id, importer) {
-          const result = await vite.environments.ssr.fetchModule(id, importer)
-          if (resolvedConfig.server.native.includes(id)) {
-            // sharp needs to load the .node file on this thread for some reason
-            // maybe it's the case for other natives as well
-            // update: maybe it's fixed
-            // await import(id)
-          }
-          return result
+        onViteTransportMessage(data) {
+          return onMessageHandler(data)
         },
+
+        // These are used by Vike on the other side
         moduleGraphResolveUrl(url: string) {
           return vite.environments.ssr.moduleGraph.resolveUrl(url)
         },
@@ -184,7 +191,7 @@ function devServerPlugin(): Plugin {
 
 // This is the minimal representation the Vike runtime needs
 function convertToMinimalModuleNode(
-  node: EnvironmentModuleNode ,
+  node: EnvironmentModuleNode,
   cache: Map<EnvironmentModuleNode, MinimalModuleNode> = new Map()
 ): MinimalModuleNode {
   // If the node is in the cache, return the cached version
@@ -209,4 +216,87 @@ function convertToMinimalModuleNode(
   }
 
   return minimalNode
+}
+
+function createSimpleHMRChannel(options: {
+  name: string
+  post: (data: any) => any
+  on: (listener: (data: any) => void) => () => void
+  onRestartWorker: () => void
+}): HMRChannel {
+  const listerMap = new DefaultMap<string, Set<Function>>(() => new Set())
+  let dispose: (() => void) | undefined
+
+  return {
+    name: options.name,
+    listen() {
+      dispose = options.on((payload) => {
+        for (const f of listerMap.get(payload.event)) {
+          f(payload.data)
+        }
+      })
+    },
+    close() {
+      dispose?.()
+      dispose = undefined
+    },
+    on(event: string, listener: (...args: any[]) => any) {
+      listerMap.get(event).add(listener)
+    },
+    off(event: string, listener: (...args: any[]) => any) {
+      listerMap.get(event).delete(listener)
+    },
+    send(...args: any[]) {
+      let payload: any
+      if (typeof args[0] === 'string') {
+        payload = {
+          type: 'custom',
+          event: args[0],
+          data: args[1]
+        }
+      } else {
+        payload = args[0]
+      }
+
+      if (payload.triggeredBy && isImported(payload.triggeredBy)) {
+        options.onRestartWorker()
+        return
+      }
+
+      options.post(payload)
+    }
+  }
+}
+
+class DefaultMap<K, V> extends Map<K, V> {
+  constructor(
+    private defaultFn: (key: K) => V,
+    entries?: Iterable<readonly [K, V]>
+  ) {
+    super(entries)
+  }
+
+  override get(key: K): V {
+    if (!this.has(key)) {
+      this.set(key, this.defaultFn(key))
+    }
+    return super.get(key)!
+  }
+}
+
+function isImported(id: string) {
+  const moduleNode = vite.environments.ssr.moduleGraph.getModuleById(id)
+  assert(moduleNode)
+  const modules = new Set([moduleNode])
+  for (const module of modules) {
+    if (module.file === entryAbs) {
+      return true
+    }
+
+    for (const importerInner of module.importers) {
+      modules.add(importerInner)
+    }
+  }
+
+  return false
 }

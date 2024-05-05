@@ -28,7 +28,7 @@
     "typescript": "^5.3.3",
     "vike": "0.4.161",
     "vike-node": "^0.0.1",
-    "vite": "6.0.0-alpha.0"
+    "vite": "6.0.0-alpha.11"
   },
   "type": "module"
 }

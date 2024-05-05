@@ -22,7 +22,8 @@
   },
   "pnpm": {
     "overrides": {
-      "vike-node": "link:./packages/vike-node/"
+      "vike-node": "link:./packages/vike-node/",
+      "vite": "6.0.0-alpha.11"
     },
     "patchedDependencies": {
       "vike@0.4.161": "patches/vike@0.4.161.patch"

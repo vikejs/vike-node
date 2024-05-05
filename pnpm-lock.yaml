@@ -6,6 +6,7 @@ settings:
 
 overrides:
   vike-node: link:./packages/vike-node/
+  vite: 6.0.0-alpha.11
 
 patchedDependencies:
   vike@0.4.161:
@@ -51,7 +52,7 @@ importers:
         version: 18.2.22
       '@vitejs/plugin-react':
         specifier: ^4.2.1
-        version: 4.2.1(vite@6.0.0-alpha.0)
+        version: 4.2.1(vite@6.0.0-alpha.11)
       cross-env:
         specifier: ^7.0.3
         version: 7.0.3
@@ -84,13 +85,13 @@ importers:
         version: 5.4.3
       vike:
         specifier: 0.4.161
-        version: 0.4.161(patch_hash=4x6h4gn45u3smxaalew7bffdpm)(vite@6.0.0-alpha.0)
+        version: 0.4.161(patch_hash=4x6h4gn45u3smxaalew7bffdpm)(vite@6.0.0-alpha.11)
       vike-node:
         specifier: link:../../packages/vike-node
         version: link:../../packages/vike-node
       vite:
-        specifier: 6.0.0-alpha.0
-        version: 6.0.0-alpha.0(@types/node@20.11.30)
+        specifier: 6.0.0-alpha.11
+        version: 6.0.0-alpha.11(@types/node@20.11.30)
 
   packages/vike-node:
     dependencies:
@@ -127,10 +128,10 @@ importers:
         version: 5.4.3
       vike:
         specifier: 0.4.161
-        version: 0.4.161(patch_hash=4x6h4gn45u3smxaalew7bffdpm)(vite@6.0.0-alpha.0)
+        version: 0.4.161(patch_hash=4x6h4gn45u3smxaalew7bffdpm)(vite@6.0.0-alpha.11)
       vite:
-        specifier: 6.0.0-alpha.0
-        version: 6.0.0-alpha.0(@types/node@20.11.30)
+        specifier: 6.0.0-alpha.11
+        version: 6.0.0-alpha.11(@types/node@20.11.30)
 
 packages:
 
@@ -1596,18 +1597,18 @@ packages:
       - supports-color
     dev: false
 
-  /@vitejs/plugin-react@4.2.1(vite@6.0.0-alpha.0):
+  /@vitejs/plugin-react@4.2.1(vite@6.0.0-alpha.11):
     resolution: {integrity: sha512-oojO9IDc4nCUUi8qIR11KoQm0XFFLIwsRBwHRR4d/88IWghn1y6ckz/bJ8GHDCsYEJee8mDzqtJxh15/cisJNQ==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
-      vite: ^4.2.0 || ^5.0.0
+      vite: 6.0.0-alpha.11
     dependencies:
       '@babel/core': 7.24.3
       '@babel/plugin-transform-react-jsx-self': 7.24.1(@babel/core@7.24.3)
       '@babel/plugin-transform-react-jsx-source': 7.24.1(@babel/core@7.24.3)
       '@types/babel__core': 7.20.5
       react-refresh: 0.14.0
-      vite: 6.0.0-alpha.0(@types/node@20.11.30)
+      vite: 6.0.0-alpha.11(@types/node@20.11.30)
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -3830,13 +3831,13 @@ packages:
     engines: {node: '>= 0.8'}
     dev: false
 
-  /vike@0.4.161(patch_hash=4x6h4gn45u3smxaalew7bffdpm)(vite@6.0.0-alpha.0):
+  /vike@0.4.161(patch_hash=4x6h4gn45u3smxaalew7bffdpm)(vite@6.0.0-alpha.11):
     resolution: {integrity: sha512-APiNZS9AuK9JpoJNvxXFxQ6arj3frJzx1kp+gzmXztq8QHa1Sbl5EDUqEGEz3waqO/Q4H0ebRx/W+/UwDk38iQ==}
     engines: {node: '>=16.0.0'}
     hasBin: true
     peerDependencies:
       react-streaming: '>=0.3.5'
-      vite: '>=3.1.0'
+      vite: 6.0.0-alpha.11
     peerDependenciesMeta:
       react-streaming:
         optional: true
@@ -3853,11 +3854,11 @@ packages:
       fast-glob: 3.3.2
       sirv: 2.0.4
       source-map-support: 0.5.21
-      vite: 6.0.0-alpha.0(@types/node@20.11.30)
+      vite: 6.0.0-alpha.11(@types/node@20.11.30)
     patched: true
 
-  /vite@6.0.0-alpha.0(@types/node@20.11.30):
-    resolution: {integrity: sha512-NBYF7KOkASr2SRgknZD4hjSrpkJ9IpP5XMWBSidw66TTtKR5oplE/ONIRd8HKH07QwYVbKadXhP6/jQZfab9xA==}
+  /vite@6.0.0-alpha.11(@types/node@20.11.30):
+    resolution: {integrity: sha512-Pc0tgTWqdO4HzHpfnHxhVPj85gjrmoC+hEMLvI9vA8jTdSnjm4p6WUmvVfDYguBMCfnNXf1ThnxzS9GUwKxqpg==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
     peerDependencies:

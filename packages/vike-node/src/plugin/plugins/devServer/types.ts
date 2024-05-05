@@ -12,8 +12,8 @@ type WorkerData = {
 
 type ClientFunctions = {
   start(workerData: WorkerData): void
-  deleteByModuleId(modulePath: string): boolean
-  invalidateDepTree(ids: string[]): void
+  onViteTransportMessage(data: any): void
+  onHmrReceive: (data: any) => void
 }
 
 type MinimalModuleNode = Pick<EnvironmentModuleNode, 'id' | 'url' | 'type'> & {
@@ -21,8 +21,8 @@ type MinimalModuleNode = Pick<EnvironmentModuleNode, 'id' | 'url' | 'type'> & {
 }
 
 type ServerFunctions = {
-  fetchModule(id: string, importer?: string): Promise<FetchResult>
   moduleGraphResolveUrl(url: string): Promise<ResolvedUrl>
   moduleGraphGetModuleById(id: string): MinimalModuleNode | undefined
   transformIndexHtml(url: string, html: string, originalUrl?: string): Promise<string>
+  onViteTransportMessage(data: any): void
 }
