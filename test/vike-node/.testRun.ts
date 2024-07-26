@@ -71,9 +71,7 @@ function testRun(cmd: 'npm run dev' | 'npm run prod') {
     expect(xTestHeader).toBe('test')
   })
 
-  // fastify should work but broken on ci
-  // let's leave it out for now
-  if (!isProd && !(isCI() && process.env.VIKE_NODE_FRAMEWORK === 'fastify'))
+  if (!isProd)
     test('vite hmr websocket', async () => {
       const logs: string[] = []
       page.on('console', (msg) => logs.push(msg.text()))
