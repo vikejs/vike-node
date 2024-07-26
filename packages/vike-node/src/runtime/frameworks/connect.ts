@@ -34,12 +34,7 @@ function vike<PlatformRequest extends IncomingMessage, PlatformResponse extends 
 ): (req: PlatformRequest, res: PlatformResponse, next?: NextFunction) => void {
   const handler = createHandler(options)
   return (req, res, next) => {
-    const handled = globalStore.HMRProxy(req, res)
-    if (handled) {
-      next?.()
-      return
-    }
-
+    globalStore.setupHMRProxy(req)
     handler({
       req,
       res,

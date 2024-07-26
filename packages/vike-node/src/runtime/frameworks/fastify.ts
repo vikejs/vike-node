@@ -34,10 +34,7 @@ function vike(options?: VikeOptions<FastifyRequest>): FastifyPluginCallback {
   const handler = createHandler(options)
   return function plugin(instance, _options, done) {
     instance.get('*', async (req, reply) => {
-      const handled = globalStore.HMRProxy(req.raw, reply.raw)
-      if (handled) {
-        return
-      }
+      globalStore.setupHMRProxy(req.raw)
       const { res, onReadable } = createServerResponse(req.raw)
       ;(async () => {
         const { readable, headers, statusCode } = await onReadable

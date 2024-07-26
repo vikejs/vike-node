@@ -37,14 +37,7 @@ function vike(options?: VikeOptions): MiddlewareHandler {
   const handler = createHandler<HonoRequest>(options)
   return async function middleware(ctx, next) {
     const req = ctx.env.incoming as IncomingMessage
-    const res = ctx.env.outgoing as ServerResponse
-    const handled = globalStore.HMRProxy(req, res)
-
-    if (handled) {
-      res.writeHead = () => res
-      return new Response()
-    }
-
+    globalStore.setupHMRProxy(req)
     const response = await connectToWeb((req, res, next) =>
       handler({
         req,

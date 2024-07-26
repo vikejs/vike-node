@@ -1,5 +1,5 @@
 import { fork } from 'child_process'
-import { ServerResponse, createServer, type IncomingMessage } from 'http'
+import { createServer, type IncomingMessage, type Server } from 'http'
 import type { Plugin, ViteDevServer } from 'vite'
 import { globalStore } from '../../runtime/globalStore.js'
 import type { ConfigVikeNodeResolved } from '../../types.js'
@@ -15,6 +15,7 @@ export function devServerPlugin(): Plugin {
   let resolvedConfig: ConfigVikeNodeResolved
   let entryAbs: string
   let HMRServer: ReturnType<typeof createServer> | undefined
+  let setupHMRProxyDone = false
   return {
     name: 'vite-node:devserver',
     apply: 'serve',
@@ -60,7 +61,7 @@ export function devServerPlugin(): Plugin {
 
       viteDevServer = vite
       globalStore.viteDevServer = vite
-      globalStore.HMRProxy = HMRProxy
+      globalStore.setupHMRProxy = setupHMRProxy
       patchViteServer(vite)
       initializeServerEntry(vite)
     }
@@ -95,30 +96,19 @@ export function devServerPlugin(): Plugin {
     vite.ssrLoadModule(entryAbs)
   }
 
-  function HMRProxy(req: IncomingMessage, res: ServerResponse, next?: (err?: unknown) => void): boolean {
-    const canHandle = req.url === VITE_HMR_PATH && req.headers.upgrade === 'websocket'
-    if (!canHandle) {
-      next?.()
-      return false
+  function setupHMRProxy(req: IncomingMessage) {
+    if (setupHMRProxyDone || isBun) {
+      return
     }
 
-    // Pause the socket to prevent data loss
-    req.socket.pause()
-
-    // Prepare the socket for upgrade
-    res.detachSocket(req.socket)
-    req.socket.setTimeout(0)
-    req.socket.setNoDelay(true)
-    req.socket.setKeepAlive(true, 0)
-
-    // Emit the upgrade event
-    assert(HMRServer)
-    HMRServer.emit('upgrade', req, req.socket, Buffer.alloc(0))
-
-    // Resume the socket
-    req.socket.resume()
-
-    return true
+    setupHMRProxyDone = true
+    const server = (req.socket as any).server as Server
+    server.on('upgrade', (clientReq, clientSocket, wsHead) => {
+      if (clientReq.url === VITE_HMR_PATH) {
+        assert(HMRServer)
+        HMRServer.emit('upgrade', clientReq, clientSocket, wsHead)
+      }
+    })
   }
 }
 
