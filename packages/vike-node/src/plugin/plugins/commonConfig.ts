@@ -1,31 +1,23 @@
 export { commonConfig }
 
 import type { Plugin } from 'vite'
-import { ConfigVikeNodeResolved } from '../../types.js'
+import type { ConfigVikeNodePlugin, ConfigVikeNodeResolved } from '../../types.js'
 import { resolveConfig } from '../utils/resolveConfig.js'
 
-function commonConfig(): Plugin {
+function commonConfig(configVikeNodePlugin: ConfigVikeNodePlugin): Plugin {
   return {
-    name: 'vike-node:commonConfig',
     enforce: 'pre',
-    config(config, env) {
-      const server = { entry: './server/index-hono.ts', standalone: true }
-      const resolvedConfig: ConfigVikeNodeResolved = resolveConfig({ server })
+    name: 'vike-node:commonConfig',
+    configResolved(config) {
+      const resolvedConfig: ConfigVikeNodeResolved = resolveConfig({ server: configVikeNodePlugin })
       ;(config as Record<string, unknown>).configVikeNode = resolvedConfig
 
-      return {
-        environments: {
-          ssr: {
-            resolve: { external: resolvedConfig.server.native }
-          },
-          client: {
-            resolve: { external: resolvedConfig.server.native }
-          }
-        },
-        optimizeDeps: {
-          exclude: resolvedConfig.server.native,
-        }
+      if (typeof config.ssr.external !== 'boolean') {
+        config.ssr.external ??= []
+        config.ssr.external.push(...resolvedConfig.server.external)
       }
+      config.optimizeDeps.exclude ??= []
+      config.optimizeDeps.exclude.push(...resolvedConfig.server.external)
     }
   }
 }

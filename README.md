@@ -1,1 +1,1 @@
-packages/vike-node/README.md
+./packages/vike-node/README.md

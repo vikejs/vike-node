@@ -1,35 +1,24 @@
-export { createHandler }
-
 import type { IncomingMessage, ServerResponse } from 'http'
-import { dirname, join } from 'path'
+import { dirname, isAbsolute, join } from 'path'
 import { fileURLToPath } from 'url'
 import { renderPage } from 'vike/server'
 import { assert } from '../utils/assert.js'
-import { getIsDevEnv } from './env.js'
-import { RenderAssetHttpResponse, renderAsset } from './renderAsset.js'
-import type { NextFunction, VikeHttpResponse, VikeOptions } from './types.js'
+import { globalStore } from './globalStore.js'
+import type { ConnectMiddleware, VikeOptions } from './types.js'
+import { writeHttpResponse } from './utils/writeHttpResponse.js'
 
-const dirname_ = dirname(fileURLToPath(import.meta.url))
+const argv1 = process.argv[1]
+const entrypointDirAbs = argv1
+  ? dirname(isAbsolute(argv1) ? argv1 : join(process.cwd(), argv1))
+  : dirname(fileURLToPath(import.meta.url))
+const defaultStaticDir = join(entrypointDirAbs, '..', 'client')
 
-function createHandler<PlatformRequest>(options: VikeOptions<PlatformRequest> = {}) {
-  let staticHandler: ((req: IncomingMessage, res: ServerResponse, next: () => void) => void) | undefined
-  let compressHandler: ((req: IncomingMessage, res: ServerResponse, next: () => void) => void) | undefined
-
-  function getPageContext(platformRequest: PlatformRequest): Record<string, any> | Promise<Record<string, any>> {
-    if (typeof options?.pageContext === 'function') {
-      return options.pageContext(platformRequest)
-    }
-    return options.pageContext ?? {}
-  }
-
-  const serveAssets =
-    options.serveAssets === true || options.serveAssets === undefined
-      ? {
-          root: join(dirname_, '..', 'client'),
-          compress: true,
-          cache: true
-        }
-      : false
+export function createHandler<PlatformRequest>(options: VikeOptions<PlatformRequest> = {}) {
+  const staticConfig = resolveStaticConfig(options.static)
+  const shouldCache = staticConfig && staticConfig.cache
+  const compressionType = options.compress ?? true
+  let staticMiddleware: ConnectMiddleware | undefined
+  let compressMiddleware: ConnectMiddleware | undefined
 
   return async function handler({
     req,
@@ -39,104 +28,106 @@ function createHandler<PlatformRequest>(options: VikeOptions<PlatformRequest> = 
   }: {
     req: IncomingMessage
     res: ServerResponse
-    next?: NextFunction
+    next?: (err?: unknown) => void
     platformRequest: PlatformRequest
-  }) {
+  }): Promise<boolean> {
     if (req.method !== 'GET') {
-      return next?.()
+      next?.()
+      return false
     }
-    const urlOriginal = req.url ?? ''
 
-    if (getIsDevEnv()) {
-      const httpResponse = await renderAsset(urlOriginal, req.headers)
-
-      if (httpResponse) {
-        await writeHttpResponse(httpResponse, res)
-        return
-      }
-    } else if (serveAssets) {
-      const { root, compress, cache } = serveAssets
-      if (compress) {
-        if (!compressHandler) {
-          const { default: shrinkRay } = await import('@nitedani/shrink-ray-current')
-          //@ts-ignore
-          compressHandler = shrinkRay({
-            cacheSize: cache ? '128mB' : false
-          })
-        }
-
-        assert(compressHandler)
-        compressHandler(req, res, () => {})
+    if (globalStore.isPluginLoaded) {
+      const handled = await handleViteDevServer(req, res)
+      if (handled) return true
+    } else {
+      const isAsset = req.url?.startsWith('/assets/')
+      const shouldCompressResponse = compressionType === true || (compressionType === 'static' && isAsset)
+      if (shouldCompressResponse) {
+        await applyCompression(req, res, shouldCache)
       }
 
-      if (!staticHandler) {
-        const { default: sirv } = await import('sirv')
-        staticHandler = sirv(root, {
-          etag: true
-        })
-      }
-
-      const handled = await new Promise<boolean>((resolve) => {
-        res.once('finish', () => resolve(true))
-        assert(staticHandler)
-        staticHandler(req, res, () => {
-          resolve(false)
-        })
-      })
-      if (handled) {
-        return
+      if (staticConfig) {
+        const handled = await serveStaticFiles(req, res, staticConfig)
+        if (handled) return true
       }
     }
 
-    const pageContextInit = {
-      urlOriginal,
-      userAgent: req.headers['user-agent']
+    const handled = await renderPageAndRespond(req, res, platformRequest)
+    if (handled) return true
+    next?.()
+    return false
+  }
+
+  async function applyCompression(req: IncomingMessage, res: ServerResponse, shouldCache: boolean) {
+    if (!compressMiddleware) {
+      const { default: shrinkRay } = await import('@nitedani/shrink-ray-current')
+      compressMiddleware = shrinkRay({ cacheSize: shouldCache ? '128mB' : false }) as ConnectMiddleware
+    }
+    compressMiddleware(req, res, () => {})
+  }
+
+  async function serveStaticFiles(
+    req: IncomingMessage,
+    res: ServerResponse,
+    config: { root: string; cache: boolean }
+  ): Promise<boolean> {
+    if (!staticMiddleware) {
+      const { default: sirv } = await import('sirv')
+      staticMiddleware = sirv(config.root, { etag: true })
     }
 
-    const mergedPageContextInit = {
-      ...pageContextInit,
-      ...(getPageContext && (await getPageContext(platformRequest)))
+    return new Promise<boolean>((resolve) => {
+      res.once('finish', () => resolve(true))
+      staticMiddleware!(req, res, () => resolve(false))
+    })
+  }
+
+  async function renderPageAndRespond(
+    req: IncomingMessage,
+    res: ServerResponse,
+    platformRequest: PlatformRequest
+  ): Promise<boolean> {
+    const pageContext = await renderPage({
+      urlOriginal: req.url ?? '',
+      userAgent: req.headers['user-agent'],
+      ...(await getPageContext(platformRequest))
+    })
+
+    if (pageContext.errorWhileRendering) {
+      options.onError?.(pageContext.errorWhileRendering)
     }
 
-    const pageContext = await renderPage(mergedPageContextInit)
-    const { httpResponse, errorWhileRendering } = pageContext
-    if (errorWhileRendering) {
-      options.onError?.(errorWhileRendering)
+    if (!pageContext.httpResponse) {
+      return false
     }
-    if (!httpResponse) return next?.()
-    await writeHttpResponse(httpResponse, res)
+
+    await writeHttpResponse(pageContext.httpResponse, res)
+    return true
+  }
+
+  function getPageContext(platformRequest: PlatformRequest) {
+    return typeof options.pageContext === 'function' ? options.pageContext(platformRequest) : options.pageContext ?? {}
   }
 }
 
-async function writeHttpResponse(httpResponse: VikeHttpResponse | RenderAssetHttpResponse, res: ServerResponse) {
-  assert(httpResponse)
-  const { statusCode, headers } = httpResponse
-  const groupedHeaders = groupHeaders(headers)
-  groupedHeaders.forEach(([name, value]) => res.setHeader(name, value))
-  res.statusCode = statusCode
-  httpResponse.pipe(res)
-  await new Promise<void>((resolve) => {
-    res.once('finish', resolve)
+function handleViteDevServer(req: IncomingMessage, res: ServerResponse): Promise<boolean> {
+  return new Promise<boolean>((resolve) => {
+    res.once('finish', () => resolve(true))
+    assert(globalStore.viteDevServer)
+    globalStore.viteDevServer.middlewares(req, res, () => resolve(false))
   })
 }
 
-function groupHeaders(headers: [string, string][]) {
-  const grouped: { [key: string]: string | string[] } = {}
-
-  headers.forEach(([key, value]) => {
-    if (grouped[key]) {
-      // If the key already exists, append the new value
-      if (Array.isArray(grouped[key])) {
-        ;(grouped[key] as string[]).push(value)
-      } else {
-        grouped[key] = [grouped[key] as string, value]
-      }
-    } else {
-      // If the key doesn't exist, add it to the object
-      grouped[key] = value
-    }
-  })
-
-  // Convert the object back to an array
-  return Object.entries(grouped)
+function resolveStaticConfig(static_: VikeOptions['static']): false | { root: string; cache: boolean } {
+  if (static_ === false) return false
+  if (static_ === true || static_ === undefined) {
+    return { root: defaultStaticDir, cache: true }
+  }
+  if (typeof static_ === 'string') {
+    return { root: static_, cache: true }
+  }
+  return {
+    root: static_.root ?? defaultStaticDir,
+    cache: static_.cache ?? true
+  }
 }

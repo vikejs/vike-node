@@ -1,13 +1,14 @@
-export { vikeNode as default, vikeNode }
+export { vikeNode, vikeNode as default }
 
-import { setPluginLoaded } from '../runtime/env.js'
+import { globalStore } from '../runtime/globalStore.js'
+import { ConfigVikeNodePlugin } from '../types.js'
 import { commonConfig } from './plugins/commonConfig.js'
-import { devServerPlugin } from './plugins/devServer/devServerPlugin.js'
+import { devServerPlugin } from './plugins/devServerPlugin.js'
 import { serverEntryPlugin } from './plugins/serverEntryPlugin.js'
 import { standalonePlugin } from './plugins/standalonePlugin.js'
 
-setPluginLoaded()
+globalStore.isPluginLoaded = true
 
-function vikeNode() {
-  return [commonConfig(), serverEntryPlugin(), devServerPlugin(), standalonePlugin()]
+function vikeNode(config: ConfigVikeNodePlugin) {
+  return [commonConfig(config), serverEntryPlugin(), devServerPlugin(), standalonePlugin()]
 }
