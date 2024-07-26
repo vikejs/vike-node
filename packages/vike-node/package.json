@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@brillout/picocolors": "^1.0.14",
-    "@nitedani/shrink-ray-current": "^4.2.0",
+    "@nitedani/shrink-ray-current": "^4.3.0",
     "@vercel/nft": "^0.26.5",
     "esbuild": "^0.19.12",
     "sirv": "^2.0.4"

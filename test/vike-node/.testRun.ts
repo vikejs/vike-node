@@ -48,6 +48,7 @@ function testRun(cmd: 'npm run dev' | 'npm run prod') {
 
   test('argon2', async () => {
     await page.goto(`${getServerUrl()}/argon2`)
+    expect(await page.textContent('button[type="submit"]')).toBe('Sign in')
     await page.fill('input[type="text"]', 'correct-password')
     await autoRetry(async () => {
       await page.click('button[type="submit"]')
@@ -57,6 +58,7 @@ function testRun(cmd: 'npm run dev' | 'npm run prod') {
 
   test('sharp', async () => {
     await page.goto(`${getServerUrl()}/sharp`)
+    expect(await page.textContent('button[type="button"]')).toBe('Run sharp')
     await autoRetry(async () => {
       await page.click('button[type="button"]')
       expect(await page.textContent('body')).toContain('240000 bytes')
@@ -71,9 +73,9 @@ function testRun(cmd: 'npm run dev' | 'npm run prod') {
 
   // fastify should work but broken on ci
   // let's leave it out for now
-  if (!isProd && !(isCI && process.env.VIKE_NODE_FRAMEWORK === 'fastify'))
+  if (!isProd && !(isCI() && process.env.VIKE_NODE_FRAMEWORK === 'fastify'))
     test('vite hmr websocket', async () => {
-      const logs = []
+      const logs: string[] = []
       page.on('console', (msg) => logs.push(msg.text()))
 
       await page.goto(`${getServerUrl()}/`)
