@@ -49,8 +49,9 @@ function testRun(cmd: 'npm run dev' | 'npm run prod') {
   test('argon2', async () => {
     await page.goto(`${getServerUrl()}/argon2`)
     expect(await page.textContent('button[type="submit"]')).toBe('Sign in')
-    await page.fill('input[type="text"]', 'correct-password')
     await autoRetry(async () => {
+      await page.fill('input[type="text"]', '')
+      await page.fill('input[type="text"]', 'correct-password')
       await page.click('button[type="submit"]')
       expect(await page.textContent('body')).toContain('Valid password')
     })
