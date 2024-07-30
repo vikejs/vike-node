@@ -150,7 +150,7 @@ For example when we want to redirect the user using the 'Accept-Language' header
 ```js
 app.use(
   vike({
-    onBeforeRenderPage(req, res) {
+    beforeRenderPageHandler(req, res) {
       const isLocaleInPathname = ...
       const acceptLanguageHeaderExists = req.headers.has("Accept-Language")
       const url = new URL(req.url)
