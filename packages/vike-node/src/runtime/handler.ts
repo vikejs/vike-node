@@ -52,6 +52,16 @@ export function createHandler<PlatformRequest>(options: VikeOptions<PlatformRequ
       }
     }
 
+    if (options.onBeforeRenderPage) {
+      const handled = await options.onBeforeRenderPage(platformRequest, res)
+      if (handled) {
+        res.emit('finish')
+        return new Promise<boolean>((resolve) => {
+          res.once('finish', () => resolve(true))
+        })
+      }
+    }
+
     const handled = await renderPageAndRespond(req, res, platformRequest)
     if (handled) return true
     next?.()
@@ -63,7 +73,7 @@ export function createHandler<PlatformRequest>(options: VikeOptions<PlatformRequ
       const { default: shrinkRay } = await import('@nitedani/shrink-ray-current')
       compressMiddleware = shrinkRay({ cacheSize: shouldCache ? '128mB' : false }) as ConnectMiddleware
     }
-    compressMiddleware(req, res, () => {})
+    compressMiddleware(req, res, () => { })
   }
 
   async function serveStaticFiles(
