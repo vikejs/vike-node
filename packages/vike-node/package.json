@@ -6,6 +6,7 @@
     "./connect": "./dist/connect.js",
     "./fastify": "./dist/fastify.js",
     "./hono": "./dist/hono.js",
+    "./elysia": "./dist/elysia.js",
     "./plugin": "./dist/plugin/index.js"
   },
   "scripts": {
@@ -31,6 +32,7 @@
     "@types/node": "^20.14.12",
     "fastify": "^4.28.1",
     "hono": "^4.5.1",
+    "elysia": "^1.1.4",
     "typescript": "^5.5.4",
     "vike": "^0.4.181",
     "vite": "^5.3.5"
@@ -45,6 +47,9 @@
       ],
       "hono": [
         "./dist/hono.d.ts"
+      ],
+      "elysia": [
+        "./dist/elysia.d.ts"
       ],
       "plugin": [
         "./dist/plugin/index.d.ts"

@@ -211,6 +211,24 @@ function startServer() {
 }
 ```
 
+Elysia (Bun):
+
+```js
+// server/index.js
+
+import { Elysia } from 'elysia'
+import vike from 'vike-node/elysia'
+
+startServer()
+
+function startServer() {
+  const app = new Elysia()
+  app.use(vike())
+  const port = +(process.env.PORT || 3000)
+  app.listen(port, () => console.log(`Server running at http://localhost:${port}`))
+}
+```
+
 ## Migration guide:
 
 ```diff

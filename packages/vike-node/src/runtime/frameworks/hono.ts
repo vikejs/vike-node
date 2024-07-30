@@ -33,8 +33,8 @@ import type { VikeOptions } from '../types.js'
  * ```
  *
  */
-function vike(options?: VikeOptions): MiddlewareHandler {
-  const handler = createHandler<HonoRequest>(options)
+function vike(options?: VikeOptions<HonoRequest>): MiddlewareHandler {
+  const handler = createHandler(options)
   return async function middleware(ctx, next) {
     const req = ctx.env.incoming as IncomingMessage
     globalStore.setupHMRProxy(req)

@@ -81,6 +81,9 @@ importers:
       '@types/node':
         specifier: ^20.14.12
         version: 20.14.12
+      elysia:
+        specifier: ^1.1.4
+        version: 1.1.4(@sinclair/typebox@0.32.35)(typescript@5.5.4)
       fastify:
         specifier: ^4.28.1
         version: 4.28.1
@@ -126,6 +129,9 @@ importers:
       cross-env:
         specifier: ^7.0.3
         version: 7.0.3
+      elysia:
+        specifier: ^1.1.4
+        version: 1.1.4(@sinclair/typebox@0.32.35)(typescript@5.5.4)
       express:
         specifier: ^4.19.2
         version: 4.19.2
@@ -1130,6 +1136,9 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  '@sinclair/typebox@0.32.35':
+    resolution: {integrity: sha512-Ul3YyOTU++to8cgNkttakC0dWvpERr6RYoHO2W47DLbFvrwBDJUY31B1sImH6JZSYc4Kt4PyHtoPNu+vL2r2dA==}
+
   '@ts-morph/common@0.20.0':
     resolution: {integrity: sha512-7uKjByfbPpwuzkstL3L5MQyuXPSKdoNG93Fmi2JoDcTf3pEP731JdRFAduRVkOs8oqxPsXKA+ScrWkdQ8t/I+Q==}
 
@@ -1555,6 +1564,18 @@ packages:
 
   electron-to-chromium@1.5.2:
     resolution: {integrity: sha512-kc4r3U3V3WLaaZqThjYz/Y6z8tJe+7K0bbjUVo3i+LWIypVdMx5nXCkwRe6SWbY6ILqLdc1rKcKmr3HoH7wjSQ==}
+
+  elysia@1.1.4:
+    resolution: {integrity: sha512-1axwwKig+plmUH/Rwd+lvJvgutis+6eoF+RnB76fGtgNCfhQ8yh4pNb3MIo39YHwyEA+j6A5a/vn8U+UPkRt2A==}
+    peerDependencies:
+      '@sinclair/typebox': '>= 0.32.0'
+      openapi-types: '>= 12.0.0'
+      typescript: '>= 5.0.0'
+    peerDependenciesMeta:
+      openapi-types:
+        optional: true
+      typescript:
+        optional: true
 
   emoji-regex@8.0.0:
     resolution: {integrity: sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==}
@@ -3361,6 +3382,8 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.19.0':
     optional: true
 
+  '@sinclair/typebox@0.32.35': {}
+
   '@ts-morph/common@0.20.0':
     dependencies:
       fast-glob: 3.3.2
@@ -3824,6 +3847,14 @@ snapshots:
   ee-first@1.1.1: {}
 
   electron-to-chromium@1.5.2: {}
+
+  elysia@1.1.4(@sinclair/typebox@0.32.35)(typescript@5.5.4):
+    dependencies:
+      '@sinclair/typebox': 0.32.35
+      cookie: 0.6.0
+      fast-decode-uri-component: 1.0.1
+    optionalDependencies:
+      typescript: 5.5.4
 
   emoji-regex@8.0.0: {}
 
