@@ -149,6 +149,7 @@ app.use(
 - Express
 - Fastify
 - Hono
+- Elysia (Bun)
 
 Express:
 
