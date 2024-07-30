@@ -52,8 +52,8 @@ export function createHandler<PlatformRequest>(options: VikeOptions<PlatformRequ
       }
     }
 
-    if (options.onBeforeRenderPage) {
-      const handled = await options.onBeforeRenderPage(platformRequest, res)
+    if (options.beforeRenderPageHandler) {
+      const handled = await options.beforeRenderPageHandler(platformRequest, res)
       if (handled) {
         res.emit('finish')
         return new Promise<boolean>((resolve) => {

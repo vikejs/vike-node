@@ -8,7 +8,7 @@ export type VikeOptions<PlatformRequest = null> = {
   compress?: boolean | 'static'
   static?: boolean | string | { root?: string; cache?: boolean }
   onError?: (err: unknown) => void
-  onBeforeRenderPage?: (req: PlatformRequest, res: ServerResponse) => boolean | Promise<boolean>
+  beforeRenderPageHandler?: (req: PlatformRequest, res: ServerResponse) => boolean | Promise<boolean>
 }
 export type ConnectMiddleware<
   PlatformRequest extends IncomingMessage = IncomingMessage,
