@@ -73,7 +73,7 @@ export function createHandler<PlatformRequest>(options: VikeOptions<PlatformRequ
       const { default: shrinkRay } = await import('@nitedani/shrink-ray-current')
       compressMiddleware = shrinkRay({ cacheSize: shouldCache ? '128mB' : false }) as ConnectMiddleware
     }
-    compressMiddleware(req, res, () => { })
+    compressMiddleware(req, res, () => {})
   }
 
   async function serveStaticFiles(

@@ -142,6 +142,37 @@ app.use(
 )
 ```
 
+## beforeRenderPageHandler middleware:
+
+This middleware is useful for cases like i18n : https://vike.dev/i18n.
+For example when we want to redirect the user using the 'Accept-Language' header.
+
+```js
+app.use(
+  vike({
+    onBeforeRenderPage(req, res) {
+      const isLocaleInPathname = ...
+      const acceptLanguageHeaderExists = req.headers.has("Accept-Language")
+      const url = new URL(req.url)
+
+      if (!isLocaleInPathname && acceptLanguageHeaderExists) {
+        const acceptLanguageHeader = req.headers.get("Accept-Language");
+        const locale = ...
+
+        const { pathname, search, hash } = url;
+        const pathWithoutOrigin = `${pathname}${search}${hash}`;
+
+        res.statusCode = 302;
+        res.setHeader('Location', `/${locale}${pathWithoutOrigin}`)
+        return true;
+      }
+
+      return false;
+    }
+  })
+)
+```
+
 ## Framework examples:
 
 `vike-node` includes middlewares for the most popular web frameworks:
