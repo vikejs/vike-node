@@ -89,7 +89,7 @@ export function createHandler<PlatformRequest>(options: VikeOptions<PlatformRequ
   ): Promise<boolean> {
     const pageContext = await renderPage({
       urlOriginal: req.url ?? '',
-      userAgent: req.headers['user-agent'],
+      headersOriginal: req.headers,
       ...(await getPageContext(platformRequest))
     })
 
@@ -106,7 +106,9 @@ export function createHandler<PlatformRequest>(options: VikeOptions<PlatformRequ
   }
 
   function getPageContext(platformRequest: PlatformRequest) {
-    return typeof options.pageContext === 'function' ? options.pageContext(platformRequest) : options.pageContext ?? {}
+    return typeof options.pageContext === 'function'
+      ? options.pageContext(platformRequest)
+      : (options.pageContext ?? {})
   }
 }
 
