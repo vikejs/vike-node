@@ -26,7 +26,7 @@
     "telefunc": "^0.1.76",
     "typescript": "^5.5.4",
     "vike": "^0.4.181",
-    "vike-node": "^0.1.1",
+    "vike-node": "^0.1.2",
     "vite": "^5.3.5"
   },
   "type": "module"

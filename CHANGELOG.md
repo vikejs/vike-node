@@ -1,3 +1,12 @@
+## [0.1.2](https://github.com/vikejs/vike-node/compare/v0.1.1...v0.1.2) (2024-07-31)
+
+
+### Bug Fixes
+
+* pass headersOriginal in pageContext ([70b16ce](https://github.com/vikejs/vike-node/commit/70b16cec24833d1626b0f712fe458c451d98d055))
+
+
+
 ## [0.1.1](https://github.com/vikejs/vike-node/compare/v0.1.0...v0.1.1) (2024-07-26)
 
 
