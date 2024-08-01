@@ -1,3 +1,12 @@
+## [0.1.3](https://github.com/vikejs/vike-node/compare/v0.1.2...v0.1.3) (2024-08-01)
+
+
+### Features
+
+* add h3 ([#2](https://github.com/vikejs/vike-node/issues/2)) ([12a856c](https://github.com/vikejs/vike-node/commit/12a856c69282827a47c6acb66e7cbd59dff542d5))
+
+
+
 ## [0.1.2](https://github.com/vikejs/vike-node/compare/v0.1.1...v0.1.2) (2024-07-31)
 
 
