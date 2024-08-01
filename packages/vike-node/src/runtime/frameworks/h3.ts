@@ -21,19 +21,16 @@ import type { VikeOptions } from '../types.js'
  *
  * @example
  * ```js
- * import { createServer } from 'http'
  * import { createApp } from 'h3'
  * import { vike } from 'vike-node/h3'
  *
  * const app = createApp()
  * app.use(vike())
  *
- * createServer(app).listen(3000)
  * ```
  *
  * @remarks
  * - This handler directly uses Node.js' IncomingMessage and ServerResponse objects from the h3 event.
- * - Error handling should be implemented at the h3 app level.
  *
  */
 function vike(options?: VikeOptions<IncomingMessage>): EventHandler {
