@@ -149,6 +149,7 @@ app.use(
 - Express
 - Fastify
 - Hono
+- H3
 - Elysia (Bun)
 
 Express:
@@ -209,6 +210,28 @@ function startServer() {
     },
     () => console.log(`Server running at http://localhost:${port}`)
   )
+}
+```
+
+H3:
+
+```js
+// server/index.js
+
+import { createApp, toNodeListener } from 'h3'
+import { createServer } from 'http'
+import vike from 'vike-node/h3'
+
+startServer()
+
+async function startServer() {
+  const app = createApp()
+  app.use(vike())
+  const port = process.env.PORT || 3000
+  const server = createServer(toNodeListener(app)).listen(port)
+  server.on('listening', () => {
+    console.log(`Server running at http://localhost:${port}`)
+  })
 }
 ```
 
