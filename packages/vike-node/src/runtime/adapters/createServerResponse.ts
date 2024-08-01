@@ -17,12 +17,18 @@ function createServerResponse(incomingMessage: IncomingMessage) {
   const passThrough = new PassThrough()
   const onReadable = new Promise<{ readable: Readable; headers: OutgoingHttpHeaders; statusCode: number }>(
     (resolve, reject) => {
-      passThrough.once('readable', () => {
+      const handleReadable = () => {
         resolve({ readable: Readable.from(passThrough), headers: res.getHeaders(), statusCode: res.statusCode })
-      })
-      passThrough.once('error', (err) => {
+      }
+
+      const handleError = (err: Error) => {
         reject(err)
-      })
+      }
+
+      passThrough.once('readable', handleReadable)
+      passThrough.once('end', handleReadable)
+      passThrough.once('error', handleError)
+      res.once('error', handleError)
     }
   )
 
@@ -37,16 +43,11 @@ function createServerResponse(incomingMessage: IncomingMessage) {
   res.write = passThrough.write.bind(passThrough)
   res.end = (passThrough as any).end.bind(passThrough)
 
-  let headersSet = false
   res.writeHead = function writeHead(
     statusCode: number,
     statusMessage?: string | OutgoingHttpHeaders | OutgoingHttpHeader[],
     headers?: OutgoingHttpHeaders | OutgoingHttpHeader[]
   ): ServerResponse {
-    if (headersSet) {
-      return res
-    }
-    headersSet = true
     res.statusCode = statusCode
     if (typeof statusMessage === 'object') {
       headers = statusMessage

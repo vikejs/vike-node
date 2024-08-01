@@ -26,7 +26,7 @@ const statusCodesWithoutBody = [
  * @returns {WebHandler} A function that handles web requests and returns a Response or undefined.
  */
 function connectToWeb(handler: ConnectMiddleware): WebHandler {
-  return async (request: Request): Promise<Response | undefined> => {
+  return (request: Request): Promise<Response | undefined> => {
     const req = createIncomingMessage(request)
     const { res, onReadable } = createServerResponse(req)
 
@@ -56,19 +56,7 @@ function connectToWeb(handler: ConnectMiddleware): WebHandler {
         }
       }
 
-      try {
-        handler(req, res, next)
-      } catch (error) {
-        reject(error instanceof Error ? error : new Error(String(error)))
-      }
-
-      request.signal.addEventListener(
-        'abort',
-        () => {
-          resolve(undefined)
-        },
-        { once: true }
-      )
+      Promise.resolve(handler(req, res, next)).catch(next)
     })
   }
 }
