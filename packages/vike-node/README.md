@@ -218,30 +218,20 @@ H3:
 ```js
 // server/index.js
 
+import { createApp, toNodeListener } from 'h3'
+import { createServer } from 'http'
 import vike from 'vike-node/h3'
-import {
-    createApp,
-    createRouter,
-    eventHandler,
-    toNodeListener,
-    toWebRequest,
-} from "h3"
 
 startServer()
 
-function startServer() {
-  const app = createApp();
-  const port = +(process.env.PORT || 3000)
-  const router = createRouter();
-  router.use("/**", eventHandler(vike()));
-
-    app.use(router);
-
-    const server = createServer(toNodeListener(app)).listen(port);
-
-    server.on("listening", () => {
-        console.log(`Server running at http://localhost:${port}`);
-    });
+async function startServer() {
+  const app = createApp()
+  app.use(vike())
+  const port = process.env.PORT || 3000
+  const server = createServer(toNodeListener(app)).listen(port)
+  server.on('listening', () => {
+    console.log(`Server running at http://localhost:${port}`)
+  })
 }
 ```
 

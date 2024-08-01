@@ -1,45 +1,53 @@
 export { vike }
 
-import { EventHandlerRequest, H3Event, toWebRequest } from 'h3'
-import { connectToWeb } from '../adapters/connectToWeb.js'
+import { eventHandler, EventHandler } from 'h3'
+import type { IncomingMessage } from 'node:http'
 import { globalStore } from '../globalStore.js'
 import { createHandler } from '../handler.js'
 import type { VikeOptions } from '../types.js'
 
 /**
- * Creates a H3 middleware to handle Vike requests and HMR (Hot Module Replacement).
+ * Creates an h3 event handler to process Vike requests.
  *
- * @param {VikeOptions} [options] - Configuration options for Vike.
+ * @param {VikeOptions<IncomingMessage>} [options] - Configuration options for Vike.
  *
- * @returns {MiddlewareHandler} A H3 middleware function that processes requests with Vike.
+ * @returns {EventHandler} An h3 event handler that processes requests with Vike.
  *
  * @description
- * This function creates a H3 middleware that integrates Vike's server-side rendering capabilities
- * and handles Hot Module Replacement (HMR) for development environments. The middleware:
- *
+ * This function creates an h3 event handler that integrates Vike's server-side rendering capabilities.
+ * The handler:
  * 1. Checks for and handles HMR WebSocket upgrade requests.
  * 2. Processes regular requests using Vike's handler.
- * 3. Adapts Node.js-style request handling to work with Web standard Response objects.
+ *
+ * @example
+ * ```js
+ * import { createServer } from 'http'
+ * import { createApp } from 'h3'
+ * import { vike } from 'vike-node/h3'
+ *
+ * const app = createApp()
+ * app.use(vike())
+ *
+ * createServer(app).listen(3000)
+ * ```
+ *
+ * @remarks
+ * - This handler directly uses Node.js' IncomingMessage and ServerResponse objects from the h3 event.
+ * - Error handling should be implemented at the h3 app level.
+ *
  */
-function vike(options?: VikeOptions<Request>) {
-    const handler = createHandler(options);
+function vike(options?: VikeOptions<IncomingMessage>): EventHandler {
+  const handler = createHandler(options)
+  return eventHandler(async (event) => {
+    const {
+      node: { req, res }
+    } = event
 
-    return async function middleware(event: H3Event<EventHandlerRequest>) {
-        const request = toWebRequest(event);
-
-        globalStore.setupHMRProxy(event.node.req);
-
-        const response = await connectToWeb((req, res, next) =>
-            handler({
-                req,
-                res,
-                next,
-                platformRequest: request
-            })
-        )(request)
-
-        if (response) {
-            return response
-        }
-    }
+    globalStore.setupHMRProxy(req)
+    await handler({
+      req,
+      res,
+      platformRequest: req
+    })
+  })
 }
