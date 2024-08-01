@@ -106,9 +106,7 @@ export function createHandler<PlatformRequest>(options: VikeOptions<PlatformRequ
   }
 
   function getPageContext(platformRequest: PlatformRequest) {
-    return typeof options.pageContext === 'function'
-      ? options.pageContext(platformRequest)
-      : (options.pageContext ?? {})
+    return typeof options.pageContext === 'function' ? options.pageContext(platformRequest) : options.pageContext ?? {}
   }
 }
 
