@@ -32,10 +32,12 @@ function createServerResponse(incomingMessage: IncomingMessage) {
     }
   )
 
-  res.once('finish', () => {
-    passThrough.end()
+  passThrough.once('finish', () => {
+    res.emit('finish')
   })
-
+  passThrough.once('close', () => {
+    res.emit('close')
+  })
   passThrough.on('drain', () => {
     res.emit('drain')
   })
