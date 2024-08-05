@@ -13,6 +13,6 @@ async function writeHttpResponse(httpResponse: VikeHttpResponse, res: ServerResp
   res.statusCode = statusCode
   httpResponse.pipe(res)
   await new Promise<void>((resolve) => {
-    res.once('finish', resolve)
+    res.once('close', resolve)
   })
 }

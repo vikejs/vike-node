@@ -33,14 +33,10 @@ function createServerResponse(incomingMessage: IncomingMessage) {
   )
 
   passThrough.once('finish', () => {
-    setTimeout(() => {
-      res.emit('finish')
-    }, 0)
+    res.emit('finish')
   })
   passThrough.once('close', () => {
-    setTimeout(() => {
-      res.emit('close')
-    }, 0)
+    res.emit('close')
   })
   passThrough.on('drain', () => {
     res.emit('drain')

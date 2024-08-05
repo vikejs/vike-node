@@ -77,7 +77,7 @@ export function createHandler<PlatformRequest>(options: VikeOptions<PlatformRequ
     }
 
     return new Promise<boolean>((resolve) => {
-      res.once('finish', () => resolve(true))
+      res.once('close', () => resolve(true))
       staticMiddleware!(req, res, () => resolve(false))
     })
   }
@@ -112,7 +112,7 @@ export function createHandler<PlatformRequest>(options: VikeOptions<PlatformRequ
 
 function handleViteDevServer(req: IncomingMessage, res: ServerResponse): Promise<boolean> {
   return new Promise<boolean>((resolve) => {
-    res.once('finish', () => resolve(true))
+    res.once('close', () => resolve(true))
     assert(globalStore.viteDevServer)
     globalStore.viteDevServer.middlewares(req, res, () => resolve(false))
   })
