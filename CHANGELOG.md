@@ -1,3 +1,12 @@
+## [0.1.4](https://github.com/vikejs/vike-node/compare/v0.1.3...v0.1.4) (2024-08-05)
+
+
+### Bug Fixes
+
+* fix createServerResponse memory leak ([c0f3788](https://github.com/vikejs/vike-node/commit/c0f37886f874faddd62a78ce133263fb6d2a0621))
+
+
+
 ## [0.1.3](https://github.com/vikejs/vike-node/compare/v0.1.2...v0.1.3) (2024-08-01)
 
 
