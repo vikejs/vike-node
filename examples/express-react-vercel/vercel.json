@@ -1,0 +1,9 @@
+{
+  "outputDirectory": "dist/client",
+  "rewrites": [
+    {
+      "source": "/((?!assets/).*)",
+      "destination": "/api"
+    }
+  ]
+}
