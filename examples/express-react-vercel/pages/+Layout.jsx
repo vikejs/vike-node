@@ -8,10 +8,10 @@ function Layout({ children }) {
     <PageLayout>
       <Sidebar>
         <a className="navitem" href="/">
-          Home
+          Pre-rendered
         </a>
-        <a className="navitem" href="/about">
-          About
+        <a className="navitem" href="/dynamic">
+          Dynamic
         </a>
       </Sidebar>
       <Content>{children}</Content>

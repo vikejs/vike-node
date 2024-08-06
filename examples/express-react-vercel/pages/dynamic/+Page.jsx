@@ -5,8 +5,8 @@ import React from 'react'
 function Page() {
   return (
     <>
-      <h1>About</h1>
-      <p>Example of using Vike.</p>
+      <h1>Dynamic</h1>
+      This page is rendered to HTML at {new Date().toLocaleString('en')}.
     </>
   )
 }
