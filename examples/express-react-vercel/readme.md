@@ -7,4 +7,4 @@ npm install
 npm run dev
 ```
 
-https://vercel.com/new/clone?repository-url=https://github.com/vikejs/vike-node/tree/main/examples/express-react-vercel&project-name=express-react&repository-name=express-react
+https://vercel.com/new/clone?repository-url=https://github.com/vikejs/vike-node/tree/vercel/examples/express-react-vercel&project-name=express-react&repository-name=express-react
