@@ -119,6 +119,10 @@ function handleViteDevServer(req: IncomingMessage, res: ServerResponse): Promise
 }
 
 function resolveStaticConfig(static_: VikeOptions['static']): false | { root: string; cache: boolean } {
+  // Disable static file serving for Vercel
+  // Vercel will serve static files on its own
+  // See vercel.json > outputDirectory
+  if (process.env.VERCEL) return false
   if (static_ === false) return false
   if (static_ === true || static_ === undefined) {
     return { root: defaultStaticDir, cache: true }
