@@ -13,6 +13,9 @@ function Layout({ children }) {
         <a className="navitem" href="/dynamic">
           Dynamic
         </a>
+        <a className="navitem" href="/static">
+          Static
+        </a>
       </Sidebar>
       <Content>{children}</Content>
     </PageLayout>

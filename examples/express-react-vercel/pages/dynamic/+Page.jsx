@@ -1,12 +1,27 @@
 export default Page
 
-import React from 'react'
+import React, { useState } from 'react'
 
 function Page() {
   return (
     <>
-      <h1>Dynamic</h1>
-      This page is rendered to HTML at {new Date().toLocaleString('en')}.
+      <h1>Welcome</h1>
+      This page is:
+      <ul>
+        <li>Dynamic</li>
+        <li>No static html generated</li>
+        <li>Interactive</li>
+      </ul>
+      <Counter />
     </>
+  )
+}
+
+function Counter() {
+  const [count, setCount] = useState(0)
+  return (
+    <button type="button" onClick={() => setCount((count) => count + 1)}>
+      Counter {count}
+    </button>
   )
 }

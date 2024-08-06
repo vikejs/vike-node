@@ -10,7 +10,7 @@ function Page() {
       <ul>
         <li>Pre-rendered</li>
         <li>Static html generated</li>
-        <li>Interactive</li>
+        <li>Not interactive (no javascript is downloaded for this page)</li>
       </ul>
       <Counter />
     </>
