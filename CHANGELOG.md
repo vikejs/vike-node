@@ -1,3 +1,12 @@
+## [0.1.9](https://github.com/vikejs/vike-node/compare/v0.1.8...v0.1.9) (2024-08-07)
+
+
+### Bug Fixes
+
+* fix wrong stacktraces ([ed62357](https://github.com/vikejs/vike-node/commit/ed623578095694db9cd719d120a771673e767d8b))
+
+
+
 ## [0.1.8](https://github.com/vikejs/vike-node/compare/v0.1.7...v0.1.8) (2024-08-07)
 
 
