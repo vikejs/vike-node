@@ -63,6 +63,7 @@ export function devServerPlugin(): Plugin {
       globalStore.viteDevServer = vite
       globalStore.setupHMRProxy = setupHMRProxy
       patchViteServer(vite)
+      setupErrorHandler(vite)
       initializeServerEntry(vite)
     }
   }
@@ -110,6 +111,27 @@ export function devServerPlugin(): Plugin {
       }
     })
   }
+}
+
+function setupErrorHandler(vite: ViteDevServer) {
+  const _prepareStackTrace = Error.prepareStackTrace
+  Error.prepareStackTrace = function prepareStackTrace(error, stack) {
+    let ret = _prepareStackTrace?.(error, stack)
+    try {
+      ret = vite.ssrRewriteStacktrace(ret)
+    } catch (e) {
+      console.warn('Failed to apply Vite SSR stack trace fix:', e)
+    }
+    return ret
+  }
+
+  function onError(err: unknown) {
+    console.error(err)
+    logViteInfo('Server crash: Update a server file or type "r+enter" to restart the server.')
+  }
+
+  process.on('unhandledRejection', onError)
+  process.on('uncaughtException', onError)
 }
 
 async function setupReloader() {
