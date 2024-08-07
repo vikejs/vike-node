@@ -7,12 +7,6 @@ import { globalStore } from './globalStore.js'
 import type { ConnectMiddleware, VikeOptions } from './types.js'
 import { writeHttpResponse } from './utils/writeHttpResponse.js'
 
-const argv1 = process.argv[1]
-const entrypointDirAbs = argv1
-  ? dirname(isAbsolute(argv1) ? argv1 : join(process.cwd(), argv1))
-  : dirname(fileURLToPath(import.meta.url))
-const defaultStaticDir = join(entrypointDirAbs, '..', 'client')
-
 export function createHandler<PlatformRequest>(options: VikeOptions<PlatformRequest> = {}) {
   const staticConfig = resolveStaticConfig(options.static)
   const shouldCache = staticConfig && staticConfig.cache
@@ -124,6 +118,13 @@ function resolveStaticConfig(static_: VikeOptions['static']): false | { root: st
   // See vercel.json > outputDirectory
   if (process.env.VERCEL) return false
   if (static_ === false) return false
+
+  const argv1 = process.argv[1]
+  const entrypointDirAbs = argv1
+    ? dirname(isAbsolute(argv1) ? argv1 : join(process.cwd(), argv1))
+    : dirname(fileURLToPath(import.meta.url))
+  const defaultStaticDir = join(entrypointDirAbs, '..', 'client')
+
   if (static_ === true || static_ === undefined) {
     return { root: defaultStaticDir, cache: true }
   }

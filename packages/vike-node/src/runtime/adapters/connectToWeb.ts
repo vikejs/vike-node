@@ -31,22 +31,17 @@ function connectToWeb(handler: ConnectMiddleware): WebHandler {
     const { res, onReadable } = createServerResponse(req)
 
     return new Promise<Response | undefined>((resolve, reject) => {
-      ;(async () => {
-        try {
-          const { readable, headers, statusCode } = await onReadable
-          const responseBody = statusCodesWithoutBody.includes(statusCode)
-            ? null
-            : (Readable.toWeb(readable) as ReadableStream)
-          resolve(
-            new Response(responseBody, {
-              status: statusCode,
-              headers: flattenHeaders(headers)
-            })
-          )
-        } catch (error) {
-          reject(error instanceof Error ? error : new Error('Error creating response'))
-        }
-      })()
+      onReadable(({ readable, headers, statusCode }) => {
+        const responseBody = statusCodesWithoutBody.includes(statusCode)
+          ? null
+          : (Readable.toWeb(readable) as ReadableStream)
+        resolve(
+          new Response(responseBody, {
+            status: statusCode,
+            headers: flattenHeaders(headers)
+          })
+        )
+      })
 
       const next = (error?: unknown) => {
         if (error) {
