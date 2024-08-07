@@ -1,3 +1,13 @@
+## [0.1.8](https://github.com/vikejs/vike-node/compare/v0.1.7...v0.1.8) (2024-08-07)
+
+
+### Bug Fixes
+
+* [#5](https://github.com/vikejs/vike-node/issues/5) ([d0a1187](https://github.com/vikejs/vike-node/commit/d0a1187e7326be2320002a5cc8af21061b5c395c))
+* fix leaking promise ([052d16a](https://github.com/vikejs/vike-node/commit/052d16a0d5f81163632731dbccd0065ba27c5675))
+
+
+
 ## [0.1.7](https://github.com/vikejs/vike-node/compare/v0.1.6...v0.1.7) (2024-08-06)
 
 
