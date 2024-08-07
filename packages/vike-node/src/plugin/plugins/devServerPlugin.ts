@@ -94,7 +94,7 @@ export function devServerPlugin(): Plugin {
     const indexResolved = await vite.pluginContainer.resolveId(index)
     assert(indexResolved?.id)
     entryAbs = indexResolved.id
-    vite.ssrLoadModule(entryAbs)
+    vite.ssrLoadModule(entryAbs).catch(logRestartMessage)
   }
 
   function setupHMRProxy(req: IncomingMessage) {
@@ -113,21 +113,35 @@ export function devServerPlugin(): Plugin {
   }
 }
 
+function logRestartMessage() {
+  logViteInfo('Server crash: Update a server file or type "r+enter" to restart the server.')
+}
+
 function setupErrorHandler(vite: ViteDevServer) {
+  const rewroteStacktraces = new WeakSet()
+
   const _prepareStackTrace = Error.prepareStackTrace
   Error.prepareStackTrace = function prepareStackTrace(error, stack) {
     let ret = _prepareStackTrace?.(error, stack)
+    if (!ret) return ret
     try {
       ret = vite.ssrRewriteStacktrace(ret)
+      rewroteStacktraces.add(error)
     } catch (e) {
       console.warn('Failed to apply Vite SSR stack trace fix:', e)
     }
     return ret
   }
 
+  const _ssrFixStacktrace = vite.ssrFixStacktrace
+  vite.ssrFixStacktrace = function ssrFixStacktrace(e) {
+    if (rewroteStacktraces.has(e)) return
+    return _ssrFixStacktrace(e)
+  }
+
   function onError(err: unknown) {
     console.error(err)
-    logViteInfo('Server crash: Update a server file or type "r+enter" to restart the server.')
+    logRestartMessage()
   }
 
   process.on('unhandledRejection', onError)
