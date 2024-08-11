@@ -7,7 +7,7 @@ export default {
   plugins: [
     react(),
     vike({ prerender: true }),
-    vikeNode({ entry: 'server/node-entry.js' }),
+    vikeNode('server/node-entry.js'),
     pages({
       server: {
         kind: 'hono',

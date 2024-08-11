@@ -3,7 +3,6 @@ import esbuild from 'esbuild'
 import { builtinModules } from 'module'
 import vikeNode from 'vike-node/plugin'
 import vike from 'vike/plugin'
-import { UserConfig } from 'vite'
 
 export default {
   plugins: [
@@ -40,4 +39,4 @@ export default {
       }
     }
   ]
-} as UserConfig
+}
