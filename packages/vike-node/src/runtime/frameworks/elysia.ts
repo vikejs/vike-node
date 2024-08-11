@@ -1,14 +1,13 @@
 export { vike }
 
-import { Elysia, NotFoundError } from 'elysia'
-import { connectToWeb } from '../adapters/connectToWeb.js'
-import { createHandler } from '../handler.js'
+import { Context, Elysia, NotFoundError } from 'elysia'
+import { createHandler } from '../handler-web.js'
 import type { VikeOptions } from '../types.js'
 
 /**
  * Creates an Elysia plugin to handle Vike requests.
  *
- * @param {VikeOptions<Request>} [options] - Configuration options for Vike.
+ * @param {VikeOptions<Context>} [options] - Configuration options for Vike.
  *
  * @returns {Elysia} An Elysia plugin that handles all GET requests and processes them with Vike.
  *
@@ -29,19 +28,12 @@ import type { VikeOptions } from '../types.js'
  *
  * @throws {NotFoundError} Thrown when Vike doesn't handle the request, allowing Elysia to manage 404 responses.
  */
-function vike(options?: VikeOptions<Request>): Elysia {
+function vike(options?: VikeOptions<Context>): Elysia {
   const handler = createHandler(options)
   return new Elysia({
     name: 'vike-node:elysia'
   }).get('*', async (ctx) => {
-    const response = await connectToWeb((req, res, next) =>
-      handler({
-        req,
-        res,
-        next,
-        platformRequest: ctx.request
-      })
-    )(ctx.request)
+    const response = await handler({ request: ctx.request, platformRequest: ctx })
 
     if (response) {
       return response

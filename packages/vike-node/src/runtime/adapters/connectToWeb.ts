@@ -2,12 +2,11 @@ export { connectToWeb }
 
 import type { IncomingMessage } from 'node:http'
 import { Readable } from 'node:stream'
-import type { ConnectMiddleware } from '../types.js'
+import type { ConnectMiddleware, WebHandler } from '../types.js'
 import { flattenHeaders } from '../utils/header-utils.js'
 import { createServerResponse } from './createServerResponse.js'
 
 /** Type definition for a web-compatible request handler */
-type WebHandler = (request: Request) => Response | undefined | Promise<Response | undefined>
 
 const statusCodesWithoutBody = [
   100, // Continue

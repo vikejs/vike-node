@@ -1,11 +1,12 @@
 import type { IncomingMessage, ServerResponse } from 'http'
 import { dirname, isAbsolute, join } from 'path'
 import { fileURLToPath } from 'url'
-import { renderPage } from 'vike/server'
+
 import { assert } from '../utils/assert.js'
 import { globalStore } from './globalStore.js'
 import type { ConnectMiddleware, VikeOptions } from './types.js'
 import { writeHttpResponse } from './utils/writeHttpResponse.js'
+import { renderPage } from './vike-handler.js'
 
 export function createHandler<PlatformRequest>(options: VikeOptions<PlatformRequest> = {}) {
   const staticConfig = resolveStaticConfig(options.static)
@@ -46,10 +47,17 @@ export function createHandler<PlatformRequest>(options: VikeOptions<PlatformRequ
       }
     }
 
-    const handled = await renderPageAndRespond(req, res, platformRequest)
-    if (handled) return true
-    next?.()
-    return false
+    const httpResponse = await renderPage({
+      request: req,
+      platformRequest,
+      options
+    })
+    if (!httpResponse) {
+      next?.()
+      return false
+    }
+    await writeHttpResponse(httpResponse, res)
+    return true
   }
 
   async function applyCompression(req: IncomingMessage, res: ServerResponse, shouldCache: boolean) {
@@ -74,33 +82,6 @@ export function createHandler<PlatformRequest>(options: VikeOptions<PlatformRequ
       res.once('close', () => resolve(true))
       staticMiddleware!(req, res, () => resolve(false))
     })
-  }
-
-  async function renderPageAndRespond(
-    req: IncomingMessage,
-    res: ServerResponse,
-    platformRequest: PlatformRequest
-  ): Promise<boolean> {
-    const pageContext = await renderPage({
-      urlOriginal: req.url ?? '',
-      headersOriginal: req.headers,
-      ...(await getPageContext(platformRequest))
-    })
-
-    if (pageContext.errorWhileRendering) {
-      options.onError?.(pageContext.errorWhileRendering)
-    }
-
-    if (!pageContext.httpResponse) {
-      return false
-    }
-
-    await writeHttpResponse(pageContext.httpResponse, res)
-    return true
-  }
-
-  function getPageContext(platformRequest: PlatformRequest) {
-    return typeof options.pageContext === 'function' ? options.pageContext(platformRequest) : options.pageContext ?? {}
   }
 }
 

@@ -1,10 +1,9 @@
 export { vike }
 
-import type { HonoRequest, MiddlewareHandler } from 'hono'
-import type { IncomingMessage, ServerResponse } from 'http'
-import { connectToWeb } from '../adapters/connectToWeb.js'
+import type { Context, MiddlewareHandler } from 'hono'
+import type { IncomingMessage } from 'http'
 import { globalStore } from '../globalStore.js'
-import { createHandler } from '../handler.js'
+import { createHandler } from '../handler-web.js'
 import type { VikeOptions } from '../types.js'
 
 /**
@@ -33,19 +32,18 @@ import type { VikeOptions } from '../types.js'
  * ```
  *
  */
-function vike(options?: VikeOptions<HonoRequest>): MiddlewareHandler {
+function vike(options?: VikeOptions<Context>): MiddlewareHandler {
   const handler = createHandler(options)
   return async function middleware(ctx, next) {
-    const req = ctx.env.incoming as IncomingMessage
-    globalStore.setupHMRProxy(req)
-    const response = await connectToWeb((req, res, next) =>
-      handler({
-        req,
-        res,
-        next,
-        platformRequest: ctx.req
-      })
-    )(ctx.req.raw)
+    if (ctx.env.incoming) {
+      const req = ctx.env.incoming as IncomingMessage
+      globalStore.setupHMRProxy(req)
+    }
+
+    const response = await handler({
+      request: ctx.req.raw,
+      platformRequest: ctx
+    })
 
     if (response) {
       return response
