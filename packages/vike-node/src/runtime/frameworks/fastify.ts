@@ -3,7 +3,7 @@ export { vike }
 import type { FastifyPluginCallback, FastifyRequest } from 'fastify'
 import { createServerResponse } from '../adapters/createServerResponse.js'
 import { globalStore } from '../globalStore.js'
-import { createHandler } from '../handler.js'
+import { createHandler } from '../handler-node-only.js'
 import type { VikeOptions } from '../types.js'
 
 /**

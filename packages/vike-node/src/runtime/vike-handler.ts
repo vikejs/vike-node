@@ -1,4 +1,4 @@
-export { renderPage }
+export { renderPage, renderPageWeb }
 
 import { renderPage as _renderPage } from 'vike/server'
 import type { VikeHttpResponse, VikeOptions } from './types.js'
@@ -31,4 +31,23 @@ async function renderPage<PlatformRequest>({
   }
 
   return pageContext.httpResponse
+}
+
+async function renderPageWeb<PlatformRequest>({
+  request,
+  platformRequest,
+  options
+}: {
+  request: { url?: string; headers: Record<string, any> }
+  platformRequest: PlatformRequest
+  options: VikeOptions<PlatformRequest>
+}) {
+  const httpResponse = await renderPage({
+    request,
+    platformRequest,
+    options
+  })
+  if (!httpResponse) return undefined
+  const { statusCode, headers, getReadableWebStream } = httpResponse
+  return new Response(getReadableWebStream(), { status: statusCode, headers })
 }

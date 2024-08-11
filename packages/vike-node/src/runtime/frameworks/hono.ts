@@ -3,7 +3,6 @@ export { vike }
 import type { Context, MiddlewareHandler } from 'hono'
 import type { IncomingMessage } from 'http'
 import { globalStore } from '../globalStore.js'
-import { createHandler } from '../handler-web.js'
 import type { VikeOptions } from '../types.js'
 
 /**
@@ -33,13 +32,17 @@ import type { VikeOptions } from '../types.js'
  *
  */
 function vike(options?: VikeOptions<Context>): MiddlewareHandler {
-  const handler = createHandler(options)
+  let handler: ReturnType<typeof import('vike-node/__handler').createHandler<Context>> | undefined = undefined
   return async function middleware(ctx, next) {
     if (ctx.env.incoming) {
       const req = ctx.env.incoming as IncomingMessage
       globalStore.setupHMRProxy(req)
     }
 
+    if (!handler) {
+      const { createHandler } = await import('vike-node/__handler')
+      handler = createHandler(options)
+    }
     const response = await handler({
       request: ctx.req.raw,
       platformRequest: ctx

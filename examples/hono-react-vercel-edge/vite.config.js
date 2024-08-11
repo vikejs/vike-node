@@ -3,5 +3,9 @@ import vike from 'vike/plugin'
 import vikeNode from 'vike-node/plugin'
 
 export default {
-  plugins: [react(), vike({ prerender: true }), vikeNode('server/index.js')]
+  plugins: [
+    react(),
+    vike({ prerender: false }),
+    vikeNode({ entry: 'server/index.js', external: ['vike-node/__handler'] })
+  ]
 }

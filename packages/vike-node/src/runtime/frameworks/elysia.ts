@@ -1,7 +1,6 @@
 export { vike }
 
-import { Context, Elysia, NotFoundError } from 'elysia'
-import { createHandler } from '../handler-web.js'
+import { type Context, Elysia, NotFoundError } from 'elysia'
 import type { VikeOptions } from '../types.js'
 
 /**
@@ -29,10 +28,14 @@ import type { VikeOptions } from '../types.js'
  * @throws {NotFoundError} Thrown when Vike doesn't handle the request, allowing Elysia to manage 404 responses.
  */
 function vike(options?: VikeOptions<Context>): Elysia {
-  const handler = createHandler(options)
+  let handler: ReturnType<typeof import('vike-node/__handler').createHandler<Context>> | undefined = undefined
   return new Elysia({
     name: 'vike-node:elysia'
   }).get('*', async (ctx) => {
+    if (!handler) {
+      const { createHandler } = await import('vike-node/__handler')
+      handler = createHandler(options)
+    }
     const response = await handler({ request: ctx.request, platformRequest: ctx })
 
     if (response) {
