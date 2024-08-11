@@ -11,4 +11,4 @@ npm run dev
 
 Deploy the example using [Vercel](https://vercel.com):
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/vikejs/vike-node/tree/vercel-edge/examples/hono-react-vercel-edge&project-name=hono-react&repository-name=hono-react)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/vikejs/vike-node/tree/main/examples/hono-react-vercel-edge&project-name=hono-react&repository-name=hono-react)
