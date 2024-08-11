@@ -11,7 +11,7 @@ export default {
     pages({
       server: {
         kind: 'hono',
-        entry: 'server/hono-entry.js'
+        entry: 'server/app.js'
       }
     })
   ]
