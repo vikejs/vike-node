@@ -15,9 +15,9 @@
     "./__handler": {
       "worker": "./dist/runtime/handler-web-only.js",
       "workerd": "./dist/runtime/handler-web-only.js",
-      "deno": "./dist/runtime/handler-web-only.js",
-      "browser": "./dist/runtime/handler-web-only.js",
+      "edge-light": "./dist/runtime/handler-web-only.js",
       "edge": "./dist/runtime/handler-web-only.js",
+      "browser": "./dist/runtime/handler-web-only.js",
       "default": "./dist/runtime/handler-web-and-node.js",
       "types": "./dist/runtime/handler-web-only.d.ts"
     }
