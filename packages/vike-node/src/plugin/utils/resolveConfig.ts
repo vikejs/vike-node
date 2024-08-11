@@ -4,7 +4,7 @@ import { unique } from './unique.js'
 
 export { resolveConfig }
 
-export const nativeDependecies = ['sharp', '@prisma/client', '@node-rs/*', 'vike-node/*']
+export const nativeDependecies = ['sharp', '@prisma/client', '@node-rs/*']
 
 function resolveConfig(configVike: ConfigVikeNode): ConfigVikeNodeResolved {
   if (typeof configVike.server === 'object') {

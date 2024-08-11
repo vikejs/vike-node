@@ -66,7 +66,7 @@ export function standalonePlugin(): Plugin {
       platform: 'node',
       format: 'esm',
       bundle: true,
-      external: configResolvedVike.server.external.filter((id) => id !== 'vike-node/__handler'),
+      external: configResolvedVike.server.external,
       entryPoints: rollupEntryFilePaths,
       sourcemap: configResolved.build.sourcemap === 'hidden' ? true : configResolved.build.sourcemap,
       outExtension: { '.js': '.mjs' },

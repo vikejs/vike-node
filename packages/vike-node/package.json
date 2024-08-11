@@ -17,7 +17,8 @@
       "workerd": "./dist/runtime/handler-web-only.js",
       "deno": "./dist/runtime/handler-web-only.js",
       "browser": "./dist/runtime/handler-web-only.js",
-      "import": "./dist/runtime/handler-web-and-node.js",
+      "edge": "./dist/runtime/handler-web-only.js",
+      "default": "./dist/runtime/handler-web-and-node.js",
       "types": "./dist/runtime/handler-web-only.d.ts"
     }
   },

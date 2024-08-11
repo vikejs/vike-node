@@ -14,7 +14,7 @@ function commonConfig(configVikeNodePlugin: ConfigVikeNodePlugin): Plugin {
 
       if (typeof config.ssr.external !== 'boolean') {
         config.ssr.external ??= []
-        config.ssr.external.push(...resolvedConfig.server.external)
+        config.ssr.external.push(...resolvedConfig.server.external, 'vike-node/__handler')
       }
       config.optimizeDeps.exclude ??= []
       config.optimizeDeps.exclude.push(...resolvedConfig.server.external)

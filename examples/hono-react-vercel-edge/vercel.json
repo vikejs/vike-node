@@ -3,7 +3,7 @@
   "rewrites": [
     {
       "source": "/((?!assets/).*)",
-      "destination": "/api"
+      "destination": "/api/edge-ssr"
     }
   ]
 }
