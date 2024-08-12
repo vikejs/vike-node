@@ -1,5 +1,5 @@
 import { serve } from '@hono/node-server'
-import app from './hono-entry.js'
+import app from './app.js'
 
 startServer()
 
