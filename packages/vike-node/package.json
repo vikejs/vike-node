@@ -34,7 +34,8 @@
     "@nitedani/shrink-ray-current": "^4.3.0",
     "@vercel/nft": "^0.26.5",
     "esbuild": "^0.19.12",
-    "sirv": "^2.0.4"
+    "sirv": "^2.0.4",
+    "unenv-nightly": "2.0.0-1721914978.1a79944"
   },
   "peerDependencies": {
     "vike": "^0.4.181",
@@ -49,9 +50,7 @@
     "hono": "^4.5.5",
     "typescript": "^5.5.4",
     "vike": "^0.4.184",
-    "vite": "^5.4.0",
-    "unenv-nightly": "2.0.0-1721914978.1a79944",
-    "ts-dedent": "^2.2.0"
+    "vite": "^5.4.0"
   },
   "typesVersions": {
     "*": {

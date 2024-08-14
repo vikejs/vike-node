@@ -180,6 +180,9 @@ importers:
       sirv:
         specifier: ^2.0.4
         version: 2.0.4
+      unenv-nightly:
+        specifier: 2.0.0-1721914978.1a79944
+        version: 2.0.0-1721914978.1a79944
     devDependencies:
       '@brillout/release-me':
         specifier: ^0.4.0
@@ -199,15 +202,9 @@ importers:
       hono:
         specifier: ^4.5.5
         version: 4.5.5
-      ts-dedent:
-        specifier: ^2.2.0
-        version: 2.2.0
       typescript:
         specifier: ^5.5.4
         version: 5.5.4
-      unenv-nightly:
-        specifier: 2.0.0-1721914978.1a79944
-        version: 2.0.0-1721914978.1a79944
       vike:
         specifier: ^0.4.184
         version: 0.4.184(react-streaming@0.3.43(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.0(@types/node@20.14.15))
@@ -3016,10 +3013,6 @@ packages:
   tr46@0.0.3:
     resolution: {integrity: sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==}
 
-  ts-dedent@2.2.0:
-    resolution: {integrity: sha512-q5W7tVM71e2xjHZTlgfTDoPF/SmqKG5hddq9SzR49CH2hayqRKJtQ4mtRlSxKaJlR/+9rEM+mnBHf7I2/BQcpQ==}
-    engines: {node: '>=6.10'}
-
   ts-morph@19.0.0:
     resolution: {integrity: sha512-D6qcpiJdn46tUqV45vr5UGM2dnIEuTGNxVhg0sk5NX11orcouwj6i1bMqZIz2mZTZB1Hcgy7C3oEVhAT+f6mbQ==}
 
@@ -5786,8 +5779,6 @@ snapshots:
   totalist@3.0.1: {}
 
   tr46@0.0.3: {}
-
-  ts-dedent@2.2.0: {}
 
   ts-morph@19.0.0:
     dependencies:
