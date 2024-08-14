@@ -1,10 +1,10 @@
 import { isNodeLike } from '../utils/isNodeLike.js'
 import type { VikeOptions, WebHandler } from './types.js'
-import { renderPageWeb } from './vike-handler.js'
 
 export function createHandler<PlatformRequest>(options: VikeOptions<PlatformRequest> = {}) {
   let nodeLike = undefined
   let nodeHandler: WebHandler | undefined = undefined
+  let webHandler: WebHandler | undefined = undefined
 
   return async function handler({ request, platformRequest }: { request: Request; platformRequest: PlatformRequest }) {
     if (request.method !== 'GET') {
@@ -20,6 +20,11 @@ export function createHandler<PlatformRequest>(options: VikeOptions<PlatformRequ
       return nodeHandler(request)
     }
 
-    return renderPageWeb({ request, platformRequest, options })
+    if (!webHandler) {
+      const handler = (await import('./handler-web-only.js')).createHandler(options)
+      webHandler = (request) => handler({ request, platformRequest })
+    }
+
+    return webHandler(request)
   }
 }

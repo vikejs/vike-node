@@ -1,11 +1,10 @@
 export { config }
 
 import vikeReact from 'vike-react/config'
+import vercel from '@vite-plugin-vercel/vike/config'
 
 const config = {
   // https://vike.dev/extends
-  extends: vikeReact,
-  prerender: false,
-  // set to "web" after https://github.com/vikejs/vike/pull/1799 is merged
+  extends: [vikeReact, vercel],
   stream: false
 }

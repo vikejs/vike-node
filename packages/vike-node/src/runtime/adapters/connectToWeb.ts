@@ -5,8 +5,7 @@ import { Readable } from 'node:stream'
 import type { ConnectMiddleware, WebHandler } from '../types.js'
 import { flattenHeaders } from '../utils/header-utils.js'
 import { createServerResponse } from './createServerResponse.js'
-
-/** Type definition for a web-compatible request handler */
+import { DUMMY_BASE_URL } from '../constants.js'
 
 const statusCodesWithoutBody = [
   100, // Continue
@@ -25,7 +24,7 @@ const statusCodesWithoutBody = [
  * @returns {WebHandler} A function that handles web requests and returns a Response or undefined.
  */
 function connectToWeb(handler: ConnectMiddleware): WebHandler {
-  return (request: Request): Promise<Response | undefined> => {
+  return async (request: Request): Promise<Response | undefined> => {
     const req = createIncomingMessage(request)
     const { res, onReadable } = createServerResponse(req)
 
@@ -62,10 +61,10 @@ function connectToWeb(handler: ConnectMiddleware): WebHandler {
  * @returns {IncomingMessage} An IncomingMessage-like object compatible with Node.js HTTP module.
  */
 function createIncomingMessage(request: Request): IncomingMessage {
-  const parsedUrl = new URL(request.url)
+  const parsedUrl = new URL(request.url, DUMMY_BASE_URL)
   const pathnameAndQuery = (parsedUrl.pathname || '') + (parsedUrl.search || '')
-
   const body = request.body ? Readable.fromWeb(request.body as any) : Readable.from([])
+
   return Object.assign(body, {
     url: pathnameAndQuery,
     method: request.method,

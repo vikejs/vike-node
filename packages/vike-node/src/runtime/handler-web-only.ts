@@ -1,4 +1,5 @@
 import type { VikeOptions } from './types.js'
+import { parseHeaders } from './utils/header-utils.js'
 import { renderPageWeb } from './vike-handler.js'
 
 export function createHandler<PlatformRequest>(options: VikeOptions<PlatformRequest> = {}) {
@@ -6,6 +7,6 @@ export function createHandler<PlatformRequest>(options: VikeOptions<PlatformRequ
     if (request.method !== 'GET') {
       return undefined
     }
-    return renderPageWeb({ request, platformRequest, options })
+    return renderPageWeb({ url: request.url, headers: parseHeaders(request.headers), platformRequest, options })
   }
 }

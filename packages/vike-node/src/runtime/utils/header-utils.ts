@@ -1,6 +1,7 @@
-export { flattenHeaders, groupHeaders }
+export { flattenHeaders, groupHeaders, parseHeaders }
 
 import type { OutgoingHttpHeaders } from 'http'
+import { HeadersProvided } from '../types.js'
 
 function groupHeaders(headers: [string, string][]): [string, string | string[]][] {
   const grouped: { [key: string]: string | string[] } = {}
@@ -43,4 +44,31 @@ function flattenHeaders(headers: OutgoingHttpHeaders): [string, string][] {
   }
 
   return flatHeaders
+}
+
+function parseHeaders(headers: HeadersProvided): [string, string][] {
+  const result: [string, string][] = []
+  if (typeof headers.forEach === 'function') {
+    headers.forEach((value, key) => {
+      if (Array.isArray(value)) {
+        value.forEach((value_) => {
+          result.push([key, value_])
+        })
+      } else {
+        result.push([key, value])
+      }
+    })
+  } else {
+    for (const [key, value] of Object.entries(headers)) {
+      if (Array.isArray(value)) {
+        value.forEach((value_) => {
+          result.push([key, value_])
+        })
+      } else {
+        result.push([key, value])
+      }
+    }
+  }
+
+  return result
 }

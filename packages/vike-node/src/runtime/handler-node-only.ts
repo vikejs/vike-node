@@ -7,11 +7,13 @@ import { globalStore } from './globalStore.js'
 import type { ConnectMiddleware, VikeOptions } from './types.js'
 import { writeHttpResponse } from './utils/writeHttpResponse.js'
 import { renderPage } from './vike-handler.js'
+import { parseHeaders } from './utils/header-utils.js'
+import { isVercel } from '../utils/isVercel.js'
 
 export function createHandler<PlatformRequest>(options: VikeOptions<PlatformRequest> = {}) {
   const staticConfig = resolveStaticConfig(options.static)
   const shouldCache = staticConfig && staticConfig.cache
-  const compressionType = options.compress ?? true
+  const compressionType = options.compress ?? !isVercel()
   let staticMiddleware: ConnectMiddleware | undefined
   let compressMiddleware: ConnectMiddleware | undefined
 
@@ -48,7 +50,8 @@ export function createHandler<PlatformRequest>(options: VikeOptions<PlatformRequ
     }
 
     const httpResponse = await renderPage({
-      request: req,
+      url: req.url!,
+      headers: parseHeaders(req.headers),
       platformRequest,
       options
     })
@@ -97,7 +100,7 @@ function resolveStaticConfig(static_: VikeOptions['static']): false | { root: st
   // Disable static file serving for Vercel
   // Vercel will serve static files on its own
   // See vercel.json > outputDirectory
-  if (process.env.VERCEL) return false
+  if (isVercel()) return false
   if (static_ === false) return false
 
   const argv1 = process.argv[1]

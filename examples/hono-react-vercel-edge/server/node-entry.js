@@ -8,9 +8,9 @@ function startServer() {
   serve(
     {
       fetch: app.fetch,
-      port: +port,
-      // Needed for Bun
-      overrideGlobalObjects: false
+      port: +port
+      // // Needed for Bun
+      // overrideGlobalObjects: false
     },
     () => console.log(`Server running at http://localhost:${port}`)
   )

@@ -3,7 +3,7 @@
   "rewrites": [
     {
       "source": "/((?!assets/).*)",
-      "destination": "/api/edge-ssr"
+      "destination": "/api/vercel-entry"
     }
   ]
 }

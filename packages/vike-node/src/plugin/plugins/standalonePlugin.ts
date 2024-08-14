@@ -214,9 +214,10 @@ function findRollupBundleEntries<OutputBundle extends Record<string, { name: str
   resolvedConfig: ConfigVikeNodeResolved,
   root: string
 ): OutputBundle[string][] {
-  const entryPathsFromConfig = Object.values(resolvedConfig.server.entry).map((entryPath) =>
-    path.posix.join(root, entryPath)
-  )
+  const entryPathsFromConfig = Object.entries(resolvedConfig.server.entry)
+    .filter(([_, entry]) => entry.runtime === 'node')
+    .map(([_, entry]) => path.posix.join(root, entry.path))
+
   const entries: OutputBundle[string][] = []
   for (const key in bundle) {
     const entry = bundle[key]!

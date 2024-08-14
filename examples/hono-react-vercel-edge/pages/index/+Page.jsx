@@ -1,8 +1,10 @@
 export default Page
 
 import React, { useState } from 'react'
+import { useData } from 'vike-react/useData'
 
 function Page() {
+  const data = useData()
   return (
     <>
       <h1>Welcome</h1>
@@ -11,6 +13,7 @@ function Page() {
         <li>Pre-rendered</li>
         <li>Static html generated</li>
         <li>Interactive</li>
+        <li>Server Rendered at: {data.d}</li>
       </ul>
       <Counter />
     </>
