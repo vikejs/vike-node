@@ -17,8 +17,5 @@ export default {
     vike({ prerender: true }),
     react(),
     telefunc()
-  ],
-  ssr: {
-    external: true
-  }
+  ]
 }
