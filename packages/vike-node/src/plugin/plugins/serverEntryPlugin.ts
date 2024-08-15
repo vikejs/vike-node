@@ -20,15 +20,15 @@ export function serverEntryPlugin(): Plugin {
       assert(entries.length > 0)
 
       const resolvedEntries: EntryResolved = {
-        index: { path: '', runtime: 'node' } // Initialize with a placeholder, will be overwritten
+        index: { entry: '', runtime: 'node' } // Initialize with a placeholder, will be overwritten
       }
 
       for (const [name, entryInfo] of entries) {
-        const { path: entryPath, runtime } = entryInfo
+        const { entry: entryPath, runtime } = entryInfo
         let entryFilePath = path.join(config.root, entryPath)
         try {
           resolvedEntries[name] = {
-            path: require_.resolve(entryFilePath),
+            entry: require_.resolve(entryFilePath),
             runtime
           }
         } catch (err) {
@@ -44,7 +44,7 @@ export function serverEntryPlugin(): Plugin {
 
       if (viteIsSSR(config)) {
         config.build.rollupOptions.input = injectRollupInputs(
-          Object.fromEntries(Object.entries(resolvedEntries).map(([name, { path }]) => [name, path])),
+          Object.fromEntries(Object.entries(resolvedEntries).map(([name, { entry: path }]) => [name, path])),
           config
         )
       }

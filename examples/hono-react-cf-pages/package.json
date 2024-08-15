@@ -19,7 +19,7 @@
   },
   "type": "module",
   "devDependencies": {
-    "vike-cloudflare": "^0.0.6",
+    "telefunc": "^0.1.76",
     "wrangler": "^3.71.0"
   }
 }

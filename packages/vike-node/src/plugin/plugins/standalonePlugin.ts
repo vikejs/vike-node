@@ -216,7 +216,7 @@ function findRollupBundleEntries<OutputBundle extends Record<string, { name: str
 ): OutputBundle[string][] {
   const entryPathsFromConfig = Object.entries(resolvedConfig.server.entry)
     .filter(([_, entry]) => entry.runtime === 'node')
-    .map(([_, entry]) => path.posix.join(root, entry.path))
+    .map(([_, entry]) => path.posix.join(root, entry.entry))
 
   const entries: OutputBundle[string][] = []
   for (const key in bundle) {

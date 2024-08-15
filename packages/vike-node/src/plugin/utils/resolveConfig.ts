@@ -15,9 +15,9 @@ function resolveConfig(configVike: ConfigVikeNode): ConfigVikeNodeResolved {
           (typeof configVike.server.entry === 'object' &&
             Object.entries(configVike.server.entry).every(
               ([, value]) =>
-                typeof value === 'string' || (typeof value === 'object' && 'path' in value && 'runtime' in value)
+                typeof value === 'string' || (typeof value === 'object' && 'entry' in value && 'runtime' in value)
             )),
-        'server.entry should be a string or an entry mapping { name: string | { path: string, runtime: Runtime } }'
+        'server.entry should be a string or an entry mapping { name: string | { entry: string, runtime: Runtime } }'
       )
       assertUsage(
         typeof configVike.server.entry !== 'object' ||
@@ -28,7 +28,7 @@ function resolveConfig(configVike: ConfigVikeNode): ConfigVikeNodeResolved {
 
     const entriesProvided: EntryResolved =
       typeof configVike.server.entry === 'string'
-        ? { index: { path: configVike.server.entry, runtime: 'node' } }
+        ? { index: { entry: configVike.server.entry, runtime: 'node' } }
         : Object.entries(configVike.server.entry).reduce((acc, [name, value]) => {
             if (typeof value === 'object') {
               assertUsage(
@@ -36,7 +36,7 @@ function resolveConfig(configVike: ConfigVikeNode): ConfigVikeNodeResolved {
                 `Invalid runtime "${value.runtime}" for entry "${name}". Valid runtimes are: ${RUNTIMES.join(', ')}.`
               )
             }
-            acc[name] = typeof value === 'string' ? { path: value, runtime: 'node' } : value
+            acc[name] = typeof value === 'string' ? { entry: value, runtime: 'node' } : value
             return acc
           }, {} as EntryResolved)
 
@@ -53,7 +53,7 @@ function resolveConfig(configVike: ConfigVikeNode): ConfigVikeNodeResolved {
   assertUsage(typeof configVike.server === 'string', 'config.server should be defined')
   return {
     server: {
-      entry: { index: { path: configVike.server, runtime: 'node' } },
+      entry: { index: { entry: configVike.server, runtime: 'node' } },
       standalone: false,
       external: nativeDependecies
     }

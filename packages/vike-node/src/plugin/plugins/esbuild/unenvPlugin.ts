@@ -15,10 +15,11 @@ function getEnv(runtime: Runtime) {
     case 'node':
       return env(node)
     case 'nodeless':
+    case 'cloudflare':
       return env(nodeless)
     case 'deno':
       return env(nodeless, deno)
-    case 'cloudflare':
+    case 'cloudflare-nodejs-compat':
       return env(nodeless, cloudflare)
     case 'vercel':
       return env(nodeless, vercel)
@@ -54,11 +55,11 @@ function replaceUnenv<T>(value: T): T {
 export function unenvPlugin(runtime: Runtime): Plugin {
   const { alias, inject, external, polyfill } = replaceUnenv(getEnv(runtime))
 
-  // already included in polyfill
+  // already included in polyfill / broken
   delete inject.global
   delete inject.process
   delete inject.Buffer
-  delete inject.performance
+  delete inject.console
 
   return {
     name: 'unenv',
@@ -67,6 +68,9 @@ export function unenvPlugin(runtime: Runtime): Plugin {
       handleRequireCallsToNodeJSBuiltins(build)
       handleAliasedNodeJSPackages(build, alias, external)
       handleNodeJSGlobals(build, inject)
+      build.initialOptions.banner = {
+        js: 'globalThis.process ||= {};'
+      }
     }
   }
 }

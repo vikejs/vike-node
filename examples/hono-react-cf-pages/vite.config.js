@@ -1,18 +1,22 @@
 import react from '@vitejs/plugin-react'
-import vike from 'vike/plugin'
+import { telefunc } from 'telefunc/vite'
 import vikeNode from 'vike-node/plugin'
-import { pages } from 'vike-cloudflare'
+import vike from 'vike/plugin'
 
 export default {
   plugins: [
-    react(),
     vike({ prerender: true }),
-    vikeNode({ entry: 'server/node-entry.js' }),
-    pages({
-      server: {
-        kind: 'hono',
-        entry: 'server/app.js'
+    vikeNode({
+      entry: {
+        index: 'server/node-entry.js',
+        cloudflare: {
+          entry: 'server/app.js',
+          runtime: 'cloudflare',
+          scaffold: 'dist/cloudflare'
+        }
       }
-    })
+    }),
+    react(),
+    telefunc()
   ]
 }

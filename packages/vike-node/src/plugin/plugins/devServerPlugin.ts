@@ -91,7 +91,7 @@ export function devServerPlugin(): Plugin {
   async function initializeServerEntry(vite: ViteDevServer) {
     assert(resolvedConfig.server)
     const { index } = resolvedConfig.server.entry
-    const indexResolved = await vite.pluginContainer.resolveId(index.path)
+    const indexResolved = await vite.pluginContainer.resolveId(index.entry)
     assert(indexResolved?.id)
     entryAbs = indexResolved.id
     vite.ssrLoadModule(entryAbs).catch(logRestartMessage)

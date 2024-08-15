@@ -5,6 +5,7 @@ import vike from 'vike/plugin'
 
 export default {
   plugins: [
+    vike({ prerender: true }),
     vikeNode({
       entry: {
         index: 'server/node-entry.js',
@@ -14,7 +15,6 @@ export default {
         }
       }
     }),
-    vike({ prerender: true }),
     react(),
     telefunc()
   ]

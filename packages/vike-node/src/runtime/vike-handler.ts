@@ -20,15 +20,8 @@ async function renderPage<PlatformRequest>({
     return typeof options.pageContext === 'function' ? options.pageContext(platformRequest) : options.pageContext ?? {}
   }
 
-  const fixedUrl = isVercel()
-    ? fixUrlVercel({
-        url,
-        headers
-      })
-    : url
-
   const pageContext = await _renderPage({
-    urlOriginal: fixedUrl,
+    urlOriginal: url,
     headersOriginal: headers,
     ...(await getPageContext(platformRequest))
   })
@@ -64,27 +57,4 @@ async function renderPageWeb<PlatformRequest>({
   if (!httpResponse) return undefined
   const { statusCode, headers: headersOut, getReadableWebStream } = httpResponse
   return new Response(getReadableWebStream(), { status: statusCode, headers: headersOut })
-}
-
-function fixUrlVercel(request: { url: string; headers: [string, string][] }) {
-  const parsedUrl = new URL(request.url, DUMMY_BASE_URL)
-  const headers = request.headers
-  const search = parsedUrl.searchParams
-  const __original_path = search.get('__original_path')
-  if (typeof __original_path === 'string') {
-    search.delete('__original_path')
-    return __original_path + parsedUrl.search
-  }
-
-  // FIXME: x-now-route-matches is not definitive https://github.com/orgs/vercel/discussions/577#discussioncomment-2769478
-  const matchesHeader = headers.find((h) => h[0] === 'x-now-route-matches')?.[1]
-  const matches = matchesHeader ? new URLSearchParams(matchesHeader).get('1') : null
-
-  if (typeof matches === 'string') {
-    const pathnameAndQuery = matches + (parsedUrl.search || '')
-    return pathnameAndQuery
-  }
-
-  const pathnameAndQuery = (parsedUrl.pathname || '') + (parsedUrl.search || '')
-  return pathnameAndQuery
 }

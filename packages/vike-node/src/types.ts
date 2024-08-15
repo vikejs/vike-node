@@ -1,6 +1,6 @@
 export type { ConfigVikeNode, ConfigVikeNodeResolved, ConfigVikeNodePlugin, Runtime, EntryResolved }
 
-type Runtime = 'node' | 'nodeless' | 'deno' | 'cloudflare' | 'vercel'
+type Runtime = 'node' | 'nodeless' | 'deno' | 'cloudflare' | 'cloudflare-nodejs-compat' | 'vercel'
 type ConfigVikeNode = {
   /** Server entry path.
    *
@@ -8,7 +8,9 @@ type ConfigVikeNode = {
   server:
     | string
     | {
-        entry: string | { index: string; [name: string]: string | { path: string; runtime: Runtime } }
+        entry:
+          | string
+          | { index: string; [name: string]: string | { entry: string; runtime: Runtime; scaffold?: string } }
         /** Enable standalone build.
          *
          * @default false
@@ -22,7 +24,10 @@ type ConfigVikeNode = {
       }
 }
 
-type EntryResolved = { index: { path: string; runtime: Runtime }; [name: string]: { path: string; runtime: Runtime } }
+type EntryResolved = {
+  index: { entry: string; runtime: Runtime }
+  [name: string]: { entry: string; runtime: Runtime; scaffold?: string }
+}
 type ConfigVikeNodeResolved = {
   server: {
     entry: EntryResolved
