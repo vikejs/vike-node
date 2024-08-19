@@ -19,11 +19,14 @@ import { PassThrough, Readable } from 'stream'
 function createServerResponse(incomingMessage: IncomingMessage) {
   const res = new ServerResponse(incomingMessage)
   const passThrough = new PassThrough()
+  let handled = false
 
   const onReadable = (
     cb: (result: { readable: Readable; headers: OutgoingHttpHeaders; statusCode: number }) => void
   ) => {
     const handleReadable = () => {
+      if (handled) return
+      handled = true
       cb({ readable: Readable.from(passThrough), headers: res.getHeaders(), statusCode: res.statusCode })
     }
 
