@@ -65,7 +65,8 @@ export function devServerPlugin(): Plugin {
       globalStore.viteDevServer = vite
       globalStore.setupHMRProxy = setupHMRProxy
       patchViteServer(vite)
-      setupErrorHandler(vite)
+      setupErrorStrackRewrite(vite)
+      setupErrorHandlers()
       initializeServerEntry(vite)
     }
   }
@@ -119,7 +120,7 @@ function logRestartMessage() {
   logViteInfo('Server crash: Update a server file or type "r+enter" to restart the server.')
 }
 
-function setupErrorHandler(vite: ViteDevServer) {
+function setupErrorStrackRewrite(vite: ViteDevServer) {
   const rewroteStacktraces = new WeakSet()
 
   const _prepareStackTrace = Error.prepareStackTrace
@@ -138,9 +139,11 @@ function setupErrorHandler(vite: ViteDevServer) {
   const _ssrFixStacktrace = vite.ssrFixStacktrace
   vite.ssrFixStacktrace = function ssrFixStacktrace(e) {
     if (rewroteStacktraces.has(e)) return
-    return _ssrFixStacktrace(e)
+    _ssrFixStacktrace(e)
   }
+}
 
+function setupErrorHandlers() {
   function onError(err: unknown) {
     console.error(err)
     logRestartMessage()
