@@ -11,7 +11,7 @@ import { logViteInfo } from '../utils/logVite.js'
 let viteDevServer: ViteDevServer
 const VITE_HMR_PATH = '/__vite_hmr'
 const RESTART_EXIT_CODE = 33
-const IS_RESTARTER_SETUP = '__VIKE__IS_RESTARTER_SETUP'
+const IS_RESTARTER_SET_UP = '__VIKE__IS_RESTARTER_SET_UP'
 
 export function devServerPlugin(): Plugin {
   let resolvedConfig: ConfigVikeNodeResolved
@@ -150,11 +150,11 @@ function setupErrorHandler(vite: ViteDevServer) {
   process.on('uncaughtException', onError)
 }
 
-// The CLI root process is blocked and, instead, it orchestrates server restarts.
-// The same CLI is called as a child process which does the actual work.
+// We hijack the CLI root process: we block Vite and make it orchestrates server restarts instead.
+// We execute the CLI again as a child process which does the actual work.
 async function setupProcessRestarter() {
-  if (isRestarterSetup()) return
-  process.env[IS_RESTARTER_SETUP] = 'true'
+  if (isRestarterSetUp()) return
+  process.env[IS_RESTARTER_SET_UP] = 'true'
 
   function start() {
     const cliEntry = process.argv[1]!
@@ -171,16 +171,16 @@ async function setupProcessRestarter() {
   }
   start()
 
-  // Trick: never resolve promise in order to block the CLI root process
+  // Trick: never-resolving-promise in order to block the CLI root process
   await new Promise(() => {})
 }
 
-function isRestarterSetup() {
-  return process.env[IS_RESTARTER_SETUP] === 'true'
+function isRestarterSetUp() {
+  return process.env[IS_RESTARTER_SET_UP] === 'true'
 }
 
 function restartProcess() {
   logViteInfo('Restarting server...')
-  assert(isRestarterSetup())
+  assert(isRestarterSetUp())
   process.exit(RESTART_EXIT_CODE)
 }
