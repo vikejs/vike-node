@@ -10,6 +10,8 @@ import { logViteInfo } from '../utils/logVite.js'
 
 let viteDevServer: ViteDevServer
 const VITE_HMR_PATH = '/__vite_hmr'
+const RESTART_EXIT_CODE = 33
+const IS_RESTARTER_SETUP = '__VIKE__IS_RESTARTER_SETUP'
 
 export function devServerPlugin(): Plugin {
   let resolvedConfig: ConfigVikeNodeResolved
@@ -21,7 +23,7 @@ export function devServerPlugin(): Plugin {
     apply: 'serve',
     enforce: 'pre',
     config: async () => {
-      await setupReloader()
+      await setupProcessRestarter()
 
       if (isBun) {
         return {
@@ -148,26 +150,37 @@ function setupErrorHandler(vite: ViteDevServer) {
   process.on('uncaughtException', onError)
 }
 
-async function setupReloader() {
-  const isReloaderSetup = process.env.VIKE_NODE_RELOADER_SETUP === 'true'
-  if (!isReloaderSetup) {
-    process.env.VIKE_NODE_RELOADER_SETUP = 'true'
-    function start() {
-      const cp = fork(process.argv[1]!, process.argv.slice(2), { stdio: 'inherit' })
-      cp.on('exit', (code) => {
-        if (code === 33) {
-          start()
-        } else {
-          process.exit(code)
-        }
-      })
-    }
-    start()
-    await new Promise(() => {})
+// The CLI root process is blocked and, instead, it orchestrates server restarts.
+// The same CLI is called as a child process which does the actual work.
+async function setupProcessRestarter() {
+  if (isRestarterSetup()) return
+  process.env[IS_RESTARTER_SETUP] = 'true'
+
+  function start() {
+    const cliEntry = process.argv[1]!
+    const cliArgs = process.argv.slice(2)
+    // Re-run the exact same CLI
+    const clone = fork(cliEntry, cliArgs, { stdio: 'inherit' })
+    clone.on('exit', (code) => {
+      if (code === RESTART_EXIT_CODE) {
+        start()
+      } else {
+        process.exit(code)
+      }
+    })
   }
+  start()
+
+  // Trick: never resolve promise in order to block the CLI root process
+  await new Promise(() => {})
+}
+
+function isRestarterSetup() {
+  return process.env[IS_RESTARTER_SETUP] === 'true'
 }
 
 function restartProcess() {
   logViteInfo('Restarting server...')
-  process.exit(33)
+  assert(isRestarterSetup())
+  process.exit(RESTART_EXIT_CODE)
 }
