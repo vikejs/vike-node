@@ -6,5 +6,5 @@ export default {
   build: {
     outDir: 'build'
   },
-  plugins: [react(), vike(), vikeNode({ entry: 'server/index.js', standalone: true })]
+  plugins: [react(), vike(), vikeNode('server/index.js')]
 }
