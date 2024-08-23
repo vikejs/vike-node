@@ -1,30 +1,44 @@
 import { isNodeLike } from '../utils/isNodeLike.js'
-import type { VikeOptions, WebHandler } from './types.js'
+import type { VikeOptions } from './types.js'
 
-export function createHandler<PlatformRequest>(options: VikeOptions<PlatformRequest> = {}) {
-  let nodeLike = undefined
-  let nodeHandler: WebHandler | undefined = undefined
-  let webHandler: WebHandler | undefined = undefined
+type Handler<PlatformRequest> = (params: {
+  request: Request
+  platformRequest: PlatformRequest
+}) => Response | undefined | Promise<Response | undefined>
 
-  return async function handler({ request, platformRequest }: { request: Request; platformRequest: PlatformRequest }) {
+export function createHandler<PlatformRequest>(options: VikeOptions<PlatformRequest> = {}): Handler<PlatformRequest> {
+  let nodeLike: boolean | undefined = undefined
+  let nodeHandler: Handler<PlatformRequest> | undefined = undefined
+  let webHandler: Handler<PlatformRequest> | undefined = undefined
+
+  return async function handler({ request, platformRequest }) {
     if (request.method !== 'GET') {
       return undefined
     }
+
     nodeLike ??= await isNodeLike()
+
     if (nodeLike) {
       if (!nodeHandler) {
-        const connectToWeb = (await import('./adapters/connectToWeb.js')).connectToWeb
-        const handler = (await import('./handler-node-only.js')).createHandler(options)
-        nodeHandler = connectToWeb((req, res, next) => handler!({ req, res, platformRequest, next }))
+        const { connectToWeb } = await import('./adapters/connectToWeb.js')
+        const { createHandler } = await import('./handler-node-only.js')
+        const nodeOnlyHandler = createHandler(options)
+        nodeHandler = ({ request, platformRequest }) => {
+          const connectedHandler = connectToWeb((req, res, next) =>
+            nodeOnlyHandler({ req, res, platformRequest, next })
+          )
+          return connectedHandler(request)
+        }
       }
-      return nodeHandler(request)
+
+      return nodeHandler({ request, platformRequest })
     }
 
     if (!webHandler) {
-      const handler = (await import('./handler-web-only.js')).createHandler(options)
-      webHandler = (request) => handler({ request, platformRequest })
+      const { createHandler } = await import('./handler-web-only.js')
+      webHandler = createHandler(options)
     }
 
-    return webHandler(request)
+    return webHandler({ request, platformRequest })
   }
 }
