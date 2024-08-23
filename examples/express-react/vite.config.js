@@ -3,8 +3,5 @@ import vike from 'vike/plugin'
 import vikeNode from 'vike-node/plugin'
 
 export default {
-  build: {
-    outDir: 'build'
-  },
   plugins: [react(), vike(), vikeNode('server/index.js')]
 }
