@@ -5,6 +5,7 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
+  '@brillout/vite-plugin-server-entry': 0.4.8-commit-a56d728
   vike-node: link:./packages/vike-node/
 
 importers:
@@ -462,8 +463,8 @@ packages:
     peerDependencies:
       typescript: '>=4.0.0'
 
-  '@brillout/vite-plugin-server-entry@0.4.7':
-    resolution: {integrity: sha512-G/wHFx/JdFUA9kPSPDT0nIJH1wmgIwUIY27RL4N6EaHeaXgN4zSCBZTNvvKHyojvMxMw825m4vE0VksHXLyOng==}
+  '@brillout/vite-plugin-server-entry@0.4.8-commit-a56d728':
+    resolution: {integrity: sha512-nhbJLibA8hZ4kfkQhF/xJbVwoNQWqvVvvwDGE8Ej/CCw3bGSFb6kMPqnwAueNn/iFHSJphUQiJsPprI2PStLcw==}
 
   '@cloudflare/kv-asset-handler@0.3.4':
     resolution: {integrity: sha512-YLPHc8yASwjNkmcDMQMY35yiWjoKAKnhUbPRszBRS0YgH+IXtsMp61j+yTcnCE3oO2DgP0U3iejLC8FTtKDC8Q==}
@@ -3414,7 +3415,7 @@ snapshots:
       source-map-support: 0.5.21
       typescript: 5.5.4
 
-  '@brillout/vite-plugin-server-entry@0.4.7':
+  '@brillout/vite-plugin-server-entry@0.4.8-commit-a56d728':
     dependencies:
       '@brillout/import': 0.2.3
 
@@ -5728,7 +5729,7 @@ snapshots:
       '@brillout/import': 0.2.3
       '@brillout/json-serializer': 0.5.13
       '@brillout/picocolors': 1.0.14
-      '@brillout/vite-plugin-server-entry': 0.4.7
+      '@brillout/vite-plugin-server-entry': 0.4.8-commit-a56d728
       es-module-lexer: 0.7.1
       picocolors: 1.0.1
       ts-morph: 19.0.0
@@ -5853,7 +5854,7 @@ snapshots:
       '@brillout/json-serializer': 0.5.13
       '@brillout/picocolors': 1.0.14
       '@brillout/require-shim': 0.1.2
-      '@brillout/vite-plugin-server-entry': 0.4.7
+      '@brillout/vite-plugin-server-entry': 0.4.8-commit-a56d728
       acorn: 8.12.1
       cac: 6.7.14
       es-module-lexer: 1.5.4
@@ -5872,7 +5873,7 @@ snapshots:
       '@brillout/json-serializer': 0.5.13
       '@brillout/picocolors': 1.0.14
       '@brillout/require-shim': 0.1.2
-      '@brillout/vite-plugin-server-entry': 0.4.7
+      '@brillout/vite-plugin-server-entry': 0.4.8-commit-a56d728
       acorn: 8.12.1
       cac: 6.7.14
       es-module-lexer: 1.5.4
