@@ -23,7 +23,7 @@ export function standalonePlugin(): Plugin {
   let root = ''
   let outDir = ''
   let outDirAbs = ''
-  let rollupEntryFilePaths: string[]
+  let rollupEntryFilePaths: string[] = []
   let rollupResolve: any
 
   return {
