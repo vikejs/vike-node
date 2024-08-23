@@ -39,7 +39,7 @@
     "resolve-from": "^5.0.0"
   },
   "peerDependencies": {
-    "vike": "^0.4.181",
+    "vike": "^0.4.192",
     "vite": "^5.0.10"
   },
   "devDependencies": {
@@ -50,7 +50,7 @@
     "h3": "^1.12.0",
     "hono": "^4.5.5",
     "typescript": "^5.5.4",
-    "vike": "^0.4.184",
+    "vike": "^0.4.192",
     "vite": "^5.4.0"
   },
   "typesVersions": {

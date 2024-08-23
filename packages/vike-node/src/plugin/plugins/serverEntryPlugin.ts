@@ -7,15 +7,9 @@ import { assert, assertUsage } from '../../utils/assert.js'
 import { getConfigVikeNode } from '../utils/getConfigVikeNode.js'
 import { injectRollupInputs } from '../utils/injectRollupInputs.js'
 import { viteIsSSR } from '../utils/viteIsSSR.js'
+import type { ConfigVitePluginServerEntry } from 'vike/types'
 
 const require_ = createRequire(import.meta.url)
-
-type ConfigVitePluginServerEntry = {
-  vitePluginServerEntry?: {
-    autoImport?: boolean
-    inject?: boolean | string[]
-  }
-}
 
 export function serverEntryPlugin(): Plugin {
   return {
