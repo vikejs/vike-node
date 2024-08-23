@@ -27,7 +27,7 @@
   },
   "pnpm": {
     "overrides": {
-      "@brillout/vite-plugin-server-entry": "0.4.8-commit-a56d728",
+      "@brillout/vite-plugin-server-entry": "link:../../code/vite-plugin-server-entry/",
       "vike-node": "link:./packages/vike-node/"
     }
   },
