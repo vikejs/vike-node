@@ -462,9 +462,6 @@ packages:
     peerDependencies:
       typescript: '>=4.0.0'
 
-  '@brillout/vite-plugin-server-entry@0.4.7':
-    resolution: {integrity: sha512-G/wHFx/JdFUA9kPSPDT0nIJH1wmgIwUIY27RL4N6EaHeaXgN4zSCBZTNvvKHyojvMxMw825m4vE0VksHXLyOng==}
-
   '@brillout/vite-plugin-server-entry@0.4.9':
     resolution: {integrity: sha512-ETiWJlljweuxXS/0TBk4eLotZ3ZFC26u7s983z2P9lmDGifZzgj7BCJzgopnDihbl8Y8usKZSLq0grrCivtMSA==}
 
@@ -3417,10 +3414,6 @@ snapshots:
       source-map-support: 0.5.21
       typescript: 5.5.4
 
-  '@brillout/vite-plugin-server-entry@0.4.7':
-    dependencies:
-      '@brillout/import': 0.2.3
-
   '@brillout/vite-plugin-server-entry@0.4.9':
     dependencies:
       '@brillout/import': 0.2.3
@@ -5735,7 +5728,7 @@ snapshots:
       '@brillout/import': 0.2.3
       '@brillout/json-serializer': 0.5.13
       '@brillout/picocolors': 1.0.14
-      '@brillout/vite-plugin-server-entry': 0.4.7
+      '@brillout/vite-plugin-server-entry': 0.4.9
       es-module-lexer: 0.7.1
       picocolors: 1.0.1
       ts-morph: 19.0.0
