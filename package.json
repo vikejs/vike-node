@@ -27,7 +27,6 @@
   },
   "pnpm": {
     "overrides": {
-      "vike": "link:../../code/vike/vike/",
       "vike-node": "link:./packages/vike-node/"
     }
   },
