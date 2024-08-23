@@ -1,3 +1,12 @@
+## [0.1.16](https://github.com/vikejs/vike-node/compare/v0.1.15...v0.1.16) (2024-08-23)
+
+
+### Bug Fixes
+
+* stale value in closure ([78b7340](https://github.com/vikejs/vike-node/commit/78b73402e4a963132db44e8cb62f2589c7b7b01d))
+
+
+
 ## [0.1.15](https://github.com/vikejs/vike-node/compare/v0.1.14...v0.1.15) (2024-08-19)
 
 
