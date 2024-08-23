@@ -6,7 +6,6 @@ settings:
 
 overrides:
   vike: link:../../code/vike/vike/
-  react-streaming: 0.3.43
   vike-node: link:./packages/vike-node/
 
 importers:
@@ -2956,7 +2955,7 @@ packages:
       '@babel/parser': ^7.0.0
       '@babel/types': ^7.0.0
       react: ^18.0.0
-      react-streaming: 0.3.43
+      react-streaming: ^0.3.3
     peerDependenciesMeta:
       '@babel/core':
         optional: true
