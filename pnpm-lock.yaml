@@ -175,8 +175,8 @@ importers:
         specifier: ^0.26.5
         version: 0.26.5
       esbuild:
-        specifier: ^0.19.12
-        version: 0.19.12
+        specifier: ^0.21.0 || ^0.22.0 || ^0.23.0
+        version: 0.21.5
       resolve-from:
         specifier: ^5.0.0
         version: 5.0.0
