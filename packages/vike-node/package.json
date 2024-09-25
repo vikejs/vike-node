@@ -33,7 +33,7 @@
     "@brillout/picocolors": "^1.0.14",
     "@nitedani/shrink-ray-current": "^4.3.0",
     "@vercel/nft": "^0.26.5",
-    "esbuild": "^0.19.12",
+    "esbuild": "^0.21.0 || ^0.22.0 || ^0.23.0",
     "sirv": "^2.0.4",
     "unenv-nightly": "2.0.0-1721914978.1a79944",
     "resolve-from": "^5.0.0"
