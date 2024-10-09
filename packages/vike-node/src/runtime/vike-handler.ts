@@ -1,11 +1,12 @@
 import { parseHeaders } from './utils/header-utils.js'
 import { renderPage as _renderPage } from 'vike/server'
-import type { VikeHttpResponse, VikeOptions } from './types.js'
+import type { ConnectMiddleware, VikeHttpResponse, VikeOptions } from './types.js'
 import type { Get, UniversalHandler } from '@universal-middleware/core'
 import { globalStore } from './globalStore.js'
 import { assert } from '../utils/assert.js'
 import type { IncomingMessage, ServerResponse } from 'http'
 import { connectToWebFallback } from './adapters/connectToWeb.js'
+import { isVercel } from '../utils/isVercel.js'
 
 export { renderPage, renderPageWeb }
 
@@ -55,8 +56,17 @@ async function renderPageWeb<PlatformRequest>({
 }
 
 export const renderPageUniversal = ((options?) => async (request, context, runtime: any) => {
-  if (runtime.req || runtime.env?.incoming) {
-    globalStore.setupHMRProxy(runtime.req ?? runtime.env?.incoming);
+  const nodeReq: IncomingMessage | undefined = runtime.req ?? runtime.env?.incoming
+  let staticConfig: false | { root: string; cache: boolean } = false
+  let shouldCache = false
+  const compressionType = options?.compress ?? !isVercel()
+  let staticMiddleware: ConnectMiddleware | undefined
+
+  if (nodeReq) {
+    globalStore.setupHMRProxy(nodeReq)
+    const { resolveStaticConfig } = await import("./handler-node-only.js")
+    staticConfig = resolveStaticConfig(options?.static)
+    shouldCache = staticConfig && staticConfig.cache
   }
 
   if (globalStore.isPluginLoaded) {
@@ -64,17 +74,32 @@ export const renderPageUniversal = ((options?) => async (request, context, runti
 
     // console.log({ url: request.url, handled: Boolean(handled) })
     if (handled) return handled
-  } else {
-    // const isAsset = req.url?.startsWith('/assets/')
-    // const shouldCompressResponse = compressionType === true || (compressionType === 'static' && isAsset)
+  } else if (nodeReq) {
+    const isAsset = nodeReq.url?.startsWith('/assets/')
+    const shouldCompressResponse = compressionType === true || (compressionType === 'static' && isAsset)
     // if (shouldCompressResponse) {
     //   await applyCompression(req, res, shouldCache)
     // }
-    //
-    // if (staticConfig) {
-    //   const handled = await serveStaticFiles(req, res, staticConfig)
-    //   if (handled) return true
-    // }
+
+    if (staticConfig) {
+      const handled = await connectToWebFallback(serveStaticFiles)(request);
+      if (handled) return handled
+    }
+  }
+
+  async function serveStaticFiles(
+    req: IncomingMessage,
+    res: ServerResponse
+  ): Promise<boolean> {
+    if (!staticMiddleware) {
+      const { default: sirv } = await import('sirv')
+      staticMiddleware = sirv((staticConfig as { root: string; cache: boolean }).root, { etag: true })
+    }
+
+    return new Promise<boolean>((resolve) => {
+      res.once('close', () => resolve(true))
+      staticMiddleware!(req, res, () => resolve(false))
+    })
   }
 
   const pageContextInit = { ...context, ...runtime, urlOriginal: request.url, headersOriginal: request.headers }
