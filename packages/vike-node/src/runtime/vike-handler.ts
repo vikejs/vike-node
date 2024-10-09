@@ -55,6 +55,10 @@ async function renderPageWeb<PlatformRequest>({
 }
 
 export const renderPageUniversal = ((options?) => async (request, context, runtime: any) => {
+  if (runtime.req || runtime.env?.incoming) {
+    globalStore.setupHMRProxy(runtime.req ?? runtime.env?.incoming);
+  }
+
   if (globalStore.isPluginLoaded) {
     const handled = await web(request)
 
