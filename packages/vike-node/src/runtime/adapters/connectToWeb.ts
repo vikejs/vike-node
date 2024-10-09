@@ -1,8 +1,8 @@
-export { connectToWeb }
+export { connectToWeb, connectToWebFallback }
 
 import type { IncomingMessage } from 'node:http'
 import { Readable } from 'node:stream'
-import type { ConnectMiddleware, WebHandler } from '../types.js'
+import type { ConnectMiddleware, ConnectMiddlewareBoolean, WebHandler } from '../types.js'
 import { flattenHeaders } from '../utils/header-utils.js'
 import { createServerResponse } from './createServerResponse.js'
 import { DUMMY_BASE_URL } from '../constants.js'
@@ -50,6 +50,46 @@ function connectToWeb(handler: ConnectMiddleware): WebHandler {
       }
 
       Promise.resolve(handler(req, res, next)).catch(next)
+    })
+  }
+}
+
+function connectToWebFallback(handler: ConnectMiddlewareBoolean): WebHandler {
+  return async (request: Request): Promise<Response | undefined> => {
+    const req = createIncomingMessage(request)
+    const { res, onReadable } = createServerResponse(req)
+
+    return new Promise<Response | undefined>(async (resolve, reject) => {
+      onReadable(({ readable, headers, statusCode }) => {
+        const responseBody = statusCodesWithoutBody.includes(statusCode)
+          ? null
+          : (Readable.toWeb(readable) as ReadableStream)
+        resolve(
+          new Response(responseBody, {
+            status: statusCode,
+            headers: flattenHeaders(headers)
+          })
+        )
+      })
+
+      const next = (error?: unknown) => {
+        if (error) {
+          reject(error instanceof Error ? error : new Error(String(error)))
+        } else {
+          resolve(undefined)
+        }
+      }
+
+      try {
+        const handled = await handler(req, res, next);
+
+        if (!handled) {
+          res.destroy();
+          resolve(undefined);
+        }
+      } catch (e) {
+        next(e);
+      }
     })
   }
 }
