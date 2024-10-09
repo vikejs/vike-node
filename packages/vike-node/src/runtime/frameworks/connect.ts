@@ -30,7 +30,7 @@ import { globalStore } from '../globalStore.js'
  *
  */
 function vike<PlatformRequest extends IncomingMessage, PlatformResponse extends ServerResponse>(
-  options?: VikeOptions<PlatformRequest>
+  options?: VikeOptions
 ): (req: PlatformRequest, res: PlatformResponse, next?: NextFunction) => void {
   const handler = createHandler(options)
   return (req, res, next) => {

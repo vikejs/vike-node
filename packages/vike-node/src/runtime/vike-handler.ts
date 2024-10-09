@@ -1,3 +1,5 @@
+import { parseHeaders } from './utils/header-utils.js'
+
 export { renderPage, renderPageWeb }
 
 import { renderPage as _renderPage } from 'vike/server'
@@ -8,21 +10,13 @@ async function renderPage<PlatformRequest>({
   url,
   headers,
   options,
-  platformRequest
 }: {
   url: string
   headers: [string, string][]
-  options: VikeOptions<PlatformRequest>
-  platformRequest: PlatformRequest
+  options: VikeOptions
 }): Promise<VikeHttpResponse> {
-  async function getPageContext(platformRequest: PlatformRequest): Record<string, any> | Promise<Record<string, any>> {
-    return typeof options.pageContext === 'function'
-      ? options.pageContext(platformRequest)
-      : (options.pageContext ?? {})
-  }
-
   const pageContext = await _renderPage({
-    ...(await getPageContext(platformRequest)),
+    ...options?.pageContext,
     urlOriginal: url,
     headersOriginal: headers
   })
@@ -37,18 +31,16 @@ async function renderPage<PlatformRequest>({
 async function renderPageWeb<PlatformRequest>({
   url,
   headers,
-  platformRequest,
   options
 }: {
   url: string
   headers: [string, string][]
   platformRequest: PlatformRequest
-  options: VikeOptions<PlatformRequest>
+  options: VikeOptions
 }) {
   const httpResponse = await renderPage({
     url,
     headers,
-    platformRequest,
     options
   })
   if (!httpResponse) return undefined
@@ -59,10 +51,19 @@ async function renderPageWeb<PlatformRequest>({
   return new Response(readable, { status: httpResponse.statusCode, headers: httpResponse.headers })
 }
 
-export const renderPageUniversal = (() => async (request, context, runtime) => {
+export const renderPageUniversal = ((options?) => async (request, context, runtime) => {
   const pageContextInit = { ...context, ...runtime, urlOriginal: request.url, headersOriginal: request.headers }
-  const pageContext = await _renderPage(pageContextInit)
-  const response = pageContext.httpResponse
+  const response = await renderPage({
+    url: request.url,
+    headers: parseHeaders(request.headers),
+    options: {
+      ...options,
+      pageContext: {
+        ...pageContextInit,
+        ...options?.pageContext
+      }
+    }
+  })
 
   const { readable, writable } = new TransformStream()
   response.pipe(writable)
@@ -71,4 +72,4 @@ export const renderPageUniversal = (() => async (request, context, runtime) => {
     status: response.statusCode,
     headers: response.headers
   })
-}) satisfies Get<[], UniversalHandler>
+}) satisfies Get<[options: VikeOptions], UniversalHandler>

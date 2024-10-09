@@ -28,7 +28,7 @@ import type { VikeOptions } from '../types.js'
  *
  * @throws {NotFoundError} Thrown when Vike doesn't handle the request, allowing Elysia to manage 404 responses.
  */
-function vike(options?: VikeOptions<Context>): Elysia {
+function vike(options?: VikeOptions): Elysia {
   const handler = createHandler(options)
   return new Elysia({
     name: 'vike-node:elysia'

@@ -5,11 +5,6 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
-    "./connect": "./dist/connect.js",
-    "./fastify": "./dist/fastify.js",
-    "./h3": "./dist/h3.js",
-    "./hono": "./dist/hono.js",
-    "./elysia": "./dist/elysia.js",
     "./plugin": "./dist/plugin/index.js",
     ".": "./dist/index.js",
     "./__handler": {
@@ -18,13 +13,63 @@
       "worker": "./dist/runtime/handler-web-only.js",
       "workerd": "./dist/runtime/handler-web-only.js",
       "browser": "./dist/runtime/handler-web-only.js",
-      "default": "./dist/runtime/handler-web-and-node.js",
-      "types": "./dist/runtime/handler-web-only.d.ts"
+      "types": "./dist/runtime/handler-web-only.d.ts",
+      "default": "./dist/runtime/handler-web-and-node.js"
+    },
+    "./handler": {
+      "types": "./dist/handler.d.ts",
+      "import": "./dist/handler.js",
+      "default": "./dist/handler.js"
+    },
+    "./hono": {
+      "types": "./dist/universal-hono-handler-vike.handler.d.ts",
+      "import": "./dist/universal-hono-handler-vike.handler.js",
+      "default": "./dist/universal-hono-handler-vike.handler.js"
+    },
+    "./express": {
+      "types": "./dist/universal-express-handler-vike.handler.d.ts",
+      "import": "./dist/universal-express-handler-vike.handler.js",
+      "default": "./dist/universal-express-handler-vike.handler.js"
+    },
+    "./hattip": {
+      "types": "./dist/universal-hattip-handler-vike.handler.d.ts",
+      "import": "./dist/universal-hattip-handler-vike.handler.js",
+      "default": "./dist/universal-hattip-handler-vike.handler.js"
+    },
+    "./webroute": {
+      "types": "./dist/universal-webroute-handler-vike.handler.d.ts",
+      "import": "./dist/universal-webroute-handler-vike.handler.js",
+      "default": "./dist/universal-webroute-handler-vike.handler.js"
+    },
+    "./fastify": {
+      "types": "./dist/universal-fastify-handler-vike.handler.d.ts",
+      "import": "./dist/universal-fastify-handler-vike.handler.js",
+      "default": "./dist/universal-fastify-handler-vike.handler.js"
+    },
+    "./h3": {
+      "types": "./dist/universal-h3-handler-vike.handler.d.ts",
+      "import": "./dist/universal-h3-handler-vike.handler.js",
+      "default": "./dist/universal-h3-handler-vike.handler.js"
+    },
+    "./cloudflare-worker": {
+      "types": "./dist/universal-cloudflare-worker-handler-vike.handler.d.ts",
+      "import": "./dist/universal-cloudflare-worker-handler-vike.handler.js",
+      "default": "./dist/universal-cloudflare-worker-handler-vike.handler.js"
+    },
+    "./cloudflare-pages": {
+      "types": "./dist/universal-cloudflare-pages-handler-vike.handler.d.ts",
+      "import": "./dist/universal-cloudflare-pages-handler-vike.handler.js",
+      "default": "./dist/universal-cloudflare-pages-handler-vike.handler.js"
+    },
+    "./elysia": {
+      "types": "./dist/universal-elysia-handler-vike.handler.d.ts",
+      "import": "./dist/universal-elysia-handler-vike.handler.js",
+      "default": "./dist/universal-elysia-handler-vike.handler.js"
     }
   },
   "scripts": {
     "dev": "tsc --watch",
-    "build": "rm -rf dist/ && tsc",
+    "build": "rm -rf dist && tsup",
     "release": "release-me patch",
     "release:minor": "release-me minor",
     "release:commit": "release-me commit"
@@ -33,7 +78,7 @@
     "@brillout/picocolors": "^1.0.14",
     "@nitedani/shrink-ray-current": "^4.3.0",
     "@vercel/nft": "^0.26.5",
-    "esbuild": "^0.21.0 || ^0.22.0 || ^0.23.0",
+    "esbuild": "^0.24.0",
     "resolve-from": "^5.0.0",
     "sirv": "^2.0.4",
     "unenv-nightly": "2.0.0-1721914978.1a79944"
@@ -45,12 +90,14 @@
   "devDependencies": {
     "@brillout/release-me": "^0.4.0",
     "@types/node": "^20.14.15",
-    "@universal-middleware/core": "^0.2.12",
+    "@universal-middleware/core": "^0.2.13",
     "elysia": "^1.1.6",
     "fastify": "^4.28.1",
     "h3": "^1.12.0",
     "hono": "^4.6.3",
+    "tsup": "^8.3.0",
     "typescript": "^5.5.4",
+    "universal-middleware": "^0.3.7",
     "vike": "^0.4.198",
     "vite": "^5.4.8"
   },
@@ -83,5 +130,15 @@
     "dist/"
   ],
   "repository": "github:vikejs/vike-node",
-  "license": "MIT"
+  "license": "MIT",
+  "optionalDependencies": {
+    "@universal-middleware/hono": "^0",
+    "@universal-middleware/express": "^0",
+    "@universal-middleware/hattip": "^0",
+    "@universal-middleware/webroute": "^0",
+    "@universal-middleware/fastify": "^0",
+    "@universal-middleware/h3": "^0",
+    "@universal-middleware/cloudflare": "^0",
+    "@universal-middleware/elysia": "^0"
+  }
 }

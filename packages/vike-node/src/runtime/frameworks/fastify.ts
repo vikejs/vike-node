@@ -30,7 +30,7 @@ import type { VikeOptions } from '../types.js'
  * ```
  *
  */
-function vike(options?: VikeOptions<FastifyRequest>): FastifyPluginCallback {
+function vike(options?: VikeOptions): FastifyPluginCallback {
   const handler = createHandler(options)
   return function plugin(instance, _options, done) {
     instance.get('*', async (req, reply) => {

@@ -2,7 +2,7 @@ import type { VikeOptions } from './types.js'
 import { parseHeaders } from './utils/header-utils.js'
 import { renderPageWeb } from './vike-handler.js'
 
-export function createHandler<PlatformRequest>(options: VikeOptions<PlatformRequest> = {}) {
+export function createHandler<PlatformRequest>(options: VikeOptions = {}) {
   return async function handler({ request, platformRequest }: { request: Request; platformRequest: PlatformRequest }) {
     if (request.method !== 'GET') {
       return undefined

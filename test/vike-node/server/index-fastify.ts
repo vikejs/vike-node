@@ -1,7 +1,7 @@
 Error.stackTraceLimit = Infinity
 import fastify from 'fastify'
 import { telefunc } from 'telefunc'
-import { vike } from 'vike-node/fastify'
+import vike from 'vike-node/fastify'
 import { Worker } from 'worker_threads'
 import { init } from '../database/todoItems.js'
 import { two } from './shared-chunk.js'
@@ -27,7 +27,7 @@ async function startServer() {
     done()
   })
 
-  app.register(vike())
+  app.all("/*", vike())
   const port = process.env.PORT || 3000
   app.listen({ port: +port })
   console.log(`Server running at http://localhost:${port}`)
