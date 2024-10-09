@@ -33,7 +33,7 @@ import type { VikeOptions } from '../types.js'
  * - This handler directly uses Node.js' IncomingMessage and ServerResponse objects from the h3 event.
  *
  */
-function vike(options?: VikeOptions<IncomingMessage>): EventHandler {
+function vike(options?: VikeOptions): EventHandler {
   const handler = createHandler(options)
   return eventHandler(async (event) => {
     const {

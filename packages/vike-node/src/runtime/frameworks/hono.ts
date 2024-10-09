@@ -31,7 +31,7 @@ import type { VikeOptions } from '../types.js'
  * ```
  *
  */
-function vike(options?: VikeOptions<Context>): MiddlewareHandler {
+function vike(options?: VikeOptions): MiddlewareHandler {
   let handler: ReturnType<typeof import('vike-node/__handler').createHandler<Context>> | undefined = undefined
   return async function middleware(ctx, next) {
     if (ctx.env.incoming) {

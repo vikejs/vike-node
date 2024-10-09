@@ -6,7 +6,7 @@ type Handler<PlatformRequest> = (params: {
   platformRequest: PlatformRequest
 }) => Response | undefined | Promise<Response | undefined>
 
-export function createHandler<PlatformRequest>(options: VikeOptions<PlatformRequest> = {}): Handler<PlatformRequest> {
+export function createHandler<PlatformRequest>(options: VikeOptions = {}): Handler<PlatformRequest> {
   let nodeLike: boolean | undefined = undefined
   let nodeHandler: Handler<PlatformRequest> | undefined = undefined
   let webHandler: Handler<PlatformRequest> | undefined = undefined

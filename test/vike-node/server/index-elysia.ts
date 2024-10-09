@@ -26,6 +26,6 @@ async function startServer() {
     ctx.set.headers['x-test'] = 'test'
   })
 
-  app.use(vike())
+  app.get("/*", vike())
   app.listen(+port, () => console.log(`Server running at http://localhost:${port}`))
 }

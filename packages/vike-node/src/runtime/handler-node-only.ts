@@ -10,7 +10,7 @@ import { renderPage } from './vike-handler.js'
 import { parseHeaders } from './utils/header-utils.js'
 import { isVercel } from '../utils/isVercel.js'
 
-export function createHandler<PlatformRequest>(options: VikeOptions<PlatformRequest> = {}) {
+export function createHandler<PlatformRequest>(options: VikeOptions = {}) {
   const staticConfig = resolveStaticConfig(options.static)
   const shouldCache = staticConfig && staticConfig.cache
   const compressionType = options.compress ?? !isVercel()
@@ -52,7 +52,6 @@ export function createHandler<PlatformRequest>(options: VikeOptions<PlatformRequ
     const httpResponse = await renderPage({
       url: req.url!,
       headers: parseHeaders(req.headers),
-      platformRequest,
       options
     })
     if (!httpResponse) {
