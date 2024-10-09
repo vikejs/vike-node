@@ -34,24 +34,25 @@
     "@nitedani/shrink-ray-current": "^4.3.0",
     "@vercel/nft": "^0.26.5",
     "esbuild": "^0.21.0 || ^0.22.0 || ^0.23.0",
+    "resolve-from": "^5.0.0",
     "sirv": "^2.0.4",
-    "unenv-nightly": "2.0.0-1721914978.1a79944",
-    "resolve-from": "^5.0.0"
+    "unenv-nightly": "2.0.0-1721914978.1a79944"
   },
   "peerDependencies": {
-    "vike": "^0.4.193",
+    "vike": "^0.4.198",
     "vite": "^5.0.10"
   },
   "devDependencies": {
     "@brillout/release-me": "^0.4.0",
     "@types/node": "^20.14.15",
+    "@universal-middleware/core": "^0.2.12",
     "elysia": "^1.1.6",
     "fastify": "^4.28.1",
     "h3": "^1.12.0",
-    "hono": "^4.5.5",
+    "hono": "^4.6.3",
     "typescript": "^5.5.4",
-    "vike": "^0.4.193",
-    "vite": "^5.4.0"
+    "vike": "^0.4.198",
+    "vite": "^5.4.8"
   },
   "typesVersions": {
     "*": {
