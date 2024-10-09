@@ -95,7 +95,7 @@ function handleViteDevServer(req: IncomingMessage, res: ServerResponse): Promise
   })
 }
 
-function resolveStaticConfig(static_: VikeOptions['static']): false | { root: string; cache: boolean } {
+export function resolveStaticConfig(static_: VikeOptions['static']): false | { root: string; cache: boolean } {
   // Disable static file serving for Vercel
   // Vercel will serve static files on its own
   // See vercel.json > outputDirectory
