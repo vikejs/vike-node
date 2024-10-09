@@ -13,4 +13,8 @@ export type ConnectMiddleware<
   PlatformRequest extends IncomingMessage = IncomingMessage,
   PlatformResponse extends ServerResponse = ServerResponse
 > = (req: PlatformRequest, res: PlatformResponse, next: NextFunction) => void
+export type ConnectMiddlewareBoolean<
+  PlatformRequest extends IncomingMessage = IncomingMessage,
+  PlatformResponse extends ServerResponse = ServerResponse
+> = (req: PlatformRequest, res: PlatformResponse, next: NextFunction) => boolean | Promise<boolean>
 export type WebHandler = (request: Request) => Response | undefined | Promise<Response | undefined>
