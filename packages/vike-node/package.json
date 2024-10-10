@@ -89,6 +89,7 @@
   },
   "devDependencies": {
     "@brillout/release-me": "^0.4.0",
+    "@major-tanya/itty-compression": "^0.2.2",
     "@types/node": "^20.14.15",
     "@universal-middleware/core": "^0.2.13 ",
     "elysia": "^1.1.6",
@@ -134,11 +135,11 @@
   "optionalDependencies": {
     "@universal-middleware/cloudflare": "^0",
     "@universal-middleware/elysia": "^0",
+    "@universal-middleware/express": "^0",
     "@universal-middleware/fastify": "^0",
     "@universal-middleware/h3": "^0",
     "@universal-middleware/hattip": "^0",
     "@universal-middleware/hono": "^0",
-    "@universal-middleware/webroute": "^0",
-    "@universal-middleware/express": "^0"
+    "@universal-middleware/webroute": "^0"
   }
 }
