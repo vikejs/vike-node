@@ -27,7 +27,8 @@
   },
   "pnpm": {
     "overrides": {
-      "vike-node": "link:./packages/vike-node/"
+      "vike-node": "link:./packages/vike-node/",
+      "esbuild": "^0.24.0"
     }
   },
   "packageManager": "pnpm@9.2.0"

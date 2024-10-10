@@ -1,37 +1,32 @@
-export { renderPage, renderPageWeb }
-
+import { parseHeaders } from './utils/header-utils.js'
 import { renderPage as _renderPage } from 'vike/server'
-import type { VikeHttpResponse, VikeOptions } from './types.js'
+import type { ConnectMiddleware, VikeHttpResponse, VikeOptions } from './types.js'
+import { type Get, pipe, type UniversalHandler, type UniversalMiddleware } from '@universal-middleware/core'
+import { globalStore } from './globalStore.js'
+import { assert } from '../utils/assert.js'
+import type { IncomingMessage, ServerResponse } from 'http'
+import { connectToWebFallback } from './adapters/connectToWeb.js'
 import { isVercel } from '../utils/isVercel.js'
-import { DUMMY_BASE_URL } from './constants.js'
+
+export { renderPage, renderPageWeb }
 
 async function renderPage<PlatformRequest>({
   url,
   headers,
-  options,
-  platformRequest
+  options
 }: {
   url: string
   headers: [string, string][]
-  options: VikeOptions<PlatformRequest>
-  platformRequest: PlatformRequest
+  options: VikeOptions
 }): Promise<VikeHttpResponse> {
-  function getPageContext(platformRequest: PlatformRequest): Record<string, any> {
-    return typeof options.pageContext === 'function' ? options.pageContext(platformRequest) : options.pageContext ?? {}
-  }
-
   const pageContext = await _renderPage({
+    ...options?.pageContext,
     urlOriginal: url,
-    headersOriginal: headers,
-    ...(await getPageContext(platformRequest))
+    headersOriginal: headers
   })
 
   if (pageContext.errorWhileRendering) {
     options.onError?.(pageContext.errorWhileRendering)
-  }
-
-  if (!pageContext.httpResponse) {
-    return null
   }
 
   return pageContext.httpResponse
@@ -40,21 +35,123 @@ async function renderPage<PlatformRequest>({
 async function renderPageWeb<PlatformRequest>({
   url,
   headers,
-  platformRequest,
   options
 }: {
   url: string
   headers: [string, string][]
   platformRequest: PlatformRequest
-  options: VikeOptions<PlatformRequest>
+  options: VikeOptions
 }) {
   const httpResponse = await renderPage({
     url,
     headers,
-    platformRequest,
     options
   })
   if (!httpResponse) return undefined
-  const { statusCode, headers: headersOut, getReadableWebStream } = httpResponse
-  return new Response(getReadableWebStream(), { status: statusCode, headers: headersOut })
+
+  const { readable, writable } = new TransformStream()
+  httpResponse.pipe(writable)
+
+  return new Response(readable, { status: httpResponse.statusCode, headers: httpResponse.headers })
+}
+
+export const renderPageCompress = ((options?) => async (request, context, runtime: any) => {
+  const nodeReq: IncomingMessage | undefined = runtime.req
+  const compressionType = options?.compress ?? !isVercel()
+
+  return async (response) => {
+    if (!globalStore.isPluginLoaded && nodeReq) {
+      const isAsset = nodeReq.url?.startsWith('/assets/')
+      const shouldCompressResponse = compressionType === true || (compressionType === 'static' && isAsset)
+      if (shouldCompressResponse) {
+        // FIXME convert to universal-middleware! Wrong usage of getReader().read()
+        // Could use either CompressionStream or node:zlib
+        // const { negotiatedCompression } = await import('@major-tanya/itty-compression')
+        // TODO caching
+        // const newRes = await negotiatedCompression(response, request)
+        response.headers.delete('content-length')
+        response.headers.set('content-encoding', 'gzip')
+        response.headers.set('vary', 'Accept-Encoding')
+        return new Response(response.body?.pipeThrough(new CompressionStream('gzip')), response)
+        // FIXME should be part of the compression lib
+        // newRes.headers.delete('content-length')
+        // return newRes
+      }
+    }
+    return response
+  }
+}) satisfies Get<[options: VikeOptions], UniversalMiddleware>
+
+export const renderPageHandler = ((options?) => async (request, context, runtime: any) => {
+  const nodeReq: IncomingMessage | undefined = runtime.req
+  let staticConfig: false | { root: string; cache: boolean } = false
+  let staticMiddleware: ConnectMiddleware | undefined
+
+  if (nodeReq) {
+    globalStore.setupHMRProxy(nodeReq)
+    const { resolveStaticConfig } = await import('./handler-node-only.js')
+    staticConfig = resolveStaticConfig(options?.static)
+  }
+
+  if (globalStore.isPluginLoaded) {
+    const handled = await web(request)
+
+    // console.log({ url: request.url, handled: Boolean(handled) })
+    if (handled) return handled
+  } else if (nodeReq) {
+    if (staticConfig) {
+      const handled = await connectToWebFallback(serveStaticFiles)(request)
+      if (handled) return handled
+    }
+  }
+
+  async function serveStaticFiles(req: IncomingMessage, res: ServerResponse): Promise<boolean> {
+    if (!staticMiddleware) {
+      const { default: sirv } = await import('sirv')
+      staticMiddleware = sirv((staticConfig as { root: string; cache: boolean }).root, { etag: true })
+    }
+
+    return new Promise<boolean>((resolve) => {
+      res.once('close', () => resolve(true))
+      staticMiddleware!(req, res, () => resolve(false))
+    })
+  }
+
+  const pageContextInit = { ...context, ...runtime, urlOriginal: request.url, headersOriginal: request.headers }
+  const response = await renderPage({
+    url: request.url,
+    headers: parseHeaders(request.headers),
+    options: {
+      ...options,
+      pageContext: {
+        ...pageContextInit,
+        ...options?.pageContext
+      }
+    }
+  })
+
+  const { readable, writable } = new TransformStream()
+  response.pipe(writable)
+
+  return new Response(readable, {
+    status: response.statusCode,
+    headers: response.headers
+  })
+}) satisfies Get<[options: VikeOptions], UniversalHandler>
+
+export const renderPageUniversal = ((options?) =>
+  pipe(renderPageCompress(options), renderPageHandler(options))) satisfies Get<[options: VikeOptions], UniversalHandler>
+
+const web = connectToWebFallback(handleViteDevServer)
+
+function handleViteDevServer(req: IncomingMessage, res: ServerResponse): Promise<boolean> {
+  return new Promise<boolean>((resolve) => {
+    res.once('close', () => {
+      resolve(true)
+    })
+    assert(globalStore.viteDevServer)
+    globalStore.viteDevServer.middlewares(req, res, () => {
+      resolve(false)
+    })
+  })
 }
