@@ -1,3 +1,3 @@
 import { renderPageUniversal } from './runtime/vike-handler.js'
 
-export default renderPageUniversal;
+export default renderPageUniversal

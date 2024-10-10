@@ -81,14 +81,14 @@ function connectToWebFallback(handler: ConnectMiddlewareBoolean): WebHandler {
       }
 
       try {
-        const handled = await handler(req, res, next);
+        const handled = await handler(req, res, next)
 
         if (!handled) {
-          res.destroy();
-          resolve(undefined);
+          res.destroy()
+          resolve(undefined)
         }
       } catch (e) {
-        next(e);
+        next(e)
       }
     })
   }

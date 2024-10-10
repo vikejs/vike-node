@@ -169,9 +169,6 @@ importers:
       '@brillout/picocolors':
         specifier: ^1.0.14
         version: 1.0.15
-      '@major-tanya/itty-compression':
-        specifier: ^0.2.2
-        version: 0.2.2
       '@nitedani/shrink-ray-current':
         specifier: ^4.3.0
         version: 4.3.0
@@ -219,6 +216,9 @@ importers:
       '@brillout/release-me':
         specifier: ^0.4.0
         version: 0.4.0
+      '@major-tanya/itty-compression':
+        specifier: ^0.2.2
+        version: 0.2.2
       '@types/node':
         specifier: ^20.14.15
         version: 20.14.15
