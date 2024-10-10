@@ -90,14 +90,14 @@
   "devDependencies": {
     "@brillout/release-me": "^0.4.0",
     "@types/node": "^20.14.15",
-    "@universal-middleware/core": "^0.2.13",
+    "@universal-middleware/core": "^0.2.13 ",
     "elysia": "^1.1.6",
     "fastify": "^4.28.1",
     "h3": "^1.12.0",
     "hono": "^4.6.3",
     "tsup": "^8.3.0",
     "typescript": "^5.5.4",
-    "universal-middleware": "^0.3.7",
+    "universal-middleware": "^0.3.8",
     "vike": "^0.4.198",
     "vite": "^5.4.8"
   },
