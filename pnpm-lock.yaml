@@ -169,6 +169,9 @@ importers:
       '@brillout/picocolors':
         specifier: ^1.0.14
         version: 1.0.15
+      '@major-tanya/itty-compression':
+        specifier: ^0.2.2
+        version: 0.2.2
       '@nitedani/shrink-ray-current':
         specifier: ^4.3.0
         version: 4.3.0
@@ -868,6 +871,10 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.9':
     resolution: {integrity: sha512-3Belt6tdc8bPgAtbcmdtNJlirVoTmEb5e2gC94PnkwEW9jI6CAHUeoG85tjWP5WquqfavoMtMwiG4P926ZKKuQ==}
+
+  '@major-tanya/itty-compression@0.2.2':
+    resolution: {integrity: sha512-iAQgF3iHRb+N4ABjqNmlr5zX4wT5lNcb5obFTj8WHQNAZXrvVuG3/QUGcMWkpHWOUs9SfPbY0UnKqpvsX23+vg==}
+    engines: {node: '>=18'}
 
   '@mapbox/node-pre-gyp@1.0.11':
     resolution: {integrity: sha512-Yhlar6v9WQgUp/He7BdgzOz8lqMQ8sU+jkCq7Wx8Myc5YFJLbEe7lgui/V7G1qB1DJykHSGwreceSaD60Y0PUQ==}
@@ -3639,6 +3646,8 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
+
+  '@major-tanya/itty-compression@0.2.2': {}
 
   '@mapbox/node-pre-gyp@1.0.11':
     dependencies:

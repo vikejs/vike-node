@@ -1,7 +1,7 @@
 import { parseHeaders } from './utils/header-utils.js'
 import { renderPage as _renderPage } from 'vike/server'
 import type { ConnectMiddleware, VikeHttpResponse, VikeOptions } from './types.js'
-import type { Get, UniversalHandler } from '@universal-middleware/core'
+import { type Get, pipe, type UniversalHandler, type UniversalMiddleware } from '@universal-middleware/core'
 import { globalStore } from './globalStore.js'
 import { assert } from '../utils/assert.js'
 import type { IncomingMessage, ServerResponse } from 'http'
@@ -55,18 +55,42 @@ async function renderPageWeb<PlatformRequest>({
   return new Response(readable, { status: httpResponse.statusCode, headers: httpResponse.headers })
 }
 
-export const renderPageUniversal = ((options?) => async (request, context, runtime: any) => {
+export const renderPageCompress = ((options?) => async (request, context, runtime: any) => {
+  const nodeReq: IncomingMessage | undefined = runtime.req
+  const compressionType = options?.compress ?? !isVercel()
+
+  return async (response) => {
+    if (!globalStore.isPluginLoaded && nodeReq) {
+      const isAsset = nodeReq.url?.startsWith('/assets/')
+      const shouldCompressResponse = compressionType === true || (compressionType === 'static' && isAsset)
+      if (shouldCompressResponse) {
+        // FIXME convert to universal-middleware! Wrong usage of getReader().read()
+        // Could use either CompressionStream or node:zlib
+        // const { negotiatedCompression } = await import('@major-tanya/itty-compression')
+        // TODO caching
+        // const newRes = await negotiatedCompression(response, request)
+        response.headers.delete('content-length')
+        response.headers.set('content-encoding', 'gzip')
+        response.headers.set('vary', 'Accept-Encoding')
+        return new Response(response.body?.pipeThrough(new CompressionStream('gzip')), response)
+        // FIXME should be part of the compression lib
+        // newRes.headers.delete('content-length')
+        // return newRes
+      }
+    }
+    return response
+  }
+}) satisfies Get<[options: VikeOptions], UniversalMiddleware>
+
+export const renderPageHandler = ((options?) => async (request, context, runtime: any) => {
   const nodeReq: IncomingMessage | undefined = runtime.req
   let staticConfig: false | { root: string; cache: boolean } = false
-  let shouldCache = false
-  const compressionType = options?.compress ?? !isVercel()
   let staticMiddleware: ConnectMiddleware | undefined
 
   if (nodeReq) {
     globalStore.setupHMRProxy(nodeReq)
-    const { resolveStaticConfig } = await import("./handler-node-only.js")
+    const { resolveStaticConfig } = await import('./handler-node-only.js')
     staticConfig = resolveStaticConfig(options?.static)
-    shouldCache = staticConfig && staticConfig.cache
   }
 
   if (globalStore.isPluginLoaded) {
@@ -75,22 +99,13 @@ export const renderPageUniversal = ((options?) => async (request, context, runti
     // console.log({ url: request.url, handled: Boolean(handled) })
     if (handled) return handled
   } else if (nodeReq) {
-    const isAsset = nodeReq.url?.startsWith('/assets/')
-    const shouldCompressResponse = compressionType === true || (compressionType === 'static' && isAsset)
-    // if (shouldCompressResponse) {
-    //   await applyCompression(req, res, shouldCache)
-    // }
-
     if (staticConfig) {
-      const handled = await connectToWebFallback(serveStaticFiles)(request);
+      const handled = await connectToWebFallback(serveStaticFiles)(request)
       if (handled) return handled
     }
   }
 
-  async function serveStaticFiles(
-    req: IncomingMessage,
-    res: ServerResponse
-  ): Promise<boolean> {
+  async function serveStaticFiles(req: IncomingMessage, res: ServerResponse): Promise<boolean> {
     if (!staticMiddleware) {
       const { default: sirv } = await import('sirv')
       staticMiddleware = sirv((staticConfig as { root: string; cache: boolean }).root, { etag: true })
@@ -123,6 +138,9 @@ export const renderPageUniversal = ((options?) => async (request, context, runti
     headers: response.headers
   })
 }) satisfies Get<[options: VikeOptions], UniversalHandler>
+
+export const renderPageUniversal = ((options?) =>
+  pipe(renderPageCompress(options), renderPageHandler(options))) satisfies Get<[options: VikeOptions], UniversalHandler>
 
 const web = connectToWebFallback(handleViteDevServer)
 

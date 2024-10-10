@@ -16,7 +16,7 @@ export default defineConfig([
     esbuildOptions(opts) {
       opts.outbase = "src";
     },
-    external: ["stream", "http", "node:stream", "node:http", "path", "url"],
+    external: ["stream", "http", "node:stream", "node:http", "path", "url", "node:zlib"],
     dts: true,
     outDir: 'dist',
     bundle: true

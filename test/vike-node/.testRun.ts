@@ -3,7 +3,8 @@ export { testRun }
 import { page, test, expect, run, getServerUrl, autoRetry, fetchHtml, isCI } from '@brillout/test-e2e'
 
 function testRun(cmd: 'npm run dev' | 'npm run prod') {
-  run(cmd, { serverUrl: 'http://127.0.0.1:3000' })
+  // FIXME exitCode 1 when using npm??
+  run('p' + cmd, { serverUrl: 'http://127.0.0.1:3000' })
   const isProd = cmd === 'npm run prod'
 
   test('HTML', async () => {
@@ -87,10 +88,10 @@ function testRun(cmd: 'npm run dev' | 'npm run prod') {
     })
 
   if (isProd)
-    test('Brotli compression and headers in production', async () => {
+    test('Compression and headers in production', async () => {
       const response = await page.goto(`${getServerUrl()}/`)
       const contentEncoding = await response.headerValue('content-encoding')
-      expect(contentEncoding).toBe('br')
+      expect(contentEncoding).toBe('gzip')
       const varyHeader = await response.headerValue('vary')
       expect(varyHeader).toContain('Accept-Encoding')
     })
