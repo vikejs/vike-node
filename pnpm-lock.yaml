@@ -193,7 +193,7 @@ importers:
         version: 0.2.6
       '@universal-middleware/elysia':
         specifier: ^0
-        version: 0.2.0
+        version: 0.2.1
       '@universal-middleware/express':
         specifier: ^0
         version: 0.2.8
@@ -202,13 +202,13 @@ importers:
         version: 0.3.5
       '@universal-middleware/h3':
         specifier: ^0
-        version: 0.2.5
+        version: 0.2.7
       '@universal-middleware/hattip':
         specifier: ^0
-        version: 0.2.9
+        version: 0.2.10
       '@universal-middleware/hono':
         specifier: ^0
-        version: 0.2.10
+        version: 0.2.11
       '@universal-middleware/webroute':
         specifier: ^0
         version: 0.2.7
@@ -220,7 +220,7 @@ importers:
         specifier: ^20.14.15
         version: 20.14.15
       '@universal-middleware/core':
-        specifier: ^0.2.13
+        specifier: '^0.2.13 '
         version: 0.2.13
       elysia:
         specifier: ^1.1.6
@@ -241,8 +241,8 @@ importers:
         specifier: ^5.5.4
         version: 5.5.4
       universal-middleware:
-        specifier: ^0.3.7
-        version: 0.3.7(esbuild@0.24.0)(vite@5.4.8(@types/node@20.14.15))
+        specifier: ^0.3.8
+        version: 0.3.8(esbuild@0.24.0)(vite@5.4.8(@types/node@20.14.15))
       vike:
         specifier: ^0.4.198
         version: 0.4.198(react-streaming@0.3.43(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.8(@types/node@20.14.15))
@@ -1215,8 +1215,8 @@ packages:
   '@universal-middleware/core@0.2.13':
     resolution: {integrity: sha512-FkWz+UQuaqRPzK8xc2GIyJEbetuUzDiJKqs7uJYDcepkHtZUVon+5FrwzxGr2XJnXtWE/vK58wrwETz4WkEmCA==}
 
-  '@universal-middleware/elysia@0.2.0':
-    resolution: {integrity: sha512-CR/ZO0gd6QV4tbwImcpWX0N6mCBxN4P1gzhGN5WE/IHw2kmHxWwhCCPqgWyS8l6AwnXhhY04Tf1akJbr/A91Tg==}
+  '@universal-middleware/elysia@0.2.1':
+    resolution: {integrity: sha512-X9IAUHR0hM0oh3NR9xxJ1Ka5waLmySGqJSIcOC8gkDfK95fYTqLmngUpElu1wSIlOyYTVEDyyu/saBBXhhn5Xw==}
 
   '@universal-middleware/express@0.2.8':
     resolution: {integrity: sha512-m+LMPrUbkRwiFd7Zl1IdH1V2R4ngx9KmXYvtCCsHDOSZ6+xmF6MhiqtZHECJgBbl1d6C7742hQggGYVQ91EzLQ==}
@@ -1224,14 +1224,14 @@ packages:
   '@universal-middleware/fastify@0.3.5':
     resolution: {integrity: sha512-crO4KbG7wklVSrJZ58ukBr9dSRr6PGkYiRODFi4Wk2iNYmRYPqFJ1WSr8IZ29x1OWnNp4VEoEj/R+0QMdhFh2Q==}
 
-  '@universal-middleware/h3@0.2.5':
-    resolution: {integrity: sha512-W7Nn7dGbIknc7XIbXJ0IhtbF5b18SVWRZw4OJY4VYrbACDFQ5NtR7qRVqnaO1E0sdOJFNXIqjs4ByfoZ0jDhdw==}
+  '@universal-middleware/h3@0.2.7':
+    resolution: {integrity: sha512-r/3oC8/en6YvWgQC0TfSz0Y9itk4b4auXQhVyWuByotFbU2UMRe7fgq/ZU5J1IgACwFi5IzgfgleNODozt5K6g==}
 
-  '@universal-middleware/hattip@0.2.9':
-    resolution: {integrity: sha512-NRdDqcNDZyQybMjfFt+Lw3tP/Jp3AhPv4DZewq1j7a+D0MaI8aH8F2LvwlHIfT8no3jxdKoz+4Ek7Xsc31vodw==}
+  '@universal-middleware/hattip@0.2.10':
+    resolution: {integrity: sha512-xbymaNVIQMjD1hlD85pFvB3xbXplPoSYrw3xNmAG9Q0H7znD3mMEqfMOwn7T2IqRPKo+aLsLii04jgzJzjjHuA==}
 
-  '@universal-middleware/hono@0.2.10':
-    resolution: {integrity: sha512-3O+4LtyHeUJxKMKgiPdXi18O4Fky2r88TfC960aaG7axQMLHiJMzVG0z1gUwWajE7ghMSrTjMqR/yy9W1/Dorw==}
+  '@universal-middleware/hono@0.2.11':
+    resolution: {integrity: sha512-DAZy0xctHBJ6WW/jsPbbMEuLxTZ7I0E/mEfT95NFF5lE/NF8qjAmv4GVnPL0jLVGzbmyDy/pyO6EGDV7Bv/uNg==}
 
   '@universal-middleware/webroute@0.2.7':
     resolution: {integrity: sha512-M/ggO5iy9A/mQ2LYh5rzmYp4v73XFf9HLZi2QWCD9DvSNWkKr3wQrjL9EK0HZf3un2pe2G5rFqcy0kb6lsQvcA==}
@@ -2992,8 +2992,8 @@ packages:
   unenv@1.10.0:
     resolution: {integrity: sha512-wY5bskBQFL9n3Eca5XnhH6KbUo/tfvkwm9OpcdCvLaeA7piBNbavbOKJySEwQ1V0RH6HvNlSAFRTpvTqgKRQXQ==}
 
-  universal-middleware@0.3.7:
-    resolution: {integrity: sha512-JbSmDD7GzffTAeXxElBDBYjszjmlbaO7pweJq2E+RJaV76cE7nB/1emj2YPKzh5O+kALoO7Y7J+5Ahudf+hCsw==}
+  universal-middleware@0.3.8:
+    resolution: {integrity: sha512-3d0CwE3APxtZSfBaPsYrUS1kI+70jwr9c+KDN53ZIfAvNNK8TxaWumiVmvGpXVyiz0tRpXUce5/MQQReplzqcw==}
     peerDependencies:
       '@rollup/plugin-node-resolve': ^15.3.0
       esbuild: ^0.24.0
@@ -3970,7 +3970,7 @@ snapshots:
       regexparam: 3.0.0
       tough-cookie: 5.0.0
 
-  '@universal-middleware/elysia@0.2.0':
+  '@universal-middleware/elysia@0.2.1':
     dependencies:
       '@universal-middleware/core': 0.2.13
     optional: true
@@ -3985,16 +3985,16 @@ snapshots:
       '@universal-middleware/express': 0.2.8
       fastify-raw-body: 5.0.0
 
-  '@universal-middleware/h3@0.2.5':
+  '@universal-middleware/h3@0.2.7':
     dependencies:
       '@universal-middleware/core': 0.2.13
     optional: true
 
-  '@universal-middleware/hattip@0.2.9':
+  '@universal-middleware/hattip@0.2.10':
     dependencies:
       '@universal-middleware/core': 0.2.13
 
-  '@universal-middleware/hono@0.2.10':
+  '@universal-middleware/hono@0.2.11':
     dependencies:
       '@universal-middleware/core': 0.2.13
 
@@ -5806,14 +5806,14 @@ snapshots:
       node-fetch-native: 1.6.4
       pathe: 1.1.2
 
-  universal-middleware@0.3.7(esbuild@0.24.0)(vite@5.4.8(@types/node@20.14.15)):
+  universal-middleware@0.3.8(esbuild@0.24.0)(vite@5.4.8(@types/node@20.14.15)):
     dependencies:
       '@universal-middleware/cloudflare': 0.2.6
       '@universal-middleware/core': 0.2.13
       '@universal-middleware/express': 0.2.8
       '@universal-middleware/fastify': 0.3.5
-      '@universal-middleware/hattip': 0.2.9
-      '@universal-middleware/hono': 0.2.10
+      '@universal-middleware/hattip': 0.2.10
+      '@universal-middleware/hono': 0.2.11
       '@universal-middleware/webroute': 0.2.7
       oxc-transform: 0.30.5
       package-up: 5.0.0

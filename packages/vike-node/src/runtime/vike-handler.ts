@@ -56,7 +56,7 @@ async function renderPageWeb<PlatformRequest>({
 }
 
 export const renderPageUniversal = ((options?) => async (request, context, runtime: any) => {
-  const nodeReq: IncomingMessage | undefined = runtime.req ?? runtime.env?.incoming
+  const nodeReq: IncomingMessage | undefined = runtime.req
   let staticConfig: false | { root: string; cache: boolean } = false
   let shouldCache = false
   const compressionType = options?.compress ?? !isVercel()
