@@ -77,6 +77,8 @@
   "dependencies": {
     "@brillout/picocolors": "^1.0.14",
     "@nitedani/shrink-ray-current": "^4.3.0",
+    "@universal-middleware/core": "^0.2.13",
+    "@universal-middleware/compress": "^0.2.0",
     "@vercel/nft": "^0.26.5",
     "esbuild": "^0.24.0",
     "resolve-from": "^5.0.0",
@@ -89,9 +91,7 @@
   },
   "devDependencies": {
     "@brillout/release-me": "^0.4.0",
-    "@major-tanya/itty-compression": "^0.2.2",
     "@types/node": "^20.14.15",
-    "@universal-middleware/core": "^0.2.13 ",
     "elysia": "^1.1.6",
     "fastify": "^4.28.1",
     "h3": "^1.12.0",

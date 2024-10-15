@@ -172,6 +172,12 @@ importers:
       '@nitedani/shrink-ray-current':
         specifier: ^4.3.0
         version: 4.3.0
+      '@universal-middleware/compress':
+        specifier: ^0.2.0
+        version: 0.2.0
+      '@universal-middleware/core':
+        specifier: ^0.2.13
+        version: 0.2.13
       '@vercel/nft':
         specifier: ^0.26.5
         version: 0.26.5
@@ -216,15 +222,9 @@ importers:
       '@brillout/release-me':
         specifier: ^0.4.0
         version: 0.4.0
-      '@major-tanya/itty-compression':
-        specifier: ^0.2.2
-        version: 0.2.2
       '@types/node':
         specifier: ^20.14.15
         version: 20.14.15
-      '@universal-middleware/core':
-        specifier: '^0.2.13 '
-        version: 0.2.13
       elysia:
         specifier: ^1.1.6
         version: 1.1.6(@sinclair/typebox@0.32.35)(typescript@5.5.4)
@@ -872,10 +872,6 @@ packages:
   '@jridgewell/trace-mapping@0.3.9':
     resolution: {integrity: sha512-3Belt6tdc8bPgAtbcmdtNJlirVoTmEb5e2gC94PnkwEW9jI6CAHUeoG85tjWP5WquqfavoMtMwiG4P926ZKKuQ==}
 
-  '@major-tanya/itty-compression@0.2.2':
-    resolution: {integrity: sha512-iAQgF3iHRb+N4ABjqNmlr5zX4wT5lNcb5obFTj8WHQNAZXrvVuG3/QUGcMWkpHWOUs9SfPbY0UnKqpvsX23+vg==}
-    engines: {node: '>=18'}
-
   '@mapbox/node-pre-gyp@1.0.11':
     resolution: {integrity: sha512-Yhlar6v9WQgUp/He7BdgzOz8lqMQ8sU+jkCq7Wx8Myc5YFJLbEe7lgui/V7G1qB1DJykHSGwreceSaD60Y0PUQ==}
     hasBin: true
@@ -1218,6 +1214,9 @@ packages:
 
   '@universal-middleware/cloudflare@0.2.6':
     resolution: {integrity: sha512-G92QqkKEtcWaVXV2yjdb3dHvj7yfWNSYXcbV9sWpgU6R7WHsjSzSjS7euNytD6R355Ac5wUVgqI8WRHZ417dsw==}
+
+  '@universal-middleware/compress@0.2.0':
+    resolution: {integrity: sha512-08T6Q91jINHZffE8hnr6B+xUMp+MMVPDAl6l8miKkJJRg4ARQ4kANWRYSfispK1OZ+0IOn6ajvYky7TCiWYU9Q==}
 
   '@universal-middleware/core@0.2.13':
     resolution: {integrity: sha512-FkWz+UQuaqRPzK8xc2GIyJEbetuUzDiJKqs7uJYDcepkHtZUVon+5FrwzxGr2XJnXtWE/vK58wrwETz4WkEmCA==}
@@ -2146,8 +2145,8 @@ packages:
   lru-cache@10.4.3:
     resolution: {integrity: sha512-JNAzZcXrCt42VGLuYz0zfAzDfAvJWW6AfYlDBQyDV5DClI2m5sAmK+OIO7s59XfsRsWHp02jAJrRadPRGTt6SQ==}
 
-  lru-cache@11.0.0:
-    resolution: {integrity: sha512-Qv32eSV1RSCfhY3fpPE2GNZ8jgM9X7rdAfemLWqTUxwiyIC4jJ6Sy0fZ8H+oLWevO6i4/bizg7c8d8i6bxrzbA==}
+  lru-cache@11.0.1:
+    resolution: {integrity: sha512-CgeuL5uom6j/ZVrg7G/+1IXqRY8JXX4Hghfy5YE0EhoYQWvndP1kufu58cmZLNIDKnRhZrXfdS9urVWx98AipQ==}
     engines: {node: 20 || >=22}
 
   lru-cache@5.1.1:
@@ -2188,10 +2187,6 @@ packages:
 
   mime-db@1.52.0:
     resolution: {integrity: sha512-sPU4uV7dYlvtWJxwwxHD0PuihVNiE7TyAbQ5SWxDCB9mUYvOgroQOwYQQOKPJ8CIbE+1ETVlOoK1UC2nU3gYvg==}
-    engines: {node: '>= 0.6'}
-
-  mime-db@1.53.0:
-    resolution: {integrity: sha512-oHlN/w+3MQ3rba9rqFr6V/ypF10LSkdwUysQL7GkXoTgIWeV+tcXGA852TBxH+gsh8UWoyhR1hKcoMJTuWflpg==}
     engines: {node: '>= 0.6'}
 
   mime-types@2.1.35:
@@ -3647,8 +3642,6 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
-  '@major-tanya/itty-compression@0.2.2': {}
-
   '@mapbox/node-pre-gyp@1.0.11':
     dependencies:
       detect-libc: 2.0.3
@@ -3677,7 +3670,7 @@ snapshots:
       bytes: 3.1.2
       compressible: 2.0.18
       debug: 4.3.6
-      lru-cache: 11.0.0
+      lru-cache: 11.0.1
       multipipe: 4.0.0
       on-headers: 1.0.2
       stream-buffers: 3.0.3
@@ -3973,6 +3966,17 @@ snapshots:
   '@universal-middleware/cloudflare@0.2.6':
     dependencies:
       '@universal-middleware/core': 0.2.13
+
+  '@universal-middleware/compress@0.2.0':
+    optionalDependencies:
+      '@universal-middleware/cloudflare': 0.2.6
+      '@universal-middleware/elysia': 0.2.1
+      '@universal-middleware/express': 0.2.8
+      '@universal-middleware/fastify': 0.3.5
+      '@universal-middleware/h3': 0.2.7
+      '@universal-middleware/hattip': 0.2.10
+      '@universal-middleware/hono': 0.2.11
+      '@universal-middleware/webroute': 0.2.7
 
   '@universal-middleware/core@0.2.13':
     dependencies:
@@ -4302,7 +4306,7 @@ snapshots:
 
   compressible@2.0.18:
     dependencies:
-      mime-db: 1.53.0
+      mime-db: 1.52.0
 
   concat-map@0.0.1: {}
 
@@ -4963,7 +4967,7 @@ snapshots:
 
   lru-cache@10.4.3: {}
 
-  lru-cache@11.0.0: {}
+  lru-cache@11.0.1: {}
 
   lru-cache@5.1.1:
     dependencies:
@@ -4995,8 +4999,6 @@ snapshots:
       picomatch: 2.3.1
 
   mime-db@1.52.0: {}
-
-  mime-db@1.53.0: {}
 
   mime-types@2.1.35:
     dependencies:
