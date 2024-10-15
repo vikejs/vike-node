@@ -59,7 +59,7 @@ async function renderPageWeb<PlatformRequest>({
 export const renderPageCompress = ((options?) => async (request, context, runtime: any) => {
   const nodeReq: IncomingMessage | undefined = runtime.req
   const compressionType = options?.compress ?? !isVercel()
-  const compressMiddleware = compressMiddlewareFactory()(request);
+  const compressMiddleware = compressMiddlewareFactory()(request)
 
   return async (response) => {
     if (!globalStore.isPluginLoaded && nodeReq) {
