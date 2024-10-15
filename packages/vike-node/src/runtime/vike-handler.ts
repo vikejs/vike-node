@@ -2,6 +2,7 @@ import { parseHeaders } from './utils/header-utils.js'
 import { renderPage as _renderPage } from 'vike/server'
 import type { ConnectMiddleware, VikeHttpResponse, VikeOptions } from './types.js'
 import { type Get, pipe, type UniversalHandler, type UniversalMiddleware } from '@universal-middleware/core'
+import compressMiddlewareFactory from '@universal-middleware/compress'
 import { globalStore } from './globalStore.js'
 import { assert } from '../utils/assert.js'
 import type { IncomingMessage, ServerResponse } from 'http'
@@ -58,24 +59,14 @@ async function renderPageWeb<PlatformRequest>({
 export const renderPageCompress = ((options?) => async (request, context, runtime: any) => {
   const nodeReq: IncomingMessage | undefined = runtime.req
   const compressionType = options?.compress ?? !isVercel()
+  const compressMiddleware = compressMiddlewareFactory()(request);
 
   return async (response) => {
     if (!globalStore.isPluginLoaded && nodeReq) {
       const isAsset = nodeReq.url?.startsWith('/assets/')
       const shouldCompressResponse = compressionType === true || (compressionType === 'static' && isAsset)
       if (shouldCompressResponse) {
-        // FIXME convert to universal-middleware! Wrong usage of getReader().read()
-        // Could use either CompressionStream or node:zlib
-        // const { negotiatedCompression } = await import('@major-tanya/itty-compression')
-        // TODO caching
-        // const newRes = await negotiatedCompression(response, request)
-        response.headers.delete('content-length')
-        response.headers.set('content-encoding', 'gzip')
-        response.headers.set('vary', 'Accept-Encoding')
-        return new Response(response.body?.pipeThrough(new CompressionStream('gzip')), response)
-        // FIXME should be part of the compression lib
-        // newRes.headers.delete('content-length')
-        // return newRes
+        return compressMiddleware(response)
       }
     }
     return response
