@@ -7,15 +7,6 @@
   "exports": {
     "./plugin": "./dist/plugin/index.js",
     ".": "./dist/index.js",
-    "./__handler": {
-      "vike-node-dev": "./dist/runtime/handler-web-and-node.js",
-      "edge-light": "./dist/runtime/handler-web-only.js",
-      "worker": "./dist/runtime/handler-web-only.js",
-      "workerd": "./dist/runtime/handler-web-only.js",
-      "browser": "./dist/runtime/handler-web-only.js",
-      "types": "./dist/runtime/handler-web-only.d.ts",
-      "default": "./dist/runtime/handler-web-and-node.js"
-    },
     "./handler": {
       "types": "./dist/handler.d.ts",
       "import": "./dist/handler.js",
@@ -101,31 +92,6 @@
     "universal-middleware": "^0.3.8",
     "vike": "^0.4.198",
     "vite": "^5.4.8"
-  },
-  "typesVersions": {
-    "*": {
-      "connect": [
-        "./dist/connect.d.ts"
-      ],
-      "fastify": [
-        "./dist/fastify.d.ts"
-      ],
-      "h3": [
-        "./dist/h3.d.ts"
-      ],
-      "hono": [
-        "./dist/hono.d.ts"
-      ],
-      "elysia": [
-        "./dist/elysia.d.ts"
-      ],
-      "plugin": [
-        "./dist/plugin/index.d.ts"
-      ],
-      ".": [
-        "./dist/index.d.ts"
-      ]
-    }
   },
   "files": [
     "dist/"
