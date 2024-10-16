@@ -126,7 +126,7 @@ app.use(
 ## Custom [pageContext](https://vike.dev/pageContext):
 
 `vike-node` leverages [universal-middleware](https://universal-middleware.dev/) internally,
-and merges it with `pageContext`.
+and merges the universal context with `pageContext`.
 
 If you need custom properties to be available in `pageContext`,
 [create a universal context middleware](https://universal-middleware.dev/recipes/context-middleware#updating-the-context) and attach it to your server.
