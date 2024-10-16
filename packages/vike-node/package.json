@@ -74,7 +74,7 @@
     "esbuild": "^0.24.0",
     "resolve-from": "^5.0.0",
     "sirv": "^2.0.4",
-    "unenv-nightly": "2.0.0-1721914978.1a79944"
+    "unenv-nightly": "2.0.0-20241015-162228-03257ee"
   },
   "peerDependencies": {
     "vike": "^0.4.198",
