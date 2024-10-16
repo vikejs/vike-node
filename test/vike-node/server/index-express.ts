@@ -1,6 +1,6 @@
 import express from 'express'
 import { telefunc } from 'telefunc'
-import { vike } from 'vike-node/connect'
+import vike from 'vike-node/express'
 import { Worker } from 'worker_threads'
 import { init } from '../database/todoItems.js'
 import { two } from './shared-chunk.js'
@@ -14,8 +14,7 @@ new Worker(new URL('./worker.mjs', import.meta.url))
 async function startServer() {
   await init()
   const app = express()
-  app.use(express.text()) // Parse & make HTTP request body available at `req.body`
-  app.all('/_telefunc', async (req, res) => {
+  app.all('/_telefunc', express.text(), async (req, res) => {
     const context = {}
     const httpResponse = await telefunc({ url: req.originalUrl, method: req.method, body: req.body, context })
     const { body, statusCode, contentType } = httpResponse

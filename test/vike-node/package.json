@@ -16,7 +16,7 @@
     "@vitejs/plugin-react": "^4.3.1",
     "cross-env": "^7.0.3",
     "elysia": "^1.1.6",
-    "express": "^4.19.2",
+    "express": "^4.21.1",
     "fastify": "^4.28.1",
     "h3": "^1.12.0",
     "hono": "^4.5.5",
@@ -26,9 +26,9 @@
     "sharp": "^0.33.4",
     "telefunc": "^0.1.76",
     "typescript": "^5.5.4",
-    "vike": "^0.4.193",
+    "vike": "^0.4.198",
     "vike-node": "link:../../packages/vike-node",
-    "vite": "^5.4.0"
+    "vite": "^5.4.8"
   },
   "type": "module"
 }
