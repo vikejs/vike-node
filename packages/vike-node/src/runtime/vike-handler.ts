@@ -1,6 +1,6 @@
 import type { IncomingMessage, ServerResponse } from 'http'
 import compressMiddlewareFactory from '@universal-middleware/compress'
-import { type Get, type UniversalHandler, type UniversalMiddleware, pipe } from '@universal-middleware/core'
+import { type Get, type UniversalHandler, type UniversalMiddleware } from '@universal-middleware/core'
 import { renderPage as _renderPage } from 'vike/server'
 import { assert } from '../utils/assert.js'
 import { isVercel } from '../utils/isVercel.js'
@@ -9,9 +9,9 @@ import { globalStore } from './globalStore.js'
 import type { ConnectMiddleware, VikeHttpResponse, VikeOptions } from './types.js'
 import { parseHeaders } from './utils/header-utils.js'
 
-export { renderPage, renderPageWeb }
+export { renderPage }
 
-async function renderPage<PlatformRequest>({
+async function renderPage({
   url,
   headers,
   options
@@ -33,30 +33,7 @@ async function renderPage<PlatformRequest>({
   return pageContext.httpResponse
 }
 
-async function renderPageWeb<PlatformRequest>({
-  url,
-  headers,
-  options
-}: {
-  url: string
-  headers: [string, string][]
-  platformRequest: PlatformRequest
-  options: VikeOptions
-}) {
-  const httpResponse = await renderPage({
-    url,
-    headers,
-    options
-  })
-  if (!httpResponse) return undefined
-
-  const { readable, writable } = new TransformStream()
-  httpResponse.pipe(writable)
-
-  return new Response(readable, { status: httpResponse.statusCode, headers: httpResponse.headers })
-}
-
-export const renderPageCompress = ((options?) => async (request, context, runtime: any) => {
+export const renderPageCompress = ((options?) => async (request, _context, runtime: any) => {
   const nodeReq: IncomingMessage | undefined = runtime.req
   const compressionType = options?.compress ?? !isVercel()
   const compressMiddleware = compressMiddlewareFactory()(request)
@@ -129,9 +106,6 @@ export const renderPageHandler = ((options?) => async (request, context, runtime
     headers: response.headers
   })
 }) satisfies Get<[options: VikeOptions], UniversalHandler>
-
-export const renderPageUniversal = ((options?) =>
-  pipe(renderPageCompress(options), renderPageHandler(options))) satisfies Get<[options: VikeOptions], UniversalHandler>
 
 const web = connectToWeb(handleViteDevServer)
 
