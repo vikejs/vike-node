@@ -69,7 +69,7 @@
     "@brillout/picocolors": "^1.0.14",
     "@nitedani/shrink-ray-current": "^4.3.0",
     "@universal-middleware/core": "^0.2.13",
-    "@universal-middleware/compress": "^0.2.0",
+    "@universal-middleware/compress": "^0.2.1",
     "@vercel/nft": "^0.26.5",
     "esbuild": "^0.24.0",
     "resolve-from": "^5.0.0",
