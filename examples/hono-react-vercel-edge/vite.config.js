@@ -10,7 +10,7 @@ export default {
       entry: {
         index: 'server/node-entry.js',
         app: {
-          path: 'server/app.js',
+          entry: 'server/app.js',
           runtime: 'vercel'
         }
       }
