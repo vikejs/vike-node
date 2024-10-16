@@ -1,6 +1,8 @@
 import { defineConfig } from 'tsup'
 import universalMiddleware from 'universal-middleware/esbuild'
 
+const external = ['stream', 'http', 'path', 'url', 'zlib']
+
 export default defineConfig([
   {
     entry: {
@@ -18,7 +20,7 @@ export default defineConfig([
     esbuildOptions(opts) {
       opts.outbase = 'src'
     },
-    external: ['stream', 'http', 'node:stream', 'node:http', 'path', 'url', 'node:zlib'],
+    external: external.map((e) => [e, `node:${e}`]).flat(1),
     dts: true,
     outDir: 'dist',
     bundle: true

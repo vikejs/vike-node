@@ -1,28 +1,7 @@
-export { flattenHeaders, groupHeaders, parseHeaders }
+export { flattenHeaders, parseHeaders }
 
-import type { OutgoingHttpHeaders } from 'http'
+import type { OutgoingHttpHeaders } from 'node:http'
 import { HeadersProvided } from '../types.js'
-
-function groupHeaders(headers: [string, string][]): [string, string | string[]][] {
-  const grouped: { [key: string]: string | string[] } = {}
-
-  headers.forEach(([key, value]) => {
-    if (grouped[key]) {
-      // If the key already exists, append the new value
-      if (Array.isArray(grouped[key])) {
-        ;(grouped[key] as string[]).push(value)
-      } else {
-        grouped[key] = [grouped[key] as string, value]
-      }
-    } else {
-      // If the key doesn't exist, add it to the object
-      grouped[key] = value
-    }
-  })
-
-  // Convert the object back to an array
-  return Object.entries(grouped)
-}
 
 function flattenHeaders(headers: OutgoingHttpHeaders): [string, string][] {
   const flatHeaders: [string, string][] = []

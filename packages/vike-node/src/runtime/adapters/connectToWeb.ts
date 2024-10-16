@@ -1,11 +1,11 @@
-export { connectToWeb, connectToWebFallback }
+export { connectToWeb }
 
 import type { IncomingMessage } from 'node:http'
 import { Readable } from 'node:stream'
+import { DUMMY_BASE_URL } from '../constants.js'
 import type { ConnectMiddleware, ConnectMiddlewareBoolean, WebHandler } from '../types.js'
 import { flattenHeaders } from '../utils/header-utils.js'
 import { createServerResponse } from './createServerResponse.js'
-import { DUMMY_BASE_URL } from '../constants.js'
 
 const statusCodesWithoutBody = [
   100, // Continue
@@ -20,41 +20,10 @@ const statusCodesWithoutBody = [
 /**
  * Converts a Connect-style middleware to a web-compatible request handler.
  *
- * @param {ConnectMiddleware} handler - The Connect-style middleware function to be converted.
+ * @param {ConnectMiddleware | ConnectMiddlewareBoolean} handler - The Connect-style middleware function to be converted.
  * @returns {WebHandler} A function that handles web requests and returns a Response or undefined.
  */
-function connectToWeb(handler: ConnectMiddleware): WebHandler {
-  return async (request: Request): Promise<Response | undefined> => {
-    const req = createIncomingMessage(request)
-    const { res, onReadable } = createServerResponse(req)
-
-    return new Promise<Response | undefined>((resolve, reject) => {
-      onReadable(({ readable, headers, statusCode }) => {
-        const responseBody = statusCodesWithoutBody.includes(statusCode)
-          ? null
-          : (Readable.toWeb(readable) as ReadableStream)
-        resolve(
-          new Response(responseBody, {
-            status: statusCode,
-            headers: flattenHeaders(headers)
-          })
-        )
-      })
-
-      const next = (error?: unknown) => {
-        if (error) {
-          reject(error instanceof Error ? error : new Error(String(error)))
-        } else {
-          resolve(undefined)
-        }
-      }
-
-      Promise.resolve(handler(req, res, next)).catch(next)
-    })
-  }
-}
-
-function connectToWebFallback(handler: ConnectMiddlewareBoolean): WebHandler {
+function connectToWeb(handler: ConnectMiddleware | ConnectMiddlewareBoolean): WebHandler {
   return async (request: Request): Promise<Response | undefined> => {
     const req = createIncomingMessage(request)
     const { res, onReadable } = createServerResponse(req)
@@ -83,7 +52,7 @@ function connectToWebFallback(handler: ConnectMiddlewareBoolean): WebHandler {
       try {
         const handled = await handler(req, res, next)
 
-        if (!handled) {
+        if (handled === false) {
           res.destroy()
           resolve(undefined)
         }

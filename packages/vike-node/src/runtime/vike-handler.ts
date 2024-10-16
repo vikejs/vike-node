@@ -1,13 +1,13 @@
-import { parseHeaders } from './utils/header-utils.js'
-import { renderPage as _renderPage } from 'vike/server'
-import type { ConnectMiddleware, VikeHttpResponse, VikeOptions } from './types.js'
-import { type Get, pipe, type UniversalHandler, type UniversalMiddleware } from '@universal-middleware/core'
-import compressMiddlewareFactory from '@universal-middleware/compress'
-import { globalStore } from './globalStore.js'
-import { assert } from '../utils/assert.js'
 import type { IncomingMessage, ServerResponse } from 'http'
-import { connectToWebFallback } from './adapters/connectToWeb.js'
+import compressMiddlewareFactory from '@universal-middleware/compress'
+import { type Get, type UniversalHandler, type UniversalMiddleware, pipe } from '@universal-middleware/core'
+import { renderPage as _renderPage } from 'vike/server'
+import { assert } from '../utils/assert.js'
 import { isVercel } from '../utils/isVercel.js'
+import { connectToWeb } from './adapters/connectToWeb.js'
+import { globalStore } from './globalStore.js'
+import type { ConnectMiddleware, VikeHttpResponse, VikeOptions } from './types.js'
+import { parseHeaders } from './utils/header-utils.js'
 
 export { renderPage, renderPageWeb }
 
@@ -80,7 +80,7 @@ export const renderPageHandler = ((options?) => async (request, context, runtime
 
   if (nodeReq) {
     globalStore.setupHMRProxy(nodeReq)
-    const { resolveStaticConfig } = await import('./handler-node-only.js')
+    const { resolveStaticConfig } = await import('./utils/resolve-static-config.js')
     staticConfig = resolveStaticConfig(options?.static)
   }
 
@@ -91,7 +91,7 @@ export const renderPageHandler = ((options?) => async (request, context, runtime
     if (handled) return handled
   } else if (nodeReq) {
     if (staticConfig) {
-      const handled = await connectToWebFallback(serveStaticFiles)(request)
+      const handled = await connectToWeb(serveStaticFiles)(request)
       if (handled) return handled
     }
   }
@@ -133,7 +133,7 @@ export const renderPageHandler = ((options?) => async (request, context, runtime
 export const renderPageUniversal = ((options?) =>
   pipe(renderPageCompress(options), renderPageHandler(options))) satisfies Get<[options: VikeOptions], UniversalHandler>
 
-const web = connectToWebFallback(handleViteDevServer)
+const web = connectToWeb(handleViteDevServer)
 
 function handleViteDevServer(req: IncomingMessage, res: ServerResponse): Promise<boolean> {
   return new Promise<boolean>((resolve) => {
