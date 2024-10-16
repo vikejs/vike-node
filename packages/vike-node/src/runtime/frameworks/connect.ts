@@ -1,9 +1,8 @@
 export { vike }
 
 import type { IncomingMessage, ServerResponse } from 'http'
-import { createHandler } from '../handler-node-only.js'
-import type { NextFunction, VikeOptions } from '../types.js'
 import { globalStore } from '../globalStore.js'
+import type { NextFunction, VikeOptions } from '../types.js'
 
 /**
  * Creates middleware for Express-like frameworks to handle Vike requests.

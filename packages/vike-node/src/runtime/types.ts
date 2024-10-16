@@ -12,7 +12,7 @@ export type VikeOptions = {
 export type ConnectMiddleware<
   PlatformRequest extends IncomingMessage = IncomingMessage,
   PlatformResponse extends ServerResponse = ServerResponse
-> = (req: PlatformRequest, res: PlatformResponse, next: NextFunction) => void
+> = (req: PlatformRequest, res: PlatformResponse, next: NextFunction) => void | Promise<void>
 export type ConnectMiddlewareBoolean<
   PlatformRequest extends IncomingMessage = IncomingMessage,
   PlatformResponse extends ServerResponse = ServerResponse
