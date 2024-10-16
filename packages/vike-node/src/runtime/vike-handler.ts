@@ -64,7 +64,6 @@ export const renderPageHandler = ((options?) => async (request, context, runtime
   if (globalStore.isPluginLoaded) {
     const handled = await web(request)
 
-    // console.log({ url: request.url, handled: Boolean(handled) })
     if (handled) return handled
   } else if (nodeReq) {
     if (staticConfig) {
