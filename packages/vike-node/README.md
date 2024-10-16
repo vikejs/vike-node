@@ -107,40 +107,28 @@ export default {
 }
 ```
 
-## Caching and compression:
+## Compression:
 
-In production, `vike-node`:
+In production, `vike-node` compresses all Vike responses
 
-- compresses all Vike responses
-- caches the compressed static assets(.js, .css).
-
-On a request, if the asset(.js, .css) is not in the cache, `vike-node` compresses it with a fast compression level, sends it in the response, then recompresses it with a high compression level and finally caches the compressed data.<br>
-You can disable compression/caching:
+On a request, `vike-node` compresses any asset with a fast compression level, and sends it in the response.<br>
+You can disable compression:
 
 ```js
 app.use(
   vike({
-    compress: false,
-    static: {
-      cache: false
-    }
+    compress: false
   })
 )
 ```
 
 ## Custom [pageContext](https://vike.dev/pageContext):
 
-You can define custom [pageContext](https://vike.dev/pageContext) properties:
+`vike-node` leverages [universal-middleware](https://universal-middleware.dev/) internally,
+and merges it with `pageContext`.
 
-```js
-app.use(
-  vike({
-    pageContext: (req) => ({
-      user: req.user
-    })
-  })
-)
-```
+If you need custom properties to be available in `pageContext`,
+[create a universal context middleware](https://universal-middleware.dev/recipes/context-middleware#updating-the-context) and attach it to your server.
 
 ## Framework examples:
 
@@ -152,7 +140,9 @@ app.use(
 - H3
 - Elysia (Bun)
 
-Express:
+[See complete list of supported servers](https://universal-middleware.dev/reference/supported-adapters)
+
+#### Express:
 
 ```js
 // server/index.js
@@ -170,7 +160,7 @@ function startServer() {
 }
 ```
 
-Fastify:
+#### Fastify:
 
 ```js
 // server/index.js
@@ -182,13 +172,13 @@ startServer()
 
 function startServer() {
   const app = fastify()
-  app.register(vike())
+  app.all('/*', vike())
   const port = +(process.env.PORT || 3000)
   app.listen({ port }, () => console.log(`Server running at http://localhost:${port}`))
 }
 ```
 
-Hono:
+#### Hono:
 
 ```js
 // server/index.js
@@ -213,7 +203,7 @@ function startServer() {
 }
 ```
 
-H3:
+#### H3:
 
 ```js
 // server/index.js
@@ -235,7 +225,7 @@ async function startServer() {
 }
 ```
 
-Elysia (Bun):
+#### Elysia (Bun):
 
 ```js
 // server/index.js
@@ -247,7 +237,7 @@ startServer()
 
 function startServer() {
   const app = new Elysia()
-  app.use(vike())
+  app.get('/*', vike())
   const port = +(process.env.PORT || 3000)
   app.listen(port, () => console.log(`Server running at http://localhost:${port}`))
 }
