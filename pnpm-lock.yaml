@@ -173,8 +173,8 @@ importers:
         specifier: ^4.3.0
         version: 4.3.0
       '@universal-middleware/compress':
-        specifier: ^0.2.0
-        version: 0.2.0
+        specifier: ^0.2.1
+        version: 0.2.1
       '@universal-middleware/core':
         specifier: ^0.2.13
         version: 0.2.13
@@ -1215,8 +1215,8 @@ packages:
   '@universal-middleware/cloudflare@0.2.6':
     resolution: {integrity: sha512-G92QqkKEtcWaVXV2yjdb3dHvj7yfWNSYXcbV9sWpgU6R7WHsjSzSjS7euNytD6R355Ac5wUVgqI8WRHZ417dsw==}
 
-  '@universal-middleware/compress@0.2.0':
-    resolution: {integrity: sha512-08T6Q91jINHZffE8hnr6B+xUMp+MMVPDAl6l8miKkJJRg4ARQ4kANWRYSfispK1OZ+0IOn6ajvYky7TCiWYU9Q==}
+  '@universal-middleware/compress@0.2.1':
+    resolution: {integrity: sha512-Q2xs+WaYXRgKGj4jxjc5BXkU2hvxKPFOqDgTIkt9340sq7dOfmPVkL/04Hs8oaJ9BSwlmSd7/5kxXne4n40iBw==}
 
   '@universal-middleware/core@0.2.13':
     resolution: {integrity: sha512-FkWz+UQuaqRPzK8xc2GIyJEbetuUzDiJKqs7uJYDcepkHtZUVon+5FrwzxGr2XJnXtWE/vK58wrwETz4WkEmCA==}
@@ -3966,7 +3966,7 @@ snapshots:
     dependencies:
       '@universal-middleware/core': 0.2.13
 
-  '@universal-middleware/compress@0.2.0':
+  '@universal-middleware/compress@0.2.1':
     optionalDependencies:
       '@universal-middleware/cloudflare': 0.2.6
       '@universal-middleware/elysia': 0.2.1
