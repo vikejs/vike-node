@@ -14,7 +14,7 @@ In development, the server process is restarted when a change is detected in som
 [Installation](#installation)  
 [Standalone build](#standalone-build)  
 [External packages](#external-packages)  
-[Caching and compression](#caching-and-compression)  
+[Compression](#compression)  
 [Custom pageContext](#custom-pagecontext)  
 [Framework examples](#framework-examples)  
 [Migration guide](#migration-guide)
@@ -245,6 +245,38 @@ function startServer() {
 ```
 
 ## Migration guide:
+
+### `0.1.x` to `0.2.x`
+
+#### Caching support removed
+
+```diff
+app.use(
+  vike({
+    compress: false,
+-     static: {
+-       cache: false
+-     }
+  })
+)
+```
+
+#### `pageContext`
+
+If you were using it to feed `universal-middleware` context to `pageContext`, it's now the default behaviour.<br>
+Otherwise, you now need to [create a universal context middleware](https://universal-middleware.dev/recipes/context-middleware#updating-the-context) and attach it to your server.
+
+```diff
+app.use(
+  vike({
+-    pageContext: (req) => ({
+-      user: req.user
+-    })
+  })
+)
+```
+
+### Codebase without `vike-node`
 
 ```diff
 // server/index.js
