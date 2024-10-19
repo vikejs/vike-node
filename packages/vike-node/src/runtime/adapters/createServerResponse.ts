@@ -1,7 +1,7 @@
 export { createServerResponse }
 
-import { ServerResponse, type IncomingMessage, type OutgoingHttpHeader, type OutgoingHttpHeaders } from 'http'
-import { PassThrough, Readable } from 'stream'
+import { ServerResponse, type IncomingMessage, type OutgoingHttpHeader, type OutgoingHttpHeaders } from 'node:http'
+import { PassThrough, Readable } from 'node:stream'
 
 /**
  * Creates a custom ServerResponse object that allows for intercepting and streaming the response.

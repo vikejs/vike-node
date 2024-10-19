@@ -1,6 +1,6 @@
 export { vike }
 
-import type { IncomingMessage, ServerResponse } from 'http'
+import type { IncomingMessage, ServerResponse } from 'node:http'
 import { createHandler } from '../handler-node-only.js'
 import type { NextFunction, VikeOptions } from '../types.js'
 import { globalStore } from '../globalStore.js'

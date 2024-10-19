@@ -1,7 +1,7 @@
 export { vike }
 
-import { eventHandler, EventHandler } from 'h3'
 import type { IncomingMessage } from 'node:http'
+import { eventHandler, EventHandler } from 'h3'
 import { globalStore } from '../globalStore.js'
 import { createHandler } from '../handler-node-only.js'
 import type { VikeOptions } from '../types.js'

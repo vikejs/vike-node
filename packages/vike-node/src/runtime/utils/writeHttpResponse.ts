@@ -1,6 +1,6 @@
 export { writeHttpResponse }
 
-import type { ServerResponse } from 'http'
+import type { ServerResponse } from 'node:http'
 import { assert } from '../../utils/assert.js'
 import type { VikeHttpResponse } from '../types.js'
 import { groupHeaders } from './header-utils.js'

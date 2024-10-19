@@ -1,7 +1,7 @@
 export { vike }
 
+import type { IncomingMessage } from 'node:http'
 import type { Context, MiddlewareHandler } from 'hono'
-import type { IncomingMessage } from 'http'
 import { globalStore } from '../globalStore.js'
 import type { VikeOptions } from '../types.js'
 

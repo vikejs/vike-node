@@ -1,6 +1,6 @@
 export { flattenHeaders, groupHeaders, parseHeaders }
 
-import type { OutgoingHttpHeaders } from 'http'
+import type { OutgoingHttpHeaders } from 'node:http'
 import { HeadersProvided } from '../types.js'
 
 function groupHeaders(headers: [string, string][]): [string, string | string[]][] {

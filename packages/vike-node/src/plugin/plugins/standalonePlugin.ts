@@ -1,6 +1,6 @@
+import fs from 'node:fs/promises'
+import path from 'node:path'
 import esbuild from 'esbuild'
-import fs from 'fs/promises'
-import path from 'path'
 import { searchForWorkspaceRoot, type Plugin, type ResolvedConfig } from 'vite'
 import type { ConfigVikeNodeResolved } from '../../types.js'
 import { assert, assertUsage } from '../../utils/assert.js'

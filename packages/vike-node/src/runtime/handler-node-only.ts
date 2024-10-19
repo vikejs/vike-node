@@ -1,6 +1,6 @@
-import type { IncomingMessage, ServerResponse } from 'http'
-import { dirname, isAbsolute, join } from 'path'
-import { fileURLToPath } from 'url'
+import type { IncomingMessage, ServerResponse } from 'node:http'
+import { dirname, isAbsolute, join } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
 import { assert } from '../utils/assert.js'
 import { globalStore } from './globalStore.js'

@@ -1,5 +1,5 @@
-import { fork } from 'child_process'
-import { createServer, type IncomingMessage, type Server } from 'http'
+import { fork } from 'node:child_process'
+import { createServer, type IncomingMessage, type Server } from 'node:http'
 import type { Plugin, ViteDevServer } from 'vite'
 import { globalStore } from '../../runtime/globalStore.js'
 import type { ConfigVikeNodeResolved } from '../../types.js'

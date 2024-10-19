@@ -1,6 +1,6 @@
+import { createRequire } from 'node:module'
+import path from 'node:path'
 import pc from '@brillout/picocolors'
-import { createRequire } from 'module'
-import path from 'path'
 import type { Plugin, ResolvedConfig } from 'vite'
 import type { EntryResolved } from '../../types.js'
 import { assert, assertUsage } from '../../utils/assert.js'

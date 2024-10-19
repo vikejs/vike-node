@@ -1,6 +1,6 @@
-import { readFileSync } from 'fs'
-import { createRequire } from 'module'
-import path from 'path'
+import { readFileSync } from 'node:fs'
+import { createRequire } from 'node:module'
+import path from 'node:path'
 
 let version = 'unknown'
 let packagePath = ''
