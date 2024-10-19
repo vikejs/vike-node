@@ -7,7 +7,6 @@ type Handler<PlatformRequest> = (params: {
 }) => Response | undefined | Promise<Response | undefined>
 
 export function createHandler<PlatformRequest>(options: VikeOptions<PlatformRequest> = {}): Handler<PlatformRequest> {
-  let nodeLike: boolean | undefined = undefined
   let nodeHandler: Handler<PlatformRequest> | undefined = undefined
   let webHandler: Handler<PlatformRequest> | undefined = undefined
 
@@ -16,9 +15,7 @@ export function createHandler<PlatformRequest>(options: VikeOptions<PlatformRequ
       return undefined
     }
 
-    nodeLike ??= await isNodeLike()
-
-    if (nodeLike) {
+    if (isNodeLike()) {
       if (!nodeHandler) {
         const { connectToWeb } = await import('./adapters/connectToWeb.js')
         const { createHandler } = await import('./handler-node-only.js')
