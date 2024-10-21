@@ -21,3 +21,7 @@ export type PlatformRequestUws = HttpRequest & {
   url: string
   headers: [string, string][]
 }
+export type HandlerUws<PlatformRequestUws> = (params: {
+  res: HttpResponse
+  platformRequest: PlatformRequestUws
+}) => Promise<void>

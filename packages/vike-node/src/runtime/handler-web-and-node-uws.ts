@@ -3,7 +3,7 @@ import { isNodeLike } from '../utils/isNodeLike.js'
 import { connectToWeb } from './adapters/connectToWeb.js'
 import { createHandler as createHandlerNode } from './handler-node-only-uws.js'
 import { createHandler as createHandlerWeb } from'./handler-web-only-uws.js'
-import type { PlatformRequestUws, VikeOptions } from './types.js'
+import type { HandlerUws, PlatformRequestUws, VikeOptions } from './types.js'
 
 const getHeaders = (req: HttpRequest): [string, string][] => {
   const headers: [string, string][] = []
@@ -37,7 +37,7 @@ export function createHandler<HttpRequest>(options: VikeOptions<HttpRequest> = {
 
     if (await isNodeLike()) {
       const nodeOnlyHandler = createHandlerNode(options)
-      const nodeHandler: Handler<PlatformRequestUws> = ({ request, platformRequest }) => {
+      const nodeHandler: HandlerUws<PlatformRequestUws> = ({ request, platformRequest }) => {
         const connectedHandler = connectToWeb((req, res) =>
           nodeOnlyHandler({ req, res, platformRequest })
         )
@@ -46,7 +46,7 @@ export function createHandler<HttpRequest>(options: VikeOptions<HttpRequest> = {
 
       await nodeHandler({ request, platformRequest })
     } else {
-      const webHandler: Handler<PlatformRequestUws> = createHandlerWeb(options)
+      const webHandler: HandlerUws<PlatformRequestUws> = createHandlerWeb(options)
       await webHandler({ platformRequest })
     }
   }
