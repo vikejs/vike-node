@@ -1,6 +1,6 @@
 import type { HttpRequest, HttpResponse } from 'uWebSockets.js'
 import { isNodeLike } from '../utils/isNodeLike.js'
-import { connectToWeb } from './adapters/connectToWeb.js'
+import { connectToWeb } from './adapters/connectToWebUws.js'
 import { createHandler as createHandlerNode } from './handler-node-only-uws.js'
 import { createHandler as createHandlerWeb } from'./handler-web-only-uws.js'
 import type { HandlerUws, PlatformRequestUws, VikeOptions } from './types.js'
@@ -37,17 +37,17 @@ export function createHandler<HttpRequest>(options: VikeOptions<HttpRequest> = {
 
     if (await isNodeLike()) {
       const nodeOnlyHandler = createHandlerNode(options)
-      const nodeHandler: HandlerUws<PlatformRequestUws> = ({ request, platformRequest }) => {
+      const nodeHandler: HandlerUws<PlatformRequestUws> = ({ res: response, platformRequest }) => {
         const connectedHandler = connectToWeb((req, res) =>
           nodeOnlyHandler({ req, res, platformRequest })
         )
-        return connectedHandler(request)
+        return connectedHandler(platformRequest)
       }
 
-      await nodeHandler({ request, platformRequest })
+      await nodeHandler({ res: response, platformRequest })
     } else {
       const webHandler: HandlerUws<PlatformRequestUws> = createHandlerWeb(options)
-      await webHandler({ platformRequest })
+      await webHandler({ res: response, platformRequest })
     }
   }
 }
