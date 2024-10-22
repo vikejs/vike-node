@@ -4,9 +4,15 @@ import type { OutgoingHttpHeader, OutgoingHttpHeaders } from 'node:http'
 import { PassThrough, Readable } from 'node:stream'
 import type { HttpResponse } from 'uWebSockets.js'
 
+type OnReadable = (cb: (result: {
+  readable: Readable
+  headers: [string, string][]
+  statusCode: number
+}) => void) => void
+
 type CreatedServerReponse = {
   res: HttpResponse
-  onReadable: (cb: (result: { readable: Readable; headers: OutgoingHttpHeaders; statusCode: number }) => void) => void
+  onReadable: OnReadable
 }
 
 /**
@@ -23,13 +29,15 @@ function createServerResponse(res: HttpResponse): CreatedServerReponse {
   const passThrough = new PassThrough()
   let handled = false
 
-  const onReadable = (
-    cb: (result: { readable: Readable; headers: OutgoingHttpHeaders; statusCode: number }) => void
-  ) => {
+  const onReadable: OnReadable = (cb) => {
     const handleReadable = () => {
       if (handled) return
       handled = true
-      cb({ readable: Readable.from(passThrough), headers: res.getHeaders(), statusCode: res.statusCode })
+      cb({
+        readable: Readable.from(passThrough),
+        headers: res.headers as [string, string][],
+        statusCode: res.statusCode as number
+      })
     }
 
     passThrough.once('readable', handleReadable)
@@ -63,7 +71,7 @@ function createServerResponse(res: HttpResponse): CreatedServerReponse {
     if (headers) {
       Object.entries(headers).forEach(([key, value]) => {
         if (value !== undefined) {
-          res.writeHeader(key, value)
+          res.writeHeader(key, value.toString())
         }
       })
     }
