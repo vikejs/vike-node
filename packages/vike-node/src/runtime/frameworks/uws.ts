@@ -27,10 +27,10 @@ import type { PlatformRequestUws, VikeOptions } from '../types.js'
  */
 function vike(app: TemplatedApp, options?: VikeOptions<HttpRequest>): TemplatedApp {
   const handler = createHandler(options)
-  return app.get('*', (response, request) => 
+  return app.get('*', (response, request) =>
     handler({ response, request, platformRequest: request as PlatformRequestUws }).catch((error: Error) => {
-        console.error(error)
-        response.writeStatus('500').end('Internal Server Error: ' + error.message)
+      console.error(error)
+      response.writeStatus('500').end('Internal Server Error: ' + error.message)
     })
   )
 }

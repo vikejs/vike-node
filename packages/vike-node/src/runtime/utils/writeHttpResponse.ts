@@ -45,5 +45,5 @@ async function readableStreamToBuffer(readableStream: ReadableStream): Promise<B
   }
 
   // Using Buffer.concat directly to handle chunk concatenation, improving performance.
-  return Buffer.concat(chunks.map(chunk => Buffer.from(chunk)))
+  return Buffer.concat(chunks.map((chunk) => Buffer.from(chunk)))
 }

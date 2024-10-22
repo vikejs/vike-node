@@ -40,7 +40,7 @@ async function renderPageWeb<PlatformRequest>({
   platformRequest,
   options
 }: {
-  res: HttpResponse,
+  res: HttpResponse
   url: string
   headers: [string, string][]
   platformRequest: PlatformRequest

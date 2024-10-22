@@ -18,7 +18,10 @@ export function createHandler(options: VikeOptions<PlatformRequestUws> = {}) {
   // let staticMiddleware: ConnectMiddleware | undefined
   // let compressMiddleware: ConnectMiddleware | undefined
 
-  return async function handler({ res, platformRequest }: {
+  return async function handler({
+    res,
+    platformRequest
+  }: {
     res: HttpResponse
     platformRequest: PlatformRequestUws
   }): Promise<void> {
@@ -35,7 +38,6 @@ export function createHandler(options: VikeOptions<PlatformRequestUws> = {}) {
       // if (shouldCompressResponse) {
       //   await applyCompression(req, res, shouldCache)
       // }
-
       // if (staticConfig) {
       //   const handled = await serveStaticFiles(req, res, staticConfig)
       //   if (handled) return true
@@ -87,7 +89,11 @@ function handleViteDevServer(res: HttpResponse, platformRequest: PlatformRequest
   return new Promise<boolean>((resolve) => {
     res.once('close', () => resolve(true))
     assert(globalStore.viteDevServer)
-    globalStore.viteDevServer.middlewares(platformRequest as unknown as IncomingMessage, res as unknown as ServerResponse, () => resolve(false))
+    globalStore.viteDevServer.middlewares(
+      platformRequest as unknown as IncomingMessage,
+      res as unknown as ServerResponse,
+      () => resolve(false)
+    )
   })
 }
 

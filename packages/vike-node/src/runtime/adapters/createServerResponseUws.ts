@@ -4,11 +4,13 @@ import type { OutgoingHttpHeader, OutgoingHttpHeaders } from 'node:http'
 import { PassThrough, Readable } from 'node:stream'
 import type { HttpResponse } from 'uWebSockets.js'
 
-type OnReadable = (cb: (result: {
-  readable: Readable
-  headers: [string, string][]
-  statusCode: number
-}) => void) => void
+type OnReadable = (
+  cb: (result: {
+    readable: Readable
+    headers: [string, string][]
+    statusCode: number
+  }) => void
+) => void
 
 type CreatedServerReponse = {
   res: HttpResponse

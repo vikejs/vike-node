@@ -33,7 +33,7 @@ function connectToWeb(handler: ConnectMiddlewareUws): WebHandlerUws {
         for (const [key, value] of headers) {
           res.writeHeader(key, value)
         }
-        if(statusCodesWithoutBody.has(statusCode)) {
+        if (statusCodesWithoutBody.has(statusCode)) {
           res.end()
         } else {
           res.end(await readableStreamToBuffer(Readable.toWeb(readable) as ReadableStream))
