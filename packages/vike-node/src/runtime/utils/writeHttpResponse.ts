@@ -22,8 +22,8 @@ async function writeHttpResponseUws(httpResponse: VikeHttpResponse, res: HttpRes
   assert(httpResponse)
   res.writeStatus(httpResponse.statusCode + '')
 
-  for (const header in httpResponse.headers) {
-    res.writeHeader(header[0]!, header[1]!)
+  for (const [key, value] of httpResponse.headers) {
+    res.writeHeader(key!, value!)
   }
 
   const readableWebStream = httpResponse.getReadableWebStream()

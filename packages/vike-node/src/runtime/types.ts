@@ -14,9 +14,9 @@ export type ConnectMiddleware<
   PlatformRequest extends IncomingMessage = IncomingMessage,
   PlatformResponse extends ServerResponse = ServerResponse
 > = (req: PlatformRequest, res: PlatformResponse, next: NextFunction) => void
-export type ConnectMiddlewareUws = (req: HttpRequest, res: HttpResponse) => void
+export type ConnectMiddlewareUws = (res: HttpResponse, platformRequest: PlatformRequestUws) => void
 export type WebHandler = (request: Request) => Response | undefined | Promise<Response | undefined>
-export type WebHandlerUws = (request: HttpRequest) => Promise<void>
+export type WebHandlerUws = (response: HttpResponse, platformRequest: PlatformRequestUws) => Promise<void>
 export type PlatformRequestUws = HttpRequest & {
   url: string
   headers: [string, string][]

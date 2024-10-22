@@ -37,11 +37,11 @@ export function createHandler<HttpRequest>(options: VikeOptions<HttpRequest> = {
 
     if (await isNodeLike()) {
       const nodeOnlyHandler = createHandlerNode(options)
-      const nodeHandler: HandlerUws<PlatformRequestUws> = ({ res: response, platformRequest }) => {
-        const connectedHandler = connectToWeb((req, res) =>
-          nodeOnlyHandler({ req, res, platformRequest })
+      const nodeHandler: HandlerUws<PlatformRequestUws> = ({ platformRequest }) => {
+        const connectedHandler = connectToWeb((res, platformRequest) =>
+          nodeOnlyHandler({ res, platformRequest })
         )
-        return connectedHandler(platformRequest)
+        return connectedHandler(response, platformRequest)
       }
 
       await nodeHandler({ res: response, platformRequest })
