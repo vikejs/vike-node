@@ -10,6 +10,7 @@
     "./h3": "./dist/h3.js",
     "./hono": "./dist/hono.js",
     "./elysia": "./dist/elysia.js",
+    "./uws": "./dist/uws.js",
     "./plugin": "./dist/plugin/index.js",
     ".": "./dist/index.js",
     "./__handler": {
@@ -50,6 +51,7 @@
     "h3": "^1.12.0",
     "hono": "^4.5.5",
     "typescript": "^5.5.4",
+    "uWebSockets.js": "github:uNetworking/uWebSockets.js#v20.49.0",
     "vike": "^0.4.193",
     "vite": "^5.4.0"
   },

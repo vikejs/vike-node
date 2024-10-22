@@ -208,6 +208,9 @@ importers:
       typescript:
         specifier: ^5.5.4
         version: 5.5.4
+      uWebSockets.js:
+        specifier: github:uNetworking/uWebSockets.js#v20.49.0
+        version: https://codeload.github.com/uNetworking/uWebSockets.js/tar.gz/442087c0a01bf146acb7386910739ec81df06700
       vike:
         specifier: ^0.4.193
         version: 0.4.193(react-streaming@0.3.43(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.0(@types/node@20.14.15))
