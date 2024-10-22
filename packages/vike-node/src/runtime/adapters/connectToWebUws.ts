@@ -5,6 +5,7 @@ import type { HttpResponse } from 'uWebSockets.js'
 import type { ConnectMiddlewareUws, PlatformRequestUws, WebHandlerUws } from '../types.js'
 import { createServerResponse } from './createServerResponseUws.js'
 import { DUMMY_BASE_URL } from '../constants.js'
+import { readableStreamToBuffer } from '../utils/writeHttpResponse.js'
 
 const statusCodesWithoutBody = new Set([
   100, // Continue
@@ -27,16 +28,16 @@ function connectToWeb(handler: ConnectMiddlewareUws): WebHandlerUws {
     const { res, onReadable } = createServerResponse(enrichResponse(response, platformRequest))
 
     return new Promise<void>((resolve) => {
-      onReadable(({ readable, headers, statusCode }) => {
-        const responseBody = statusCodesWithoutBody.has(statusCode)
-          ? ''
-          : (Readable.toWeb(readable) as ReadableStream)
-
+      onReadable(async ({ readable, headers, statusCode }) => {
         res.writeStatus(statusCode.toString())
         for (const [key, value] of headers) {
           res.writeHeader(key, value)
         }
-        res.end(responseBody)
+        if(statusCodesWithoutBody.has(statusCode)) {
+          res.end()
+        } else {
+          res.end(await readableStreamToBuffer(Readable.toWeb(readable) as ReadableStream))
+        }
         resolve()
       })
 

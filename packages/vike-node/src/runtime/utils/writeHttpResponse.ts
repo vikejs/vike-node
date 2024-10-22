@@ -1,4 +1,4 @@
-export { writeHttpResponse, writeHttpResponseUws }
+export { writeHttpResponse, writeHttpResponseUws, readableStreamToBuffer }
 
 import type { HttpResponse } from 'uWebSockets.js'
 import type { ServerResponse } from 'http'
@@ -28,30 +28,22 @@ async function writeHttpResponseUws(httpResponse: VikeHttpResponse, res: HttpRes
 
   const readableWebStream = httpResponse.getReadableWebStream()
 
-  res.end(await readableStreamToArrayBuffer(readableWebStream))
+  res.end(await readableStreamToBuffer(readableWebStream))
 }
 
 /**
- * Convert Readable Web Stream to ArrayBuffer
+ * Convert Readable Web Stream to Buffer
  */
-async function readableStreamToArrayBuffer(readableStream: ReadableStream): Promise<Uint8Array> {
+async function readableStreamToBuffer(readableStream: ReadableStream): Promise<Buffer> {
   const reader = readableStream.getReader()
   const chunks: Uint8Array[] = []
-  let done = false
-  while (!done) {
-    const { value, done: doneReading } = await reader.read()
-    if (value) {
-      chunks.push(value)
-    }
-    done = doneReading
+
+  let result = await reader.read()
+  while (!result.done) {
+    chunks.push(result.value)
+    result = await reader.read()
   }
 
-  const arrayBuffer = new Uint8Array(chunks.reduce((acc, chunk) => acc + chunk.length, 0))
-  let offset = 0
-  for (const chunk of chunks) {
-    arrayBuffer.set(chunk, offset)
-    offset += chunk.length
-  }
-
-  return arrayBuffer
+  // Using Buffer.concat directly to handle chunk concatenation, improving performance.
+  return Buffer.concat(chunks.map(chunk => Buffer.from(chunk)))
 }
