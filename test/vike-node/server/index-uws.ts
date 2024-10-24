@@ -42,5 +42,14 @@ async function startServer() {
   // res.writeHeader('x-test', 'test')
 
   const port = process.env.PORT || 3000
-  app.listen(+port, () => console.log(`Server running at http://localhost:${port}`))
+  await new Promise<void>((resolve, reject) => {
+    app.listen(+port, (listenSocket) => {
+      if (listenSocket) {
+        console.log(`Server running at http://localhost:${port}`)
+        resolve()
+      } else {
+        reject(`Failed to listen to port ${port}`)
+      }
+    })
+  })
 }
