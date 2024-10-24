@@ -14,6 +14,7 @@ export default {
   ],
   // Make test more interesting: avoid vite-plugin-server-entry from [finding the server entry by searching for the dist/ directory](https://github.com/brillout/vite-plugin-server-entry/blob/240f59b4849a3fdfd84448117a3aaf4fbe95a8a0/src/runtime/crawlServerEntry.ts)
   build: { outDir: 'build' },
+  esbuild: { loader: { '.node': 'file' } },
   // Disable CORS for the test of uWebSockets.js where the cors middleware isn't compatible with uWebSockets.js
   server: { cors: false }
 }
