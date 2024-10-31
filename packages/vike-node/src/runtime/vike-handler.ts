@@ -16,7 +16,7 @@ async function renderPage<PlatformRequest>({
   options: VikeOptions<PlatformRequest>
   platformRequest: PlatformRequest
 }): Promise<VikeHttpResponse> {
-  function getPageContext(platformRequest: PlatformRequest): Record<string, any> {
+  async function getPageContext(platformRequest: PlatformRequest): Promise<Record<string, any>> {
     return typeof options.pageContext === 'function' ? options.pageContext(platformRequest) : options.pageContext ?? {}
   }
 
@@ -28,10 +28,6 @@ async function renderPage<PlatformRequest>({
 
   if (pageContext.errorWhileRendering) {
     options.onError?.(pageContext.errorWhileRendering)
-  }
-
-  if (!pageContext.httpResponse) {
-    return null
   }
 
   return pageContext.httpResponse
