@@ -96,10 +96,7 @@ export const renderPageHandler = ((options?) => async (request, context, runtime
     }
   })
 
-  const { readable, writable } = new TransformStream()
-  response.pipe(writable)
-
-  return new Response(readable, {
+  return new Response(response.getReadableWebStream(), {
     status: response.statusCode,
     headers: response.headers
   })
