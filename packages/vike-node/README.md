@@ -43,7 +43,7 @@ In development, the server process is restarted when a change is detected in som
    // server/index.js
 
    import express from 'express'
-   import vike from 'vike-node/connect'
+   import vike from 'vike-node/express'
 
    startServer()
 
@@ -149,7 +149,7 @@ If you need custom properties to be available in `pageContext`,
 // server/index.js
 
 import express from 'express'
-import vike from 'vike-node/connect'
+import vike from 'vike-node/express'
 
 startServer()
 
@@ -282,7 +282,7 @@ app.use(
 // server/index.js
 
 - import { renderPage } from 'vike/server'
-+ import { vike } from 'vike-node/connect'
++ import { vike } from 'vike-node/express'
 
 - if (isProduction) {
 -   app.use(express.static(`${root}/dist/client`))
