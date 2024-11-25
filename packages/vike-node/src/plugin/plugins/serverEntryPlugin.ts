@@ -49,6 +49,9 @@ export function serverEntryPlugin(): Plugin {
           config
         )
       }
+
+      config.vitePluginServerEntry ??= {}
+      config.vitePluginServerEntry.inject = Object.keys(resolvedEntries)
     }
   }
 }
