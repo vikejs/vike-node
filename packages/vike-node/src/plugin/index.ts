@@ -8,7 +8,7 @@ import { edgePlugin } from './plugins/edgePlugin.js'
 import { serverEntryPlugin } from './plugins/serverEntryPlugin.js'
 import { standalonePlugin } from './plugins/standalonePlugin.js'
 
-globalStore.isPluginLoaded = true
+globalStore.isDev = true
 
 function vikeNode(config: ConfigVikeNodePlugin) {
   return [commonConfig(config), serverEntryPlugin(), devServerPlugin(), standalonePlugin(), edgePlugin()]

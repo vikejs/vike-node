@@ -39,7 +39,7 @@ export const compressMiddleware = ((options?) => async (request, _context, runti
   const compressMiddlewareInternal = compressMiddlewareFactory()(request)
 
   return async (response) => {
-    if (!globalStore.isPluginLoaded && nodeReq) {
+    if (!globalStore.isDev && nodeReq) {
       const isAsset = nodeReq.url?.startsWith('/assets/')
       const shouldCompressResponse = compressionType === true || (compressionType === 'static' && isAsset)
       if (shouldCompressResponse) {
@@ -61,7 +61,7 @@ export const renderPageHandler = ((options?) => async (request, context, runtime
     staticConfig = resolveStaticConfig(options?.static)
   }
 
-  if (globalStore.isPluginLoaded) {
+  if (globalStore.isDev) {
     const handled = await web(request)
 
     if (handled) return handled
