@@ -34,13 +34,12 @@ async function renderPage({
 }
 
 export const compressMiddleware = ((options?) => async (request, _context, runtime: any) => {
-  const nodeReq: IncomingMessage | undefined = runtime.req
   const compressionType = options?.compress ?? !isVercel()
   const compressMiddlewareInternal = compressMiddlewareFactory()(request)
 
   return async (response) => {
-    if (!globalStore.isDev && nodeReq) {
-      const isAsset = nodeReq.url?.startsWith('/assets/')
+    if (!globalStore.isDev) {
+      const isAsset = new URL(request.url).pathname.startsWith('/assets/')
       const shouldCompressResponse = compressionType === true || (compressionType === 'static' && isAsset)
       if (shouldCompressResponse) {
         return compressMiddlewareInternal(response)
