@@ -246,36 +246,6 @@ function startServer() {
 
 ## Migration guide:
 
-### `0.1.x` to `0.2.x`
-
-#### Caching support removed
-
-```diff
-app.use(
-  vike({
-    compress: false,
--     static: {
--       cache: false
--     }
-  })
-)
-```
-
-#### `pageContext`
-
-If you were using it to feed `universal-middleware` context to `pageContext`, it's now the default behaviour.<br>
-Otherwise, you now need to [create a universal context middleware](https://universal-middleware.dev/recipes/context-middleware#updating-the-context) and attach it to your server.
-
-```diff
-app.use(
-  vike({
--    pageContext: (req) => ({
--      user: req.user
--    })
-  })
-)
-```
-
 ### Codebase without `vike-node`
 
 ```diff
