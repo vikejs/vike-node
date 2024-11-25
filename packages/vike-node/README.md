@@ -5,9 +5,10 @@
 
 # `vike-node`
 
-Node integration for Vike.
+Server integration for Vike.
 
-With this extension, your server-side code is transpiled with Vite.<br>
+With this extension, your server code is transpiled with Vite.
+
 In development, the server process is restarted when a change is detected in some of your server files.
 
 [Installation](#installation)  
@@ -49,7 +50,7 @@ In development, the server process is restarted when a change is detected in som
    function startServer() {
      const app = express()
      app.use(vike())
-     const port = process.env.PORT || 3000
+     const port = 3000
      app.listen(port, () => console.log(`Server running at http://localhost:${port}`))
    }
    ```
@@ -165,7 +166,7 @@ startServer()
 function startServer() {
   const app = express()
   app.use(vike())
-  const port = process.env.PORT || 3000
+  const port = 3000
   app.listen(port, () => console.log(`Server running at http://localhost:${port}`))
 }
 ```
@@ -183,7 +184,7 @@ startServer()
 function startServer() {
   const app = fastify()
   app.register(vike())
-  const port = +(process.env.PORT || 3000)
+  const port = 3000
   app.listen({ port }, () => console.log(`Server running at http://localhost:${port}`))
 }
 ```
@@ -202,7 +203,7 @@ startServer()
 function startServer() {
   const app = new Hono()
   app.use(vike())
-  const port = +(process.env.PORT || 3000)
+  const port = 3000
   serve(
     {
       fetch: app.fetch,
@@ -227,7 +228,7 @@ startServer()
 async function startServer() {
   const app = createApp()
   app.use(vike())
-  const port = process.env.PORT || 3000
+  const port = 3000
   const server = createServer(toNodeListener(app)).listen(port)
   server.on('listening', () => {
     console.log(`Server running at http://localhost:${port}`)
@@ -248,7 +249,7 @@ startServer()
 function startServer() {
   const app = new Elysia()
   app.use(vike())
-  const port = +(process.env.PORT || 3000)
+  const port = 3000
   app.listen(port, () => console.log(`Server running at http://localhost:${port}`))
 }
 ```
