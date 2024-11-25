@@ -33,17 +33,17 @@ async function renderPage({
   return pageContext.httpResponse
 }
 
-export const renderPageCompress = ((options?) => async (request, _context, runtime: any) => {
+export const compressMiddleware = ((options?) => async (request, _context, runtime: any) => {
   const nodeReq: IncomingMessage | undefined = runtime.req
   const compressionType = options?.compress ?? !isVercel()
-  const compressMiddleware = compressMiddlewareFactory()(request)
+  const compressMiddlewareInternal = compressMiddlewareFactory()(request)
 
   return async (response) => {
     if (!globalStore.isPluginLoaded && nodeReq) {
       const isAsset = nodeReq.url?.startsWith('/assets/')
       const shouldCompressResponse = compressionType === true || (compressionType === 'static' && isAsset)
       if (shouldCompressResponse) {
-        return compressMiddleware(response)
+        return compressMiddlewareInternal(response)
       }
     }
     return response
