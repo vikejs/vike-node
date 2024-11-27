@@ -36,9 +36,7 @@ export function serverEntryPlugin(): Plugin {
           assert((err as Record<string, unknown>).code === 'MODULE_NOT_FOUND')
           assertUsage(
             false,
-            `No file found at ${entryFilePath}. Does the value ${pc.cyan(`'${entryFilePath}'`)} of ${pc.cyan(
-              `server.entry.${name}.path`
-            )} point to an existing file?`
+            `No file found at ${entryFilePath}. Make sure ${pc.cyan(`server.entry.${name}`)} points to an existing file.`
           )
         }
       }
