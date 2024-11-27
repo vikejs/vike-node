@@ -56,6 +56,16 @@
       "types": "./dist/universal-elysia-handler-vike.handler.d.ts",
       "import": "./dist/universal-elysia-handler-vike.handler.js",
       "default": "./dist/universal-elysia-handler-vike.handler.js"
+    },
+    "./vercel-edge": {
+      "types": "./dist/universal-vercel-edge-handler-vike.handler.d.ts",
+      "import": "./dist/universal-vercel-edge-handler-vike.handler.js",
+      "default": "./dist/universal-vercel-edge-handler-vike.handler.js"
+    },
+    "./vercel-node": {
+      "types": "./dist/universal-vercel-node-handler-vike.handler.d.ts",
+      "import": "./dist/universal-vercel-node-handler-vike.handler.js",
+      "default": "./dist/universal-vercel-node-handler-vike.handler.js"
     }
   },
   "scripts": {
@@ -89,7 +99,7 @@
     "hono": "^4.6.3",
     "tsup": "^8.3.0",
     "typescript": "^5.5.4",
-    "universal-middleware": "^0.3.8",
+    "universal-middleware": "^0.4.0",
     "vike": "^0.4.198",
     "vite": "^5.4.8"
   },
@@ -97,15 +107,5 @@
     "dist/"
   ],
   "repository": "github:vikejs/vike-node",
-  "license": "MIT",
-  "optionalDependencies": {
-    "@universal-middleware/cloudflare": "^0",
-    "@universal-middleware/elysia": "^0",
-    "@universal-middleware/express": "^0",
-    "@universal-middleware/fastify": "^0",
-    "@universal-middleware/h3": "^0",
-    "@universal-middleware/hattip": "^0",
-    "@universal-middleware/hono": "^0",
-    "@universal-middleware/webroute": "^0"
-  }
+  "license": "MIT"
 }

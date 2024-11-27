@@ -177,7 +177,7 @@ importers:
         version: 0.2.1
       '@universal-middleware/core':
         specifier: ^0.2.13
-        version: 0.2.13
+        version: 0.2.14
       '@vercel/nft':
         specifier: ^0.26.5
         version: 0.26.5
@@ -193,31 +193,6 @@ importers:
       unenv-nightly:
         specifier: 2.0.0-20241015-162228-03257ee
         version: 2.0.0-20241015-162228-03257ee
-    optionalDependencies:
-      '@universal-middleware/cloudflare':
-        specifier: ^0
-        version: 0.2.6
-      '@universal-middleware/elysia':
-        specifier: ^0
-        version: 0.2.2
-      '@universal-middleware/express':
-        specifier: ^0
-        version: 0.2.9
-      '@universal-middleware/fastify':
-        specifier: ^0
-        version: 0.3.6
-      '@universal-middleware/h3':
-        specifier: ^0
-        version: 0.2.8
-      '@universal-middleware/hattip':
-        specifier: ^0
-        version: 0.2.10
-      '@universal-middleware/hono':
-        specifier: ^0
-        version: 0.2.12
-      '@universal-middleware/webroute':
-        specifier: ^0
-        version: 0.2.8
     devDependencies:
       '@brillout/release-me':
         specifier: ^0.4.0
@@ -244,8 +219,8 @@ importers:
         specifier: ^5.5.4
         version: 5.7.2
       universal-middleware:
-        specifier: ^0.3.8
-        version: 0.3.9(esbuild@0.24.0)(rollup@4.27.4)(vite@5.4.11(@types/node@20.17.7))
+        specifier: ^0.4.0
+        version: 0.4.0(esbuild@0.24.0)(rollup@4.27.4)(vite@5.4.11(@types/node@20.17.7))
       vike:
         specifier: ^0.4.198
         version: 0.4.204(react-streaming@0.3.43(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.11(@types/node@20.17.7))
@@ -966,43 +941,43 @@ packages:
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
 
-  '@oxc-transform/binding-darwin-arm64@0.31.0':
-    resolution: {integrity: sha512-0QolonAqXrxN3ai5/nB2i99U/dbZLanFpnwpL2jPPPRxYQPXU/j1uLPPcfOC6J5nrDQs2mMVHvkrT2CJmhetKA==}
+  '@oxc-transform/binding-darwin-arm64@0.37.0':
+    resolution: {integrity: sha512-2zzylEL3seHJaLkQfvk1/fhCfBSnnFsXzgwhqOF2oUGNaVbPnHt778rXg/csNuokD8rSsy9CJa+6ooT1473gMg==}
     cpu: [arm64]
     os: [darwin]
 
-  '@oxc-transform/binding-darwin-x64@0.31.0':
-    resolution: {integrity: sha512-asWogC7PtXbBHdN7Z/NJTHq4JXv5st94qe8t4JQR01vBumkxUa1qomTIf7h4/G3o/BeXgjL8VgHaM4snF7Z/iw==}
+  '@oxc-transform/binding-darwin-x64@0.37.0':
+    resolution: {integrity: sha512-dEeV//DdMb0LcClwZVW+p6bBslw/m+Pl8G6S3ybu1E0qb/t2kDr0p1urgwPYYjc4+H2QKCzid9C86/4D6F2xJQ==}
     cpu: [x64]
     os: [darwin]
 
-  '@oxc-transform/binding-linux-arm64-gnu@0.31.0':
-    resolution: {integrity: sha512-eNtUs4TRgg8L7Aw5cGjVVnfJLlgCHD8nloJYRKZuS09h78qN7PzUs3V0smNvxVj3iFamey9d2r/sVZd89MPY4w==}
+  '@oxc-transform/binding-linux-arm64-gnu@0.37.0':
+    resolution: {integrity: sha512-CZQdB2SNtYTSgRtQ5p4JMHJIyZ9NMg3DTHo8HcciMZRJckUchruQcD8e2SqealHnCt8S09GjoJNa2Thpba5PvQ==}
     cpu: [arm64]
     os: [linux]
 
-  '@oxc-transform/binding-linux-arm64-musl@0.31.0':
-    resolution: {integrity: sha512-yEps46bvFWZn4LJiRv+xNQKBOUd2WQF5sRwX2BFASqGGoDm3GbLV9ge9iyd5L+PvqXUANuMy7Pim6rwmRxDcdQ==}
+  '@oxc-transform/binding-linux-arm64-musl@0.37.0':
+    resolution: {integrity: sha512-yyQr04hjIlG9CEl6ii4vu7CmsY66gKokJWYQj2RAW+tLBiFLM/CIxYp4wUcrENM8jK8VkLvQ837CX08nmrRGUA==}
     cpu: [arm64]
     os: [linux]
 
-  '@oxc-transform/binding-linux-x64-gnu@0.31.0':
-    resolution: {integrity: sha512-8XP6bOi8CGlyEFEpinADND44ZklEq8q3Q8CB8gYpMP1QS7u0VyH1AeKwXES2r+g4N7ndv4y3hmK/1GdTE6Q4sA==}
+  '@oxc-transform/binding-linux-x64-gnu@0.37.0':
+    resolution: {integrity: sha512-ASl+V3BUp8EaDvXVWURuc+jygZ0xEXcBe1tJVtrqsoH5LpR9ReVPdmKz2QCJreCj+9QWHEE6ESJ49NvOtcaBjg==}
     cpu: [x64]
     os: [linux]
 
-  '@oxc-transform/binding-linux-x64-musl@0.31.0':
-    resolution: {integrity: sha512-Wjc8dCdOcLZrRYP6Tw3uBUD2YjOptIe0V0AkC9immpx57aaiHA4YFcCQFd8Jg+LChqd+jVQMJCIkx6+jSdmbIg==}
+  '@oxc-transform/binding-linux-x64-musl@0.37.0':
+    resolution: {integrity: sha512-QSD5NTt5FxfLtWqqhxWPkhX5o+Foo68RsRcj38H6NvkXOLBhs7uDJW6Zya7d7z4EHrZN/OLAdksOVhxjw4JM1Q==}
     cpu: [x64]
     os: [linux]
 
-  '@oxc-transform/binding-win32-arm64-msvc@0.31.0':
-    resolution: {integrity: sha512-RGtJ4fLLMRMzjvCphuPZvRU/te0IpFacoKmfZwbkOY0Tc1EAXJKJvtbk2Nxn+22O3qilLv8d+WX7li32sE6s5A==}
+  '@oxc-transform/binding-win32-arm64-msvc@0.37.0':
+    resolution: {integrity: sha512-fjcis9rgNu0lwPBM9QAZOz3bMbIeSLau6zVOnHi58SwpkVCll3j57ZdwG+BxIbMeV2BXyWRWTwjvsBRNPZrnBQ==}
     cpu: [arm64]
     os: [win32]
 
-  '@oxc-transform/binding-win32-x64-msvc@0.31.0':
-    resolution: {integrity: sha512-QHB6+wU2/Ilr8UGu68F+LOrZ85GqPuMMvpxa+9Y01j5vWE+/qUypQE6gf/zKMwubq+JVBBUUEqK3ApHxRcISzQ==}
+  '@oxc-transform/binding-win32-x64-msvc@0.37.0':
+    resolution: {integrity: sha512-d1rRJ9jnX72ZiA8HaBR9YeQJvahsXPPh2TGRZFXsAIcIJCcIEBhsICm/R1r3L8zGg4zrFXU/+2DjN5KkeRkhLQ==}
     cpu: [x64]
     os: [win32]
 
@@ -1203,35 +1178,38 @@ packages:
   '@types/serve-static@1.15.7':
     resolution: {integrity: sha512-W8Ym+h8nhuRwaKPaDw34QUkwsGi6Rc4yYqvKFo5rm2FUEhCFbzVWrxXUxuKK8TASjWsysJY0nsmNCGhCOIsrOw==}
 
-  '@universal-middleware/cloudflare@0.2.6':
-    resolution: {integrity: sha512-G92QqkKEtcWaVXV2yjdb3dHvj7yfWNSYXcbV9sWpgU6R7WHsjSzSjS7euNytD6R355Ac5wUVgqI8WRHZ417dsw==}
+  '@universal-middleware/cloudflare@0.2.7':
+    resolution: {integrity: sha512-B5yeO9BMi8hAMfANeSUeaLMh3XL2qGhGVVUgHxJABLpUD0mpCBXMFGGEjavM7gLaZb7GzaK/JC52+U9Crhb8NA==}
 
   '@universal-middleware/compress@0.2.1':
     resolution: {integrity: sha512-Q2xs+WaYXRgKGj4jxjc5BXkU2hvxKPFOqDgTIkt9340sq7dOfmPVkL/04Hs8oaJ9BSwlmSd7/5kxXne4n40iBw==}
 
-  '@universal-middleware/core@0.2.13':
-    resolution: {integrity: sha512-FkWz+UQuaqRPzK8xc2GIyJEbetuUzDiJKqs7uJYDcepkHtZUVon+5FrwzxGr2XJnXtWE/vK58wrwETz4WkEmCA==}
+  '@universal-middleware/core@0.2.14':
+    resolution: {integrity: sha512-HrbFL8vafL3WK1EHOAWjaqCXW4bfsvx2mbouSwenLjA2rGmgLcxspBCYzIuDDHdqSCU9vJdqMyswcB3l935RcA==}
 
-  '@universal-middleware/elysia@0.2.2':
-    resolution: {integrity: sha512-itEo6yWNSZ/fas/ZFks2F2tIHPtzS/nmScmcD/U5jKquFwc+yTU0Fd3WxeynBBzDTdvcqZUfiJ++z8P5y9uPUQ==}
+  '@universal-middleware/elysia@0.2.3':
+    resolution: {integrity: sha512-2utU4b5WPgRBVKnM4BkaipEBozaXvuFtny3mKGHS3jMx6YKqrklyTVBiJWi7Y45uH4XjPoiDha7PjiKZ/4Fbjg==}
 
-  '@universal-middleware/express@0.2.9':
-    resolution: {integrity: sha512-xK5pA1I9voMfcs4lk1jJnneY/PME4rWKMyPx4zZ0JxL6Z//8AcLmZQy7KTV0uwSS8Ipn88p0lrBMZ4EcGEYZMQ==}
+  '@universal-middleware/express@0.2.10':
+    resolution: {integrity: sha512-jRPY2o40ikpznHGUo0GxeSej6NU4XhjOvTgKMqLB98SpZ5hP+kTDvwv15JqeUFRiMsyN0Vu73RyE4IjzU79tQQ==}
 
-  '@universal-middleware/fastify@0.3.6':
-    resolution: {integrity: sha512-fFGzRMr/F+GUHaiv0DgsvRENb/l2aM6A8+2EgGV68ztdGGBOdZJ9Jti4z/D1lYA7yQytVWFv+LUKOATngjMpwg==}
+  '@universal-middleware/fastify@0.3.7':
+    resolution: {integrity: sha512-mqc8VSIK94Ooq3JjfjCLZUdIH7l4fzj0u+JaxPyHv+2FzuJVuYFonGnvie8IaHEeeBEoDPmDJgKPckXGWHhRow==}
 
-  '@universal-middleware/h3@0.2.8':
-    resolution: {integrity: sha512-o/E0fMOXeSXnRFxcke5go6cXc1s8/dSAeX5+voO6Ci6kAcVyFvPsM2/IjKEhELd4rmLPW6nYvjIuTfw6PPIhSA==}
+  '@universal-middleware/h3@0.2.9':
+    resolution: {integrity: sha512-4aA9JykmJ1n2MnXUiWv9FeOt4LJi5OAmGbvw2ErwqRYyqKpBOPvAvho2xS3dGLcTzaozUtfR7UsaT9bo1MjDVQ==}
 
-  '@universal-middleware/hattip@0.2.10':
-    resolution: {integrity: sha512-xbymaNVIQMjD1hlD85pFvB3xbXplPoSYrw3xNmAG9Q0H7znD3mMEqfMOwn7T2IqRPKo+aLsLii04jgzJzjjHuA==}
+  '@universal-middleware/hattip@0.2.11':
+    resolution: {integrity: sha512-GwxBQJj/Vxn1rnAivxVC4csqlfxhHxmgDZp3/u76ZIS5n6iKqrGsnzspxB06rD2RJArdjmG1sEE4b2JEfg9SbA==}
 
-  '@universal-middleware/hono@0.2.12':
-    resolution: {integrity: sha512-fhHne/mrH0MhoTGejIZU/PoWsKx8lf/j4hY2FS9KfGaS6yRTZIJeY2BOT30Ux6R/EhwQKAXsNPp+PgOnD4ya3A==}
+  '@universal-middleware/hono@0.2.13':
+    resolution: {integrity: sha512-hW583VHTX11oj/0xp1OWAeiLmEbx3cBBVYAdBFA/e6Mti92VcV5AdjT1e6PThWoKap49OKfG3SQRV9sWIK0MfQ==}
 
-  '@universal-middleware/webroute@0.2.8':
-    resolution: {integrity: sha512-BkgioS5SJ9opl8hGNUHrPmf7n5RAk6b9AW6x7ljTTFb2AMhRHA13nQk3Q4rdlXsHKrlaUvyqjZU9yG8+0co8fA==}
+  '@universal-middleware/vercel@0.1.2-beta':
+    resolution: {integrity: sha512-IMgazdqN6t7yxGHHTrcso9YDzvNMjsvNeB7De5Dg7HrSYs8947NazTe2XG7RtOrsZw1e7fkaBP4J7CenHvSgKQ==}
+
+  '@universal-middleware/webroute@0.2.9':
+    resolution: {integrity: sha512-T+UU1vUJHLlgbsLj+e/38fl4lb7cl8IakNfuJFkwXjgOtx93UJBYm2g9QUZjFx2t3+5TR45K4f8NbjY85e29Ag==}
 
   '@vercel/nft@0.26.5':
     resolution: {integrity: sha512-NHxohEqad6Ra/r4lGknO52uc/GrWILXAMs1BB4401GTqww0fw1bAqzpG1XHuDO+dprg4GvsD9ZLLSsdo78p9hQ==}
@@ -2289,8 +2267,8 @@ packages:
     resolution: {integrity: sha512-kbpaSSGJTWdAY5KPVeMOKXSrPtr8C8C7wodJbcsd51jRnmD+GZu8Y0VoU6Dm5Z4vWr0Ig/1NKuWRKf7j5aaYSg==}
     engines: {node: '>=6'}
 
-  oxc-transform@0.31.0:
-    resolution: {integrity: sha512-7NirXynEn8hxw371f2UQL56ljvKSzLI2mTdKe3dZyPDS7EmCkkKrEyWCufDYEWaN6ZhBba0ACaMRjVMsY6Et2g==}
+  oxc-transform@0.37.0:
+    resolution: {integrity: sha512-z2jIypxe05UDYYBzHT+Jwb7JaD2oDiay+MJpa/t3n2SGNsr2EsjFepDYez6kvtMdLXAirFms0OxobwGVsAUa5g==}
 
   p-limit@4.0.0:
     resolution: {integrity: sha512-5b0R4txpzjPWVw/cXXUResoD4hb6U/x9BH08L7nw+GN1sezDzPdxeRvpc9c433fZhBan/wusjbCsqwqm4EIBIQ==}
@@ -2906,14 +2884,17 @@ packages:
   unenv@1.10.0:
     resolution: {integrity: sha512-wY5bskBQFL9n3Eca5XnhH6KbUo/tfvkwm9OpcdCvLaeA7piBNbavbOKJySEwQ1V0RH6HvNlSAFRTpvTqgKRQXQ==}
 
-  universal-middleware@0.3.9:
-    resolution: {integrity: sha512-sh60kFv5+ywVIu1R1dAlepXii5CzwoAsSPgG/cRtknyVugD1qCH2WTO/zChvB1ZGgEBrdJV07DvmCY64VBHWXA==}
+  universal-middleware@0.4.0:
+    resolution: {integrity: sha512-YlRwkTNMOCV+f8WEVpsLKvsj4erSOM/mV7Wak/+lpRxzhvpTebHXHMh96DMLhTRiwwDgsA1fBz8wOdseSqakYg==}
     peerDependencies:
+      '@rollup/plugin-commonjs': ^28.0.1
       '@rollup/plugin-node-resolve': ^15.3.0
       esbuild: ^0.24.0
-      rollup: ^4.24.0
-      vite: '>=5.4.8'
+      rollup: ^4.27.4
+      vite: '>=5.4.11'
     peerDependenciesMeta:
+      '@rollup/plugin-commonjs':
+        optional: true
       '@rollup/plugin-node-resolve':
         optional: true
       esbuild:
@@ -3645,28 +3626,28 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.17.1
 
-  '@oxc-transform/binding-darwin-arm64@0.31.0':
+  '@oxc-transform/binding-darwin-arm64@0.37.0':
     optional: true
 
-  '@oxc-transform/binding-darwin-x64@0.31.0':
+  '@oxc-transform/binding-darwin-x64@0.37.0':
     optional: true
 
-  '@oxc-transform/binding-linux-arm64-gnu@0.31.0':
+  '@oxc-transform/binding-linux-arm64-gnu@0.37.0':
     optional: true
 
-  '@oxc-transform/binding-linux-arm64-musl@0.31.0':
+  '@oxc-transform/binding-linux-arm64-musl@0.37.0':
     optional: true
 
-  '@oxc-transform/binding-linux-x64-gnu@0.31.0':
+  '@oxc-transform/binding-linux-x64-gnu@0.37.0':
     optional: true
 
-  '@oxc-transform/binding-linux-x64-musl@0.31.0':
+  '@oxc-transform/binding-linux-x64-musl@0.37.0':
     optional: true
 
-  '@oxc-transform/binding-win32-arm64-msvc@0.31.0':
+  '@oxc-transform/binding-win32-arm64-msvc@0.37.0':
     optional: true
 
-  '@oxc-transform/binding-win32-x64-msvc@0.31.0':
+  '@oxc-transform/binding-win32-x64-msvc@0.37.0':
     optional: true
 
   '@pkgjs/parseargs@0.11.0':
@@ -3858,57 +3839,60 @@ snapshots:
       '@types/node': 20.17.7
       '@types/send': 0.17.4
 
-  '@universal-middleware/cloudflare@0.2.6':
+  '@universal-middleware/cloudflare@0.2.7':
     dependencies:
-      '@universal-middleware/core': 0.2.13
+      '@universal-middleware/core': 0.2.14
 
   '@universal-middleware/compress@0.2.1':
     optionalDependencies:
-      '@universal-middleware/cloudflare': 0.2.6
-      '@universal-middleware/elysia': 0.2.2
-      '@universal-middleware/express': 0.2.9
-      '@universal-middleware/fastify': 0.3.6
-      '@universal-middleware/h3': 0.2.8
-      '@universal-middleware/hattip': 0.2.10
-      '@universal-middleware/hono': 0.2.12
-      '@universal-middleware/webroute': 0.2.8
+      '@universal-middleware/cloudflare': 0.2.7
+      '@universal-middleware/elysia': 0.2.3
+      '@universal-middleware/express': 0.2.10
+      '@universal-middleware/fastify': 0.3.7
+      '@universal-middleware/h3': 0.2.9
+      '@universal-middleware/hattip': 0.2.11
+      '@universal-middleware/hono': 0.2.13
+      '@universal-middleware/webroute': 0.2.9
 
-  '@universal-middleware/core@0.2.13':
+  '@universal-middleware/core@0.2.14':
     dependencies:
       regexparam: 3.0.0
       tough-cookie: 5.0.0
 
-  '@universal-middleware/elysia@0.2.2':
+  '@universal-middleware/elysia@0.2.3':
     dependencies:
-      '@universal-middleware/core': 0.2.13
-    optional: true
+      '@universal-middleware/core': 0.2.14
 
-  '@universal-middleware/express@0.2.9':
+  '@universal-middleware/express@0.2.10':
     dependencies:
-      '@universal-middleware/core': 0.2.13
+      '@universal-middleware/core': 0.2.14
 
-  '@universal-middleware/fastify@0.3.6':
+  '@universal-middleware/fastify@0.3.7':
     dependencies:
-      '@universal-middleware/core': 0.2.13
-      '@universal-middleware/express': 0.2.9
+      '@universal-middleware/core': 0.2.14
+      '@universal-middleware/express': 0.2.10
       fastify-raw-body: 5.0.0
 
-  '@universal-middleware/h3@0.2.8':
+  '@universal-middleware/h3@0.2.9':
     dependencies:
-      '@universal-middleware/core': 0.2.13
-    optional: true
+      '@universal-middleware/core': 0.2.14
 
-  '@universal-middleware/hattip@0.2.10':
+  '@universal-middleware/hattip@0.2.11':
     dependencies:
-      '@universal-middleware/core': 0.2.13
+      '@universal-middleware/core': 0.2.14
 
-  '@universal-middleware/hono@0.2.12':
+  '@universal-middleware/hono@0.2.13':
     dependencies:
-      '@universal-middleware/core': 0.2.13
+      '@universal-middleware/core': 0.2.14
 
-  '@universal-middleware/webroute@0.2.8':
+  '@universal-middleware/vercel@0.1.2-beta':
     dependencies:
-      '@universal-middleware/core': 0.2.13
+      '@universal-middleware/core': 0.2.14
+      '@universal-middleware/express': 0.2.10
+
+  '@universal-middleware/webroute@0.2.9':
+    dependencies:
+      '@universal-middleware/core': 0.2.14
 
   '@vercel/nft@0.26.5':
     dependencies:
@@ -4970,16 +4954,16 @@ snapshots:
     dependencies:
       mimic-fn: 2.1.0
 
-  oxc-transform@0.31.0:
+  oxc-transform@0.37.0:
     optionalDependencies:
-      '@oxc-transform/binding-darwin-arm64': 0.31.0
-      '@oxc-transform/binding-darwin-x64': 0.31.0
-      '@oxc-transform/binding-linux-arm64-gnu': 0.31.0
-      '@oxc-transform/binding-linux-arm64-musl': 0.31.0
-      '@oxc-transform/binding-linux-x64-gnu': 0.31.0
-      '@oxc-transform/binding-linux-x64-musl': 0.31.0
-      '@oxc-transform/binding-win32-arm64-msvc': 0.31.0
-      '@oxc-transform/binding-win32-x64-msvc': 0.31.0
+      '@oxc-transform/binding-darwin-arm64': 0.37.0
+      '@oxc-transform/binding-darwin-x64': 0.37.0
+      '@oxc-transform/binding-linux-arm64-gnu': 0.37.0
+      '@oxc-transform/binding-linux-arm64-musl': 0.37.0
+      '@oxc-transform/binding-linux-x64-gnu': 0.37.0
+      '@oxc-transform/binding-linux-x64-musl': 0.37.0
+      '@oxc-transform/binding-win32-arm64-msvc': 0.37.0
+      '@oxc-transform/binding-win32-x64-msvc': 0.37.0
 
   p-limit@4.0.0:
     dependencies:
@@ -5624,16 +5608,19 @@ snapshots:
       node-fetch-native: 1.6.4
       pathe: 1.1.2
 
-  universal-middleware@0.3.9(esbuild@0.24.0)(rollup@4.27.4)(vite@5.4.11(@types/node@20.17.7)):
+  universal-middleware@0.4.0(esbuild@0.24.0)(rollup@4.27.4)(vite@5.4.11(@types/node@20.17.7)):
     dependencies:
-      '@universal-middleware/cloudflare': 0.2.6
-      '@universal-middleware/core': 0.2.13
-      '@universal-middleware/express': 0.2.9
-      '@universal-middleware/fastify': 0.3.6
-      '@universal-middleware/hattip': 0.2.10
-      '@universal-middleware/hono': 0.2.12
-      '@universal-middleware/webroute': 0.2.8
-      oxc-transform: 0.31.0
+      '@universal-middleware/cloudflare': 0.2.7
+      '@universal-middleware/core': 0.2.14
+      '@universal-middleware/elysia': 0.2.3
+      '@universal-middleware/express': 0.2.10
+      '@universal-middleware/fastify': 0.3.7
+      '@universal-middleware/h3': 0.2.9
+      '@universal-middleware/hattip': 0.2.11
+      '@universal-middleware/hono': 0.2.13
+      '@universal-middleware/vercel': 0.1.2-beta
+      '@universal-middleware/webroute': 0.2.9
+      oxc-transform: 0.37.0
       package-up: 5.0.0
       unplugin: 1.16.0
     optionalDependencies:

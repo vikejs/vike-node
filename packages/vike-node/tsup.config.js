@@ -23,7 +23,8 @@ export default defineConfig([
     external: external.map((e) => [e, `node:${e}`]).flat(1),
     dts: true,
     outDir: 'dist',
-    bundle: true
+    bundle: true,
+    treeshake: true
   },
   {
     entry: {
@@ -37,6 +38,7 @@ export default defineConfig([
       opts.outbase = 'src'
     },
     dts: true,
-    outDir: 'dist'
+    outDir: 'dist',
+    treeshake: true
   }
 ])
