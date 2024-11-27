@@ -4,7 +4,6 @@ export type HeadersProvided = Record<string, string | string[] | undefined> | He
 export type VikeHttpResponse = Awaited<ReturnType<typeof import('vike/server').renderPage>>['httpResponse']
 export type NextFunction = (err?: unknown) => void
 export type VikeOptions = {
-  pageContext?: Record<string, any>
   compress?: boolean | 'static'
   static?: boolean | string | { root?: string; cache?: boolean }
   onError?: (err: unknown) => void
