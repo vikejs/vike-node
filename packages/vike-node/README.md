@@ -16,15 +16,14 @@ In development, the server process is restarted when a change is detected in som
 [External packages](#external-packages)  
 [Compression](#compression)  
 [Custom pageContext](#custom-pagecontext)  
-[Framework examples](#framework-examples)  
-[Migration guide](#migration-guide)
+[Add to existing app](#add-to-existing-app)  
 
 <br/>
 
 ## Installation
 
 1. `npm install vike-node express`
-2. Extend `vite.config.js`:
+1. Extend `vite.config.js`:
 
    ```js
    // vite.config.js
@@ -36,8 +35,7 @@ In development, the server process is restarted when a change is detected in som
      plugins: [vikeNode('server/index.js')]
    }
    ```
-
-3. Create `server/index.js`:
+1. Create `server/index.js`:
 
    ```js
    // server/index.js
@@ -54,8 +52,9 @@ In development, the server process is restarted when a change is detected in som
      app.listen(port, () => console.log(`Server running at http://localhost:${port}`))
    }
    ```
+   > If you already have a server, see [Add to existing app](#add-to-existing-app).
 
-## Standalone build:
+## Standalone build
 
 You can enable standalone builds by setting `standalone` to `true`.
 <br>
@@ -81,7 +80,7 @@ export default {
 }
 ```
 
-## External packages:
+## External packages
 
 Packages that import native binaries/custom assets need to be added to `external`.<br>
 When building with `standalone` enabled, `external` packages and their assets are copied to the output `dist` directory.<br>
@@ -108,12 +107,11 @@ export default {
 }
 ```
 
-## Compression:
+## Compression
 
-In production, `vike-node` compresses all Vike responses
+In production, `vike-node` compresses all Vike responses.
 
-On a request, `vike-node` compresses any asset with a fast compression level, and sends it in the response.<br>
-You can disable compression:
+You can disable it:
 
 ```js
 app.use(
@@ -123,15 +121,14 @@ app.use(
 )
 ```
 
-## Custom [pageContext](https://vike.dev/pageContext):
+## Custom [pageContext](https://vike.dev/pageContext)
 
-`vike-node` leverages [universal-middleware](https://universal-middleware.dev/) internally,
-and merges the universal context with `pageContext`.
+`vike-node` uses [universal-middleware](https://universal-middleware.dev/) and automatically adds the universal context to `pageContext`.
 
 If you need custom properties to be available in `pageContext`,
-[create a universal context middleware](https://universal-middleware.dev/recipes/context-middleware#updating-the-context) and attach it to your server.
+you can [create a universal context middleware](https://universal-middleware.dev/recipes/context-middleware#updating-the-context) and attach it to your server.
 
-## Framework examples:
+## Framework examples
 
 `vike-node` includes middlewares for the most popular web frameworks:
 
@@ -141,9 +138,9 @@ If you need custom properties to be available in `pageContext`,
 - H3
 - Elysia (Bun)
 
-[See complete list of supported servers](https://universal-middleware.dev/reference/supported-adapters)
+[See complete list of supported servers](https://universal-middleware.dev/reference/supported-adapters).
 
-#### Express:
+#### Express
 
 ```js
 // server/index.js
@@ -161,7 +158,7 @@ function startServer() {
 }
 ```
 
-#### Fastify:
+#### Fastify
 
 ```js
 // server/index.js
@@ -179,7 +176,7 @@ function startServer() {
 }
 ```
 
-#### Hono:
+#### Hono
 
 ```js
 // server/index.js
@@ -204,7 +201,7 @@ function startServer() {
 }
 ```
 
-#### H3:
+#### H3
 
 ```js
 // server/index.js
@@ -226,7 +223,7 @@ async function startServer() {
 }
 ```
 
-#### Elysia (Bun):
+#### Elysia (Bun)
 
 ```js
 // server/index.js
@@ -244,9 +241,9 @@ function startServer() {
 }
 ```
 
-## Migration guide:
+## Add to existing app
 
-### Codebase without `vike-node`
+To add `vike-node` to an existing Vike app:
 
 ```diff
 // server/index.js
