@@ -1,5 +1,5 @@
 import express from 'express'
-import vike from 'vike-node/connect'
+import vike from 'vike-node/express'
 
 startServer()
 

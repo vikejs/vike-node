@@ -5,26 +5,72 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
-    "./connect": "./dist/connect.js",
-    "./fastify": "./dist/fastify.js",
-    "./h3": "./dist/h3.js",
-    "./hono": "./dist/hono.js",
-    "./elysia": "./dist/elysia.js",
     "./plugin": "./dist/plugin/index.js",
     ".": "./dist/index.js",
-    "./__handler": {
-      "vike-node-dev": "./dist/runtime/handler-web-and-node.js",
-      "edge-light": "./dist/runtime/handler-web-only.js",
-      "worker": "./dist/runtime/handler-web-only.js",
-      "workerd": "./dist/runtime/handler-web-only.js",
-      "browser": "./dist/runtime/handler-web-only.js",
-      "default": "./dist/runtime/handler-web-and-node.js",
-      "types": "./dist/runtime/handler-web-only.d.ts"
+    "./handler": {
+      "types": "./dist/handler.d.ts",
+      "import": "./dist/handler.js",
+      "default": "./dist/handler.js"
+    },
+    "./hono": {
+      "types": "./dist/universal-hono-handler-vike.handler.d.ts",
+      "import": "./dist/universal-hono-handler-vike.handler.js",
+      "default": "./dist/universal-hono-handler-vike.handler.js"
+    },
+    "./express": {
+      "types": "./dist/universal-express-handler-vike.handler.d.ts",
+      "import": "./dist/universal-express-handler-vike.handler.js",
+      "default": "./dist/universal-express-handler-vike.handler.js"
+    },
+    "./hattip": {
+      "types": "./dist/universal-hattip-handler-vike.handler.d.ts",
+      "import": "./dist/universal-hattip-handler-vike.handler.js",
+      "default": "./dist/universal-hattip-handler-vike.handler.js"
+    },
+    "./webroute": {
+      "types": "./dist/universal-webroute-handler-vike.handler.d.ts",
+      "import": "./dist/universal-webroute-handler-vike.handler.js",
+      "default": "./dist/universal-webroute-handler-vike.handler.js"
+    },
+    "./fastify": {
+      "types": "./dist/universal-fastify-handler-vike.handler.d.ts",
+      "import": "./dist/universal-fastify-handler-vike.handler.js",
+      "default": "./dist/universal-fastify-handler-vike.handler.js"
+    },
+    "./h3": {
+      "types": "./dist/universal-h3-handler-vike.handler.d.ts",
+      "import": "./dist/universal-h3-handler-vike.handler.js",
+      "default": "./dist/universal-h3-handler-vike.handler.js"
+    },
+    "./cloudflare-worker": {
+      "types": "./dist/universal-cloudflare-worker-handler-vike.handler.d.ts",
+      "import": "./dist/universal-cloudflare-worker-handler-vike.handler.js",
+      "default": "./dist/universal-cloudflare-worker-handler-vike.handler.js"
+    },
+    "./cloudflare-pages": {
+      "types": "./dist/universal-cloudflare-pages-handler-vike.handler.d.ts",
+      "import": "./dist/universal-cloudflare-pages-handler-vike.handler.js",
+      "default": "./dist/universal-cloudflare-pages-handler-vike.handler.js"
+    },
+    "./elysia": {
+      "types": "./dist/universal-elysia-handler-vike.handler.d.ts",
+      "import": "./dist/universal-elysia-handler-vike.handler.js",
+      "default": "./dist/universal-elysia-handler-vike.handler.js"
+    },
+    "./vercel-edge": {
+      "types": "./dist/universal-vercel-edge-handler-vike.handler.d.ts",
+      "import": "./dist/universal-vercel-edge-handler-vike.handler.js",
+      "default": "./dist/universal-vercel-edge-handler-vike.handler.js"
+    },
+    "./vercel-node": {
+      "types": "./dist/universal-vercel-node-handler-vike.handler.d.ts",
+      "import": "./dist/universal-vercel-node-handler-vike.handler.js",
+      "default": "./dist/universal-vercel-node-handler-vike.handler.js"
     }
   },
   "scripts": {
     "dev": "tsc --watch",
-    "build": "rm -rf dist/ && tsc",
+    "build": "rm -rf dist && tsup",
     "release": "release-me patch",
     "release:minor": "release-me minor",
     "release:commit": "release-me commit"
@@ -32,14 +78,16 @@
   "dependencies": {
     "@brillout/picocolors": "^1.0.14",
     "@nitedani/shrink-ray-current": "^4.3.0",
+    "@universal-middleware/core": "^0.2.13",
+    "@universal-middleware/compress": "^0.2.1",
     "@vercel/nft": "^0.26.5",
-    "esbuild": "^0.21.0 || ^0.22.0 || ^0.23.0",
+    "esbuild": "^0.19.0 || ^0.20.0 || ^0.21.0 || ^0.22.0 || ^0.23.0 || ^0.24.0",
+    "resolve-from": "^5.0.0",
     "sirv": "^2.0.4",
-    "unenv-nightly": "2.0.0-1721914978.1a79944",
-    "resolve-from": "^5.0.0"
+    "unenv-nightly": "2.0.0-20241015-162228-03257ee"
   },
   "peerDependencies": {
-    "vike": "^0.4.193",
+    "vike": "^0.4.198",
     "vite": "^5.0.10"
   },
   "devDependencies": {
@@ -48,35 +96,12 @@
     "elysia": "^1.1.6",
     "fastify": "^4.28.1",
     "h3": "^1.12.0",
-    "hono": "^4.5.5",
+    "hono": "^4.6.3",
+    "tsup": "^8.3.0",
     "typescript": "^5.5.4",
-    "vike": "^0.4.193",
-    "vite": "^5.4.0"
-  },
-  "typesVersions": {
-    "*": {
-      "connect": [
-        "./dist/connect.d.ts"
-      ],
-      "fastify": [
-        "./dist/fastify.d.ts"
-      ],
-      "h3": [
-        "./dist/h3.d.ts"
-      ],
-      "hono": [
-        "./dist/hono.d.ts"
-      ],
-      "elysia": [
-        "./dist/elysia.d.ts"
-      ],
-      "plugin": [
-        "./dist/plugin/index.d.ts"
-      ],
-      ".": [
-        "./dist/index.d.ts"
-      ]
-    }
+    "universal-middleware": "^0.4.0",
+    "vike": "^0.4.198",
+    "vite": "^5.4.8"
   },
   "files": [
     "dist/"

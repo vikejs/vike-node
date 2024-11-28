@@ -14,17 +14,16 @@ In development, the server process is restarted when a change is detected in som
 [Installation](#installation)  
 [Standalone build](#standalone-build)  
 [External packages](#external-packages)  
-[Caching and compression](#caching-and-compression)  
+[Compression](#compression)  
 [Custom pageContext](#custom-pagecontext)  
-[Framework examples](#framework-examples)  
-[Migration guide](#migration-guide)
+[Add to existing app](#add-to-existing-app)  
 
 <br/>
 
 ## Installation
 
 1. `npm install vike-node express`
-2. Extend `vite.config.js`:
+1. Extend `vite.config.js`:
 
    ```js
    // vite.config.js
@@ -36,14 +35,13 @@ In development, the server process is restarted when a change is detected in som
      plugins: [vikeNode('server/index.js')]
    }
    ```
-
-3. Create `server/index.js`:
+1. Create `server/index.js`:
 
    ```js
    // server/index.js
 
    import express from 'express'
-   import vike from 'vike-node/connect'
+   import vike from 'vike-node/express'
 
    startServer()
 
@@ -54,8 +52,9 @@ In development, the server process is restarted when a change is detected in som
      app.listen(port, () => console.log(`Server running at http://localhost:${port}`))
    }
    ```
+   > If you already have a server, see [Add to existing app](#add-to-existing-app).
 
-## Standalone build:
+## Standalone build
 
 You can enable standalone builds by setting `standalone` to `true`.
 <br>
@@ -81,7 +80,7 @@ export default {
 }
 ```
 
-## External packages:
+## External packages
 
 Packages that import native binaries/custom assets need to be added to `external`.<br>
 When building with `standalone` enabled, `external` packages and their assets are copied to the output `dist` directory.<br>
@@ -108,42 +107,28 @@ export default {
 }
 ```
 
-## Caching and compression:
+## Compression
 
-In production, `vike-node`:
+In production, `vike-node` compresses all Vike responses.
 
-- compresses all Vike responses
-- caches the compressed static assets(.js, .css).
-
-On a request, if the asset(.js, .css) is not in the cache, `vike-node` compresses it with a fast compression level, sends it in the response, then recompresses it with a high compression level and finally caches the compressed data.<br>
-You can disable compression/caching:
+You can disable it:
 
 ```js
 app.use(
   vike({
-    compress: false,
-    static: {
-      cache: false
-    }
+    compress: false
   })
 )
 ```
 
-## Custom [pageContext](https://vike.dev/pageContext):
+## Custom [pageContext](https://vike.dev/pageContext)
 
-You can define custom [pageContext](https://vike.dev/pageContext) properties:
+`vike-node` uses [universal-middleware](https://universal-middleware.dev/) and automatically adds the universal context to `pageContext`.
 
-```js
-app.use(
-  vike({
-    pageContext: (req) => ({
-      user: req.user
-    })
-  })
-)
-```
+If you need custom properties to be available in `pageContext`,
+you can [create a universal context middleware](https://universal-middleware.dev/recipes/context-middleware#updating-the-context) and attach it to your server.
 
-## Framework examples:
+## Framework examples
 
 `vike-node` includes middlewares for the most popular web frameworks:
 
@@ -153,13 +138,15 @@ app.use(
 - H3
 - Elysia (Bun)
 
-Express:
+[See complete list of supported servers](https://universal-middleware.dev/reference/supported-adapters).
+
+#### Express
 
 ```js
 // server/index.js
 
 import express from 'express'
-import vike from 'vike-node/connect'
+import vike from 'vike-node/express'
 
 startServer()
 
@@ -171,7 +158,7 @@ function startServer() {
 }
 ```
 
-Fastify:
+#### Fastify
 
 ```js
 // server/index.js
@@ -183,13 +170,13 @@ startServer()
 
 function startServer() {
   const app = fastify()
-  app.register(vike())
+  app.all('/*', vike())
   const port = 3000
   app.listen({ port }, () => console.log(`Server running at http://localhost:${port}`))
 }
 ```
 
-Hono:
+#### Hono
 
 ```js
 // server/index.js
@@ -214,7 +201,7 @@ function startServer() {
 }
 ```
 
-H3:
+#### H3
 
 ```js
 // server/index.js
@@ -236,7 +223,7 @@ async function startServer() {
 }
 ```
 
-Elysia (Bun):
+#### Elysia (Bun)
 
 ```js
 // server/index.js
@@ -248,19 +235,21 @@ startServer()
 
 function startServer() {
   const app = new Elysia()
-  app.use(vike())
+  app.get('/*', vike())
   const port = 3000
   app.listen(port, () => console.log(`Server running at http://localhost:${port}`))
 }
 ```
 
-## Migration guide:
+## Add to existing app
+
+To add `vike-node` to an existing Vike app:
 
 ```diff
 // server/index.js
 
 - import { renderPage } from 'vike/server'
-+ import { vike } from 'vike-node/connect'
++ import { vike } from 'vike-node/express'
 
 - if (isProduction) {
 -   app.use(express.static(`${root}/dist/client`))

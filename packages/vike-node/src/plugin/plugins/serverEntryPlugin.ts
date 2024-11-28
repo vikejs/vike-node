@@ -1,13 +1,13 @@
-import pc from '@brillout/picocolors'
 import { createRequire } from 'module'
 import path from 'path'
+import pc from '@brillout/picocolors'
+import type { ConfigVitePluginServerEntry } from 'vike/types'
 import type { Plugin, ResolvedConfig } from 'vite'
 import type { EntryResolved } from '../../types.js'
 import { assert, assertUsage } from '../../utils/assert.js'
 import { getConfigVikeNode } from '../utils/getConfigVikeNode.js'
 import { injectRollupInputs } from '../utils/injectRollupInputs.js'
 import { viteIsSSR } from '../utils/viteIsSSR.js'
-import type { ConfigVitePluginServerEntry } from 'vike/types'
 
 const require_ = createRequire(import.meta.url)
 
@@ -36,9 +36,7 @@ export function serverEntryPlugin(): Plugin {
           assert((err as Record<string, unknown>).code === 'MODULE_NOT_FOUND')
           assertUsage(
             false,
-            `No file found at ${entryFilePath}. Does the value ${pc.cyan(`'${entryFilePath}'`)} of ${pc.cyan(
-              `server.entry.${name}.path`
-            )} point to an existing file?`
+            `No file found at ${entryFilePath}. Make sure ${pc.cyan(`server.entry.${name}`)} points to an existing file.`
           )
         }
       }
