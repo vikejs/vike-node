@@ -7,6 +7,8 @@
     "test": "test-e2e && test-types",
     "========= Release": "",
     "release": "cd ./packages/vike-node/ && pnpm run release",
+    "release:minor": "cd ./packages/vike-node/ && pnpm run release:minor",
+    "release:major": "cd ./packages/vike-node/ && pnpm run release:major",
     "release:commit": "cd ./packages/vike-node/ && pnpm run release:commit",
     "========= Clean": "",
     "reset": "git clean -Xdf && pnpm install && pnpm run build",
