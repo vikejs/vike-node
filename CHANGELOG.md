@@ -1,3 +1,22 @@
+# [0.2.0](https://github.com/vikejs/vike-node/compare/v0.1.16...v0.2.0) (2024-11-28)
+
+
+### Bug Fixes
+
+* inject instead of auto import server entry ([#8](https://github.com/vikejs/vike-node/issues/8)) ([15eccda](https://github.com/vikejs/vike-node/commit/15eccda04e9b809140e0ad5f2c488c8d7d21fc7e))
+* use `universal-middleware` ([#16](https://github.com/vikejs/vike-node/issues/16)) ([a7554a7](https://github.com/vikejs/vike-node/commit/a7554a7d9e0bff287aa4e9027afac295f527b80f))
+
+
+### BREAKING CHANGES
+
+* cache related options have been removed
+* the `pageContext` setting has been removed in favor of universal-middleware context
+* `vike-node/connect` replaced by `vike-node/express`
+
+Co-authored-by: Romuald Brillout <git@brillout.com>
+
+
+
 ## [0.1.16](https://github.com/vikejs/vike-node/compare/v0.1.15...v0.1.16) (2024-08-23)
 
 
