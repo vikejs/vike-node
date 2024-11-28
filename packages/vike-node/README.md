@@ -20,6 +20,7 @@ In development, the server process is restarted when a change is detected in som
 
 <br/>
 
+
 ## Installation
 
 [Overview](#overview)  
@@ -28,7 +29,7 @@ In development, the server process is restarted when a change is detected in som
 
 ### Overview
 
-Example of adding Express.js and `vike-node` to a Vike app that doesn't use a server yet.
+Example of adding `vike-node` and Express.js to a Vike app that doesn't use a server yet.
 
 > [!NOTE]
 > - See [Add to existing server](#add-to-existing-server) if you already have a server.
@@ -116,7 +117,7 @@ If you already have a server:
 
 ### Supported servers
 
-`vike-node` includes middlewares for all widespread servers.
+`vike-node` includes middlewares for all commonly used server frameworks.
 
 - [Express](#express)
 - [Fastify](#fastify)
@@ -227,6 +228,9 @@ function startServer() {
 }
 ```
 
+<br/>
+
+
 ## Standalone build
 
 You can enable standalone builds by setting `standalone` to `true`.
@@ -252,6 +256,9 @@ export default {
   ]
 }
 ```
+
+<br/>
+
 
 ## External packages
 
@@ -280,6 +287,9 @@ export default {
 }
 ```
 
+<br/>
+
+
 ## Compression
 
 In production, `vike-node` compresses all Vike responses.
@@ -293,6 +303,9 @@ app.use(
   })
 )
 ```
+
+<br/>
+
 
 ## Custom [pageContext](https://vike.dev/pageContext)
 
