@@ -16,16 +16,26 @@ In development, the server process is restarted when a change is detected in som
 [External packages](#external-packages)  
 [Compression](#compression)  
 [Custom pageContext](#custom-pagecontext)  
-[Add to existing app](#add-to-existing-app)  
 [Version history](https://github.com/vikejs/vike-node/blob/main/CHANGELOG.md)  
 
 <br/>
 
 ## Installation
 
+[Overview](#overview)  
+[Add to existing server](#add-to-existing-server)  
+[Supported servers](#supported-servers)  
+
+### Overview
+
+Example of adding Express.js and `vike-node` to a Vike app that doesn't use a server yet.
+
+> [!NOTE]
+> - See [Add to existing server](#add-to-existing-server) if you already have a server.
+> - See [Supported servers](#supported-servers) for installing `vike-node` with a server other than Express.js.
+
 1. `npm install vike-node express`
 1. Extend `vite.config.js`:
-
    ```js
    // vite.config.js
 
@@ -37,7 +47,6 @@ In development, the server process is restarted when a change is detected in som
    }
    ```
 1. Create `server/index.js`:
-
    ```js
    // server/index.js
 
@@ -53,91 +62,67 @@ In development, the server process is restarted when a change is detected in som
      app.listen(port, () => console.log(`Server running at http://localhost:${port}`))
    }
    ```
-   > If you already have a server, see [Add to existing app](#add-to-existing-app).
 
-## Standalone build
+### Add to existing server
 
-You can enable standalone builds by setting `standalone` to `true`.
-<br>
-After build, the output `dist` folder will contain everything for a deployment.
-<br>
-With standalone mode, the production environment only needs the `dist` folder to be present.
-<br>
-Example start script: `NODE_ENV=production node dist/server/index.mjs`
+If you already have a server:
 
-```js
-// vite.config.js
+```diff
+// server/index.js
 
-import vikeNode from 'vike-node/plugin'
+- import { renderPage } from 'vike/server'
++ import { vike } from 'vike-node/express'
 
-export default {
-  // ...
-  plugins: [
-    vikeNode({
-      entry: 'server/index.js',
-      standalone: true
-    })
-  ]
+- if (isProduction) {
+-   app.use(express.static(`${root}/dist/client`))
+- } else {
+-   const vite = await import('vite')
+-   const viteDevMiddleware = (
+-     await vite.createServer({
+-       root,
+-       server: { middlewareMode: true }
+-     })
+-   ).middlewares
+-   app.use(viteDevMiddleware)
+- }
+
+- app.get('*', async (req, res, next) => {
+-   const pageContextInit = {
+-     urlOriginal: req.originalUrl
+-   }
+-   const pageContext = await renderPage(pageContextInit)
+-   const { httpResponse } = pageContext
+-   if (!httpResponse) {
+-     return next()
+-   } else {
+-     const { statusCode, headers } = httpResponse
+-     headers.forEach(([name, value]) => res.setHeader(name, value))
+-     res.status(statusCode)
+-     httpResponse.pipe(res)
+-   }
+- })
+
++ app.use(vike())
+```
+
+```diff
+// package.json
+
+"scripts": {
+- "dev": "node ./server",
++ "dev": "vite",
 }
 ```
 
-## External packages
+### Supported servers
 
-Packages that import native binaries/custom assets need to be added to `external`.<br>
-When building with `standalone` enabled, `external` packages and their assets are copied to the output `dist` directory.<br>
-By default, the `external` setting includes:
+`vike-node` includes middlewares for all widespread servers.
 
-- `sharp`
-- `@prisma/client`
-- `@node-rs/*`
-
-```js
-// vite.config.js
-
-import vikeNode from 'vike-node/plugin'
-
-export default {
-  // ...
-  plugins: [
-    vikeNode({
-      entry: 'server/index.js',
-      standalone: true,
-      external: ['my-rust-package']
-    })
-  ]
-}
-```
-
-## Compression
-
-In production, `vike-node` compresses all Vike responses.
-
-You can disable it:
-
-```js
-app.use(
-  vike({
-    compress: false
-  })
-)
-```
-
-## Custom [pageContext](https://vike.dev/pageContext)
-
-`vike-node` uses [universal-middleware](https://universal-middleware.dev/) and automatically adds the universal context to `pageContext`.
-
-If you need custom properties to be available in `pageContext`,
-you can [create a universal context middleware](https://universal-middleware.dev/recipes/context-middleware#updating-the-context) and attach it to your server.
-
-## Framework examples
-
-`vike-node` includes middlewares for the most popular web frameworks:
-
-- Express
-- Fastify
-- Hono
-- H3
-- Elysia (Bun)
+- [Express](#express)
+- [Fastify](#fastify)
+- [Hono](#hono)
+- [H3](#h3)
+- [Elysia](#elysia)
 
 [See complete list of supported servers](https://universal-middleware.dev/reference/supported-adapters).
 
@@ -224,7 +209,7 @@ async function startServer() {
 }
 ```
 
-#### Elysia (Bun)
+#### Elysia
 
 ```js
 // server/index.js
@@ -242,54 +227,76 @@ function startServer() {
 }
 ```
 
-## Add to existing app
+## Standalone build
 
-To add `vike-node` to an existing Vike app:
+You can enable standalone builds by setting `standalone` to `true`.
+<br>
+After build, the output `dist` folder will contain everything for a deployment.
+<br>
+With standalone mode, the production environment only needs the `dist` folder to be present.
+<br>
+Example start script: `NODE_ENV=production node dist/server/index.mjs`
 
-```diff
-// server/index.js
+```js
+// vite.config.js
 
-- import { renderPage } from 'vike/server'
-+ import { vike } from 'vike-node/express'
+import vikeNode from 'vike-node/plugin'
 
-- if (isProduction) {
--   app.use(express.static(`${root}/dist/client`))
-- } else {
--   const vite = await import('vite')
--   const viteDevMiddleware = (
--     await vite.createServer({
--       root,
--       server: { middlewareMode: true }
--     })
--   ).middlewares
--   app.use(viteDevMiddleware)
-- }
-
-- app.get('*', async (req, res, next) => {
--   const pageContextInit = {
--     urlOriginal: req.originalUrl
--   }
--   const pageContext = await renderPage(pageContextInit)
--   const { httpResponse } = pageContext
--   if (!httpResponse) {
--     return next()
--   } else {
--     const { statusCode, headers } = httpResponse
--     headers.forEach(([name, value]) => res.setHeader(name, value))
--     res.status(statusCode)
--     httpResponse.pipe(res)
--   }
-- })
-
-+ app.use(vike())
-
-```
-
-```diff
-// package.json
-
-"scripts": {
-- "dev": "node ./server",
-+ "dev": "vite",
+export default {
+  // ...
+  plugins: [
+    vikeNode({
+      entry: 'server/index.js',
+      standalone: true
+    })
+  ]
 }
 ```
+
+## External packages
+
+Packages that import native binaries/custom assets need to be added to `external`.<br>
+When building with `standalone` enabled, `external` packages and their assets are copied to the output `dist` directory.<br>
+By default, the `external` setting includes:
+
+- `sharp`
+- `@prisma/client`
+- `@node-rs/*`
+
+```js
+// vite.config.js
+
+import vikeNode from 'vike-node/plugin'
+
+export default {
+  // ...
+  plugins: [
+    vikeNode({
+      entry: 'server/index.js',
+      standalone: true,
+      external: ['my-rust-package']
+    })
+  ]
+}
+```
+
+## Compression
+
+In production, `vike-node` compresses all Vike responses.
+
+You can disable it:
+
+```js
+app.use(
+  vike({
+    compress: false
+  })
+)
+```
+
+## Custom [pageContext](https://vike.dev/pageContext)
+
+`vike-node` uses [universal-middleware](https://universal-middleware.dev/) and automatically adds the universal context to `pageContext`.
+
+If you need custom properties to be available in `pageContext`,
+you can [create a universal context middleware](https://universal-middleware.dev/recipes/context-middleware#updating-the-context) and attach it to your server.
