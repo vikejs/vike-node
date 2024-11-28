@@ -17,6 +17,7 @@ In development, the server process is restarted when a change is detected in som
 [Compression](#compression)  
 [Custom pageContext](#custom-pagecontext)  
 [Add to existing app](#add-to-existing-app)  
+[Version history](https://github.com/vikejs/vike-node/blob/main/CHANGELOG.md)  
 
 <br/>
 
