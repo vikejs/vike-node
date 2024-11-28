@@ -12,10 +12,9 @@ With this extension, your server code is transpiled with Vite.
 In development, the server process is restarted when a change is detected in some of your server files.
 
 [Installation](#installation)  
-[Standalone build](#standalone-build)  
+[Custom pageContext](#custom-pagecontext)  
 [External packages](#external-packages)  
 [Compression](#compression)  
-[Custom pageContext](#custom-pagecontext)  
 [Version history](https://github.com/vikejs/vike-node/blob/main/CHANGELOG.md)  
 
 <br/>
@@ -231,6 +230,16 @@ function startServer() {
 <br/>
 
 
+## Custom [pageContext](https://vike.dev/pageContext)
+
+`vike-node` uses [universal-middleware](https://universal-middleware.dev/) and automatically adds the universal context to `pageContext`.
+
+If you need custom properties to be available in `pageContext`,
+you can [create a universal context middleware](https://universal-middleware.dev/recipes/context-middleware#updating-the-context) and attach it to your server.
+
+<br/>
+
+
 ## Standalone build
 
 You can enable standalone builds by setting `standalone` to `true`.
@@ -303,13 +312,3 @@ app.use(
   })
 )
 ```
-
-<br/>
-
-
-## Custom [pageContext](https://vike.dev/pageContext)
-
-`vike-node` uses [universal-middleware](https://universal-middleware.dev/) and automatically adds the universal context to `pageContext`.
-
-If you need custom properties to be available in `pageContext`,
-you can [create a universal context middleware](https://universal-middleware.dev/recipes/context-middleware#updating-the-context) and attach it to your server.
