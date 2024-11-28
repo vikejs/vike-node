@@ -13,8 +13,6 @@
 * the `pageContext` setting has been removed in favor of universal-middleware context
 * `vike-node/connect` replaced by `vike-node/express`
 
-Co-authored-by: Romuald Brillout <git@brillout.com>
-
 
 
 ## [0.1.16](https://github.com/vikejs/vike-node/compare/v0.1.15...v0.1.16) (2024-08-23)
