@@ -1,3 +1,12 @@
+## [0.2.1](https://github.com/vikejs/vike-node/compare/v0.2.0...v0.2.1) (2024-12-01)
+
+
+### Bug Fixes
+
+* vite peerDependencies range ([d6bce88](https://github.com/vikejs/vike-node/commit/d6bce880227d1cb8c776034747bfb43b0127a03f))
+
+
+
 # [0.2.0](https://github.com/vikejs/vike-node/compare/v0.1.16...v0.2.0) (2024-11-28)
 
 
