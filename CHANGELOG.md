@@ -21,6 +21,11 @@
 * cache related options have been removed
 * the `pageContext` setting has been removed in favor of universal-middleware context
 * `vike-node/connect` replaced by `vike-node/express`
+* The `vike` middleware is now only exported as the default export:
+* ```diff
+  - import { vike } from 'vike-node/{express,fastify,h3,hono,elysia}'
+  + import vike from 'vike-node/{express,fastify,h3,hono,elysia}'
+  ```
 
 
 

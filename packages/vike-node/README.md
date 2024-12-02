@@ -72,7 +72,7 @@ If you already have a server:
 // server/index.js
 
 - import { renderPage } from 'vike/server'
-+ import { vike } from 'vike-node/express'
++ import vike from 'vike-node/express'
 
 - if (isProduction) {
 -   app.use(express.static(`${root}/dist/client`))
