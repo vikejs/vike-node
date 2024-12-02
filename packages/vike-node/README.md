@@ -69,6 +69,7 @@ Example of adding `vike-node` and Express.js to a Vike app that doesn't use a se
 
      "scripts": {
        "dev": "vite",
+       "build": "vite build",
    +   "prod": "NODE_ENV=production node dist/server/index.mjs"
      }
    ```
@@ -119,6 +120,7 @@ If you already have a server:
   // package.json
 
   "scripts": {
+    "build": "vite build",
 -   "dev": "node ./server/index.js",
 +   "dev": "vite",
 -   "prod": "NODE_ENV=production node ./server/index.js"
