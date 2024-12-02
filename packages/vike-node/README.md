@@ -63,6 +63,18 @@ Example of adding `vike-node` and Express.js to a Vike app that doesn't use a se
      app.listen(port, () => console.log(`Server running at http://localhost:${port}`))
    }
    ```
+1. Add production `script`:
+   ```diff
+     // package.json
+
+     "scripts": {
+       "dev": "vite",
+   +   "prod": "cross-env NODE_ENV=production node dist/server/index.mjs"
+     },
+     "dependencies": {
+   +   "cross-env": "^7.0.3"
+     }
+   ```
 
 ### Add to existing server
 
@@ -107,12 +119,14 @@ If you already have a server:
 ```
 
 ```diff
-// package.json
+  // package.json
 
-"scripts": {
-- "dev": "node ./server",
-+ "dev": "vite",
-}
+  "scripts": {
+-   "dev": "node ./server/index.js",
++   "dev": "vite",
+-   "prod": "cross-env NODE_ENV=production node ./server/index.js"
++   "prod": "cross-env NODE_ENV=production node dist/server/index.mjs"
+  }
 ```
 
 ### Supported servers
