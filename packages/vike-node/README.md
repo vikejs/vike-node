@@ -69,10 +69,7 @@ Example of adding `vike-node` and Express.js to a Vike app that doesn't use a se
 
      "scripts": {
        "dev": "vite",
-   +   "prod": "cross-env NODE_ENV=production node dist/server/index.mjs"
-     },
-     "dependencies": {
-   +   "cross-env": "^7.0.3"
+   +   "prod": "NODE_ENV=production node dist/server/index.mjs"
      }
    ```
 
@@ -124,8 +121,8 @@ If you already have a server:
   "scripts": {
 -   "dev": "node ./server/index.js",
 +   "dev": "vite",
--   "prod": "cross-env NODE_ENV=production node ./server/index.js"
-+   "prod": "cross-env NODE_ENV=production node dist/server/index.mjs"
+-   "prod": "NODE_ENV=production node ./server/index.js"
++   "prod": "NODE_ENV=production node dist/server/index.mjs"
   }
 ```
 
