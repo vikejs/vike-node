@@ -1,3 +1,13 @@
+## [0.2.2](https://github.com/vikejs/vike-node/compare/v0.2.1...v0.2.2) (2024-12-03)
+
+
+### Bug Fixes
+
+* add exports condition 'development|production' (to align Vite 5/6) ([7eb9690](https://github.com/vikejs/vike-node/commit/7eb9690a37244ea5335eb5b646ba3e61d23e36e4))
+* remove unused code and support Vite 6 ([ae614c0](https://github.com/vikejs/vike-node/commit/ae614c0265d6489786dab49f19f454e08614967f))
+
+
+
 ## [0.2.1](https://github.com/vikejs/vike-node/compare/v0.2.0...v0.2.1) (2024-12-01)
 
 
