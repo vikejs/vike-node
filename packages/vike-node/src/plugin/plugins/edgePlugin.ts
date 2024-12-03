@@ -71,12 +71,14 @@ export function edgePlugin(): Plugin[] {
         }
 
         return {
-          ssr: { target: 'webworker' },
+          ssr: {
+            target: 'webworker',
+            resolve: { conditions: DEFAULT_CONDITIONS }
+          },
           build: {
             rollupOptions: { external: [...builtinModules, /^node:/] },
             target: 'es2022'
-          },
-          resolve: { conditions: DEFAULT_CONDITIONS }
+          }
         }
       },
       configResolved(config) {
