@@ -39,21 +39,7 @@ export function edgePlugin(): Plugin[] {
   let entries: Entry[]
   let entriesWithOutFile: EntryWithOutFile[]
 
-  return [createServePlugin(), createBuildPlugin(), createScaffoldPlugin()]
-
-  function createServePlugin(): Plugin {
-    return {
-      name: 'vike-node:edge:serve',
-      apply: 'serve',
-      config() {
-        return {
-          resolve: {
-            conditions: ['vike-node-dev']
-          }
-        }
-      }
-    }
-  }
+  return [createBuildPlugin(), createScaffoldPlugin()]
 
   function createBuildPlugin(): Plugin {
     return {
