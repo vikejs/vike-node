@@ -5,7 +5,7 @@ import { promisify } from 'util'
 import esbuild from 'esbuild'
 import fs from 'fs/promises'
 import { prerender } from 'vike/prerender'
-import { defaultClientConditions, type Plugin, type ResolvedConfig } from 'vite'
+import { type Plugin, type ResolvedConfig } from 'vite'
 import type { ConfigVikeNodeResolved, Runtime } from '../../types.js'
 import { assert } from '../../utils/assert.js'
 import { copyFileOrFolder } from '../utils/copyFileOrFolder.js'
@@ -28,9 +28,12 @@ const DEFAULT_CONDITIONS = [
   // Probably not supported by esbuild. (It's okay to add it for esbuild as well: it'll probably just be a no-op.)
   'development|production'
 ]
+/* Uncomment once we enforce Vite >=6
+import { defaultClientConditions } from 'vite'
 // defaultClientConditions and not defaultServerConditions because target is 'webworker'
 // https://github.com/vitejs/vite/blob/ccee3d7c7d34fc66854029f27f6cc89de7dcf3c5/docs/config/ssr-options.md?plain=1#L37
 assert(defaultClientConditions.every((condition) => DEFAULT_CONDITIONS.includes(condition)))
+*/
 
 type Entry = {
   name: string
