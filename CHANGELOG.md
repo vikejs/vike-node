@@ -1,3 +1,12 @@
+## [0.2.3](https://github.com/vikejs/vike-node/compare/v0.2.2...v0.2.3) (2024-12-04)
+
+
+### Bug Fixes
+
+* also support Vite 5 (fix [#27](https://github.com/vikejs/vike-node/issues/27)) ([12e0022](https://github.com/vikejs/vike-node/commit/12e0022f6257244e243c3a2214c5a40df4b0d1d7))
+
+
+
 ## [0.2.2](https://github.com/vikejs/vike-node/compare/v0.2.1...v0.2.2) (2024-12-03)
 
 
