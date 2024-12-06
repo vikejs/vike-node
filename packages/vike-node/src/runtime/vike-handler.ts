@@ -9,8 +9,6 @@ import { globalStore } from './globalStore.js'
 import type { ConnectMiddleware, VikeHttpResponse, VikeOptions } from './types.js'
 import { parseHeaders } from './utils/header-utils.js'
 
-export { renderPage }
-
 async function renderPage({
   url,
   headers,
