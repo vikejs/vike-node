@@ -1,13 +1,13 @@
 import { Elysia } from 'elysia'
 import { telefunc } from 'telefunc'
-import vike from 'vike-node/elysia'
+import vike, { RuntimeAdapter } from 'vike-node/elysia'
 import { init } from '../database/todoItems'
 
 startServer()
 
 async function startServer() {
   await init()
-  const app = new Elysia()
+  const app = new Elysia().state('xRuntime', 'x-runtime')
 
   const port = process.env.PORT || 3000
   app.post('/_telefunc', async (ctx) => {
@@ -26,6 +26,15 @@ async function startServer() {
     ctx.set.headers['x-test'] = 'test'
   })
 
-  app.get('/*', vike())
+  app.get(
+    '/*',
+    vike({
+      pageContext(runtime: RuntimeAdapter) {
+        return {
+          xRuntime: (runtime.elysia.store as { xRuntime: string }).xRuntime
+        }
+      }
+    })
+  )
   app.listen(+port, () => console.log(`Server running at http://localhost:${port}`))
 }

@@ -1,6 +1,11 @@
 import type { IncomingMessage, ServerResponse } from 'http'
 import compressMiddlewareFactory from '@universal-middleware/compress'
-import { type Get, type UniversalHandler, type UniversalMiddleware } from '@universal-middleware/core'
+import {
+  type Get,
+  type RuntimeAdapter,
+  type UniversalHandler,
+  type UniversalMiddleware
+} from '@universal-middleware/core'
 import { renderPage as _renderPage } from 'vike/server'
 import { assert } from '../utils/assert.js'
 import { isVercel } from '../utils/isVercel.js'
@@ -9,7 +14,7 @@ import { globalStore } from './globalStore.js'
 import type { ConnectMiddleware, VikeHttpResponse, VikeOptions } from './types.js'
 import { parseHeaders } from './utils/header-utils.js'
 
-async function renderPage({
+async function renderPage<T extends RuntimeAdapter>({
   url,
   headers,
   runtimeRequest,
@@ -17,14 +22,14 @@ async function renderPage({
 }: {
   url: string
   headers: [string, string][]
-  runtimeRequest: unknown
-  options: VikeOptions
+  runtimeRequest: T
+  options: VikeOptions & { pageContextUniversal?: Record<string, any> }
 }): Promise<VikeHttpResponse> {
-  let pageContextInit: Record<string, any> = {}
+  let pageContextInit: Record<string, any> = options.pageContextUniversal ?? {}
   if (typeof options?.pageContext === 'function') {
-    pageContextInit = await options.pageContext(runtimeRequest)
+    Object.assign(pageContextInit, await options.pageContext(runtimeRequest))
   } else if (options?.pageContext) {
-    pageContextInit = options.pageContext
+    Object.assign(pageContextInit, options.pageContext)
   }
 
   const pageContext = await _renderPage({
@@ -94,13 +99,11 @@ export const renderPageHandler = ((options?) => async (request, context, runtime
   const response = await renderPage({
     url: request.url,
     headers: parseHeaders(request.headers),
-    runtimeRequest: runtime.adapter in runtime ? (runtime as any)[runtime.adapter] : request,
+    runtimeRequest: runtime,
     options: {
       ...options,
-      pageContext: {
-        ...pageContextInit,
-        ...options?.pageContext
-      }
+      pageContextUniversal: pageContextInit,
+      pageContext: options?.pageContext
     }
   })
 

@@ -1,7 +1,7 @@
 Error.stackTraceLimit = Infinity
 import fastify from 'fastify'
 import { telefunc } from 'telefunc'
-import vike from 'vike-node/fastify'
+import vike, { RuntimeAdapter } from 'vike-node/fastify'
 import { Worker } from 'worker_threads'
 import { init } from '../database/todoItems.js'
 import { two } from './shared-chunk.js'
@@ -22,12 +22,26 @@ async function startServer() {
     res.status(statusCode).type(contentType).send(body)
   })
 
+  app.addHook('onRequest', (request, reply, done) => {
+    ;(request.routeOptions.config as any).xRuntime = 'x-runtime'
+    done()
+  })
+
   app.addHook('onSend', (request, reply, payload, done) => {
     reply.header('x-test', 'test')
     done()
   })
 
-  app.all('/*', vike())
+  app.all(
+    '/*',
+    vike({
+      pageContext(runtime: RuntimeAdapter) {
+        return {
+          xRuntime: (runtime.fastify.request.routeOptions.config as any).xRuntime
+        }
+      }
+    })
+  )
   const port = process.env.PORT || 3000
   app.listen({ port: +port })
   console.log(`Server running at http://localhost:${port}`)

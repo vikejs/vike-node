@@ -251,11 +251,13 @@ function startServer() {
 You can define custom [pageContext](https://vike.dev/pageContext) properties:
 
 ```ts
+import { type RuntimeAdapter } from 'vike-node/express';
+
 app.use(
   vike({
-    pageContext(req: IncomingMessage) {
+    pageContext(runtime: RuntimeAdapter) {
       return {
-        user: req.user
+        user: runtime.req.user
       }
     }
   })

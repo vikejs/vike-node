@@ -8,6 +8,7 @@ declare global {
   namespace Vike {
     interface PageContext {
       Page: Page
+      xRuntime?: string
       pageProps?: PageProps
     }
   }

@@ -1,15 +1,16 @@
 export default Page
 
+import type { Todo } from '@prisma/client'
 import React, { useState } from 'react'
 import { TodoList } from './TodoList'
-import type { Todo } from '@prisma/client'
 
-function Page({ todoItemsInitial }: { todoItemsInitial: Todo[] }) {
+function Page({ todoItemsInitial, xRuntime }: { todoItemsInitial: Todo[]; xRuntime?: string }) {
   return (
     <>
       <h1>To-do List</h1>
       <TodoList todoItemsInitial={todoItemsInitial} />
       <Counter />
+      {xRuntime}
     </>
   )
 }
