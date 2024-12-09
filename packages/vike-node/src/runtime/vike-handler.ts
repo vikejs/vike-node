@@ -99,7 +99,7 @@ export const renderPageHandler = ((options?) => async (request, context, runtime
   const response = await renderPage({
     url: request.url,
     headers: parseHeaders(request.headers),
-    runtimeRequest: runtime.adapter in runtime ? (runtime as any)[runtime.adapter] : request,
+    runtimeRequest: runtime,
     options: {
       ...options,
       pageContextUniversal: pageContextInit,
