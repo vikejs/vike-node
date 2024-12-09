@@ -9,7 +9,8 @@ const onBeforeRender: OnBeforeRenderAsync = async (pageContext): ReturnType<OnBe
   return {
     pageContext: {
       pageProps: {
-        todoItemsInitial
+        todoItemsInitial,
+        xRuntime: pageContext.xRuntime
       }
     }
   }

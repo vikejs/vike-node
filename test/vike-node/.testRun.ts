@@ -11,6 +11,8 @@ function testRun(cmd: 'pnpm run dev' | 'pnpm run prod') {
     expect(html).toContain('<h1>To-do List</h1>')
     expect(html).toContain('<li>Buy milk</li>')
     expect(html).toContain('<li>Buy strawberries</li>')
+    // provided through pageContext function
+    expect(html).toContain('x-runtime')
   })
 
   test('Add to-do item', async () => {

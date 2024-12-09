@@ -1,6 +1,6 @@
 import express from 'express'
 import { telefunc } from 'telefunc'
-import vike, { RuntimeAdapter } from 'vike-node/express'
+import vike, { type RuntimeAdapter } from 'vike-node/express'
 import { Worker } from 'worker_threads'
 import { init } from '../database/todoItems.js'
 import { two } from './shared-chunk.js'
@@ -21,10 +21,19 @@ async function startServer() {
     res.status(statusCode).type(contentType).send(body)
   })
   app.use((req, res, next) => {
+    ;(req as any).xRuntime = 'x-runtime'
     res.set('x-test', 'test')
     next()
   })
-  app.use(vike())
+  app.use(
+    vike({
+      pageContext(runtime: RuntimeAdapter) {
+        return {
+          xRuntime: (runtime.req as any).xRuntime
+        }
+      }
+    })
+  )
   const port = process.env.PORT || 3000
   app.listen(port)
   console.log(`Server running at http://localhost:${port}`)
