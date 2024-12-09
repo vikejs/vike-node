@@ -1,3 +1,12 @@
+## [0.2.6](https://github.com/vikejs/vike-node/compare/v0.2.5...v0.2.6) (2024-12-09)
+
+
+### Bug Fixes
+
+* improve error message upon `$ vite preview` ([2fa784e](https://github.com/vikejs/vike-node/commit/2fa784e8f14e57a8b765f2e068faf784e8a11330))
+
+
+
 ## [0.2.5](https://github.com/vikejs/vike-node/compare/v0.2.4...v0.2.5) (2024-12-09)
 
 ### Features
