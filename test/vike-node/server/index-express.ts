@@ -1,6 +1,6 @@
 import express from 'express'
 import { telefunc } from 'telefunc'
-import vike from 'vike-node/express'
+import vike, { RuntimeAdapter } from 'vike-node/express'
 import { Worker } from 'worker_threads'
 import { init } from '../database/todoItems.js'
 import { two } from './shared-chunk.js'

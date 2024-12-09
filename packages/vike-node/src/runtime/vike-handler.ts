@@ -1,6 +1,11 @@
 import type { IncomingMessage, ServerResponse } from 'http'
 import compressMiddlewareFactory from '@universal-middleware/compress'
-import { type Get, type UniversalHandler, type UniversalMiddleware } from '@universal-middleware/core'
+import {
+  type Get,
+  type RuntimeAdapter,
+  type UniversalHandler,
+  type UniversalMiddleware
+} from '@universal-middleware/core'
 import { renderPage as _renderPage } from 'vike/server'
 import { assert } from '../utils/assert.js'
 import { isVercel } from '../utils/isVercel.js'
@@ -9,7 +14,7 @@ import { globalStore } from './globalStore.js'
 import type { ConnectMiddleware, VikeHttpResponse, VikeOptions } from './types.js'
 import { parseHeaders } from './utils/header-utils.js'
 
-async function renderPage({
+async function renderPage<T extends RuntimeAdapter>({
   url,
   headers,
   runtimeRequest,
@@ -17,7 +22,7 @@ async function renderPage({
 }: {
   url: string
   headers: [string, string][]
-  runtimeRequest: unknown
+  runtimeRequest: T
   options: VikeOptions
 }): Promise<VikeHttpResponse> {
   let pageContextInit: Record<string, any> = {}
