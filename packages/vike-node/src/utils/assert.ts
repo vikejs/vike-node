@@ -7,5 +7,5 @@ function assert(condition: unknown): asserts condition {
 
 function assertUsage(condition: unknown, message: string): asserts condition {
   if (condition) return
-  throw new Error(`[vike-node] wrong usage: ${message}`)
+  throw new Error(`[vike-node][Wrong Usage] ${message}`)
 }
