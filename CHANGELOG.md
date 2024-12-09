@@ -1,5 +1,12 @@
 ## [0.2.5](https://github.com/vikejs/vike-node/compare/v0.2.4...v0.2.5) (2024-12-09)
 
+### Features
+
+* better `pageContext` typing ([#29](https://github.com/vikejs/vike-node/issues/29))
+
+### Bug Fixes
+
+* do not override user provided `pageContext` with universal one ([#29](https://github.com/vikejs/vike-node/issues/29)) ([bc2d921](https://github.com/vikejs/vike-node/commit/bc2d921f73d430ef8001da6ddfb7b58b51882bae))
 
 
 ## [0.2.4](https://github.com/vikejs/vike-node/compare/v0.2.3...v0.2.4) (2024-12-09)
