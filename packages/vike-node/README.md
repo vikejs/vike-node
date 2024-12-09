@@ -5,6 +5,10 @@
 
 # `vike-node`
 
+> [!WARNING]
+> **BETA**
+> This package will have relatively frequent breaking changes
+
 Server integration for Vike.
 
 With this extension, your server code is transpiled with Vite.
