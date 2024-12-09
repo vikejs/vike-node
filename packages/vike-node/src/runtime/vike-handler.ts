@@ -23,13 +23,13 @@ async function renderPage<T extends RuntimeAdapter>({
   url: string
   headers: [string, string][]
   runtimeRequest: T
-  options: VikeOptions
+  options: VikeOptions & { pageContextUniversal?: Record<string, any> }
 }): Promise<VikeHttpResponse> {
-  let pageContextInit: Record<string, any> = {}
+  let pageContextInit: Record<string, any> = options.pageContextUniversal ?? {}
   if (typeof options?.pageContext === 'function') {
-    pageContextInit = await options.pageContext(runtimeRequest)
+    Object.assign(pageContextInit, await options.pageContext(runtimeRequest))
   } else if (options?.pageContext) {
-    pageContextInit = options.pageContext
+    Object.assign(pageContextInit, options.pageContext)
   }
 
   const pageContext = await _renderPage({
@@ -102,10 +102,8 @@ export const renderPageHandler = ((options?) => async (request, context, runtime
     runtimeRequest: runtime.adapter in runtime ? (runtime as any)[runtime.adapter] : request,
     options: {
       ...options,
-      pageContext: {
-        ...pageContextInit,
-        ...options?.pageContext
-      }
+      pageContextUniversal: pageContextInit,
+      pageContext: options?.pageContext
     }
   })
 
