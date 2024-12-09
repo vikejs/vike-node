@@ -79,8 +79,8 @@
   "dependencies": {
     "@brillout/picocolors": "^1.0.14",
     "@nitedani/shrink-ray-current": "^4.3.0",
-    "@universal-middleware/core": "^0.3.1",
-    "@universal-middleware/compress": "^0.2.5",
+    "@universal-middleware/core": "^0.3.2",
+    "@universal-middleware/compress": "^0.2.6",
     "@vercel/nft": "^0.26.5",
     "esbuild": "^0.19.0 || ^0.20.0 || ^0.21.0 || ^0.22.0 || ^0.23.0 || ^0.24.0",
     "resolve-from": "^5.0.0",
@@ -100,7 +100,7 @@
     "hono": "^4.6.3",
     "tsup": "^8.3.0",
     "typescript": "^5.5.4",
-    "universal-middleware": "^0.5.2",
+    "universal-middleware": "^0.5.3",
     "vike": "^0.4.198",
     "vite": "^6.0.2"
   },
