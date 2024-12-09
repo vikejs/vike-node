@@ -6,14 +6,13 @@
 # `vike-node`
 
 > [!WARNING]
-> **BETA**
-> This package will have relatively frequent breaking changes
+> This package is in **beta** and will have relatively frequent breaking changes.
 
 Server integration for Vike.
 
-With this extension, your server code is transpiled with Vite.
+With this extension, your server is transpiled with Vite. So that you don't need `ts-node`/`tsx` anymore.
 
-In development, the server process is restarted when a change is detected in some of your server files.
+In development, the server process is restarted when a change is detected.
 
 [Installation](#installation)  
 [Custom `pageContext`](#custom-pagecontext)  
@@ -250,10 +249,6 @@ function startServer() {
 ## Custom `pageContext`:
 
 You can define custom [pageContext](https://vike.dev/pageContext) properties:
-
-> [!NOTE]
-> `vike-node` uses [universal-middleware](https://universal-middleware.dev/)
-> and automatically adds the universal context to [`pageContext`](https://vike.dev/pageContext).
 
 ```ts
 app.use(
