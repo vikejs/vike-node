@@ -1,3 +1,7 @@
+## [0.2.4](https://github.com/vikejs/vike-node/compare/v0.2.3...v0.2.4) (2024-12-09)
+
+
+
 ## [0.2.3](https://github.com/vikejs/vike-node/compare/v0.2.2...v0.2.3) (2024-12-04)
 
 
