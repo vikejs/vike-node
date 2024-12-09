@@ -5,6 +5,10 @@
 
 # `vike-node`
 
+> [!WARNING]
+> **BETA**
+> This package will have relatively frequent breaking changes
+
 Server integration for Vike.
 
 With this extension, your server code is transpiled with Vite.
@@ -243,16 +247,27 @@ function startServer() {
 
 <br/>
 
+## Custom `pageContext`:
 
-## Custom `pageContext`
+You can define custom [pageContext](https://vike.dev/pageContext) properties:
 
-`vike-node` uses [universal-middleware](https://universal-middleware.dev/) and automatically adds the universal context to [`pageContext`](https://vike.dev/pageContext).
+> [!NOTE]
+> `vike-node` uses [universal-middleware](https://universal-middleware.dev/)
+> and automatically adds the universal context to [`pageContext`](https://vike.dev/pageContext).
 
-If you need custom properties to be available in `pageContext`,
-you can [create a universal context middleware](https://universal-middleware.dev/recipes/context-middleware#updating-the-context) and attach it to your server.
+```ts
+app.use(
+  vike({
+    pageContext(req: IncomingMessage) {
+      return {
+        user: req.user
+      }
+    }
+  })
+)
+```
 
 <br/>
-
 
 ## Standalone build
 

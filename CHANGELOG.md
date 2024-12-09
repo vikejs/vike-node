@@ -38,7 +38,8 @@
 ### BREAKING CHANGES
 
 * cache related options have been removed
-* the `pageContext` setting has been removed in favor of universal-middleware context
+* ~~the `pageContext` setting has been removed in favor of universal-middleware context~~
+  * this breaking change has been reverted in versions >= 0.2.4
 * `vike-node/connect` replaced by `vike-node/express`
 * The `vike` middleware is now only exported as the default export:
 * ```diff

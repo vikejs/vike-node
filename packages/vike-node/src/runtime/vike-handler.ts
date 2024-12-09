@@ -9,19 +9,26 @@ import { globalStore } from './globalStore.js'
 import type { ConnectMiddleware, VikeHttpResponse, VikeOptions } from './types.js'
 import { parseHeaders } from './utils/header-utils.js'
 
-export { renderPage }
-
 async function renderPage({
   url,
   headers,
+  runtimeRequest,
   options
 }: {
   url: string
   headers: [string, string][]
+  runtimeRequest: unknown
   options: VikeOptions
 }): Promise<VikeHttpResponse> {
+  let pageContextInit: Record<string, any> = {}
+  if (typeof options?.pageContext === 'function') {
+    pageContextInit = await options.pageContext(runtimeRequest)
+  } else if (options?.pageContext) {
+    pageContextInit = options.pageContext
+  }
+
   const pageContext = await _renderPage({
-    ...options?.pageContext,
+    ...pageContextInit,
     urlOriginal: url,
     headersOriginal: headers
   })
@@ -49,8 +56,8 @@ export const compressMiddleware = ((options?) => async (request, _context, runti
   }
 }) satisfies Get<[options: VikeOptions], UniversalMiddleware>
 
-export const renderPageHandler = ((options?) => async (request, context, runtime: any) => {
-  const nodeReq: IncomingMessage | undefined = runtime.req
+export const renderPageHandler = ((options?) => async (request, context, runtime) => {
+  const nodeReq: IncomingMessage | undefined = 'req' in runtime ? runtime.req : undefined
   let staticConfig: false | { root: string; cache: boolean } = false
   let staticMiddleware: ConnectMiddleware | undefined
 
@@ -87,6 +94,7 @@ export const renderPageHandler = ((options?) => async (request, context, runtime
   const response = await renderPage({
     url: request.url,
     headers: parseHeaders(request.headers),
+    runtimeRequest: runtime.adapter in runtime ? (runtime as any)[runtime.adapter] : request,
     options: {
       ...options,
       pageContext: {
