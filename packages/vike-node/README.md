@@ -251,7 +251,7 @@ You can define custom [pageContext](https://vike.dev/pageContext) properties:
 > `vike-node` uses [universal-middleware](https://universal-middleware.dev/)
 > and automatically adds the universal context to [`pageContext`](https://vike.dev/pageContext).
 
-```js
+```ts
 app.use(
   vike({
     pageContext(req: IncomingMessage) {
