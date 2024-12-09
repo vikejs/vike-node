@@ -1,5 +1,8 @@
 ## [0.2.4](https://github.com/vikejs/vike-node/compare/v0.2.3...v0.2.4) (2024-12-09)
 
+### Features
+
+* add back `pageContext` function ([#28](https://github.com/vikejs/vike-node/issues/28))
 
 
 ## [0.2.3](https://github.com/vikejs/vike-node/compare/v0.2.2...v0.2.3) (2024-12-04)
@@ -43,7 +46,7 @@
 
 * cache related options have been removed
 * ~~the `pageContext` setting has been removed in favor of universal-middleware context~~
-  * this breaking change has been reverted in versions >= 0.2.4
+  * this breaking change has been reverted in versions >= 0.2.5
 * `vike-node/connect` replaced by `vike-node/express`
 * The `vike` middleware is now only exported as the default export:
 * ```diff
