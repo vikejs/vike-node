@@ -264,6 +264,11 @@ app.use(
 )
 ```
 
+> [!NOTE]
+> `vike-node` uses [universal-middleware](https://universal-middleware.dev/)
+> and automatically adds the universal context to [`pageContext`](https://vike.dev/pageContext).
+> You can find details on `RuntimeAdapter` in the [documentation](https://universal-middleware.dev/reference/runtime-adapter).
+
 <br/>
 
 ## Standalone build
