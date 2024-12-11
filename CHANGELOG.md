@@ -1,3 +1,12 @@
+## [0.2.8](https://github.com/vikejs/vike-node/compare/v0.2.7...v0.2.8) (2024-12-11)
+
+
+### Features
+
+* Add `runtime` to pageContext ([#33](https://github.com/vikejs/vike-node/issues/33)) ([8b209e8](https://github.com/vikejs/vike-node/commit/8b209e828dc6802f5806159d48ac45e84fe7daec))
+
+
+
 ## [0.2.7](https://github.com/vikejs/vike-node/compare/v0.2.6...v0.2.7) (2024-12-11)
 
 
