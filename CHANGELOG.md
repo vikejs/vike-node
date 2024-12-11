@@ -1,3 +1,12 @@
+## [0.2.7](https://github.com/vikejs/vike-node/compare/v0.2.6...v0.2.7) (2024-12-11)
+
+
+### Bug Fixes
+
+* __vite_hmr race condition. Fixes [#32](https://github.com/vikejs/vike-node/issues/32) ([1b07c47](https://github.com/vikejs/vike-node/commit/1b07c47075eccb04ab99842057d7f8fe25b36a5a))
+
+
+
 ## [0.2.6](https://github.com/vikejs/vike-node/compare/v0.2.5...v0.2.6) (2024-12-09)
 
 
