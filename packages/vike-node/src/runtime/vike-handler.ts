@@ -67,7 +67,13 @@ export const renderPageHandler = ((options?) => async (request, context, runtime
   let staticMiddleware: ConnectMiddleware | undefined
 
   if (nodeReq) {
-    globalStore.setupHMRProxy(nodeReq)
+    const needsUpgrade = globalStore.setupHMRProxy(nodeReq)
+
+    if (needsUpgrade) {
+      // Early response for HTTP connection upgrade
+      return new Response(null)
+    }
+
     const { resolveStaticConfig } = await import('./utils/resolve-static-config.js')
     staticConfig = resolveStaticConfig(options?.static)
   }

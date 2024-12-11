@@ -1,5 +1,5 @@
 import { fork } from 'child_process'
-import { createServer, type IncomingMessage, type Server } from 'http'
+import { type IncomingMessage, type Server, createServer } from 'http'
 import type { Plugin, ViteDevServer } from 'vite'
 import { globalStore } from '../../runtime/globalStore.js'
 import type { ConfigVikeNodeResolved } from '../../types.js'
@@ -102,7 +102,7 @@ export function devServerPlugin(): Plugin {
 
   function setupHMRProxy(req: IncomingMessage) {
     if (setupHMRProxyDone || isBun) {
-      return
+      return false
     }
 
     setupHMRProxyDone = true
@@ -113,6 +113,7 @@ export function devServerPlugin(): Plugin {
         HMRServer.emit('upgrade', clientReq, clientSocket, wsHead)
       }
     })
+    return true
   }
 }
 

@@ -10,5 +10,5 @@ export const globalStore = (globalThis.__vikeNode ||= {
 }) as {
   isDev: boolean
   viteDevServer?: ViteDevServer
-  setupHMRProxy: (req: IncomingMessage) => void
+  setupHMRProxy: (req: IncomingMessage) => boolean
 }
