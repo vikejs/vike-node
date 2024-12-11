@@ -101,7 +101,7 @@ export const renderPageHandler = ((options?) => async (request, context, runtime
     })
   }
 
-  const pageContextInit = { ...context, ...runtime, urlOriginal: request.url, headersOriginal: request.headers }
+  const pageContextInit = { ...context, runtime, urlOriginal: request.url, headersOriginal: request.headers }
   const response = await renderPage({
     url: request.url,
     headers: parseHeaders(request.headers),
