@@ -113,7 +113,8 @@ export function devServerPlugin(): Plugin {
         HMRServer.emit('upgrade', clientReq, clientSocket, wsHead)
       }
     })
-    return true
+    // true if we need to send an empty Response waiting for the upgrade
+    return req.url === VITE_HMR_PATH
   }
 }
 
