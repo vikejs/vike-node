@@ -265,15 +265,11 @@ app.use(
 ```
 
 > [!NOTE]
-> `vike-node` uses [universal-middleware](https://universal-middleware.dev/) under the hood.
-> 
-> You can find details on `RuntimeAdapter` in the [documentation](https://universal-middleware.dev/reference/runtime-adapter).
+> See [`RuntimeAdapter`](https://universal-middleware.dev/reference/runtime-adapter) (`vike-node` uses [universal-middleware](https://universal-middleware.dev/) under the hood).
 
 > [!NOTE]
-> `runtime` is already available at `pageContext.runtime`.
-> 
-> So even without the custom `pageContext` function above,
-> one could also retrieve the user from `pageContext.runtime.req.user` in any Vike hook.
+> The `runtime` object is also available at `pageContext.runtime` so that, even without the custom `pageContext` function above,
+> you can retrieve `pageContext.runtime.req.user` in Vike hooks and UI components (with [`usePageContext()`](https://vike.dev/usePageContext)).
 
 <br/>
 
