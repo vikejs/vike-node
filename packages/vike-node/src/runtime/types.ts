@@ -11,6 +11,7 @@ export type VikeOptions<T = unknown> = {
     | Record<string, any>
   compress?: boolean | 'static'
   static?: boolean | string | { root?: string; cache?: boolean }
+  api?: { prefix?: string; entry?: string }
   onError?: (err: unknown) => void
 }
 
