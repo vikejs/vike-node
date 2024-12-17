@@ -1,3 +1,12 @@
+## [0.2.9](https://github.com/vikejs/vike-node/compare/v0.2.8...v0.2.9) (2024-12-17)
+
+
+### Bug Fixes
+
+* disable vike-node dev server in test mode ([#37](https://github.com/vikejs/vike-node/issues/37)) ([04cf43d](https://github.com/vikejs/vike-node/commit/04cf43dbbcaa2f5575412eb42fb005e25b161525))
+
+
+
 ## [0.2.8](https://github.com/vikejs/vike-node/compare/v0.2.7...v0.2.8) (2024-12-11)
 
 
