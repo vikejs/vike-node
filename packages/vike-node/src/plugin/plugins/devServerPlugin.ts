@@ -20,7 +20,9 @@ export function devServerPlugin(): Plugin {
   let setupHMRProxyDone = false
   return {
     name: 'vite-node:devserver',
-    apply: 'serve',
+    apply(_config, { command, mode }) {
+      return command === 'serve' && mode !== 'test'
+    },
     enforce: 'pre',
     config: async () => {
       await setupProcessRestarter()
