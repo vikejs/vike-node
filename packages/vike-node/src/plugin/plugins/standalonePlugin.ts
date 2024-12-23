@@ -1,7 +1,7 @@
+import path from 'path'
 import esbuild from 'esbuild'
 import fs from 'fs/promises'
-import path from 'path'
-import { searchForWorkspaceRoot, type Plugin, type ResolvedConfig } from 'vite'
+import { type Plugin, type ResolvedConfig, searchForWorkspaceRoot } from 'vite'
 import type { ConfigVikeNodeResolved } from '../../types.js'
 import { assert, assertUsage } from '../../utils/assert.js'
 import { toPosixPath } from '../utils/filesystemPathHandling.js'
@@ -37,7 +37,7 @@ export function standalonePlugin(): Plugin {
       if (!enabled) return
       root = toPosixPath(config.root)
       outDir = toPosixPath(config.build.outDir)
-      outDirAbs = path.posix.join(root, outDir)
+      outDirAbs = path.isAbsolute(outDir) ? outDir : path.posix.join(root, outDir)
     },
     buildStart() {
       if (!enabled) return
