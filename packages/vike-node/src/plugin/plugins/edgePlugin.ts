@@ -88,7 +88,7 @@ export function edgePlugin(): Plugin[] {
         viteConfig = config
         root = toPosixPath(config.root)
         outDir = toPosixPath(config.build.outDir)
-        outDirAbs = path.posix.join(root, outDir)
+        outDirAbs = path.isAbsolute(outDir) ? outDir : path.posix.join(root, outDir)
 
         // Now that outDirAbs is available, we can create entriesWithOutFile
         entriesWithOutFile = entries.map((entry) => ({
