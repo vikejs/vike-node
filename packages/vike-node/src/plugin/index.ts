@@ -24,7 +24,7 @@ function vikeNode(config: ConfigVikeNodePlugin) {
       configurePreviewServer() {
         assertUsage(
           false,
-          `${pc.cyan('$ vite preview')} isn't supported: directly execute the server production entry (for example ${pc.cyan('$ node dist/server/index.mjs')}) instead.`
+          `${pc.cyan('$ vike preview')} isn't supported: directly execute the server production entry (for example ${pc.cyan('$ node dist/server/index.mjs')}) instead.`
         )
       }
     }
