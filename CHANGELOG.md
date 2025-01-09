@@ -1,3 +1,13 @@
+## [0.2.10](https://github.com/vikejs/vike-node/compare/v0.2.9...v0.2.10) (2025-01-09)
+
+
+### Bug Fixes
+
+* properly handle absolute outdir. Fixes [#38](https://github.com/vikejs/vike-node/issues/38) ([#40](https://github.com/vikejs/vike-node/issues/40)) ([0cc6921](https://github.com/vikejs/vike-node/commit/0cc6921398747ec9cb7df4074e75b689e569ac32))
+* update error message ([452e55e](https://github.com/vikejs/vike-node/commit/452e55e28b302d12b0b36877ef080f0d37e969d8))
+
+
+
 ## [0.2.9](https://github.com/vikejs/vike-node/compare/v0.2.8...v0.2.9) (2024-12-17)
 
 
