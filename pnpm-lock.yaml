@@ -46,14 +46,14 @@ importers:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
       vike:
-        specifier: ^0.4.198
-        version: 0.4.210(react-streaming@0.3.44(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.11(@types/node@20.17.10))
+        specifier: ^0.4.213
+        version: 0.4.214(react-streaming@0.3.44(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.11(@types/node@20.17.10))
       vike-node:
         specifier: link:../../packages/vike-node
         version: link:../../packages/vike-node
       vike-react:
         specifier: ^0.5.7
-        version: 0.5.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.210(react-streaming@0.3.44(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.11(@types/node@20.17.10)))
+        version: 0.5.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.214(react-streaming@0.3.44(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.11(@types/node@20.17.10)))
       vite:
         specifier: ^5.4.8
         version: 5.4.11(@types/node@20.17.10)
@@ -76,14 +76,14 @@ importers:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
       vike:
-        specifier: ^0.4.198
-        version: 0.4.210(react-streaming@0.3.44(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.11(@types/node@20.17.10))
+        specifier: ^0.4.213
+        version: 0.4.214(react-streaming@0.3.44(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.11(@types/node@20.17.10))
       vike-node:
         specifier: link:../../packages/vike-node
         version: link:../../packages/vike-node
       vike-react:
         specifier: ^0.5.7
-        version: 0.5.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.210(react-streaming@0.3.44(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.11(@types/node@20.17.10)))
+        version: 0.5.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.214(react-streaming@0.3.44(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.11(@types/node@20.17.10)))
       vite:
         specifier: ^5.4.8
         version: 5.4.11(@types/node@20.17.10)
@@ -109,14 +109,14 @@ importers:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
       vike:
-        specifier: ^0.4.198
-        version: 0.4.210(react-streaming@0.3.44(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.11(@types/node@20.17.10))
+        specifier: ^0.4.213
+        version: 0.4.214(react-streaming@0.3.44(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.11(@types/node@20.17.10))
       vike-node:
         specifier: link:../../packages/vike-node
         version: link:../../packages/vike-node
       vike-react:
         specifier: ^0.5.7
-        version: 0.5.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.210(react-streaming@0.3.44(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.11(@types/node@20.17.10)))
+        version: 0.5.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.214(react-streaming@0.3.44(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.11(@types/node@20.17.10)))
       vite:
         specifier: ^5.4.8
         version: 5.4.11(@types/node@20.17.10)
@@ -152,14 +152,14 @@ importers:
         specifier: ^0.1.76
         version: 0.1.82(@babel/core@7.26.0)(@babel/parser@7.26.3)(@babel/types@7.26.3)(react-streaming@0.3.44(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       vike:
-        specifier: ^0.4.198
-        version: 0.4.210(react-streaming@0.3.44(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.11(@types/node@20.17.10))
+        specifier: ^0.4.213
+        version: 0.4.214(react-streaming@0.3.44(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.11(@types/node@20.17.10))
       vike-node:
         specifier: link:../../packages/vike-node
         version: link:../../packages/vike-node
       vike-react:
         specifier: ^0.5.7
-        version: 0.5.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.210(react-streaming@0.3.44(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.11(@types/node@20.17.10)))
+        version: 0.5.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.214(react-streaming@0.3.44(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.11(@types/node@20.17.10)))
       vite:
         specifier: ^5.4.8
         version: 5.4.11(@types/node@20.17.10)
@@ -222,8 +222,8 @@ importers:
         specifier: ^0.5.5
         version: 0.5.5(elysia@1.2.0(@sinclair/typebox@0.34.13)(typescript@5.7.2))(esbuild@0.24.2)(fastify@4.29.0)(h3@1.13.0)(hono@4.6.14)(rollup@4.29.1)(vite@6.0.5(@types/node@20.17.10))
       vike:
-        specifier: ^0.4.198
-        version: 0.4.210(react-streaming@0.3.44)(vite@6.0.5(@types/node@20.17.10))
+        specifier: ^0.4.213
+        version: 0.4.214(react-streaming@0.3.44(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@6.0.5(@types/node@20.17.10))
       vite:
         specifier: ^6.0.2
         version: 6.0.5(@types/node@20.17.10)
@@ -291,8 +291,8 @@ importers:
         specifier: ^5.5.4
         version: 5.7.2
       vike:
-        specifier: ^0.4.198
-        version: 0.4.210(react-streaming@0.3.44(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.11(@types/node@20.17.10))
+        specifier: ^0.4.213
+        version: 0.4.214(react-streaming@0.3.44(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.11(@types/node@20.17.10))
       vike-node:
         specifier: link:../../packages/vike-node
         version: link:../../packages/vike-node
@@ -2985,8 +2985,8 @@ packages:
       react-dom: '>=18.0.0'
       vike: '>=0.4.182'
 
-  vike@0.4.210:
-    resolution: {integrity: sha512-+X2Gl1OJz0L6GIDSk+1wlkFSDY/BCqLihbTsO76HukxOq6JIHLC0wYb9UgNek3ruU4jSUtwSe4nOdchyiy8+kw==}
+  vike@0.4.214:
+    resolution: {integrity: sha512-1utV8QBMrA/LF5J2MhcCjefONYFw9nLGtoEL/dxhfBjFjWCmliHNzb8GO+nksVsb44hQuJAWHTQki1+7nFqJyQ==}
     engines: {node: '>=18.0.0'}
     hasBin: true
     peerDependencies:
@@ -2994,6 +2994,8 @@ packages:
       vite: '>=5.1.0'
     peerDependenciesMeta:
       react-streaming:
+        optional: true
+      vite:
         optional: true
 
   vite@5.4.11:
@@ -5834,14 +5836,14 @@ snapshots:
 
   vary@1.1.2: {}
 
-  vike-react@0.5.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.210(react-streaming@0.3.44(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.11(@types/node@20.17.10))):
+  vike-react@0.5.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.214(react-streaming@0.3.44(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.11(@types/node@20.17.10))):
     dependencies:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       react-streaming: 0.3.44(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      vike: 0.4.210(react-streaming@0.3.44(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.11(@types/node@20.17.10))
+      vike: 0.4.214(react-streaming@0.3.44(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.11(@types/node@20.17.10))
 
-  vike@0.4.210(react-streaming@0.3.44(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.11(@types/node@20.17.10)):
+  vike@0.4.214(react-streaming@0.3.44(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.11(@types/node@20.17.10)):
     dependencies:
       '@brillout/import': 0.2.3
       '@brillout/json-serializer': 0.5.15
@@ -5853,13 +5855,14 @@ snapshots:
       es-module-lexer: 1.5.4
       esbuild: 0.24.2
       fast-glob: 3.3.2
+      json5: 2.2.3
       semver: 7.6.3
       source-map-support: 0.5.21
+    optionalDependencies:
+      react-streaming: 0.3.44(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       vite: 5.4.11(@types/node@20.17.10)
-    optionalDependencies:
-      react-streaming: 0.3.44(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
 
-  vike@0.4.210(react-streaming@0.3.44)(vite@6.0.5(@types/node@20.17.10)):
+  vike@0.4.214(react-streaming@0.3.44(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@6.0.5(@types/node@20.17.10)):
     dependencies:
       '@brillout/import': 0.2.3
       '@brillout/json-serializer': 0.5.15
@@ -5871,11 +5874,12 @@ snapshots:
       es-module-lexer: 1.5.4
       esbuild: 0.24.2
       fast-glob: 3.3.2
+      json5: 2.2.3
       semver: 7.6.3
       source-map-support: 0.5.21
-      vite: 6.0.5(@types/node@20.17.10)
     optionalDependencies:
       react-streaming: 0.3.44(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      vite: 6.0.5(@types/node@20.17.10)
 
   vite@5.4.11(@types/node@20.17.10):
     dependencies:
