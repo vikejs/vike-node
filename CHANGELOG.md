@@ -1,3 +1,17 @@
+# [0.3.0](https://github.com/vikejs/vike-node/compare/v0.2.10...v0.3.0) (2025-01-12)
+
+
+### chore
+
+* set vike minimum version to 0.4.213 ([#42](https://github.com/vikejs/vike-node/issues/42)) ([e0f9d5e](https://github.com/vikejs/vike-node/commit/e0f9d5e54d63d0aaf5b1a70ad79fc9810242282a))
+
+
+### BREAKING CHANGES
+
+* update `vike` to `0.4.213` or above.
+
+
+
 ## [0.2.10](https://github.com/vikejs/vike-node/compare/v0.2.9...v0.2.10) (2025-01-09)
 
 
