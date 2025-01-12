@@ -1,7 +1,7 @@
 {
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "dev": "vike dev",
+    "build": "vike build",
     "prepare": "pnpm prisma generate && pnpm prisma db push",
     "prod": "pnpm run build && cp ./prisma/test.db ./build/server/node_modules/.prisma/client && cross-env NODE_ENV=production node build/server/index.mjs"
   },
@@ -26,7 +26,7 @@
     "sharp": "^0.33.4",
     "telefunc": "^0.1.76",
     "typescript": "^5.5.4",
-    "vike": "^0.4.198",
+    "vike": "^0.4.213",
     "vike-node": "link:../../packages/vike-node",
     "vite": "^5.4.8"
   },

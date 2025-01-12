@@ -88,7 +88,7 @@
     "unenv-nightly": "2.0.0-20241015-162228-03257ee"
   },
   "peerDependencies": {
-    "vike": "^0.4.198",
+    "vike": "^0.4.213",
     "vite": ">=5.0.10"
   },
   "devDependencies": {
@@ -101,7 +101,7 @@
     "tsup": "^8.3.0",
     "typescript": "^5.5.4",
     "universal-middleware": "^0.5.5",
-    "vike": "^0.4.198",
+    "vike": "^0.4.213",
     "vite": "^6.0.2"
   },
   "files": [
