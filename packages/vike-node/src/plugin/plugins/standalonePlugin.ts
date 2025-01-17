@@ -1,6 +1,6 @@
-import path from 'path'
+import fs from 'node:fs/promises'
+import path from 'node:path'
 import esbuild from 'esbuild'
-import fs from 'fs/promises'
 import { type Plugin, type ResolvedConfig, searchForWorkspaceRoot } from 'vite'
 import type { ConfigVikeNodeResolved } from '../../types.js'
 import { assert, assertUsage } from '../../utils/assert.js'
@@ -192,8 +192,10 @@ function findCommonAncestor(paths: string[]): string {
   let commonAncestor = ''
   let index = 0
 
+  // biome-ignore lint/style/noNonNullAssertion: <explanation>
   while (pathComponents.every((components) => components[index] === pathComponents[0]![index])) {
-    commonAncestor += pathComponents[0]![index] + '/'
+    // biome-ignore lint/style/noNonNullAssertion: <explanation>
+    commonAncestor += `${pathComponents[0]![index]}/`
     index++
   }
 

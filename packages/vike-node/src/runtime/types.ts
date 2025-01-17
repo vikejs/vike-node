@@ -1,4 +1,4 @@
-import type { IncomingMessage, ServerResponse } from 'http'
+import type { IncomingMessage, ServerResponse } from 'node:http'
 import type { RuntimeAdapterTarget } from '@universal-middleware/core'
 
 export type HeadersProvided = Record<string, string | string[] | undefined> | Headers

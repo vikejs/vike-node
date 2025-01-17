@@ -1,9 +1,9 @@
-import { builtinModules } from 'module'
+import fs from 'node:fs/promises'
+import { builtinModules } from 'node:module'
+import path from 'node:path'
+import { promisify } from 'node:util'
 import { gzip } from 'node:zlib'
-import path from 'path'
-import { promisify } from 'util'
 import esbuild from 'esbuild'
-import fs from 'fs/promises'
 import { prerender } from 'vike/api'
 import type { Plugin, ResolvedConfig } from 'vite'
 import type { ConfigVikeNodeResolved, Runtime } from '../../types.js'
@@ -171,7 +171,20 @@ export function edgePlugin(): Plugin[] {
         plugins: [unenvPlugin(entry.runtime)]
       })
 
-      const content = result.outputFiles[0]!.contents
+      if (result.errors && result.errors.length > 0) {
+        const formatted = await esbuild.formatMessages(result.errors, {
+          kind: 'error'
+        })
+        console.error(formatted)
+      }
+
+      const content = result.outputFiles[0]?.contents
+
+      if (!content) {
+        console.warn(`${entry.name} built wihtout error, but no output found`)
+        continue
+      }
+
       const zipped = await compress(content, { level: 9 })
       logVikeNode(`built entry: ${entry.name}, gzip: ${(zipped.length / 1024).toFixed(2)} kB`)
 

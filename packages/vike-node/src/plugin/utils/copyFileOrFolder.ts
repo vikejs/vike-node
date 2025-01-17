@@ -1,7 +1,7 @@
 export { copyFileOrFolder }
 
-import fs from 'fs/promises'
-import path from 'path'
+import fs from 'node:fs/promises'
+import path from 'node:path'
 
 async function copyFileOrFolder(source: string, destination: string): Promise<void> {
   const stats = await fs.stat(source)

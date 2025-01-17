@@ -1,9 +1,9 @@
 // credits:
 // https://github.com/cloudflare/workers-sdk/blob/e24939c53475228e12a3c5228aa652c6473a889f/packages/wrangler/src/deployment-bundle/esbuild-plugins/hybrid-nodejs-compat.ts
 
-import type { Plugin, PluginBuild } from 'esbuild'
 import { builtinModules, createRequire } from 'node:module'
 import path from 'node:path'
+import type { Plugin, PluginBuild } from 'esbuild'
 import resolveFrom from 'resolve-from'
 import { cloudflare, deno, env, node, nodeless, vercel } from 'unenv-nightly'
 import type { Runtime } from '../../../types.js'
@@ -56,9 +56,13 @@ export function unenvPlugin(runtime: Runtime): Plugin {
   const { alias, inject, external, polyfill } = replaceUnenv(getEnv(runtime))
 
   // already included in polyfill / broken
+  // biome-ignore lint/performance/noDelete: <explanation>
   delete inject.global
+  // biome-ignore lint/performance/noDelete: <explanation>
   delete inject.process
+  // biome-ignore lint/performance/noDelete: <explanation>
   delete inject.Buffer
+  // biome-ignore lint/performance/noDelete: <explanation>
   delete inject.console
 
   return {
@@ -155,11 +159,11 @@ function handleNodeJSGlobals(build: PluginBuild, inject: Record<string, string |
 
     if (typeof globalMapping === 'string') {
       return handleStringGlobalMapping(globalName, globalMapping)
-    } else if (Array.isArray(globalMapping)) {
-      return handleArrayGlobalMapping(globalName, globalMapping)
-    } else {
-      throw new Error(`Invalid global mapping for ${globalName}`)
     }
+    if (Array.isArray(globalMapping)) {
+      return handleArrayGlobalMapping(globalName, globalMapping)
+    }
+    throw new Error(`Invalid global mapping for ${globalName}`)
   })
 }
 

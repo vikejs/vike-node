@@ -22,7 +22,7 @@ function TodoList({ todoItemsInitial }: { todoItemsInitial: Todo[] }) {
               setTodoItems(todoItems)
             }}
           >
-            <input type="text" onChange={(ev) => setDraft(ev.target.value)} value={draft} autoFocus={true} />{' '}
+            <input type="text" onChange={(ev) => setDraft(ev.target.value)} value={draft} />{' '}
             <button type="submit">Add to-do</button>
           </form>
         </li>

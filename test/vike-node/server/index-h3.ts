@@ -1,4 +1,4 @@
-import { createServer } from 'http'
+import { createServer } from 'node:http'
 import { createApp, createRouter, eventHandler, toNodeListener, toWebRequest } from 'h3'
 import { telefunc } from 'telefunc'
 import vike, { type RuntimeAdapter } from 'vike-node/h3'

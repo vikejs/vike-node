@@ -1,5 +1,5 @@
-import { createRequire } from 'module'
-import path from 'path'
+import { createRequire } from 'node:module'
+import path from 'node:path'
 import pc from '@brillout/picocolors'
 import type { ConfigVitePluginServerEntry } from 'vike/types'
 import type { Plugin, ResolvedConfig } from 'vite'

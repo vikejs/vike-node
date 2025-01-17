@@ -1,4 +1,4 @@
-import type { IncomingMessage, ServerResponse } from 'http'
+import type { IncomingMessage, ServerResponse } from 'node:http'
 import compressMiddlewareFactory from '@universal-middleware/compress'
 import type { Get, RuntimeAdapter, UniversalHandler, UniversalMiddleware } from '@universal-middleware/core'
 import { renderPage as _renderPage } from 'vike/server'
@@ -92,6 +92,7 @@ export const renderPageHandler = ((options?) => async (request, context, runtime
 
     return new Promise<boolean>((resolve) => {
       res.once('close', () => resolve(true))
+      // biome-ignore lint/style/noNonNullAssertion: <explanation>
       staticMiddleware!(req, res, () => resolve(false))
     })
   }

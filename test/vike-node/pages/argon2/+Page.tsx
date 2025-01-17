@@ -16,7 +16,7 @@ function Page() {
           setIsValid(isValid)
         }}
       >
-        <input type="text" onChange={(ev) => setPassword(ev.target.value)} value={password} autoFocus={true} />{' '}
+        <input type="text" onChange={(ev) => setPassword(ev.target.value)} value={password} />{' '}
         <button type="submit">Sign in</button>
       </form>
       {isValid !== undefined && <div>{isValid ? 'Valid password' : 'Invalid password'}</div>}
