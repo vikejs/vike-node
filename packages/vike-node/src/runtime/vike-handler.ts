@@ -1,11 +1,6 @@
 import type { IncomingMessage, ServerResponse } from 'http'
 import compressMiddlewareFactory from '@universal-middleware/compress'
-import {
-  type Get,
-  type RuntimeAdapter,
-  type UniversalHandler,
-  type UniversalMiddleware
-} from '@universal-middleware/core'
+import type { Get, RuntimeAdapter, UniversalHandler, UniversalMiddleware } from '@universal-middleware/core'
 import { renderPage as _renderPage } from 'vike/server'
 import { assert } from '../utils/assert.js'
 import { isVercel } from '../utils/isVercel.js'
