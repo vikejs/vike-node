@@ -22,6 +22,7 @@ function normalizeRollupInput(input?: InputOption): InputsMap {
   }
   // Usually `input` is an oject, but the user can set it as a `string` or `string[]`
   if (typeof input === 'string') {
+    // biome-ignore lint/style/noParameterAssign: <explanation>
     input = [input]
   }
   if (Array.isArray(input)) {

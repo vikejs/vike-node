@@ -1,6 +1,6 @@
 export { createServerResponse }
 
-import { ServerResponse, type IncomingMessage, type OutgoingHttpHeader, type OutgoingHttpHeaders } from 'node:http'
+import { type IncomingMessage, type OutgoingHttpHeader, type OutgoingHttpHeaders, ServerResponse } from 'node:http'
 import { PassThrough, Readable } from 'node:stream'
 
 /**
@@ -46,7 +46,8 @@ function createServerResponse(incomingMessage: IncomingMessage) {
   })
 
   res.write = passThrough.write.bind(passThrough)
-  res.end = (passThrough as any).end.bind(passThrough)
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  res.end = passThrough.end.bind(passThrough) as any
 
   res.writeHead = function writeHead(
     statusCode: number,
@@ -55,15 +56,17 @@ function createServerResponse(incomingMessage: IncomingMessage) {
   ): ServerResponse {
     res.statusCode = statusCode
     if (typeof statusMessage === 'object') {
+      // biome-ignore lint/style/noParameterAssign: <explanation>
       headers = statusMessage
+      // biome-ignore lint/style/noParameterAssign: <explanation>
       statusMessage = undefined
     }
     if (headers) {
-      Object.entries(headers).forEach(([key, value]) => {
+      for (const [key, value] of Object.entries(headers)) {
         if (value !== undefined) {
           res.setHeader(key, value)
         }
-      })
+      }
     }
     return res
   }

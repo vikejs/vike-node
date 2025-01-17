@@ -6,8 +6,9 @@ export type VikeHttpResponse = Awaited<ReturnType<typeof import('vike/server').r
 export type NextFunction = (err?: unknown) => void
 
 export type VikeOptions<T = unknown> = {
-  pageContext?:
+  pageContext?: // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     | ((req: RuntimeAdapterTarget<T>) => Record<string, any> | Promise<Record<string, any>>)
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     | Record<string, any>
   compress?: boolean | 'static'
   static?: boolean | string | { root?: string; cache?: boolean }

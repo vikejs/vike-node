@@ -5,7 +5,7 @@ import type { ConfigVikeNodeResolved } from '../../types.js'
 import { assert } from '../../utils/assert.js'
 
 function getConfigVikeNode(config: ResolvedConfig | UserConfig): ConfigVikeNodeResolved {
-  const { configVikeNode } = config as any
+  const { configVikeNode } = config as { configVikeNode: ConfigVikeNodeResolved }
   assert(configVikeNode)
   return configVikeNode
 }
