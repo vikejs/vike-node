@@ -1,7 +1,7 @@
+import { Worker } from 'node:worker_threads'
 import express from 'express'
 import { telefunc } from 'telefunc'
 import vike, { type RuntimeAdapter } from 'vike-node/express'
-import { Worker } from 'node:worker_threads'
 import { init } from '../database/todoItems.js'
 import { two } from './shared-chunk.js'
 
@@ -21,6 +21,7 @@ async function startServer() {
     res.status(statusCode).type(contentType).send(body)
   })
   app.use((req, res, next) => {
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     ;(req as any).xRuntime = 'x-runtime'
     res.set('x-test', 'test')
     next()
@@ -29,6 +30,7 @@ async function startServer() {
     vike({
       pageContext(runtime: RuntimeAdapter) {
         return {
+          // biome-ignore lint/suspicious/noExplicitAny: <explanation>
           xRuntime: (runtime.req as any).xRuntime
         }
       }

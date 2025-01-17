@@ -28,6 +28,7 @@ function connectToWeb(handler: ConnectMiddleware | ConnectMiddlewareBoolean): We
     const req = createIncomingMessage(request)
     const { res, onReadable } = createServerResponse(req)
 
+    // biome-ignore lint/suspicious/noAsyncPromiseExecutor: <explanation>
     return new Promise<Response | undefined>(async (resolve, reject) => {
       onReadable(({ readable, headers, statusCode }) => {
         const responseBody = statusCodesWithoutBody.includes(statusCode)
@@ -72,6 +73,7 @@ function connectToWeb(handler: ConnectMiddleware | ConnectMiddlewareBoolean): We
 function createIncomingMessage(request: Request): IncomingMessage {
   const parsedUrl = new URL(request.url, DUMMY_BASE_URL)
   const pathnameAndQuery = (parsedUrl.pathname || '') + (parsedUrl.search || '')
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   const body = request.body ? Readable.fromWeb(request.body as any) : Readable.from([])
 
   return Object.assign(body, {

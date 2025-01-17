@@ -1,8 +1,8 @@
 Error.stackTraceLimit = Number.POSITIVE_INFINITY
+import { Worker } from 'node:worker_threads'
 import fastify from 'fastify'
 import { telefunc } from 'telefunc'
 import vike, { type RuntimeAdapter } from 'vike-node/fastify'
-import { Worker } from 'node:worker_threads'
 import { init } from '../database/todoItems.js'
 import { two } from './shared-chunk.js'
 if (two() !== 2) {
@@ -23,6 +23,7 @@ async function startServer() {
   })
 
   app.addHook('onRequest', (request, reply, done) => {
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     ;(request.routeOptions.config as any).xRuntime = 'x-runtime'
     done()
   })
@@ -37,6 +38,7 @@ async function startServer() {
     vike({
       pageContext(runtime: RuntimeAdapter) {
         return {
+          // biome-ignore lint/suspicious/noExplicitAny: <explanation>
           xRuntime: (runtime.fastify.request.routeOptions.config as any).xRuntime
         }
       }

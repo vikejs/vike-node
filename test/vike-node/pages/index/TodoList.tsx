@@ -1,8 +1,8 @@
 export { TodoList }
 
+import type { Todo } from '@prisma/client'
 import React, { useState } from 'react'
 import { onNewTodo } from './TodoList.telefunc.js'
-import type { Todo } from '@prisma/client'
 
 function TodoList({ todoItemsInitial }: { todoItemsInitial: Todo[] }) {
   const [todoItems, setTodoItems] = useState(todoItemsInitial)
@@ -11,7 +11,7 @@ function TodoList({ todoItemsInitial }: { todoItemsInitial: Todo[] }) {
     <>
       <ul>
         {todoItems.map((todoItem, i) => (
-          <li key={i}>{todoItem.text}</li>
+          <li key={todoItem.id}>{todoItem.text}</li>
         ))}
         <li>
           <form

@@ -81,6 +81,7 @@ export function devServerPlugin(): Plugin {
     const modules = new Set([moduleNode])
     for (const module of modules) {
       if (module.file === entryAbs) return true
+      // biome-ignore lint/complexity/noForEach: <explanation>
       module.importers.forEach((importer) => modules.add(importer))
     }
 
@@ -88,7 +89,9 @@ export function devServerPlugin(): Plugin {
   }
 
   function patchViteServer(vite: ViteDevServer) {
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     vite.httpServer = { on: () => {} } as any
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     vite.listen = (() => {}) as any
     vite.printUrls = () => {}
   }
@@ -108,6 +111,7 @@ export function devServerPlugin(): Plugin {
     }
 
     setupHMRProxyDone = true
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     const server = (req.socket as any).server as Server
     server.on('upgrade', (clientReq, clientSocket, wsHead) => {
       if (clientReq.url === VITE_HMR_PATH) {
@@ -164,6 +168,7 @@ async function setupProcessRestarter() {
   process.env[IS_RESTARTER_SET_UP] = 'true'
 
   function start() {
+    // biome-ignore lint/style/noNonNullAssertion: <explanation>
     const cliEntry = process.argv[1]!
     const cliArgs = process.argv.slice(2)
     // Re-run the exact same CLI

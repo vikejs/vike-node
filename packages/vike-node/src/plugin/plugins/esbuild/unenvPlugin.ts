@@ -112,7 +112,7 @@ function handleAliasedNodeJSPackages(build: PluginBuild, alias: Record<string, s
   const aliasAbsolute = Object.fromEntries(
     Object.entries(alias)
       .map(([key, value]) => {
-        let resolvedAliasPath
+        let resolvedAliasPath: string
         try {
           resolvedAliasPath = require_.resolve(value)
         } catch (e) {

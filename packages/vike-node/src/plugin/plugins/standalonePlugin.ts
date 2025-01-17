@@ -24,7 +24,8 @@ export function standalonePlugin(): Plugin {
   let outDir = ''
   let outDirAbs = ''
   let rollupEntryFilePaths: string[] = []
-  let rollupResolve: any
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  let rollupResolve: (...args: any[]) => Promise<any>
 
   return {
     name: 'vike-node:standalone',
@@ -141,9 +142,9 @@ export function standalonePlugin(): Plugin {
           const tracedFilePath = path.posix.join(base, relativeFile)
           const isNodeModules = relativeFile.includes('node_modules')
 
-          relativeFile = relativeFile.replace(relativeRoot, '').replace(commonAncestor, '')
-          const relativeFileHoisted = `node_modules${relativeFile.split('node_modules').pop()}`
-          const fileOutputPath = path.posix.join(outDirAbs, isNodeModules ? relativeFileHoisted : relativeFile)
+          const relativeFileBis = relativeFile.replace(relativeRoot, '').replace(commonAncestor, '')
+          const relativeFileHoisted = `node_modules${relativeFileBis.split('node_modules').pop()}`
+          const fileOutputPath = path.posix.join(outDirAbs, isNodeModules ? relativeFileHoisted : relativeFileBis)
 
           if (!(await fs.stat(tracedFilePath)).isDirectory() && !copiedFiles.has(fileOutputPath)) {
             copiedFiles.add(fileOutputPath)
@@ -166,7 +167,8 @@ function generateBanner() {
   ].join('\n')
 }
 
-function createStandaloneIgnorePlugin(rollupResolve: any): esbuild.Plugin {
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+function createStandaloneIgnorePlugin(rollupResolve: (...args: any[]) => Promise<any>): esbuild.Plugin {
   return {
     name: 'standalone-ignore',
     setup(build) {
@@ -222,6 +224,7 @@ function findRollupBundleEntries<OutputBundle extends Record<string, { name: str
 
   const entries: OutputBundle[string][] = []
   for (const key in bundle) {
+    // biome-ignore lint/style/noNonNullAssertion: <explanation>
     const entry = bundle[key]!
     // https://github.com/brillout/vite-plugin-ssr/issues/612
     if (!('facadeModuleId' in entry) || key.endsWith('.map') || key.endsWith('.json')) continue

@@ -18,8 +18,10 @@ async function renderPage<T extends RuntimeAdapter>({
   url: string
   headers: [string, string][]
   runtimeRequest: T
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   options: VikeOptions & { pageContextUniversal?: Record<string, any> }
 }): Promise<VikeHttpResponse> {
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   const pageContextInit: Record<string, any> = options.pageContextUniversal ?? {}
   if (typeof options?.pageContext === 'function') {
     Object.assign(pageContextInit, await options.pageContext(runtimeRequest))
@@ -40,7 +42,7 @@ async function renderPage<T extends RuntimeAdapter>({
   return pageContext.httpResponse
 }
 
-export const compressMiddleware = ((options?) => async (request, _context, runtime: any) => {
+export const compressMiddleware = ((options?) => async (request, _context) => {
   const compressionType = options?.compress ?? !isVercel()
   const compressMiddlewareInternal = compressMiddlewareFactory()(request)
 

@@ -12,11 +12,11 @@ function flattenHeaders(headers: OutgoingHttpHeaders): [string, string][] {
     }
 
     if (Array.isArray(value)) {
-      value.forEach((v) => {
+      for (const v of value) {
         if (v != null) {
           flatHeaders.push([key, String(v)])
         }
-      })
+      }
     } else {
       flatHeaders.push([key, String(value)])
     }
@@ -30,9 +30,9 @@ function parseHeaders(headers: HeadersProvided): [string, string][] {
   if (typeof headers.forEach === 'function') {
     headers.forEach((value, key) => {
       if (Array.isArray(value)) {
-        value.forEach((value_) => {
+        for (const value_ of value) {
           result.push([key, value_])
-        })
+        }
       } else {
         result.push([key, value])
       }
@@ -40,9 +40,9 @@ function parseHeaders(headers: HeadersProvided): [string, string][] {
   } else {
     for (const [key, value] of Object.entries(headers)) {
       if (Array.isArray(value)) {
-        value.forEach((value_) => {
+        for (const value_ of value) {
           result.push([key, value_])
-        })
+        }
       } else {
         result.push([key, value])
       }

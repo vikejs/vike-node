@@ -49,6 +49,8 @@ type EntryWithOutFile = Entry & {
 export function edgePlugin(): Plugin[] {
   let viteConfig: ResolvedConfig
   let configResolvedVikeNode: ConfigVikeNodeResolved
+  // FIXME what even is that?
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   let configResolvedVike: any
   let outDir: string
   let outDirAbs: string
@@ -208,6 +210,7 @@ export function edgePlugin(): Plugin[] {
   async function prerenderPages(): Promise<string[]> {
     const staticRoutes: string[] = []
     await prerender({
+      // biome-ignore lint/suspicious/noExplicitAny: <explanation>
       async onPagePrerender(page: any) {
         const result = page._prerenderResult
         const isJson = result.filePath.endsWith('.pageContext.json')
