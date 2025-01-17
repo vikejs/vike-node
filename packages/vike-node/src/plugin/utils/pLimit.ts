@@ -1,7 +1,7 @@
 /* Copied from https://github.com/sindresorhus/p-limit */
 
 export { pLimit }
-export type PLimit = (job: () => Promise<void>) => Promise<undefined> & { __stamp?: Symbol }
+export type PLimit = (job: () => Promise<void>) => Promise<undefined> & { __stamp?: symbol }
 
 function pLimit(concurrency: number): PLimit {
   if (!((Number.isInteger(concurrency) || concurrency === Number.POSITIVE_INFINITY) && concurrency > 0)) {

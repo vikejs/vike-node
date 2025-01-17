@@ -1,4 +1,4 @@
-import { Get, type RuntimeAdapter, type UniversalHandler, pipe } from '@universal-middleware/core'
+import { type Get, type RuntimeAdapter, type UniversalHandler, pipe } from '@universal-middleware/core'
 import type { VikeOptions } from './runtime/types.js'
 import { compressMiddleware, renderPageHandler } from './runtime/vike-handler.js'
 

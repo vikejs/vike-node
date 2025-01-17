@@ -1,7 +1,7 @@
-Error.stackTraceLimit = Infinity
+Error.stackTraceLimit = Number.POSITIVE_INFINITY
 import fastify from 'fastify'
 import { telefunc } from 'telefunc'
-import vike, { RuntimeAdapter } from 'vike-node/fastify'
+import vike, { type RuntimeAdapter } from 'vike-node/fastify'
 import { Worker } from 'worker_threads'
 import { init } from '../database/todoItems.js'
 import { two } from './shared-chunk.js'

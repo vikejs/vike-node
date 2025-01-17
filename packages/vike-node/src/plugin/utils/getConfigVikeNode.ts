@@ -1,6 +1,6 @@
 export { getConfigVikeNode }
 
-import { ResolvedConfig, UserConfig } from 'vite'
+import type { ResolvedConfig, UserConfig } from 'vite'
 import type { ConfigVikeNodeResolved } from '../../types.js'
 import { assert } from '../../utils/assert.js'
 

@@ -20,7 +20,7 @@ async function renderPage<T extends RuntimeAdapter>({
   runtimeRequest: T
   options: VikeOptions & { pageContextUniversal?: Record<string, any> }
 }): Promise<VikeHttpResponse> {
-  let pageContextInit: Record<string, any> = options.pageContextUniversal ?? {}
+  const pageContextInit: Record<string, any> = options.pageContextUniversal ?? {}
   if (typeof options?.pageContext === 'function') {
     Object.assign(pageContextInit, await options.pageContext(runtimeRequest))
   } else if (options?.pageContext) {

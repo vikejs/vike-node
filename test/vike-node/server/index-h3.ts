@@ -1,7 +1,7 @@
 import { createServer } from 'http'
 import { createApp, createRouter, eventHandler, toNodeListener, toWebRequest } from 'h3'
 import { telefunc } from 'telefunc'
-import vike, { RuntimeAdapter } from 'vike-node/h3'
+import vike, { type RuntimeAdapter } from 'vike-node/h3'
 import { init } from '../database/todoItems'
 
 startServer()

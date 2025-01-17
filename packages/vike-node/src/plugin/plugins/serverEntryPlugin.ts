@@ -26,7 +26,7 @@ export function serverEntryPlugin(): Plugin {
 
       for (const [name, entryInfo] of entries) {
         const { entry: entryPath, runtime } = entryInfo
-        let entryFilePath = path.join(config.root, entryPath)
+        const entryFilePath = path.join(config.root, entryPath)
         try {
           resolvedEntries[name] = {
             entry: require_.resolve(entryFilePath),

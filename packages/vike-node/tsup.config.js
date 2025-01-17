@@ -20,7 +20,7 @@ export default defineConfig([
     esbuildOptions(opts) {
       opts.outbase = 'src'
     },
-    external: external.map((e) => [e, `node:${e}`]).flat(1),
+    external: external.flatMap((e) => [e, `node:${e}`]),
     dts: true,
     outDir: 'dist',
     bundle: true,

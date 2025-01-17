@@ -13,6 +13,7 @@
     "========= Clean": "",
     "reset": "git clean -Xdf && pnpm install && pnpm run build",
     "========= Formatting": "",
+    "lint": "biome lint .",
     "format": "pnpm run format:biome",
     "format:biome": "biome format --write .",
     "format:check": "biome format . || (echo 'Fix formatting by running `$ pnpm run -w format`.' && exit 1)",

@@ -1,6 +1,6 @@
 import { Elysia } from 'elysia'
 import { telefunc } from 'telefunc'
-import vike, { RuntimeAdapter } from 'vike-node/elysia'
+import vike, { type RuntimeAdapter } from 'vike-node/elysia'
 import { init } from '../database/todoItems'
 
 startServer()
