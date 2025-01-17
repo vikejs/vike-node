@@ -1,7 +1,7 @@
 export { flattenHeaders, parseHeaders }
 
 import type { OutgoingHttpHeaders } from 'node:http'
-import { HeadersProvided } from '../types.js'
+import type { HeadersProvided } from '../types.js'
 
 function flattenHeaders(headers: OutgoingHttpHeaders): [string, string][] {
   const flatHeaders: [string, string][] = []
