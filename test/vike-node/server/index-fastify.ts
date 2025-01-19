@@ -1,6 +1,6 @@
 Error.stackTraceLimit = Number.POSITIVE_INFINITY
 import { Worker } from 'node:worker_threads'
-import fastify from 'fastify'
+import fastify, { type FastifyInstance } from 'fastify'
 import { telefunc } from 'telefunc'
 import vike, { type RuntimeAdapter } from 'vike-node/fastify'
 import { init } from '../database/todoItems.js'
@@ -42,7 +42,7 @@ async function startServer() {
           xRuntime: (runtime.fastify.request.routeOptions.config as any).xRuntime
         }
       }
-    })
+    }) as unknown as Parameters<FastifyInstance['all']>[1]
   )
   const port = process.env.PORT || 3000
   app.listen({ port: +port })
