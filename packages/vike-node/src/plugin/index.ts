@@ -9,6 +9,7 @@ import { devServerPlugin } from './plugins/devServerPlugin.js'
 import { edgePlugin } from './plugins/edgePlugin.js'
 import { serverEntryPlugin } from './plugins/serverEntryPlugin.js'
 import { standalonePlugin } from './plugins/standalonePlugin.js'
+import { vikeHandlerPlugin } from './plugins/vikeHandlerPlugin.js'
 
 globalStore.isDev = true
 
@@ -19,6 +20,7 @@ function vikeNode(config: ConfigVikeNodePlugin) {
     devServerPlugin(),
     standalonePlugin(),
     edgePlugin(),
+    vikeHandlerPlugin(),
     {
       name: 'vike-node:forbid-vite-preview-command',
       configurePreviewServer() {
