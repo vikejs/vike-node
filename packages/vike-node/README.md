@@ -37,7 +37,12 @@ Example of adding `vike-node` and Express.js to a Vike app that doesn't use a se
 > - See [Add to existing server](#add-to-existing-server) if you already have a server.
 > - See [Supported servers](#supported-servers) for installing `vike-node` with a server other than Express.js.
 
-1. `npm install vike-node express`
+1. Install dependencies:
+   ```sh
+   npm install @universal-middleware/compress @universal-middleware/core sirv@2 express
+
+   npm install vike-node -D
+   ```
 1. Extend `vite.config.js`:
    ```js
    // vite.config.js
