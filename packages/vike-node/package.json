@@ -79,8 +79,6 @@
   "dependencies": {
     "@brillout/picocolors": "^1.0.14",
     "@nitedani/shrink-ray-current": "^4.3.0",
-    "@universal-middleware/core": "^0.3.3",
-    "@universal-middleware/compress": "^0.2.8",
     "@vercel/nft": "^0.26.5",
     "esbuild": "^0.19.0 || ^0.20.0 || ^0.21.0 || ^0.22.0 || ^0.23.0 || ^0.24.0",
     "resolve-from": "^5.0.0",
@@ -88,12 +86,16 @@
     "unenv-nightly": "2.0.0-20241015-162228-03257ee"
   },
   "peerDependencies": {
+    "@universal-middleware/compress": "^0.2.8",
+    "@universal-middleware/core": "^0.3.3",
     "vike": "^0.4.213",
     "vite": ">=5.0.10"
   },
   "devDependencies": {
     "@brillout/release-me": "^0.4.0",
     "@types/node": "^20.14.15",
+    "@universal-middleware/compress": "^0.2.8",
+    "@universal-middleware/core": "^0.3.3",
     "elysia": "^1.1.6",
     "fastify": "^4.28.1",
     "h3": "^1.12.0",

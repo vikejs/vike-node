@@ -169,12 +169,6 @@ importers:
       '@nitedani/shrink-ray-current':
         specifier: ^4.3.0
         version: 4.3.0
-      '@universal-middleware/compress':
-        specifier: ^0.2.8
-        version: 0.2.8
-      '@universal-middleware/core':
-        specifier: ^0.3.3
-        version: 0.3.3(elysia@1.2.0(@sinclair/typebox@0.34.13)(typescript@5.7.2))(fastify@4.29.0)(h3@1.13.0)(hono@4.6.14)
       '@vercel/nft':
         specifier: ^0.26.5
         version: 0.26.5
@@ -197,6 +191,12 @@ importers:
       '@types/node':
         specifier: ^20.14.15
         version: 20.17.10
+      '@universal-middleware/compress':
+        specifier: ^0.2.8
+        version: 0.2.8
+      '@universal-middleware/core':
+        specifier: ^0.3.3
+        version: 0.3.3(elysia@1.2.0(@sinclair/typebox@0.34.13)(typescript@5.7.2))(fastify@4.29.0)(h3@1.13.0)(hono@4.6.14)
       elysia:
         specifier: ^1.1.6
         version: 1.2.0(@sinclair/typebox@0.34.13)(typescript@5.7.2)
