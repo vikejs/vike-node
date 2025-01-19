@@ -82,12 +82,12 @@
     "@vercel/nft": "^0.26.5",
     "esbuild": "^0.19.0 || ^0.20.0 || ^0.21.0 || ^0.22.0 || ^0.23.0 || ^0.24.0",
     "resolve-from": "^5.0.0",
-    "sirv": "^2.0.4",
     "unenv-nightly": "2.0.0-20241015-162228-03257ee"
   },
   "peerDependencies": {
     "@universal-middleware/compress": "^0.2.8",
     "@universal-middleware/core": "^0.3.3",
+    "sirv": "^2",
     "vike": "^0.4.213",
     "vite": ">=5.0.10"
   },
@@ -100,6 +100,7 @@
     "fastify": "^4.28.1",
     "h3": "^1.12.0",
     "hono": "^4.6.3",
+    "sirv": "^2.0.4",
     "tsup": "^8.3.0",
     "typescript": "^5.5.4",
     "universal-middleware": "^0.5.5",

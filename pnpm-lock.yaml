@@ -178,9 +178,6 @@ importers:
       resolve-from:
         specifier: ^5.0.0
         version: 5.0.0
-      sirv:
-        specifier: ^2.0.4
-        version: 2.0.4
       unenv-nightly:
         specifier: 2.0.0-20241015-162228-03257ee
         version: 2.0.0-20241015-162228-03257ee
@@ -209,6 +206,9 @@ importers:
       hono:
         specifier: ^4.6.3
         version: 4.6.14
+      sirv:
+        specifier: ^2.0.4
+        version: 2.0.4
       tsup:
         specifier: ^8.3.0
         version: 8.3.5(postcss@8.4.49)(typescript@5.7.2)
