@@ -28,7 +28,7 @@
   },
   "pnpm": {
     "overrides": {
-      "vike": "0.4.218-commit-0a599fa",
+      "vike": "0.4.218-commit-da1f60b",
       "vike-node": "link:./packages/vike-node/",
       "esbuild": "^0.24.0"
     }
