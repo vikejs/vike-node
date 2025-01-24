@@ -117,12 +117,14 @@ export function edgePlugin(): Plugin[] {
       config() {
         if (!entries.length || entries.some((e) => !e.scaffold)) return
         return {
+          // TODO/next-major-release: remove this and require >=vike@0.4.219
           vitePluginSsr: {
             prerender: { disableAutoRun: true }
           }
         }
       },
       async configResolved(config) {
+        // TODO/next-major-release: remove this and require >=vike@0.4.219
         // @ts-ignore
         configResolvedVike = await config.configVikePromise
       },

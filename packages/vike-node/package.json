@@ -101,7 +101,7 @@
     "tsup": "^8.3.0",
     "typescript": "^5.5.4",
     "universal-middleware": "^0.5.5",
-    "vike": "^0.4.213",
+    "vike": "^0.4.219",
     "vite": "^6.0.2"
   },
   "files": [
