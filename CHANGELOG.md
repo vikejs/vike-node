@@ -1,3 +1,12 @@
+## [0.3.1](https://github.com/vikejs/vike-node/compare/v0.3.0...v0.3.1) (2025-01-24)
+
+
+### Bug Fixes
+
+* update sirv dependency ([1c877c9](https://github.com/vikejs/vike-node/commit/1c877c9e5d3a77018f6c2080d5bd9a73bd60c129))
+
+
+
 # [0.3.0](https://github.com/vikejs/vike-node/compare/v0.2.10...v0.3.0) (2025-01-12)
 
 
