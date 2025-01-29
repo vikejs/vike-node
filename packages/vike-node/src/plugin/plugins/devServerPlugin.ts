@@ -114,13 +114,18 @@ export function devServerPlugin(): Plugin {
     // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     const server = (req.socket as any).server as Server
     server.on('upgrade', (clientReq, clientSocket, wsHead) => {
-      if (clientReq.url === VITE_HMR_PATH) {
+      if (isHMRProxyRequest(clientReq)) {
         assert(HMRServer)
         HMRServer.emit('upgrade', clientReq, clientSocket, wsHead)
       }
     })
     // true if we need to send an empty Response waiting for the upgrade
-    return req.url === VITE_HMR_PATH
+    return isHMRProxyRequest(req)
+  }
+
+  function isHMRProxyRequest(req: IncomingMessage) {
+    const url = new URL(`http://example.com${req.url}`)
+    return url.pathname === VITE_HMR_PATH
   }
 }
 
