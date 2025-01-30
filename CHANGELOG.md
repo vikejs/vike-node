@@ -1,3 +1,12 @@
+## [0.3.2](https://github.com/vikejs/vike-node/compare/v0.3.1...v0.3.2) (2025-01-30)
+
+
+### Bug Fixes
+
+* Compare only the URL path component to expected value when proxying HMR websocket (fix [#53](https://github.com/vikejs/vike-node/issues/53)) ([#52](https://github.com/vikejs/vike-node/issues/52)) ([5ef5ee6](https://github.com/vikejs/vike-node/commit/5ef5ee66e50ee8bc581f7b752351f9a2ffe2931d))
+
+
+
 ## [0.3.1](https://github.com/vikejs/vike-node/compare/v0.3.0...v0.3.1) (2025-01-24)
 
 
