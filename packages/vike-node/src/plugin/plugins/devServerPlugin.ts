@@ -124,7 +124,10 @@ export function devServerPlugin(): Plugin {
   }
 
   function isHMRProxyRequest(req: IncomingMessage) {
-    const url = new URL(`http://example.com${req.url}`)
+    if (req.url === undefined) {
+      return false
+    }
+    const url = new URL(req.url, 'http://example.com')
     return url.pathname === VITE_HMR_PATH
   }
 }
