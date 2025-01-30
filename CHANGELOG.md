@@ -1,3 +1,13 @@
+## [0.3.3](https://github.com/vikejs/vike-node/compare/v0.3.2...v0.3.3) (2025-01-30)
+
+
+### Bug Fixes
+
+* make vite peer dependency optional ([4ab3b87](https://github.com/vikejs/vike-node/commit/4ab3b8720f9e25d6755c54f9f1bf94cffc8b63f9))
+* revert vite peerDependency version change ([#52](https://github.com/vikejs/vike-node/issues/52)) ([a0a2b38](https://github.com/vikejs/vike-node/commit/a0a2b38be6c52ea1349bbd57804a7706ce5676d0))
+
+
+
 ## [0.3.2](https://github.com/vikejs/vike-node/compare/v0.3.1...v0.3.2) (2025-01-30)
 
 
