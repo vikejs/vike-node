@@ -1,3 +1,12 @@
+## [0.3.4](https://github.com/vikejs/vike-node/compare/v0.3.3...v0.3.4) (2025-01-31)
+
+
+### Features
+
+* allow passing extra esbuild options for standalone target ([#54](https://github.com/vikejs/vike-node/issues/54)) ([e2eabc2](https://github.com/vikejs/vike-node/commit/e2eabc2294a78c6770f1150a259ac0bbf1c77276))
+
+
+
 ## [0.3.3](https://github.com/vikejs/vike-node/compare/v0.3.2...v0.3.3) (2025-01-30)
 
 
