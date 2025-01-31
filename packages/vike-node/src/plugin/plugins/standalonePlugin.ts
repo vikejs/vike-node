@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import esbuild from 'esbuild'
+import esbuild, { type BuildOptions } from 'esbuild'
 import { type Plugin, type ResolvedConfig, searchForWorkspaceRoot } from 'vite'
 import type { ConfigVikeNodeResolved } from '../../types.js'
 import { assert, assertUsage } from '../../utils/assert.js'
@@ -52,17 +52,22 @@ export function standalonePlugin(): Plugin {
     enforce: 'post',
     closeBundle: async () => {
       if (!enabled) return
+
       const base = toPosixPath(searchForWorkspaceRoot(root))
       const relativeRoot = path.posix.relative(base, root)
       const relativeOutDir = path.posix.join(relativeRoot, outDir)
+      const userEsbuildOptions =
+        typeof configResolvedVike.server.standalone === 'object' && configResolvedVike.server.standalone !== null
+          ? configResolvedVike.server.standalone.esbuild
+          : {}
 
-      const esbuildResult = await buildWithEsbuild()
+      const esbuildResult = await buildWithEsbuild(userEsbuildOptions)
       await removeLeftoverFiles(esbuildResult)
       await traceAndCopyDependencies(base, relativeRoot, relativeOutDir)
     }
   }
 
-  async function buildWithEsbuild() {
+  async function buildWithEsbuild(userEsbuildOptions: BuildOptions | undefined) {
     const res = await esbuild.build({
       platform: 'node',
       format: 'esm',
@@ -77,7 +82,8 @@ export function standalonePlugin(): Plugin {
       metafile: true,
       logOverride: { 'ignored-bare-import': 'silent' },
       banner: { js: generateBanner() },
-      plugins: [createStandaloneIgnorePlugin(rollupResolve)]
+      plugins: [createStandaloneIgnorePlugin(rollupResolve), ...(userEsbuildOptions?.plugins ?? [])],
+      ...userEsbuildOptions
     })
 
     return res
@@ -85,7 +91,8 @@ export function standalonePlugin(): Plugin {
 
   async function removeLeftoverFiles(res: Awaited<ReturnType<typeof buildWithEsbuild>>) {
     // Remove bundled files from outDir
-    const bundledFilesFromOutDir = Object.keys(res.metafile.inputs).filter(
+    // biome-ignore lint/style/noNonNullAssertion: <explanation>
+    const bundledFilesFromOutDir = Object.keys(res.metafile!.inputs).filter(
       (relativeFile) =>
         !rollupEntryFilePaths.some((entryFilePath) => entryFilePath.endsWith(relativeFile)) &&
         relativeFile.startsWith(outDir)

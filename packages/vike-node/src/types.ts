@@ -1,5 +1,7 @@
 export type { ConfigVikeNode, ConfigVikeNodeResolved, ConfigVikeNodePlugin, Runtime, EntryResolved }
 
+import type { BuildOptions } from 'esbuild'
+
 type Runtime = 'node' | 'nodeless' | 'deno' | 'cloudflare' | 'cloudflare-nodejs-compat' | 'vercel'
 type ConfigVikeNode = {
   /** Server entry path.
@@ -15,7 +17,7 @@ type ConfigVikeNode = {
          *
          * @default false
          */
-        standalone?: boolean
+        standalone?: boolean | { esbuild: BuildOptions }
 
         /** List of external/native dependencies.
          *
@@ -32,7 +34,7 @@ type ConfigVikeNodeResolved = {
   server: {
     entry: EntryResolved
     external: string[]
-    standalone: boolean
+    standalone: boolean | { esbuild: BuildOptions }
   }
 }
 
