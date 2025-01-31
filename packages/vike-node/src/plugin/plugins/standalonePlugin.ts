@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import esbuild, { BuildOptions } from 'esbuild'
+import esbuild, { type BuildOptions } from 'esbuild'
 import { type Plugin, type ResolvedConfig, searchForWorkspaceRoot } from 'vite'
 import type { ConfigVikeNodeResolved } from '../../types.js'
 import { assert, assertUsage } from '../../utils/assert.js'
@@ -78,7 +78,7 @@ export function standalonePlugin(): Plugin {
       metafile: true,
       logOverride: { 'ignored-bare-import': 'silent' },
       banner: { js: generateBanner() },
-      plugins: [createStandaloneIgnorePlugin(rollupResolve)],
+      plugins: [createStandaloneIgnorePlugin(rollupResolve), ...(extraEsbuildOptions?.plugins ?? [])],
       ...extraEsbuildOptions
     })
 
