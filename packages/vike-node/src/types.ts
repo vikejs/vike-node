@@ -1,6 +1,6 @@
 export type { ConfigVikeNode, ConfigVikeNodeResolved, ConfigVikeNodePlugin, Runtime, EntryResolved }
 
-import type { BuildOptions } from "esbuild";
+import type { BuildOptions } from 'esbuild'
 
 type Runtime = 'node' | 'nodeless' | 'deno' | 'cloudflare' | 'cloudflare-nodejs-compat' | 'vercel'
 type ConfigVikeNode = {

@@ -88,7 +88,7 @@ export function standalonePlugin(): Plugin {
   async function removeLeftoverFiles(res: Awaited<ReturnType<typeof buildWithEsbuild>>) {
     // Remove bundled files from outDir
     // biome-ignore lint/style/noNonNullAssertion: <explanation>
-        const bundledFilesFromOutDir = Object.keys(res.metafile!.inputs).filter(
+    const bundledFilesFromOutDir = Object.keys(res.metafile!.inputs).filter(
       (relativeFile) =>
         !rollupEntryFilePaths.some((entryFilePath) => entryFilePath.endsWith(relativeFile)) &&
         relativeFile.startsWith(outDir)
