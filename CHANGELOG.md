@@ -1,3 +1,12 @@
+## [0.3.5](https://github.com/vikejs/vike-node/compare/v0.3.4...v0.3.5) (2025-01-31)
+
+
+### Bug Fixes
+
+* unable to pass esbuild config to standalone ([05ce19a](https://github.com/vikejs/vike-node/commit/05ce19ac43d7cc643221446270d609731767f378))
+
+
+
 ## [0.3.4](https://github.com/vikejs/vike-node/compare/v0.3.3...v0.3.4) (2025-01-31)
 
 
