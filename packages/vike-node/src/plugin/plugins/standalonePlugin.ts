@@ -33,8 +33,7 @@ export function standalonePlugin(): Plugin {
     configResolved: async (config) => {
       configResolved = config
       configResolvedVike = getConfigVikeNode(config)
-      assert(typeof configResolvedVike.server.standalone === 'boolean')
-      enabled = configResolvedVike.server.standalone
+      enabled = Boolean(configResolvedVike.server.standalone)
       if (!enabled) return
       root = toPosixPath(config.root)
       outDir = toPosixPath(config.build.outDir)
