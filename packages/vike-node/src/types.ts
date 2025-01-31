@@ -17,13 +17,7 @@ type ConfigVikeNode = {
          *
          * @default false
          */
-        standalone?: boolean
-
-        /** Options to pass to esbuild in standalone mode.
-         *
-         * @default {}
-         */
-        standaloneEsbuildOptions?: BuildOptions
+        standalone?: boolean | { esbuild: BuildOptions }
 
         /** List of external/native dependencies.
          *
@@ -40,8 +34,7 @@ type ConfigVikeNodeResolved = {
   server: {
     entry: EntryResolved
     external: string[]
-    standalone: boolean
-    standaloneEsbuildOptions: BuildOptions
+    standalone: boolean | { esbuild: BuildOptions }
   }
 }
 

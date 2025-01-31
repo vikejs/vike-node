@@ -45,7 +45,6 @@ function resolveConfig(configVike: ConfigVikeNode): ConfigVikeNodeResolved {
       server: {
         entry: entriesProvided,
         standalone: configVike.server.standalone ?? false,
-        standaloneEsbuildOptions: configVike.server.standaloneEsbuildOptions ?? {},
         external: unique([...nativeDependecies, ...(configVike.server.external ?? [])])
       }
     }
@@ -56,7 +55,6 @@ function resolveConfig(configVike: ConfigVikeNode): ConfigVikeNodeResolved {
     server: {
       entry: { index: { entry: configVike.server, runtime: 'node' } },
       standalone: false,
-      standaloneEsbuildOptions: {},
       external: nativeDependecies
     }
   }

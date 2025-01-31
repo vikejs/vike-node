@@ -56,14 +56,18 @@ export function standalonePlugin(): Plugin {
       const base = toPosixPath(searchForWorkspaceRoot(root))
       const relativeRoot = path.posix.relative(base, root)
       const relativeOutDir = path.posix.join(relativeRoot, outDir)
+      const userEsbuildOptions =
+        typeof configResolvedVike.server.standalone === 'object' && configResolvedVike.server.standalone !== null
+          ? configResolvedVike.server.standalone.esbuild
+          : {}
 
-      const esbuildResult = await buildWithEsbuild(configResolvedVike.server.standaloneEsbuildOptions)
+      const esbuildResult = await buildWithEsbuild(userEsbuildOptions)
       await removeLeftoverFiles(esbuildResult)
       await traceAndCopyDependencies(base, relativeRoot, relativeOutDir)
     }
   }
 
-  async function buildWithEsbuild(extraEsbuildOptions: BuildOptions) {
+  async function buildWithEsbuild(userEsbuildOptions: BuildOptions | undefined) {
     const res = await esbuild.build({
       platform: 'node',
       format: 'esm',
@@ -78,8 +82,8 @@ export function standalonePlugin(): Plugin {
       metafile: true,
       logOverride: { 'ignored-bare-import': 'silent' },
       banner: { js: generateBanner() },
-      plugins: [createStandaloneIgnorePlugin(rollupResolve), ...(extraEsbuildOptions?.plugins ?? [])],
-      ...extraEsbuildOptions
+      plugins: [createStandaloneIgnorePlugin(rollupResolve), ...(userEsbuildOptions?.plugins ?? [])],
+      ...userEsbuildOptions
     })
 
     return res
