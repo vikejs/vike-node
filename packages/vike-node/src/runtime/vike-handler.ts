@@ -2,7 +2,6 @@ import type { IncomingMessage, ServerResponse } from 'node:http'
 import compressMiddlewareFactory from '@universal-middleware/compress'
 import type { Get, RuntimeAdapter, UniversalHandler, UniversalMiddleware } from '@universal-middleware/core'
 import { renderPage as _renderPage } from 'vike/server'
-import { assert } from '../utils/assert.js'
 import { isVercel } from '../utils/isVercel.js'
 import { connectToWeb } from './adapters/connectToWeb.js'
 import { globalStore } from './globalStore.js'
@@ -76,8 +75,8 @@ export const renderPageHandler = ((options?) => async (request, context, runtime
   }
 
   if (globalStore.isDev) {
-    const handled = await web(request)
-
+    const { handleViteDevServer } = await import('./adapters/handleViteDevServer.js')
+    const handled = await connectToWeb(handleViteDevServer)(request)
     if (handled) return handled
   } else if (nodeReq) {
     if (staticConfig) {
@@ -116,17 +115,3 @@ export const renderPageHandler = ((options?) => async (request, context, runtime
     headers: response.headers
   })
 }) satisfies Get<[options: VikeOptions], UniversalHandler>
-
-const web = connectToWeb(handleViteDevServer)
-
-function handleViteDevServer(req: IncomingMessage, res: ServerResponse): Promise<boolean> {
-  return new Promise<boolean>((resolve) => {
-    res.once('close', () => {
-      resolve(true)
-    })
-    assert(globalStore.viteDevServer)
-    globalStore.viteDevServer.middlewares(req, res, () => {
-      resolve(false)
-    })
-  })
-}
