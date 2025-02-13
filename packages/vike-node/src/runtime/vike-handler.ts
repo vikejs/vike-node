@@ -7,6 +7,7 @@ import { connectToWeb } from './adapters/connectToWeb.js'
 import { globalStore } from './globalStore.js'
 import type { ConnectMiddleware, VikeHttpResponse, VikeOptions } from './types.js'
 import { parseHeaders } from './utils/header-utils.js'
+import { assert } from '../utils/assert.js'
 
 async function renderPage<T extends RuntimeAdapter>({
   url,
