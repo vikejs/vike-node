@@ -16,7 +16,6 @@ In development, the server process is restarted when a change is detected.
 [Installation](#installation)  
 [Custom `pageContext`](#custom-pagecontext)  
 [Standalone build](#standalone-build)  
-[External packages](#external-packages)  
 [Compression](#compression)  
 [Version history](https://github.com/vikejs/vike-node/blob/main/CHANGELOG.md)  
 
@@ -274,13 +273,7 @@ app.use(
 
 ## Standalone build
 
-You can enable standalone builds by setting `standalone` to `true`.
-<br>
-After build, the output `dist` folder will contain everything for a deployment.
-<br>
-With standalone mode, the production environment only needs the `dist` folder to be present.
-<br>
-Example start script: `NODE_ENV=production node dist/server/index.mjs`
+With `standalone: true`, the build output directory ([`dist/`](https://vite.dev/config/build-options.html#build-outdir)) contains everything needed for deployment. This means that, in production, only `dist/` is required (i.e. you can remove `node_modules/` and skip `npm install`).
 
 ```js
 // vite.config.js
@@ -288,7 +281,6 @@ Example start script: `NODE_ENV=production node dist/server/index.mjs`
 import vikeNode from 'vike-node/plugin'
 
 export default {
-  // ...
   plugins: [
     vikeNode({
       entry: 'server/index.js',
@@ -298,35 +290,26 @@ export default {
 }
 ```
 
-<br/>
-
-
-## External packages
-
-Packages that import native binaries/custom assets need to be added to `external`.<br>
-When building with `standalone` enabled, `external` packages and their assets are copied to the output `dist` directory.<br>
-By default, the `external` setting includes:
-
-- `sharp`
-- `@prisma/client`
-- `@node-rs/*`
+Options:
 
 ```js
-// vite.config.js
-
-import vikeNode from 'vike-node/plugin'
-
-export default {
-  // ...
-  plugins: [
-    vikeNode({
-      entry: 'server/index.js',
-      standalone: true,
-      external: ['my-rust-package']
-    })
-  ]
-}
+vikeNode({
+  standalone: true,
+  external: ['my-rust-package']
+})
 ```
+
+### `external`
+
+If an npm package uses native binaries / custom assets then it needs to be added to `external`. (Its assets will then be copied to `dist/`.)
+
+> [!NOTE]
+> The following are `external` by default:
+> - `sharp`
+> - `@prisma/client`
+> - `@node-rs/*`
+>
+> PR welcome to add other packages known to have a native dependency.
 
 <br/>
 
