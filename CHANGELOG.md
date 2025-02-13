@@ -1,3 +1,13 @@
+## [0.3.6](https://github.com/vikejs/vike-node/compare/v0.3.5...v0.3.6) (2025-02-13)
+
+
+### Bug Fixes
+
+* apply Base URL to static assets (fix [#60](https://github.com/vikejs/vike-node/issues/60)) ([76646c1](https://github.com/vikejs/vike-node/commit/76646c12934148357fbf375c17f4dd268d3a2d2d))
+* load handleViteDevServer adapter only in dev ([#55](https://github.com/vikejs/vike-node/issues/55)) ([64a0757](https://github.com/vikejs/vike-node/commit/64a075790a0689bcd8f0cb1e3dc2be951999a264))
+
+
+
 ## [0.3.5](https://github.com/vikejs/vike-node/compare/v0.3.4...v0.3.5) (2025-01-31)
 
 
