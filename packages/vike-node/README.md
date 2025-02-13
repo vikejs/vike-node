@@ -294,8 +294,13 @@ Options:
 
 ```js
 vikeNode({
-  standalone: true,
-  external: ['my-rust-package']
+  external: ['my-rust-package'],
+  standalone: {
+    esbuild: {
+      minify: true,
+      // ... or any other esbuild option
+    }
+  }
 })
 ```
 
@@ -310,6 +315,10 @@ If an npm package uses native binaries / custom assets then it needs to be added
 > - `@node-rs/*`
 >
 > PR welcome to add other packages known to have a native dependency.
+
+### `esbuild`
+
+`vike-node` uses [esbuild](https://esbuild.github.io) for bundling server code; you can use `standalone.esbuild` to set esbuild options.
 
 <br/>
 
