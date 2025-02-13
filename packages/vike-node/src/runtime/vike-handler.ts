@@ -1,7 +1,7 @@
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import compressMiddlewareFactory from '@universal-middleware/compress'
 import type { Get, RuntimeAdapter, UniversalHandler, UniversalMiddleware } from '@universal-middleware/core'
-import { renderPage as _renderPage } from 'vike/server'
+import { renderPage as _renderPage, getGlobalContextAsync } from 'vike/server'
 import { isVercel } from '../utils/isVercel.js'
 import { connectToWeb } from './adapters/connectToWeb.js'
 import { globalStore } from './globalStore.js'
@@ -86,6 +86,8 @@ export const renderPageHandler = ((options?) => async (request, context, runtime
   }
 
   async function serveStaticFiles(req: IncomingMessage, res: ServerResponse): Promise<boolean> {
+    await removeBaseUrl(req)
+
     if (!staticMiddleware) {
       const { default: sirv } = await import('sirv')
       staticMiddleware = sirv((staticConfig as { root: string; cache: boolean }).root, { etag: true })
@@ -115,3 +117,17 @@ export const renderPageHandler = ((options?) => async (request, context, runtime
     headers: response.headers
   })
 }) satisfies Get<[options: VikeOptions], UniversalHandler>
+
+async function removeBaseUrl(req: IncomingMessage) {
+  if (!req.url) return
+  const globalContext = await getGlobalContextAsync(!globalStore.isDev)
+  // @ts-expect-error not released yet
+  const baseAssets = globalContext.baseAssets as string
+  // Don't choke on older Vike versions
+  if (baseAssets === undefined) return
+  const { url } = req
+  assert(url.startsWith('/'))
+  let urlWithoutBase = url.slice(baseAssets.length)
+  if (!urlWithoutBase.startsWith('/')) urlWithoutBase = '/'
+  req.url = urlWithoutBase
+}
