@@ -1,3 +1,12 @@
+## [0.3.7](https://github.com/vikejs/vike-node/compare/v0.3.6...v0.3.7) (2025-02-25)
+
+
+### Bug Fixes
+
+* fix static asset serving upon `baseAssets===/` ([#61](https://github.com/vikejs/vike-node/issues/61)) ([f4da489](https://github.com/vikejs/vike-node/commit/f4da489161c27bc19572480e1ea13947dbf8b2b6))
+
+
+
 ## [0.3.6](https://github.com/vikejs/vike-node/compare/v0.3.5...v0.3.6) (2025-02-13)
 
 
