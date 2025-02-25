@@ -129,6 +129,6 @@ async function removeBaseUrl(req: IncomingMessage) {
   const { url } = req
   assert(url.startsWith('/'))
   let urlWithoutBase = url.slice(baseAssets.length)
-  if (!urlWithoutBase.startsWith('/')) urlWithoutBase = '/'
+  if (!urlWithoutBase.startsWith('/')) urlWithoutBase = `/${urlWithoutBase}`
   req.url = urlWithoutBase
 }
