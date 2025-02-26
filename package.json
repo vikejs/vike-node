@@ -26,10 +26,5 @@
     "@brillout/test-types": "^0.1.15",
     "playwright": "^1.46.0"
   },
-  "pnpm": {
-    "overrides": {
-      "esbuild": "^0.24.0"
-    }
-  },
-  "packageManager": "pnpm@9.2.0"
+  "packageManager": "pnpm@9.15.5"
 }
