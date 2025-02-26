@@ -13,7 +13,7 @@ const require_ = createRequire(import.meta.url)
 
 export function serverEntryPlugin(): Plugin {
   return {
-    name: 'vike-node:serverEntry',
+    name: 'vike-server:serverEntry',
     async configResolved(config: ResolvedConfig & ConfigVitePluginServerEntry) {
       const resolvedConfig = getConfigVikeNode(config)
       const { entry } = resolvedConfig.server

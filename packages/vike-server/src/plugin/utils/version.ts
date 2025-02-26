@@ -7,7 +7,7 @@ let packagePath = ''
 
 try {
   const require_ = createRequire(import.meta.url)
-  const resolved = require_.resolve('vike-node')
+  const resolved = require_.resolve('vike-server')
   packagePath = path.resolve(resolved, '..', '..')
   const packageJsonPath = path.join(packagePath, 'package.json')
   const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf-8'))

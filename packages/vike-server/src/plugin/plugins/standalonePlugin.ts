@@ -28,7 +28,7 @@ export function standalonePlugin(): Plugin {
   let rollupResolve: (...args: any[]) => Promise<any>
 
   return {
-    name: 'vike-node:standalone',
+    name: 'vike-server:standalone',
     apply: (_, env) => !!env.isSsrBuild,
     configResolved: async (config) => {
       configResolved = config

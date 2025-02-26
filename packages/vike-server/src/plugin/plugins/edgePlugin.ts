@@ -62,7 +62,7 @@ export function edgePlugin(): Plugin[] {
 
   function createBuildPlugin(): Plugin {
     return {
-      name: 'vike-node:edge:build',
+      name: 'vike-server:edge:build',
       enforce: 'pre',
       apply(config) {
         return !!config.build?.ssr
@@ -108,7 +108,7 @@ export function edgePlugin(): Plugin[] {
 
   function createScaffoldPlugin(): Plugin {
     return {
-      name: 'vike-node:edge:scaffold',
+      name: 'vike-server:edge:scaffold',
       enforce: 'post',
       apply(config) {
         return !!config.build?.ssr

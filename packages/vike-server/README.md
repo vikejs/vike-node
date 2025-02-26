@@ -1,8 +1,8 @@
 <!-- WARNING: keep links absolute in this file so they work on NPM too -->
 
-[![npm version](https://img.shields.io/npm/v/vike-node)](https://www.npmjs.com/package/vike-node)
+[![npm version](https://img.shields.io/npm/v/vike-server)](https://www.npmjs.com/package/vike-server)
 
-# `vike-node`
+# `vike-server`
 
 > [!WARNING]
 > This package is in **beta** and will have relatively frequent breaking changes.
@@ -17,7 +17,7 @@ In development, the server process is restarted when a change is detected.
 [Custom `pageContext`](#custom-pagecontext)  
 [Standalone build](#standalone-build)  
 [Compression](#compression)  
-[Version history](https://github.com/vikejs/vike-node/blob/main/CHANGELOG.md)  
+[Version history](https://github.com/vikejs/vike-server/blob/main/CHANGELOG.md)  
 
 <br/>
 
@@ -30,18 +30,18 @@ In development, the server process is restarted when a change is detected.
 
 ### Overview
 
-Example of adding `vike-node` and Express.js to a Vike app that doesn't use a server yet.
+Example of adding `vike-server` and Express.js to a Vike app that doesn't use a server yet.
 
 > [!NOTE]
 > - See [Add to existing server](#add-to-existing-server) if you already have a server.
-> - See [Supported servers](#supported-servers) for installing `vike-node` with a server other than Express.js.
+> - See [Supported servers](#supported-servers) for installing `vike-server` with a server other than Express.js.
 
-1. `npm install vike-node express`
+1. `npm install vike-server express`
 1. Extend `vite.config.js`:
    ```js
    // vite.config.js
 
-   import vikeNode from 'vike-node/plugin'
+   import vikeNode from 'vike-server/plugin'
 
    export default {
      // ...
@@ -53,7 +53,7 @@ Example of adding `vike-node` and Express.js to a Vike app that doesn't use a se
    // server/index.js
 
    import express from 'express'
-   import vike from 'vike-node/express'
+   import vike from 'vike-server/express'
 
    startServer()
 
@@ -83,7 +83,7 @@ If you already have a server:
 // server/index.js
 
 - import { renderPage } from 'vike/server'
-+ import vike from 'vike-node/express'
++ import vike from 'vike-server/express'
 
 - if (isProduction) {
 -   app.use(express.static(`${root}/dist/client`))
@@ -131,7 +131,7 @@ If you already have a server:
 
 ### Supported servers
 
-`vike-node` includes middlewares for all commonly used server frameworks.
+`vike-server` includes middlewares for all commonly used server frameworks.
 
 - [Express](#express)
 - [Fastify](#fastify)
@@ -147,7 +147,7 @@ If you already have a server:
 // server/index.js
 
 import express from 'express'
-import vike from 'vike-node/express'
+import vike from 'vike-server/express'
 
 startServer()
 
@@ -165,7 +165,7 @@ function startServer() {
 // server/index.js
 
 import fastify from 'fastify'
-import vike from 'vike-node/fastify'
+import vike from 'vike-server/fastify'
 
 startServer()
 
@@ -184,7 +184,7 @@ function startServer() {
 
 import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
-import vike from 'vike-node/hono'
+import vike from 'vike-server/hono'
 
 startServer()
 
@@ -209,7 +209,7 @@ function startServer() {
 
 import { createApp, toNodeListener } from 'h3'
 import { createServer } from 'http'
-import vike from 'vike-node/h3'
+import vike from 'vike-server/h3'
 
 startServer()
 
@@ -230,7 +230,7 @@ async function startServer() {
 // server/index.js
 
 import { Elysia } from 'elysia'
-import vike from 'vike-node/elysia'
+import vike from 'vike-server/elysia'
 
 startServer()
 
@@ -249,7 +249,7 @@ function startServer() {
 You can define custom [pageContext](https://vike.dev/pageContext) properties:
 
 ```ts
-import { type RuntimeAdapter } from 'vike-node/express';
+import { type RuntimeAdapter } from 'vike-server/express';
 
 app.use(
   vike({
@@ -263,7 +263,7 @@ app.use(
 ```
 
 > [!NOTE]
-> See [`RuntimeAdapter`](https://universal-middleware.dev/reference/runtime-adapter) (`vike-node` uses [universal-middleware](https://universal-middleware.dev/) under the hood).
+> See [`RuntimeAdapter`](https://universal-middleware.dev/reference/runtime-adapter) (`vike-server` uses [universal-middleware](https://universal-middleware.dev/) under the hood).
 
 > [!NOTE]
 > The `runtime` object is also available at `pageContext.runtime` so that, even without the custom `pageContext` function above,
@@ -278,7 +278,7 @@ With `standalone: true`, the build output directory ([`dist/`](https://vite.dev/
 ```js
 // vite.config.js
 
-import vikeNode from 'vike-node/plugin'
+import vikeNode from 'vike-server/plugin'
 
 export default {
   plugins: [
@@ -318,14 +318,14 @@ If an npm package uses native binaries / custom assets then it needs to be added
 
 ### `esbuild`
 
-`vike-node` uses [esbuild](https://esbuild.github.io) for bundling server code; you can use `standalone.esbuild` to set esbuild options.
+`vike-server` uses [esbuild](https://esbuild.github.io) for bundling server code; you can use `standalone.esbuild` to set esbuild options.
 
 <br/>
 
 
 ## Compression
 
-In production, `vike-node` compresses all Vike responses.
+In production, `vike-server` compresses all Vike responses.
 
 You can disable it:
 
