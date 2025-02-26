@@ -20,7 +20,7 @@ function vikeNode(config: ConfigVikeNodePlugin) {
     standalonePlugin(),
     edgePlugin(),
     {
-      name: 'vike-node:forbid-vite-preview-command',
+      name: 'vike-server:forbid-vite-preview-command',
       configurePreviewServer() {
         assertUsage(
           false,

@@ -1,7 +1,7 @@
 import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
 import { telefunc } from 'telefunc'
-import vike, { type RuntimeAdapter } from 'vike-node/hono'
+import vike, { type RuntimeAdapter } from 'vike-server/hono'
 import { init } from '../database/todoItems'
 
 startServer()

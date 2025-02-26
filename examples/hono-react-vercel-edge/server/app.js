@@ -1,6 +1,7 @@
 import { Hono } from 'hono'
-import vike from 'vike-node/hono'
-import { telefunc, config } from 'telefunc'
+import vike from 'vike-server/hono'
+import { config, telefunc } from 'telefunc'
+
 config.disableNamingConvention = true
 
 const app = new Hono()

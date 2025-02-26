@@ -2,9 +2,10 @@ Error.stackTraceLimit = Number.POSITIVE_INFINITY
 import { Worker } from 'node:worker_threads'
 import fastify, { type FastifyInstance } from 'fastify'
 import { telefunc } from 'telefunc'
-import vike, { type RuntimeAdapter } from 'vike-node/fastify'
+import vike, { type RuntimeAdapter } from 'vike-server/fastify'
 import { init } from '../database/todoItems.js'
 import { two } from './shared-chunk.js'
+
 if (two() !== 2) {
   throw new Error()
 }

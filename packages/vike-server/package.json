@@ -1,5 +1,5 @@
 {
-  "name": "vike-node",
+  "name": "vike-server",
   "version": "0.3.7",
   "type": "module",
   "main": "./dist/index.js",
@@ -113,6 +113,6 @@
   "files": [
     "dist/"
   ],
-  "repository": "github:vikejs/vike-node",
+  "repository": "github:vikejs/vike-server",
   "license": "MIT"
 }

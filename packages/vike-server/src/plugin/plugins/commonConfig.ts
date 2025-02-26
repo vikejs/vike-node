@@ -9,7 +9,7 @@ function commonConfig(configVikeNodePlugin: ConfigVikeNodePlugin): Plugin[] {
   return [
     {
       enforce: 'pre',
-      name: 'vike-node:commonConfig',
+      name: 'vike-server:commonConfig',
       config(config) {
         ;(config as Record<string, unknown>).configVikeNode = resolvedConfig
         return {
