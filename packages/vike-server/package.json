@@ -78,8 +78,8 @@
   },
   "dependencies": {
     "@brillout/picocolors": "^1.0.26",
-    "@universal-middleware/compress": "^0.2.10",
-    "@universal-middleware/core": "^0.4.0",
+    "@universal-middleware/compress": "^0.2.11",
+    "@universal-middleware/core": "^0.4.1",
     "@vercel/nft": "^0.29.2",
     "esbuild": "^0.25.0",
     "resolve-from": "^5.0.0",

@@ -13,6 +13,9 @@ function commonConfig(configVikeNodePlugin: ConfigVikeNodePlugin): Plugin[] {
       config(config) {
         ;(config as Record<string, unknown>).configVikeNode = resolvedConfig
         return {
+          build: {
+            target: 'es2022'
+          },
           ssr: {
             external: resolvedConfig.server.external
           },
