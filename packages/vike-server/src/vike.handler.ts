@@ -1,7 +1,6 @@
 import { type Get, pipe, type RuntimeAdapter, type UniversalHandler } from '@universal-middleware/core'
 import type { VikeOptions } from './runtime/types.js'
 import { renderPageHandler } from './runtime/vike-handler.js'
-import { globalStore } from './runtime/globalStore.js'
 
 // https://vike.dev/pageContext#typescript
 declare global {
@@ -14,7 +13,7 @@ declare global {
 
 let renderPageUniversal: Get<[options: VikeOptions], UniversalHandler>
 
-if (globalStore.isDev) {
+if (__DEV__) {
   const { devServerMiddleware } = await import('./middlewares/devServer.js')
   renderPageUniversal = (options?) => pipe(devServerMiddleware(), renderPageHandler(options))
 } else {

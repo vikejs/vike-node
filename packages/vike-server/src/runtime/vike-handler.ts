@@ -1,7 +1,6 @@
 import { enhance, type Get, type RuntimeAdapter, type UniversalHandler } from '@universal-middleware/core'
 import { renderPage as _renderPage } from 'vike/server'
 import type { VikeHttpResponse, VikeOptions } from './types.js'
-import { parseHeaders } from './utils/header-utils.js'
 
 async function renderPage<T extends RuntimeAdapter>({
   url,
@@ -10,7 +9,7 @@ async function renderPage<T extends RuntimeAdapter>({
   options
 }: {
   url: string
-  headers: [string, string][]
+  headers: Headers
   runtimeRequest: T
   // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   options: VikeOptions & { pageContextUniversal?: Record<string, any> }
@@ -36,13 +35,14 @@ async function renderPage<T extends RuntimeAdapter>({
   return pageContext.httpResponse
 }
 
+// FIXME replace by vike/universal-middleware
 export const renderPageHandler = ((options?) =>
   enhance(
     async (request, context, runtime) => {
       const pageContextInit = { ...context, runtime, urlOriginal: request.url, headersOriginal: request.headers }
       const response = await renderPage({
         url: request.url,
-        headers: parseHeaders(request.headers),
+        headers: request.headers,
         runtimeRequest: runtime,
         options: {
           ...options,
@@ -57,6 +57,7 @@ export const renderPageHandler = ((options?) =>
       })
     },
     {
-      order: 0
+      order: 0,
+      immutable: false
     }
   )) satisfies Get<[options: VikeOptions], UniversalHandler>

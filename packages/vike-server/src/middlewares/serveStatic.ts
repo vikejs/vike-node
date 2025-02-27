@@ -2,7 +2,6 @@ import type { Get, UniversalMiddleware } from '@universal-middleware/core'
 import { connectToWeb } from '../runtime/adapters/connectToWeb.js'
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import { getGlobalContextAsync } from 'vike/server'
-import { globalStore } from '../runtime/globalStore.js'
 import { assert } from '../utils/assert.js'
 import type { ConnectMiddleware, VikeOptions } from '../runtime/types.js'
 import { isVercel } from '../utils/isVercel.js'
@@ -11,7 +10,7 @@ import { fileURLToPath } from 'node:url'
 
 async function removeBaseUrl(req: IncomingMessage) {
   if (!req.url) return
-  const globalContext = await getGlobalContextAsync(!globalStore.isDev)
+  const globalContext = await getGlobalContextAsync(!__DEV__)
   const baseAssets = globalContext.baseAssets as string
   // Don't choke on older Vike versions
   if (baseAssets === undefined) return
@@ -23,8 +22,8 @@ async function removeBaseUrl(req: IncomingMessage) {
 }
 
 function resolveStaticConfig(static_: VikeOptions['static']): false | { root: string; cache: boolean } {
-  // Disable static file serving for Vercel
-  // Vercel will serve static files on its own
+  // Disable static file serving for Vercel,
+  // as it will serve static files on its own
   // See vercel.json > outputDirectory
   if (isVercel()) return false
   if (static_ === false) return false

@@ -1,10 +1,9 @@
 export { connectToWeb }
 
-import type { IncomingMessage } from 'node:http'
+import type { IncomingMessage, OutgoingHttpHeaders } from 'node:http'
+import type { ConnectMiddleware, ConnectMiddlewareBoolean, WebHandler } from '../types.js'
 import { Readable } from 'node:stream'
 import { DUMMY_BASE_URL } from '../constants.js'
-import type { ConnectMiddleware, ConnectMiddlewareBoolean, WebHandler } from '../types.js'
-import { flattenHeaders } from '../utils/header-utils.js'
 import { createServerResponse } from './createServerResponse.js'
 
 const statusCodesWithoutBody = [
@@ -17,6 +16,7 @@ const statusCodesWithoutBody = [
   304 // Not Modified
 ]
 
+// TODO move to universal-middleware?
 /**
  * Converts a Connect-style middleware to a web-compatible request handler.
  *
@@ -81,4 +81,26 @@ function createIncomingMessage(request: Request): IncomingMessage {
     method: request.method,
     headers: Object.fromEntries(request.headers)
   }) as IncomingMessage
+}
+
+function flattenHeaders(headers: OutgoingHttpHeaders): [string, string][] {
+  const flatHeaders: [string, string][] = []
+
+  for (const [key, value] of Object.entries(headers)) {
+    if (value === undefined || value === null) {
+      continue
+    }
+
+    if (Array.isArray(value)) {
+      for (const v of value) {
+        if (v != null) {
+          flatHeaders.push([key, String(v)])
+        }
+      }
+    } else {
+      flatHeaders.push([key, String(value)])
+    }
+  }
+
+  return flatHeaders
 }

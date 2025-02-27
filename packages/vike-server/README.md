@@ -306,7 +306,7 @@ vikeNode({
 
 ### `external`
 
-If an npm package uses native binaries / custom assets then it needs to be added to `external`. (Its assets will then be copied to `dist/`.)
+If a npm package uses native binaries / custom assets then it needs to be added to `external`. (Its assets will then be copied to `dist/`.)
 
 > [!NOTE]
 > The following are `external` by default:

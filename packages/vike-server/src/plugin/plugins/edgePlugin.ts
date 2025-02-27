@@ -12,7 +12,6 @@ import { copyFileOrFolder } from '../utils/copyFileOrFolder.js'
 import { toPosixPath } from '../utils/filesystemPathHandling.js'
 import { getConfigVikeNode } from '../utils/getConfigVikeNode.js'
 import { logVikeNode } from '../utils/logVikeNode.js'
-import { unenvPlugin } from './esbuild/unenvPlugin.js'
 
 const compress = promisify(gzip)
 
@@ -171,8 +170,9 @@ export function edgePlugin(): Plugin[] {
         logOverride: {
           'ignored-bare-import': 'verbose',
           'require-resolve-not-external': 'verbose'
-        },
-        plugins: [unenvPlugin(entry.runtime)]
+        }
+        // TODO see if we can just not use it, otherwise, document why we need it
+        // plugins: [unenvPlugin(entry.runtime)]
       })
 
       if (result.errors && result.errors.length > 0) {

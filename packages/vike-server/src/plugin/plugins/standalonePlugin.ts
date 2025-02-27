@@ -63,7 +63,8 @@ export function standalonePlugin(): Plugin {
       const esbuildResult = await buildWithEsbuild(userEsbuildOptions)
       await removeLeftoverFiles(esbuildResult)
       await traceAndCopyDependencies(base, relativeRoot, relativeOutDir)
-    }
+    },
+    sharedDuringBuild: true
   }
 
   async function buildWithEsbuild(userEsbuildOptions: BuildOptions | undefined) {
@@ -75,14 +76,14 @@ export function standalonePlugin(): Plugin {
       entryPoints: rollupEntryFilePaths,
       sourcemap: configResolved.build.sourcemap === 'hidden' ? true : configResolved.build.sourcemap,
       outExtension: { '.js': '.mjs' },
-      splitting: rollupEntryFilePaths.length > 1,
+      splitting: false,
       outdir: outDirAbs,
       allowOverwrite: true,
-      metafile: true,
       logOverride: { 'ignored-bare-import': 'silent' },
       banner: { js: generateBanner() },
       plugins: [createStandaloneIgnorePlugin(rollupResolve), ...(userEsbuildOptions?.plugins ?? [])],
-      ...userEsbuildOptions
+      ...userEsbuildOptions,
+      metafile: true
     })
 
     return res
