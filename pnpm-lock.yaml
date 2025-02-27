@@ -168,6 +168,9 @@ importers:
       '@universal-middleware/core':
         specifier: ^0.4.1
         version: 0.4.1(elysia@1.2.22(@sinclair/typebox@0.34.28)(typescript@5.7.3))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)
+      '@universal-middleware/sirv':
+        specifier: ^0.1.2
+        version: 0.1.2
       '@vercel/nft':
         specifier: ^0.29.2
         version: 0.29.2(rollup@4.34.8)
@@ -177,9 +180,6 @@ importers:
       resolve-from:
         specifier: ^5.0.0
         version: 5.0.0
-      sirv:
-        specifier: ^3.0.1
-        version: 3.0.1
       unenv-nightly:
         specifier: 2.0.0-20241015-162228-03257ee
         version: 2.0.0-20241015-162228-03257ee
@@ -1413,9 +1413,6 @@ packages:
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
     engines: {node: '>=14'}
 
-  '@polka/url@1.0.0-next.28':
-    resolution: {integrity: sha512-8LduaNlMZGwdZ6qWrKlfa+2M4gahzFkprZiAt2TF8uS0qQgBizKXpXURqvTJ4WtmupWxaLqjRb2UCTe72mu+Aw==}
-
   '@prisma/client@6.4.1':
     resolution: {integrity: sha512-A7Mwx44+GVZVexT5e2GF/WcKkEkNNKbgr059xpr5mn+oUm2ZW1svhe+0TRNBwCdzhfIZ+q23jEgsNPvKD9u+6g==}
     engines: {node: '>=18.18'}
@@ -1667,6 +1664,9 @@ packages:
 
   '@universal-middleware/hono@0.4.0':
     resolution: {integrity: sha512-nBIJr7NCJ1Ffmb6uWWDY+wn3H0aqDDqnh7fT+drQc5xw3h4oCrqR8sixkgHkHxJI97xyXZFqx9mbAeOlyG4pBg==}
+
+  '@universal-middleware/sirv@0.1.2':
+    resolution: {integrity: sha512-U0bJTN+aZNvKrLt1RpXGiSifvuAerS8A5rzyJDvvgg9G3FwQn4s8RHrAYWPfP1nR9tJdvKmjYTtvLoGdHUVQcQ==}
 
   '@universal-middleware/vercel@0.4.1':
     resolution: {integrity: sha512-9KOLAMT06TtZR6yuB7sn9rCmj35iPMUiiDrN0scJu65leUF1DAfjeYqQ7pgoqSFomKhFCzj+HOnLP38U0dyVhg==}
@@ -2991,10 +2991,6 @@ packages:
   simple-swizzle@0.2.2:
     resolution: {integrity: sha512-JA//kQgZtbuY83m+xT+tXJkmJncGMTFT+C+g2h2R9uxkYIrE2yy9sgmcLhCnw57/WSD+Eh3J97FPEDFnbXnDUg==}
 
-  sirv@3.0.1:
-    resolution: {integrity: sha512-FoqMu0NCGBLCcAkS1qA+XJIQTR6/JHfQXl+uGteNCQ76T91DMUjPa9xfmeqMY3z80nLSg9yQmNjK0Px6RWsH/A==}
-    engines: {node: '>=18'}
-
   sonic-boom@4.2.0:
     resolution: {integrity: sha512-INb7TM37/mAcsGmc9hyyI6+QR3rR1zVRu36B0NeGXKnOOLiZOfER5SA+N7X7k3yUYRzLWafduTDvJAfDswwEww==}
 
@@ -4209,8 +4205,6 @@ snapshots:
   '@pkgjs/parseargs@0.11.0':
     optional: true
 
-  '@polka/url@1.0.0-next.28': {}
-
   '@prisma/client@6.4.1(prisma@6.4.1(typescript@5.7.3))(typescript@5.7.3)':
     optionalDependencies:
       prisma: 6.4.1(typescript@5.7.3)
@@ -4495,6 +4489,11 @@ snapshots:
       - fastify
       - h3
       - hono
+
+  '@universal-middleware/sirv@0.1.2':
+    dependencies:
+      mrmime: 2.0.1
+      totalist: 3.0.1
 
   '@universal-middleware/vercel@0.4.1(elysia@1.2.22(@sinclair/typebox@0.34.28)(typescript@5.7.3))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)':
     dependencies:
@@ -5940,12 +5939,6 @@ snapshots:
   simple-swizzle@0.2.2:
     dependencies:
       is-arrayish: 0.3.2
-
-  sirv@3.0.1:
-    dependencies:
-      '@polka/url': 1.0.0-next.28
-      mrmime: 2.0.1
-      totalist: 3.0.1
 
   sonic-boom@4.2.0:
     dependencies:

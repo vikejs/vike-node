@@ -1,24 +1,38 @@
 import type { Get, UniversalMiddleware } from '@universal-middleware/core'
-import { connectToWeb } from '../runtime/adapters/connectToWeb.js'
-import type { IncomingMessage, ServerResponse } from 'node:http'
+import { url as getUrl } from '@universal-middleware/core'
 import { getGlobalContextAsync } from 'vike/server'
-import { assert } from '../utils/assert.js'
-import type { ConnectMiddleware, VikeOptions } from '../runtime/types.js'
+import type { VikeOptions } from '../runtime/types.js'
 import { isVercel } from '../utils/isVercel.js'
 import { dirname, isAbsolute, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-async function removeBaseUrl(req: IncomingMessage) {
-  if (!req.url) return
+function cloneRequestWithNewUrl(request: Request, newUrl: string) {
+  return new Request(newUrl, {
+    method: request.method,
+    headers: request.headers,
+    body: request.body,
+    mode: request.mode,
+    credentials: request.credentials,
+    cache: request.cache,
+    redirect: request.redirect,
+    referrer: request.referrer,
+    integrity: request.integrity
+  })
+}
+
+async function removeBaseUrl(req: Request) {
+  if (!req.url) return req
   const globalContext = await getGlobalContextAsync(!__DEV__)
   const baseAssets = globalContext.baseAssets as string
   // Don't choke on older Vike versions
-  if (baseAssets === undefined) return
-  const { url } = req
-  assert(url.startsWith('/'))
-  let urlWithoutBase = url.slice(baseAssets.length)
-  if (!urlWithoutBase.startsWith('/')) urlWithoutBase = `/${urlWithoutBase}`
-  req.url = urlWithoutBase
+  if (baseAssets === undefined) return req
+  const url = getUrl(req)
+  let pathnameWithoutBase = url.pathname.slice(baseAssets.length)
+  if (!pathnameWithoutBase.startsWith('/')) pathnameWithoutBase = `/${pathnameWithoutBase}`
+
+  const newUrl = new URL(pathnameWithoutBase, url.origin)
+  newUrl.search = url.search
+  return cloneRequestWithNewUrl(req, newUrl.toString())
 }
 
 function resolveStaticConfig(static_: VikeOptions['static']): false | { root: string; cache: boolean } {
@@ -46,26 +60,20 @@ function resolveStaticConfig(static_: VikeOptions['static']): false | { root: st
   }
 }
 
-export const serveStaticMiddleware = ((options?) => async (request, _context) => {
+export const serveStaticMiddleware = ((options?) => async (request, context, runtime) => {
   const staticConfig = resolveStaticConfig(options?.static)
-  let staticMiddleware: ConnectMiddleware | undefined
+  let staticMiddleware: UniversalMiddleware
 
-  // FIXME port sirv to universal-middleware
-  async function serveStaticFiles(req: IncomingMessage, res: ServerResponse): Promise<boolean> {
-    await removeBaseUrl(req)
+  async function serveStaticFiles(req: Request) {
+    const newReq = await removeBaseUrl(req)
 
     if (!staticMiddleware) {
-      const { default: sirv } = await import('sirv')
+      const { default: sirv } = await import('@universal-middleware/sirv')
       staticMiddleware = sirv((staticConfig as { root: string; cache: boolean }).root, { etag: true })
     }
 
-    return new Promise<boolean>((resolve) => {
-      res.once('close', () => resolve(true))
-      // biome-ignore lint/style/noNonNullAssertion: <explanation>
-      staticMiddleware!(req, res, () => resolve(false))
-    })
+    return staticMiddleware(newReq, context, runtime)
   }
 
-  const handled = await connectToWeb(serveStaticFiles)(request)
-  if (handled) return handled
+  return serveStaticFiles(request)
 }) satisfies Get<[options: VikeOptions], UniversalMiddleware>

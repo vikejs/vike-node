@@ -80,10 +80,10 @@
     "@brillout/picocolors": "^1.0.26",
     "@universal-middleware/compress": "^0.2.11",
     "@universal-middleware/core": "^0.4.1",
+    "@universal-middleware/sirv": "^0.1.2",
     "@vercel/nft": "^0.29.2",
     "esbuild": "^0.25.0",
     "resolve-from": "^5.0.0",
-    "sirv": "^3.0.1",
     "unenv-nightly": "2.0.0-20241015-162228-03257ee",
     "vite": ">=6.2.0"
   },
