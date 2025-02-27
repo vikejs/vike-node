@@ -4,7 +4,7 @@ import { handleViteDevServer } from '../runtime/adapters/handleViteDevServer.js'
 import type { IncomingMessage } from 'node:http'
 import { globalStore } from '../runtime/globalStore.js'
 
-export const devServerMiddleware = (() => async (request, _context, runtime) => {
+export const devServerMiddleware = (() => async (request, context, runtime) => {
   const nodeReq: IncomingMessage | undefined = 'req' in runtime ? runtime.req : undefined
 
   if (nodeReq) {
@@ -16,7 +16,7 @@ export const devServerMiddleware = (() => async (request, _context, runtime) => 
     }
   }
 
-  const handled = await connectToWeb(handleViteDevServer)(request)
+  const handled = await connectToWeb(handleViteDevServer)(request, context, runtime)
 
   if (handled) return handled
 }) satisfies Get<[], UniversalMiddleware>
