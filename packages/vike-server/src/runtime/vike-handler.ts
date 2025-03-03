@@ -17,6 +17,9 @@ export const renderPageHandler = ((options?) =>
       return vikeUniversalHandler(request, pageContextInit, runtime as any)
     },
     {
+      name: 'vike',
+      path: '/**',
+      method: 'GET',
       order: 0,
       immutable: false
     }
