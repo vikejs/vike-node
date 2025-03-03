@@ -6,6 +6,7 @@ import { isVercel } from '../utils/isVercel.js'
 import { dirname, isAbsolute, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
+// TODO: move into `@universal-middleware/core`
 function cloneRequestWithNewUrl(request: Request, newUrl: string) {
   return new Request(newUrl, {
     method: request.method,
@@ -16,7 +17,9 @@ function cloneRequestWithNewUrl(request: Request, newUrl: string) {
     cache: request.cache,
     redirect: request.redirect,
     referrer: request.referrer,
-    integrity: request.integrity
+    integrity: request.integrity,
+    // @ts-ignore RequestInit: duplex option is required when sending a body
+    duplex: 'half'
   })
 }
 

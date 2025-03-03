@@ -1,7 +1,7 @@
 Error.stackTraceLimit = Number.POSITIVE_INFINITY
 import { Worker } from 'node:worker_threads'
 import fastify, { type FastifyInstance } from 'fastify'
-import { telefunc } from 'telefunc'
+import rawBody from 'fastify-raw-body'
 import vike, { type RuntimeAdapter } from 'vike-server/fastify'
 import { init } from '../database/todoItems.js'
 import { two } from './shared-chunk.js'
@@ -16,12 +16,9 @@ new Worker(new URL('./worker.mjs', import.meta.url))
 async function startServer() {
   await init()
   const app = fastify()
-  app.all('/_telefunc', async (req, res) => {
-    const context = {}
-    const httpResponse = await telefunc({ url: req.originalUrl, method: req.method, body: req.body as string, context })
-    const { body, statusCode, contentType } = httpResponse
-    res.status(statusCode).type(contentType).send(body)
-  })
+
+  // /!\ Mandatory for vike middleware to operate as intended
+  await app.register(rawBody)
 
   app.addHook('onRequest', (request, reply, done) => {
     // biome-ignore lint/suspicious/noExplicitAny: <explanation>
