@@ -36,5 +36,6 @@ if (__DEV__) {
     )
 }
 
-// FIXME: no enhance() routing support with pipe(...)
+// TODO: support returning an array.
+//  if so, UM should `export default pipeRoute(array)` and `export { apply(app) {...} }`
 export default renderPageUniversal
