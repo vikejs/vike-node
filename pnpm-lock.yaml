@@ -163,8 +163,8 @@ importers:
         specifier: ^1.0.26
         version: 1.0.26
       '@universal-middleware/compress':
-        specifier: ^0.2.16
-        version: 0.2.16
+        specifier: ^0.2.17
+        version: 0.2.17
       '@universal-middleware/core':
         specifier: ^0.4.2
         version: 0.4.2(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)
@@ -178,8 +178,8 @@ importers:
         specifier: ^0.5.5
         version: 0.5.5(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)
       '@universal-middleware/h3':
-        specifier: ^0.4.2
-        version: 0.4.2(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)
+        specifier: ^0.4.3
+        version: 0.4.3(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)
       '@universal-middleware/hattip':
         specifier: ^0.4.2
         version: 0.4.2(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)
@@ -187,8 +187,8 @@ importers:
         specifier: ^0.4.3
         version: 0.4.3(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)
       '@universal-middleware/sirv':
-        specifier: ^0.1.7
-        version: 0.1.7
+        specifier: ^0.1.8
+        version: 0.1.8
       '@vercel/nft':
         specifier: ^0.29.2
         version: 0.29.2(rollup@4.34.8)
@@ -1590,8 +1590,8 @@ packages:
   '@types/serve-static@1.15.7':
     resolution: {integrity: sha512-W8Ym+h8nhuRwaKPaDw34QUkwsGi6Rc4yYqvKFo5rm2FUEhCFbzVWrxXUxuKK8TASjWsysJY0nsmNCGhCOIsrOw==}
 
-  '@universal-middleware/compress@0.2.16':
-    resolution: {integrity: sha512-I7ukvkq6ycUf23L/x1A/xUdk2HTbjVEZkM+YqSqawZqmFMVobSJSP1TiU7tQj2OGLnWHyKUCqdRO5Huk2usV+w==}
+  '@universal-middleware/compress@0.2.17':
+    resolution: {integrity: sha512-pNEuARedPqlTreUBYCW2Kd2xoAO/XvbvCz2mSihpYZX1zyErzV0+xRQdS2qOGzkYlbf6ynSOOKb5RD5PJjAQbA==}
 
   '@universal-middleware/core@0.4.2':
     resolution: {integrity: sha512-fXO6O50QNk1pcjzE8Jgn9ak8orbQPk4W28GXqcAK0uh/t/qiXP2erQ6JCj2wIGy6OMpYUPbzRg8apyqptP73qA==}
@@ -1628,8 +1628,8 @@ packages:
   '@universal-middleware/fastify@0.5.5':
     resolution: {integrity: sha512-F5uVaSKBEToNRkzbKFfeN/2xNLT8Y1mDq9iWYBPPc69fdP9d9z5bhfhQhXEqDPrey1fK1iAlzkAUnj8/jCMfIg==}
 
-  '@universal-middleware/h3@0.4.2':
-    resolution: {integrity: sha512-MZcp9F8I7GRURLKtDdqYhv1I2Ae9SigmHUisiADi43Aeuq5pw4pUuvbag00kuNc/jyzkbKiKf5U1ugH6CtDpPQ==}
+  '@universal-middleware/h3@0.4.3':
+    resolution: {integrity: sha512-0kBFY5plL+ui3qqX0adlfMTJjaZOqIDAXCW83HVQLzaM7RmFpBIXihKvJZw7s+FeF+dxeJCGfHiO//qZNZO2MA==}
 
   '@universal-middleware/hattip@0.4.2':
     resolution: {integrity: sha512-2NY6Tg19JFQ9v6/jPomdwVhjYJoOF8vjeZk/EAlPScXA1NiupG7gqUPTfTB0TlYS0Xnbs49w3m8h8wGIdNebtQ==}
@@ -1637,8 +1637,8 @@ packages:
   '@universal-middleware/hono@0.4.3':
     resolution: {integrity: sha512-DA6FUT97xteDwLfgrMSzKF/66gv+jFTtW26qCdLX1jMhQSg8qYU+zW/TKTQiGj6MhPRl8kbW/CKUKFY/XEaf6w==}
 
-  '@universal-middleware/sirv@0.1.7':
-    resolution: {integrity: sha512-L9FTIDHVY/3RlmGVjSuSara652HzD3U/tjnFZBJ8e7c8gM0PPSTeL29Fz5YwusJH/T5WUhTdKLvhwH8A19Wvxw==}
+  '@universal-middleware/sirv@0.1.8':
+    resolution: {integrity: sha512-RZQflAoKpBEA85imQ82hoFAgrXtQURU2ZRLroahRiMEtI4Ev4tgLoo6T3+BPGDKyeThY34LlfdomG/RK0UxXWg==}
 
   '@vercel/nft@0.29.2':
     resolution: {integrity: sha512-A/Si4mrTkQqJ6EXJKv5EYCDQ3NL6nJXxG8VGXePsaiQigsomHYQC9xSpX8qGk7AEZk4b1ssbYIqJ0ISQQ7bfcA==}
@@ -4291,7 +4291,7 @@ snapshots:
       '@types/node': 20.17.23
       '@types/send': 0.17.4
 
-  '@universal-middleware/compress@0.2.16': {}
+  '@universal-middleware/compress@0.2.17': {}
 
   '@universal-middleware/core@0.4.2(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)':
     dependencies:
@@ -4341,7 +4341,7 @@ snapshots:
       - h3
       - hono
 
-  '@universal-middleware/h3@0.4.2(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)':
+  '@universal-middleware/h3@0.4.3(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)':
     dependencies:
       '@universal-middleware/core': 0.4.2(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)
     transitivePeerDependencies:
@@ -4377,7 +4377,7 @@ snapshots:
       - h3
       - hono
 
-  '@universal-middleware/sirv@0.1.7':
+  '@universal-middleware/sirv@0.1.8':
     dependencies:
       mrmime: 2.0.1
       totalist: 3.0.1
