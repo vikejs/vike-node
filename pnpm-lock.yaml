@@ -163,8 +163,8 @@ importers:
         specifier: ^1.0.26
         version: 1.0.26
       '@universal-middleware/compress':
-        specifier: ^0.2.17
-        version: 0.2.17
+        specifier: ^0.2.18
+        version: 0.2.18
       '@universal-middleware/core':
         specifier: ^0.4.2
         version: 0.4.2(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)
@@ -172,11 +172,11 @@ importers:
         specifier: ^0.4.3
         version: 0.4.3(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)
       '@universal-middleware/express':
-        specifier: ^0.4.4
-        version: 0.4.4(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)
+        specifier: ^0.4.5
+        version: 0.4.5(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)
       '@universal-middleware/fastify':
-        specifier: ^0.5.5
-        version: 0.5.5(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)
+        specifier: ^0.5.6
+        version: 0.5.6(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)
       '@universal-middleware/h3':
         specifier: ^0.4.3
         version: 0.4.3(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)
@@ -1590,8 +1590,8 @@ packages:
   '@types/serve-static@1.15.7':
     resolution: {integrity: sha512-W8Ym+h8nhuRwaKPaDw34QUkwsGi6Rc4yYqvKFo5rm2FUEhCFbzVWrxXUxuKK8TASjWsysJY0nsmNCGhCOIsrOw==}
 
-  '@universal-middleware/compress@0.2.17':
-    resolution: {integrity: sha512-pNEuARedPqlTreUBYCW2Kd2xoAO/XvbvCz2mSihpYZX1zyErzV0+xRQdS2qOGzkYlbf6ynSOOKb5RD5PJjAQbA==}
+  '@universal-middleware/compress@0.2.18':
+    resolution: {integrity: sha512-pAIWPEfWJZz2h91zHpTbmez2LWu8uBcpbOtsSojegBBaU2Q88rXOricRZGALOH5wpJqzhnMCXZ1KX04t3XqXWQ==}
 
   '@universal-middleware/core@0.4.2':
     resolution: {integrity: sha512-fXO6O50QNk1pcjzE8Jgn9ak8orbQPk4W28GXqcAK0uh/t/qiXP2erQ6JCj2wIGy6OMpYUPbzRg8apyqptP73qA==}
@@ -1622,11 +1622,11 @@ packages:
   '@universal-middleware/elysia@0.4.3':
     resolution: {integrity: sha512-Ofj7zgXh4vg/oeyd5ivRl/xLLK1L1DRgn6QxeMt8qI+x/vFSKZrbCqu8IrnSH4xRcpKs8eKmWJa9v6gAz0DdyQ==}
 
-  '@universal-middleware/express@0.4.4':
-    resolution: {integrity: sha512-7Fv9XINmVV63NitNgoe6nr32+52U9A2axYD2Vjm6KMOcFm2jnBTNxi8x38Dv9JpPVuAWyi96btcbgSAVXJQiSQ==}
+  '@universal-middleware/express@0.4.5':
+    resolution: {integrity: sha512-juf0+tU3ZZozOeJbNVOBUTSWxgQqBfB3xTvY8/Hy67hZZLIca1s+wy+dkIlakexINdiNnN7xZCGH3fV36y15NA==}
 
-  '@universal-middleware/fastify@0.5.5':
-    resolution: {integrity: sha512-F5uVaSKBEToNRkzbKFfeN/2xNLT8Y1mDq9iWYBPPc69fdP9d9z5bhfhQhXEqDPrey1fK1iAlzkAUnj8/jCMfIg==}
+  '@universal-middleware/fastify@0.5.6':
+    resolution: {integrity: sha512-/VyJQEDYTsqDAItHhQ/wT803OEV3MUeV6Ax7FgGqWiIfIjDK8Y4XLnwN1881AOvhlbzjWusrGrkFAylpMxaSnQ==}
 
   '@universal-middleware/h3@0.4.3':
     resolution: {integrity: sha512-0kBFY5plL+ui3qqX0adlfMTJjaZOqIDAXCW83HVQLzaM7RmFpBIXihKvJZw7s+FeF+dxeJCGfHiO//qZNZO2MA==}
@@ -4291,7 +4291,7 @@ snapshots:
       '@types/node': 20.17.23
       '@types/send': 0.17.4
 
-  '@universal-middleware/compress@0.2.17': {}
+  '@universal-middleware/compress@0.2.18': {}
 
   '@universal-middleware/core@0.4.2(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)':
     dependencies:
@@ -4315,7 +4315,7 @@ snapshots:
       - h3
       - hono
 
-  '@universal-middleware/express@0.4.4(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)':
+  '@universal-middleware/express@0.4.5(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)':
     dependencies:
       '@universal-middleware/core': 0.4.2(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)
     transitivePeerDependencies:
@@ -4327,10 +4327,10 @@ snapshots:
       - h3
       - hono
 
-  '@universal-middleware/fastify@0.5.5(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)':
+  '@universal-middleware/fastify@0.5.6(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)':
     dependencies:
       '@universal-middleware/core': 0.4.2(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)
-      '@universal-middleware/express': 0.4.4(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)
+      '@universal-middleware/express': 0.4.5(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)
       fastify-raw-body: 5.0.0
     transitivePeerDependencies:
       - '@cloudflare/workers-types'
