@@ -1,5 +1,5 @@
 import { Elysia } from 'elysia'
-import vike, { type RuntimeAdapter } from 'vike-server/elysia'
+import { apply, type RuntimeAdapter } from 'vike-server/elysia'
 import { init } from '../database/todoItems'
 
 startServer()
@@ -14,15 +14,13 @@ async function startServer() {
     ctx.set.headers['x-test'] = 'test'
   })
 
-  app.get(
-    '/*',
-    vike({
-      pageContext(runtime: RuntimeAdapter) {
-        return {
-          xRuntime: (runtime.elysia.store as { xRuntime: string }).xRuntime
-        }
+  apply(app, {
+    pageContext(runtime: RuntimeAdapter) {
+      return {
+        xRuntime: (runtime.elysia.store as { xRuntime: string }).xRuntime
       }
-    })
-  )
+    }
+  })
+
   app.listen(+port, () => console.log(`Server running at http://localhost:${port}`))
 }
