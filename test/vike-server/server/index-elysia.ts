@@ -1,5 +1,5 @@
 import { Elysia } from 'elysia'
-import { apply, type RuntimeAdapter } from 'vike-server/elysia'
+import { apply } from 'vike-server/elysia'
 import { init } from '../database/todoItems'
 
 startServer()
@@ -15,7 +15,7 @@ async function startServer() {
   })
 
   apply(app, {
-    pageContext(runtime: RuntimeAdapter) {
+    pageContext(runtime) {
       return {
         xRuntime: (runtime.elysia.store as { xRuntime: string }).xRuntime
       }

@@ -2,7 +2,7 @@ Error.stackTraceLimit = Number.POSITIVE_INFINITY
 import { Worker } from 'node:worker_threads'
 import fastify from 'fastify'
 import rawBody from 'fastify-raw-body'
-import { apply, type RuntimeAdapter } from 'vike-server/fastify'
+import { apply } from 'vike-server/fastify'
 import { init } from '../database/todoItems.js'
 import { two } from './shared-chunk.js'
 
@@ -32,7 +32,7 @@ async function startServer() {
   })
 
   await apply(app, {
-    pageContext(runtime: RuntimeAdapter) {
+    pageContext(runtime) {
       return {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         xRuntime: (runtime.fastify.request.routeOptions.config as any).xRuntime

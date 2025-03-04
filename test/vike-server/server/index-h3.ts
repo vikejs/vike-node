@@ -1,6 +1,6 @@
 import { createServer } from 'node:http'
 import { createApp, createRouter, eventHandler, toNodeListener } from 'h3'
-import { apply, type RuntimeAdapter } from 'vike-server/h3'
+import { apply } from 'vike-server/h3'
 import { init } from '../database/todoItems'
 
 startServer()
@@ -22,7 +22,7 @@ async function startServer() {
   )
 
   apply(app, {
-    pageContext(runtime: RuntimeAdapter) {
+    pageContext(runtime) {
       return {
         xRuntime: runtime.h3.context.xRuntime
       }

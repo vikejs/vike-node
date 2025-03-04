@@ -1,6 +1,6 @@
 import { Worker } from 'node:worker_threads'
 import express from 'express'
-import { apply, type RuntimeAdapter } from 'vike-server/express'
+import { apply } from 'vike-server/express'
 import { init } from '../database/todoItems.js'
 import { two } from './shared-chunk.js'
 
@@ -21,7 +21,7 @@ async function startServer() {
   })
 
   apply(app, {
-    pageContext(runtime: RuntimeAdapter) {
+    pageContext(runtime) {
       return {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         xRuntime: (runtime.req as any).xRuntime

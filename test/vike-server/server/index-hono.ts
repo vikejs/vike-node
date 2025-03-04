@@ -1,6 +1,6 @@
 import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
-import { apply, type RuntimeAdapter } from 'vike-server/hono'
+import { apply } from 'vike-server/hono'
 import { init } from '../database/todoItems'
 
 startServer()
@@ -21,7 +21,7 @@ async function startServer() {
   })
 
   apply(app, {
-    pageContext(runtime: RuntimeAdapter) {
+    pageContext(runtime) {
       return {
         xRuntime: runtime.hono.get('xRuntime')
       }
