@@ -163,8 +163,8 @@ importers:
         specifier: ^1.0.26
         version: 1.0.26
       '@universal-middleware/compress':
-        specifier: ^0.2.14
-        version: 0.2.14
+        specifier: ^0.2.15
+        version: 0.2.15
       '@universal-middleware/core':
         specifier: ^0.4.2
         version: 0.4.2(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)
@@ -184,11 +184,11 @@ importers:
         specifier: ^0.4.2
         version: 0.4.2(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)
       '@universal-middleware/hono':
-        specifier: ^0.4.2
-        version: 0.4.2(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)
+        specifier: ^0.4.3
+        version: 0.4.3(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)
       '@universal-middleware/sirv':
-        specifier: ^0.1.5
-        version: 0.1.5
+        specifier: ^0.1.6
+        version: 0.1.6
       '@vercel/nft':
         specifier: ^0.29.2
         version: 0.29.2(rollup@4.34.8)
@@ -1590,8 +1590,8 @@ packages:
   '@types/serve-static@1.15.7':
     resolution: {integrity: sha512-W8Ym+h8nhuRwaKPaDw34QUkwsGi6Rc4yYqvKFo5rm2FUEhCFbzVWrxXUxuKK8TASjWsysJY0nsmNCGhCOIsrOw==}
 
-  '@universal-middleware/compress@0.2.14':
-    resolution: {integrity: sha512-avZsAY+JVSQsWm955Gk92o0vV2lrIqWvMlFiTdRf1KmtvTvWn0B8Jfn4oUQTjCTVITP2VLc2lOY77U76H6viFQ==}
+  '@universal-middleware/compress@0.2.15':
+    resolution: {integrity: sha512-CUoxQIsN1DUKtZg3gIlB92/YGSkpu/TYTXoNy5o5bR4JsMuhhd+qEjsHCVvGuqC8de89Mjh/ZV65Qc/MkPitVQ==}
 
   '@universal-middleware/core@0.4.2':
     resolution: {integrity: sha512-fXO6O50QNk1pcjzE8Jgn9ak8orbQPk4W28GXqcAK0uh/t/qiXP2erQ6JCj2wIGy6OMpYUPbzRg8apyqptP73qA==}
@@ -1634,11 +1634,11 @@ packages:
   '@universal-middleware/hattip@0.4.2':
     resolution: {integrity: sha512-2NY6Tg19JFQ9v6/jPomdwVhjYJoOF8vjeZk/EAlPScXA1NiupG7gqUPTfTB0TlYS0Xnbs49w3m8h8wGIdNebtQ==}
 
-  '@universal-middleware/hono@0.4.2':
-    resolution: {integrity: sha512-VgoedZvNdu9WGFEMcTefTLg/mRVUCrG4q83TROFK8Yv/2tn8tsqFWdF3KCkmZI5JHGhcflEu1gNVlAULAMYgXw==}
+  '@universal-middleware/hono@0.4.3':
+    resolution: {integrity: sha512-DA6FUT97xteDwLfgrMSzKF/66gv+jFTtW26qCdLX1jMhQSg8qYU+zW/TKTQiGj6MhPRl8kbW/CKUKFY/XEaf6w==}
 
-  '@universal-middleware/sirv@0.1.5':
-    resolution: {integrity: sha512-gF/6gmtHzsHgq/nS1yuuVaEiUkXqpPnNe+y9BOZNGlvjL6cSfr+aGPDE6iu/VfmVrXtJ9xjg3wt50TQ224RzqA==}
+  '@universal-middleware/sirv@0.1.6':
+    resolution: {integrity: sha512-1L/9uxMR7Yl0mBjjc8niIjL+XYuZRmDUMUYFn/KAhmGYj8d4Prj5s65EVNimT2og6x9I7Fc0zzdUflh90Uszjg==}
 
   '@vercel/nft@0.29.2':
     resolution: {integrity: sha512-A/Si4mrTkQqJ6EXJKv5EYCDQ3NL6nJXxG8VGXePsaiQigsomHYQC9xSpX8qGk7AEZk4b1ssbYIqJ0ISQQ7bfcA==}
@@ -4291,7 +4291,7 @@ snapshots:
       '@types/node': 20.17.23
       '@types/send': 0.17.4
 
-  '@universal-middleware/compress@0.2.14': {}
+  '@universal-middleware/compress@0.2.15': {}
 
   '@universal-middleware/core@0.4.2(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)':
     dependencies:
@@ -4365,7 +4365,7 @@ snapshots:
       - h3
       - hono
 
-  '@universal-middleware/hono@0.4.2(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)':
+  '@universal-middleware/hono@0.4.3(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)':
     dependencies:
       '@universal-middleware/core': 0.4.2(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)
     transitivePeerDependencies:
@@ -4377,7 +4377,7 @@ snapshots:
       - h3
       - hono
 
-  '@universal-middleware/sirv@0.1.5':
+  '@universal-middleware/sirv@0.1.6':
     dependencies:
       mrmime: 2.0.1
       totalist: 3.0.1
