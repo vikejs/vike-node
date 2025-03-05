@@ -1,8 +1,8 @@
 import type { Get, UniversalMiddleware } from '@universal-middleware/core'
-import { connectToWeb } from '../runtime/adapters/connectToWeb.js'
 import { handleViteDevServer } from '../runtime/adapters/handleViteDevServer.js'
 import type { IncomingMessage } from 'node:http'
 import { globalStore } from '../runtime/globalStore.js'
+import { connectToWeb } from '@universal-middleware/express'
 
 export const devServerMiddleware = (() => async (request, context, runtime) => {
   const nodeReq: IncomingMessage | undefined = 'req' in runtime ? runtime.req : undefined

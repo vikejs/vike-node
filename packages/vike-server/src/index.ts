@@ -1,2 +1,1 @@
-export { connectToWeb } from './runtime/adapters/connectToWeb.js'
-export { createServerResponse } from './runtime/adapters/createServerResponse.js'
+export { connectToWeb, createServerResponse } from '@universal-middleware/express'

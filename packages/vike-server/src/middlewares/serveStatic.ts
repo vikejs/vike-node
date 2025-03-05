@@ -1,27 +1,10 @@
 import type { Get, UniversalMiddleware } from '@universal-middleware/core'
-import { url as getUrl } from '@universal-middleware/core'
+import { cloneRequest, url as getUrl } from '@universal-middleware/core'
 import { getGlobalContextAsync } from 'vike/server'
 import type { VikeOptions } from '../runtime/types.js'
 import { isVercel } from '../utils/isVercel.js'
 import { dirname, isAbsolute, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-
-// TODO: move into `@universal-middleware/core`
-function cloneRequestWithNewUrl(request: Request, newUrl: string) {
-  return new Request(newUrl, {
-    method: request.method,
-    headers: request.headers,
-    body: request.body,
-    mode: request.mode,
-    credentials: request.credentials,
-    cache: request.cache,
-    redirect: request.redirect,
-    referrer: request.referrer,
-    integrity: request.integrity,
-    // @ts-ignore RequestInit: duplex option is required when sending a body
-    duplex: 'half'
-  })
-}
 
 async function removeBaseUrl(req: Request) {
   if (!req.url) return req
@@ -35,7 +18,9 @@ async function removeBaseUrl(req: Request) {
 
   const newUrl = new URL(pathnameWithoutBase, url.origin)
   newUrl.search = url.search
-  return cloneRequestWithNewUrl(req, newUrl.toString())
+  return cloneRequest(req, {
+    url: newUrl.toString()
+  })
 }
 
 function resolveStaticConfig(static_: VikeOptions['static']): false | { root: string; cache: boolean } {
