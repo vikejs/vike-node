@@ -85,7 +85,7 @@ importers:
     dependencies:
       '@hono/node-server':
         specifier: ^1.13.8
-        version: 1.13.8(hono@4.7.2)
+        version: 1.13.8(hono@4.7.4)
       '@vitejs/plugin-react':
         specifier: ^4.3.4
         version: 4.3.4(vite@6.2.0(@types/node@20.17.23))
@@ -93,8 +93,8 @@ importers:
         specifier: ^7.0.3
         version: 7.0.3
       hono:
-        specifier: ^4.7.2
-        version: 4.7.2
+        specifier: ^4.7.4
+        version: 4.7.4
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -125,7 +125,7 @@ importers:
     dependencies:
       '@hono/node-server':
         specifier: ^1.13.8
-        version: 1.13.8(hono@4.7.2)
+        version: 1.13.8(hono@4.7.4)
       '@vitejs/plugin-react':
         specifier: ^4.3.4
         version: 4.3.4(vite@6.2.0(@types/node@20.17.23))
@@ -133,8 +133,8 @@ importers:
         specifier: ^7.0.3
         version: 7.0.3
       hono:
-        specifier: ^4.7.2
-        version: 4.7.2
+        specifier: ^4.7.4
+        version: 4.7.4
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -163,32 +163,32 @@ importers:
         specifier: ^1.0.26
         version: 1.0.26
       '@universal-middleware/compress':
-        specifier: ^0.2.18
-        version: 0.2.18
+        specifier: ^0.2.19
+        version: 0.2.19
       '@universal-middleware/core':
         specifier: ^0.4.2
-        version: 0.4.2(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)
+        version: 0.4.2(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.4)
       '@universal-middleware/elysia':
         specifier: ^0.4.3
-        version: 0.4.3(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)
+        version: 0.4.3(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.4)
       '@universal-middleware/express':
-        specifier: ^0.4.5
-        version: 0.4.5(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)
+        specifier: ^0.4.6
+        version: 0.4.6(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.4)
       '@universal-middleware/fastify':
-        specifier: ^0.5.6
-        version: 0.5.6(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)
+        specifier: ^0.5.7
+        version: 0.5.7(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.4)
       '@universal-middleware/h3':
-        specifier: ^0.4.3
-        version: 0.4.3(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)
+        specifier: ^0.4.4
+        version: 0.4.4(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.4)
       '@universal-middleware/hattip':
-        specifier: ^0.4.2
-        version: 0.4.2(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)
-      '@universal-middleware/hono':
         specifier: ^0.4.3
-        version: 0.4.3(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)
+        version: 0.4.3(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.4)
+      '@universal-middleware/hono':
+        specifier: ^0.4.4
+        version: 0.4.4(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.4)
       '@universal-middleware/sirv':
-        specifier: ^0.1.8
-        version: 0.1.8
+        specifier: ^0.1.10
+        version: 0.1.10
       '@vercel/nft':
         specifier: ^0.29.2
         version: 0.29.2(rollup@4.34.8)
@@ -221,8 +221,8 @@ importers:
         specifier: ^1.15.1
         version: 1.15.1
       hono:
-        specifier: ^4.7.2
-        version: 4.7.2
+        specifier: ^4.7.4
+        version: 4.7.4
       tsup:
         specifier: ^8.4.0
         version: 8.4.0(postcss@8.5.3)(typescript@5.8.2)
@@ -237,7 +237,7 @@ importers:
     dependencies:
       '@hono/node-server':
         specifier: ^1.13.8
-        version: 1.13.8(hono@4.7.2)
+        version: 1.13.8(hono@4.7.4)
       '@node-rs/argon2':
         specifier: ^2.0.2
         version: 2.0.2
@@ -278,8 +278,8 @@ importers:
         specifier: ^1.15.1
         version: 1.15.1
       hono:
-        specifier: ^4.7.2
-        version: 4.7.2
+        specifier: ^4.7.4
+        version: 4.7.4
       prisma:
         specifier: ^6.4.1
         version: 6.4.1(typescript@5.8.2)
@@ -1590,8 +1590,8 @@ packages:
   '@types/serve-static@1.15.7':
     resolution: {integrity: sha512-W8Ym+h8nhuRwaKPaDw34QUkwsGi6Rc4yYqvKFo5rm2FUEhCFbzVWrxXUxuKK8TASjWsysJY0nsmNCGhCOIsrOw==}
 
-  '@universal-middleware/compress@0.2.18':
-    resolution: {integrity: sha512-pAIWPEfWJZz2h91zHpTbmez2LWu8uBcpbOtsSojegBBaU2Q88rXOricRZGALOH5wpJqzhnMCXZ1KX04t3XqXWQ==}
+  '@universal-middleware/compress@0.2.19':
+    resolution: {integrity: sha512-So405Gv0zb8bKpkeXy4EKyyva2gOlk9VLZSxiMoJcE4qckuhd7ptFaTYvE+1bswtLrdxgg3AHLsiR+vccqDWwQ==}
 
   '@universal-middleware/core@0.4.2':
     resolution: {integrity: sha512-fXO6O50QNk1pcjzE8Jgn9ak8orbQPk4W28GXqcAK0uh/t/qiXP2erQ6JCj2wIGy6OMpYUPbzRg8apyqptP73qA==}
@@ -1622,23 +1622,23 @@ packages:
   '@universal-middleware/elysia@0.4.3':
     resolution: {integrity: sha512-Ofj7zgXh4vg/oeyd5ivRl/xLLK1L1DRgn6QxeMt8qI+x/vFSKZrbCqu8IrnSH4xRcpKs8eKmWJa9v6gAz0DdyQ==}
 
-  '@universal-middleware/express@0.4.5':
-    resolution: {integrity: sha512-juf0+tU3ZZozOeJbNVOBUTSWxgQqBfB3xTvY8/Hy67hZZLIca1s+wy+dkIlakexINdiNnN7xZCGH3fV36y15NA==}
+  '@universal-middleware/express@0.4.6':
+    resolution: {integrity: sha512-hqyuXveEVrF+NC9XWMKJ40B80IQ0wC23TID5JJnsHG9r8YajZpt7ddNAzXHzod01L5nsegNPwmWK1dqrinOdQA==}
 
-  '@universal-middleware/fastify@0.5.6':
-    resolution: {integrity: sha512-/VyJQEDYTsqDAItHhQ/wT803OEV3MUeV6Ax7FgGqWiIfIjDK8Y4XLnwN1881AOvhlbzjWusrGrkFAylpMxaSnQ==}
+  '@universal-middleware/fastify@0.5.7':
+    resolution: {integrity: sha512-Nbyd+H1dovp259jYdYRxXvl8/8Wg6QRON1gwtPX1vZi6rDQV9LCHHNyo/K3+OSO+iMie+0RMGdKxMNf8CCTl+A==}
 
-  '@universal-middleware/h3@0.4.3':
-    resolution: {integrity: sha512-0kBFY5plL+ui3qqX0adlfMTJjaZOqIDAXCW83HVQLzaM7RmFpBIXihKvJZw7s+FeF+dxeJCGfHiO//qZNZO2MA==}
+  '@universal-middleware/h3@0.4.4':
+    resolution: {integrity: sha512-XktO2xHnrfsRP+cNaQ6tDYwWRCh9WVdzwLVNWP321m+vUlGObIsgDfFzy5MzJtBWBGezGQHdNs936UouS0iQBA==}
 
-  '@universal-middleware/hattip@0.4.2':
-    resolution: {integrity: sha512-2NY6Tg19JFQ9v6/jPomdwVhjYJoOF8vjeZk/EAlPScXA1NiupG7gqUPTfTB0TlYS0Xnbs49w3m8h8wGIdNebtQ==}
+  '@universal-middleware/hattip@0.4.3':
+    resolution: {integrity: sha512-fUK6o8J3smfOW3VXXeqlT89QzRQ0/bvxHjJWJ60fAB5EgHUh8KWfZ3MRU28/XZZVEGQXMBEMF5kZgbLfGpVlDA==}
 
-  '@universal-middleware/hono@0.4.3':
-    resolution: {integrity: sha512-DA6FUT97xteDwLfgrMSzKF/66gv+jFTtW26qCdLX1jMhQSg8qYU+zW/TKTQiGj6MhPRl8kbW/CKUKFY/XEaf6w==}
+  '@universal-middleware/hono@0.4.4':
+    resolution: {integrity: sha512-Y3y5iJ5/8T1N5kZ/jNetHyMr6GRnOqpux7NdwrwK4UVX1FvAMyGjbPv4Jri63uFbregOi/+6b//ICbPFoi/ZSA==}
 
-  '@universal-middleware/sirv@0.1.8':
-    resolution: {integrity: sha512-RZQflAoKpBEA85imQ82hoFAgrXtQURU2ZRLroahRiMEtI4Ev4tgLoo6T3+BPGDKyeThY34LlfdomG/RK0UxXWg==}
+  '@universal-middleware/sirv@0.1.10':
+    resolution: {integrity: sha512-YkcW5zz+NdhVQkuJpwnmSN0gHoj06Gj5WQ7jIjI+u8trsoahSNF2lwvn9frafg6xWGzF1pfmAQdud70Sx3OhcQ==}
 
   '@vercel/nft@0.29.2':
     resolution: {integrity: sha512-A/Si4mrTkQqJ6EXJKv5EYCDQ3NL6nJXxG8VGXePsaiQigsomHYQC9xSpX8qGk7AEZk4b1ssbYIqJ0ISQQ7bfcA==}
@@ -2275,8 +2275,8 @@ packages:
     resolution: {integrity: sha512-0hJU9SCPvmMzIBdZFqNPXWa6dqh7WdH0cII9y+CyS8rG3nL48Bclra9HmKhVVUHyPWNH5Y7xDwAB7bfgSjkUMQ==}
     engines: {node: '>= 0.4'}
 
-  hono@4.7.2:
-    resolution: {integrity: sha512-8V5XxoOF6SI12jkHkzX/6aLBMU5GEF5g387EjVSQipS0DlxWgWGSMeEayY3CRBjtTUQYwLHx9JYouWqKzy2Vng==}
+  hono@4.7.4:
+    resolution: {integrity: sha512-Pst8FuGqz3L7tFF+u9Pu70eI0xa5S3LPUmrNd5Jm8nTHze9FxLTK9Kaj5g/k4UcwuJSXTP65SyHOPLrffpcAJg==}
     engines: {node: '>=16.9.0'}
 
   hosted-git-info@7.0.2:
@@ -3892,9 +3892,9 @@ snapshots:
       '@fastify/forwarded': 3.0.0
       ipaddr.js: 2.2.0
 
-  '@hono/node-server@1.13.8(hono@4.7.2)':
+  '@hono/node-server@1.13.8(hono@4.7.4)':
     dependencies:
-      hono: 4.7.2
+      hono: 4.7.4
 
   '@hutson/parse-repository-url@5.0.0': {}
 
@@ -4291,9 +4291,9 @@ snapshots:
       '@types/node': 20.17.23
       '@types/send': 0.17.4
 
-  '@universal-middleware/compress@0.2.18': {}
+  '@universal-middleware/compress@0.2.19': {}
 
-  '@universal-middleware/core@0.4.2(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)':
+  '@universal-middleware/core@0.4.2(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.4)':
     dependencies:
       regexparam: 3.0.0
       tough-cookie: 5.1.2
@@ -4301,11 +4301,11 @@ snapshots:
       elysia: 1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2)
       fastify: 5.2.1
       h3: 1.15.1
-      hono: 4.7.2
+      hono: 4.7.4
 
-  '@universal-middleware/elysia@0.4.3(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)':
+  '@universal-middleware/elysia@0.4.3(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.4)':
     dependencies:
-      '@universal-middleware/core': 0.4.2(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)
+      '@universal-middleware/core': 0.4.2(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.4)
     transitivePeerDependencies:
       - '@cloudflare/workers-types'
       - '@hattip/core'
@@ -4315,9 +4315,9 @@ snapshots:
       - h3
       - hono
 
-  '@universal-middleware/express@0.4.5(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)':
+  '@universal-middleware/express@0.4.6(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.4)':
     dependencies:
-      '@universal-middleware/core': 0.4.2(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)
+      '@universal-middleware/core': 0.4.2(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.4)
     transitivePeerDependencies:
       - '@cloudflare/workers-types'
       - '@hattip/core'
@@ -4327,10 +4327,10 @@ snapshots:
       - h3
       - hono
 
-  '@universal-middleware/fastify@0.5.6(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)':
+  '@universal-middleware/fastify@0.5.7(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.4)':
     dependencies:
-      '@universal-middleware/core': 0.4.2(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)
-      '@universal-middleware/express': 0.4.5(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)
+      '@universal-middleware/core': 0.4.2(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.4)
+      '@universal-middleware/express': 0.4.6(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.4)
       fastify-raw-body: 5.0.0
     transitivePeerDependencies:
       - '@cloudflare/workers-types'
@@ -4341,9 +4341,9 @@ snapshots:
       - h3
       - hono
 
-  '@universal-middleware/h3@0.4.3(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)':
+  '@universal-middleware/h3@0.4.4(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.4)':
     dependencies:
-      '@universal-middleware/core': 0.4.2(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)
+      '@universal-middleware/core': 0.4.2(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.4)
     transitivePeerDependencies:
       - '@cloudflare/workers-types'
       - '@hattip/core'
@@ -4353,9 +4353,9 @@ snapshots:
       - h3
       - hono
 
-  '@universal-middleware/hattip@0.4.2(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)':
+  '@universal-middleware/hattip@0.4.3(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.4)':
     dependencies:
-      '@universal-middleware/core': 0.4.2(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)
+      '@universal-middleware/core': 0.4.2(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.4)
     transitivePeerDependencies:
       - '@cloudflare/workers-types'
       - '@hattip/core'
@@ -4365,9 +4365,9 @@ snapshots:
       - h3
       - hono
 
-  '@universal-middleware/hono@0.4.3(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)':
+  '@universal-middleware/hono@0.4.4(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.4)':
     dependencies:
-      '@universal-middleware/core': 0.4.2(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.2)
+      '@universal-middleware/core': 0.4.2(elysia@1.2.24(@sinclair/typebox@0.34.28)(typescript@5.8.2))(fastify@5.2.1)(h3@1.15.1)(hono@4.7.4)
     transitivePeerDependencies:
       - '@cloudflare/workers-types'
       - '@hattip/core'
@@ -4377,7 +4377,7 @@ snapshots:
       - h3
       - hono
 
-  '@universal-middleware/sirv@0.1.8':
+  '@universal-middleware/sirv@0.1.10':
     dependencies:
       mrmime: 2.0.1
       totalist: 3.0.1
@@ -5147,7 +5147,7 @@ snapshots:
     dependencies:
       function-bind: 1.1.2
 
-  hono@4.7.2: {}
+  hono@4.7.4: {}
 
   hosted-git-info@7.0.2:
     dependencies:
