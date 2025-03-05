@@ -1,7 +1,7 @@
 {
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "files": {
-    "ignore": ["dist/", ".vercel/", "package.json", "test/vike-node/build"]
+    "ignore": ["dist/", ".vercel/", "package.json", "test/vike-server/build"]
   },
   "formatter": {
     "indentWidth": 2,

@@ -3,7 +3,8 @@
 import app from '../dist/server/index.mjs'
 
 // Web request handlers support streaming by default on Vercel
-import { connectToWeb } from 'vike-node'
+import { connectToWeb } from 'vike-server'
+
 const handler = connectToWeb(app)
 export const GET = handler
 export const POST = handler

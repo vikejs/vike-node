@@ -1,0 +1,92 @@
+{
+  "name": "vike-server",
+  "version": "0.3.7",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "./plugin": "./dist/plugin/index.js",
+    ".": "./dist/index.js",
+    "./hono": {
+      "types": "./dist/hono.d.ts",
+      "import": "./dist/hono.js",
+      "default": "./dist/hono.js"
+    },
+    "./express": {
+      "types": "./dist/express.d.ts",
+      "import": "./dist/express.js",
+      "default": "./dist/express.js"
+    },
+    "./hattip": {
+      "types": "./dist/hattip.d.ts",
+      "import": "./dist/hattip.js",
+      "default": "./dist/hattip.js"
+    },
+    "./fastify": {
+      "types": "./dist/fastify.d.ts",
+      "import": "./dist/fastify.js",
+      "default": "./dist/fastify.js"
+    },
+    "./h3": {
+      "types": "./dist/h3.d.ts",
+      "import": "./dist/h3.js",
+      "default": "./dist/h3.js"
+    },
+    "./elysia": {
+      "types": "./dist/elysia.d.ts",
+      "import": "./dist/elysia.js",
+      "default": "./dist/elysia.js"
+    }
+  },
+  "scripts": {
+    "dev": "tsup --watch",
+    "build": "rm -rf dist && tsup",
+    "release": "release-me patch",
+    "release:minor": "release-me minor",
+    "release:major": "release-me major",
+    "release:commit": "release-me commit"
+  },
+  "dependencies": {
+    "@brillout/picocolors": "^1.0.26",
+    "@universal-middleware/compress": "^0.2.20",
+    "@universal-middleware/core": "^0.4.3",
+    "@universal-middleware/elysia": "^0.4.4",
+    "@universal-middleware/express": "^0.4.7",
+    "@universal-middleware/fastify": "^0.5.8",
+    "@universal-middleware/h3": "^0.4.5",
+    "@universal-middleware/hattip": "^0.4.4",
+    "@universal-middleware/hono": "^0.4.5",
+    "@universal-middleware/sirv": "^0.1.11",
+    "@vercel/nft": "^0.29.2",
+    "esbuild": "^0.25.0",
+    "resolve-from": "^5.0.0",
+    "unenv-nightly": "2.0.0-20241015-162228-03257ee",
+    "vite": ">=6.2.0"
+  },
+  "peerDependencies": {
+    "vike": "^0.4.213",
+    "vite": ">=5.0.10"
+  },
+  "peerDependenciesMeta": {
+    "vite": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@brillout/release-me": "^0.4.3",
+    "@types/node": "^20.17.23",
+    "elysia": "^1.2.24",
+    "fastify": "^5.2.1",
+    "h3": "^1.15.1",
+    "hono": "^4.7.4",
+    "tsup": "^8.4.0",
+    "typescript": "^5.8.2",
+    "vike": "^0.4.224",
+    "vite": "^6.2.0"
+  },
+  "files": [
+    "dist/"
+  ],
+  "repository": "github:vikejs/vike-server",
+  "license": "MIT"
+}
