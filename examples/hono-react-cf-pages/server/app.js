@@ -1,5 +1,5 @@
 import { Hono } from 'hono'
-import vike from 'vike-server/hono'
+import { apply } from 'vike-server/hono'
 import { config, telefunc } from 'telefunc'
 
 config.disableNamingConvention = true
@@ -13,5 +13,5 @@ app.post('_telefunc', async (ctx) => {
     status: httpResponse.statusCode
   })
 })
-app.use(vike())
+apply(app)
 export default app

@@ -10,14 +10,20 @@ function commonConfig(configVikeNodePlugin: ConfigVikeNodePlugin): Plugin[] {
     {
       enforce: 'pre',
       name: 'vike-server:commonConfig',
-      config(config) {
+      config(config, env) {
         ;(config as Record<string, unknown>).configVikeNode = resolvedConfig
         return {
+          build: {
+            target: 'es2022'
+          },
           ssr: {
             external: resolvedConfig.server.external
           },
           optimizeDeps: {
             exclude: resolvedConfig.server.external
+          },
+          define: {
+            __DEV__: JSON.stringify(env.command === 'serve')
           }
         }
       }

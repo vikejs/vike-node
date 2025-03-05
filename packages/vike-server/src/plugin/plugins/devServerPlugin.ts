@@ -1,5 +1,5 @@
 import { fork } from 'node:child_process'
-import { type IncomingMessage, type Server, createServer } from 'node:http'
+import { createServer, type IncomingMessage, type Server } from 'node:http'
 import type { Plugin, ViteDevServer } from 'vite'
 import { globalStore } from '../../runtime/globalStore.js'
 import type { ConfigVikeNodeResolved } from '../../types.js'
@@ -175,24 +175,31 @@ async function setupProcessRestarter() {
   if (isRestarterSetUp()) return
   process.env[IS_RESTARTER_SET_UP] = 'true'
 
-  function start() {
-    // biome-ignore lint/style/noNonNullAssertion: <explanation>
-    const cliEntry = process.argv[1]!
-    const cliArgs = process.argv.slice(2)
-    // Re-run the exact same CLI
-    const clone = fork(cliEntry, cliArgs, { stdio: 'inherit' })
-    clone.on('exit', (code) => {
-      if (code === RESTART_EXIT_CODE) {
-        start()
-      } else {
-        process.exit(code)
-      }
+  async function start() {
+    return new Promise<void>((resolve) => {
+      // biome-ignore lint/style/noNonNullAssertion: <explanation>
+      const cliEntry = process.argv[1]!
+      const cliArgs = process.argv.slice(2)
+      // Re-run the exact same CLI
+      const clone = fork(cliEntry, cliArgs, { stdio: 'inherit' })
+      clone.on('exit', (code) => {
+        if (code === RESTART_EXIT_CODE) {
+          start().then(resolve)
+        } else {
+          resolve()
+          process.exit(code)
+        }
+      })
+
+      process.on('exit', () => {
+        if (!clone.killed) {
+          clone.kill()
+        }
+      })
     })
   }
-  start()
-
   // Trick: never-resolving-promise in order to block the CLI root process
-  await new Promise(() => {})
+  await start()
 }
 
 function isRestarterSetUp() {

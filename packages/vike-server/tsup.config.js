@@ -1,22 +1,20 @@
 import { defineConfig } from 'tsup'
-import universalMiddleware from 'universal-middleware/esbuild'
 
 const external = ['stream', 'http', 'path', 'url', 'zlib']
 
 export default defineConfig([
   {
     entry: {
-      handler: './src/vike.handler.ts'
+      elysia: './src/handlers/adapters/elysia.ts',
+      express: './src/handlers/adapters/express.ts',
+      fastify: './src/handlers/adapters/fastify.ts',
+      h3: './src/handlers/adapters/h3.ts',
+      hattip: './src/handlers/adapters/hattip.ts',
+      hono: './src/handlers/adapters/hono.ts'
     },
     format: ['esm'],
     platform: 'neutral',
     target: 'es2022',
-    esbuildPlugins: [
-      universalMiddleware({
-        serversExportNames: './[dir]/[server]',
-        entryExportNames: './[dir]/[name]'
-      })
-    ],
     esbuildOptions(opts) {
       opts.outbase = 'src'
     },

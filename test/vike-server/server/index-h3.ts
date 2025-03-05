@@ -1,7 +1,6 @@
 import { createServer } from 'node:http'
-import { createApp, createRouter, eventHandler, toNodeListener, toWebRequest } from 'h3'
-import { telefunc } from 'telefunc'
-import vike, { type RuntimeAdapter } from 'vike-server/h3'
+import { createApp, createRouter, eventHandler, toNodeListener } from 'h3'
+import { apply } from 'vike-server/h3'
 import { init } from '../database/todoItems'
 
 startServer()
@@ -13,27 +12,6 @@ async function startServer() {
 
   const router = createRouter()
 
-  router.post(
-    '/_telefunc',
-    eventHandler(async (event) => {
-      const request = toWebRequest(event)
-
-      const httpResponse = await telefunc({
-        url: request.url.toString(),
-        method: request.method,
-        body: await request.text(),
-        context: event.context
-      })
-      const { body, statusCode, contentType } = httpResponse
-      return new Response(body, {
-        status: statusCode,
-        headers: {
-          'content-type': contentType
-        }
-      })
-    })
-  )
-
   app.use(router)
 
   app.use(
@@ -43,15 +21,13 @@ async function startServer() {
     })
   )
 
-  app.use(
-    vike({
-      pageContext(runtime: RuntimeAdapter) {
-        return {
-          xRuntime: runtime.h3.context.xRuntime
-        }
+  apply(app, {
+    pageContext(runtime) {
+      return {
+        xRuntime: runtime.h3.context.xRuntime
       }
-    })
-  )
+    }
+  })
 
   const server = createServer(toNodeListener(app)).listen(port)
 

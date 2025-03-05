@@ -1,7 +1,6 @@
 import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
-import { telefunc } from 'telefunc'
-import vike, { type RuntimeAdapter } from 'vike-server/hono'
+import { apply } from 'vike-server/hono'
 import { init } from '../database/todoItems'
 
 startServer()
@@ -14,17 +13,6 @@ async function startServer() {
     }
   }>()
   const port = process.env.PORT || 3000
-  app.post('/_telefunc', async (ctx) => {
-    const context = {}
-    const httpResponse = await telefunc({
-      url: ctx.req.url,
-      method: ctx.req.method,
-      body: await ctx.req.text(),
-      context
-    })
-    const { body, statusCode, contentType } = httpResponse
-    return new Response(body, { headers: { 'content-type': contentType }, status: statusCode })
-  })
 
   app.use('*', async (ctx, next) => {
     ctx.set('xRuntime', 'x-runtime')
@@ -32,15 +20,13 @@ async function startServer() {
     ctx.header('x-test', 'test')
   })
 
-  app.use(
-    vike({
-      pageContext(runtime: RuntimeAdapter) {
-        return {
-          xRuntime: runtime.hono.get('xRuntime')
-        }
+  apply(app, {
+    pageContext(runtime) {
+      return {
+        xRuntime: runtime.hono.get('xRuntime')
       }
-    })
-  )
+    }
+  })
 
   serve(
     {

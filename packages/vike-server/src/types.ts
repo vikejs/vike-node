@@ -3,6 +3,7 @@ export type { ConfigVikeNode, ConfigVikeNodeResolved, ConfigVikeNodePlugin, Runt
 import type { BuildOptions } from 'esbuild'
 
 type Runtime = 'node' | 'nodeless' | 'deno' | 'cloudflare' | 'cloudflare-nodejs-compat' | 'vercel'
+type DetailedEntry = { entry: string; runtime: Runtime }
 type ConfigVikeNode = {
   /** Server entry path.
    *
@@ -10,14 +11,12 @@ type ConfigVikeNode = {
   server:
     | string
     | {
-        entry:
-          | string
-          | { index: string; [name: string]: string | { entry: string; runtime: Runtime; scaffold?: string } }
+        entry: string | { index: string; [name: string]: string | DetailedEntry }
         /** Enable standalone build.
          *
          * @default false
          */
-        standalone?: boolean | { esbuild: BuildOptions }
+        standalone?: boolean | { esbuild: Omit<BuildOptions, 'manifest'> }
 
         /** List of external/native dependencies.
          *
@@ -27,14 +26,14 @@ type ConfigVikeNode = {
 }
 
 type EntryResolved = {
-  index: { entry: string; runtime: Runtime }
-  [name: string]: { entry: string; runtime: Runtime; scaffold?: string }
+  index: DetailedEntry
+  [name: string]: DetailedEntry
 }
 type ConfigVikeNodeResolved = {
   server: {
     entry: EntryResolved
     external: string[]
-    standalone: boolean | { esbuild: BuildOptions }
+    standalone: boolean | { esbuild: Omit<BuildOptions, 'manifest'> }
   }
 }
 
