@@ -1,5 +1,5 @@
 import type { Get, RuntimeAdapter, UniversalMiddleware } from '@universal-middleware/core'
-import type { VikeOptions } from '../runtime/types.js' // https://vike.dev/pageContext#typescript
+import type { VikeOptions } from '../runtime/types.js'
 
 // https://vike.dev/pageContext#typescript
 declare global {
