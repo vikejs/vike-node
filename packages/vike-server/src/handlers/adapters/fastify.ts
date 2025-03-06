@@ -2,7 +2,7 @@ import { apply as applyAdapter } from '@universal-middleware/fastify'
 import renderPageUniversal from '../universal.js'
 import type { VikeOptions } from '../../runtime/types.js'
 import type { RuntimeAdapterTarget } from '@universal-middleware/core'
-import { commonRuntimesNode, onReady, type Serve } from '../serve.js'
+import { type ApplyReturn, commonRuntimesNode, onReady, type Serve } from '../serve.js'
 
 function createServerAdapter<App extends Parameters<typeof applyAdapter>[0]>(app: App): Serve<App> {
   return function serve(options) {
@@ -21,8 +21,15 @@ function createServerAdapter<App extends Parameters<typeof applyAdapter>[0]>(app
   }
 }
 
-export function apply(app: Parameters<typeof applyAdapter>[0], options?: VikeOptions<'fastify'>) {
-  return applyAdapter(app, renderPageUniversal(options))
+export function apply<App extends Parameters<typeof applyAdapter>[0]>(
+  app: App,
+  options?: VikeOptions<'fastify'>
+): ApplyReturn<App> {
+  applyAdapter(app, renderPageUniversal(options))
+
+  return {
+    serve: createServerAdapter<App>(app)
+  }
 }
 
 export type RuntimeAdapter = RuntimeAdapterTarget<'fastify'>
