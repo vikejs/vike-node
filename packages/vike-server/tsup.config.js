@@ -1,6 +1,5 @@
 import { defineConfig } from 'tsup'
-
-const external = ['stream', 'http', 'path', 'url', 'zlib']
+import { builtinModules } from 'node:module'
 
 export default defineConfig([
   {
@@ -18,7 +17,7 @@ export default defineConfig([
     esbuildOptions(opts) {
       opts.outbase = 'src'
     },
-    external: external.flatMap((e) => [e, `node:${e}`]),
+    external: builtinModules.flatMap((e) => [e, `node:${e}`]),
     dts: true,
     outDir: 'dist',
     bundle: true,

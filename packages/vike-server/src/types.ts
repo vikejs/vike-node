@@ -1,9 +1,8 @@
-export type { ConfigVikeNode, ConfigVikeNodeResolved, ConfigVikeNodePlugin, Runtime, EntryResolved }
+export type { ConfigVikeNode, ConfigVikeNodeResolved, ConfigVikeNodePlugin }
 
+import type { Runtime } from '@universal-middleware/core'
 import type { BuildOptions } from 'esbuild'
 
-type Runtime = 'node' | 'nodeless' | 'deno' | 'cloudflare' | 'cloudflare-nodejs-compat' | 'vercel'
-type DetailedEntry = { entry: string; runtime: Runtime }
 type ConfigVikeNode = {
   /** Server entry path.
    *
@@ -11,27 +10,29 @@ type ConfigVikeNode = {
   server:
     | string
     | {
-        entry: string | { index: string; [name: string]: string | DetailedEntry }
-        /** Enable standalone build.
-         *
+        entry: string | { index: string; [name: string]: string }
+        /**
+         * Under which runtime will your built code run
+         * @default "node"
+         */
+        runtime?: Runtime['runtime']
+        /**
+         * Enable standalone build.
          * @default false
          */
         standalone?: boolean | { esbuild: Omit<BuildOptions, 'manifest'> }
 
-        /** List of external/native dependencies.
-         *
+        /**
+         * List of external/native dependencies.
          */
         external?: string[]
       }
 }
 
-type EntryResolved = {
-  index: DetailedEntry
-  [name: string]: DetailedEntry
-}
 type ConfigVikeNodeResolved = {
   server: {
-    entry: EntryResolved
+    entry: Record<string, string>
+    runtime: Runtime['runtime']
     external: string[]
     standalone: boolean | { esbuild: Omit<BuildOptions, 'manifest'> }
   }

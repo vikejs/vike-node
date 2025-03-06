@@ -1,8 +1,7 @@
 export { resolveConfig }
 
-import type { ConfigVikeNode, ConfigVikeNodeResolved, EntryResolved } from '../../types.js'
+import type { ConfigVikeNode, ConfigVikeNodeResolved } from '../../types.js'
 import { assertUsage } from '../../utils/assert.js'
-import { RUNTIMES } from '../constants.js'
 import { unique } from './unique.js'
 
 export const nativeDependecies = ['sharp', '@prisma/client', '@node-rs/*']
@@ -13,11 +12,8 @@ function resolveConfig(configVike: ConfigVikeNode): ConfigVikeNodeResolved {
       assertUsage(
         typeof configVike.server.entry === 'string' ||
           (typeof configVike.server.entry === 'object' &&
-            Object.entries(configVike.server.entry).every(
-              ([, value]) =>
-                typeof value === 'string' || (typeof value === 'object' && 'entry' in value && 'runtime' in value)
-            )),
-        'server.entry should be a string or an entry mapping { name: string | { entry: string, runtime: Runtime } }'
+            Object.entries(configVike.server.entry).every(([, value]) => typeof value === 'string')),
+        'server.entry should be a string or an entry mapping { index: string; [name: string]: string }'
       )
       assertUsage(
         typeof configVike.server.entry !== 'object' ||
@@ -26,24 +22,14 @@ function resolveConfig(configVike: ConfigVikeNode): ConfigVikeNodeResolved {
       )
     }
 
-    const entriesProvided: EntryResolved =
-      typeof configVike.server.entry === 'string'
-        ? { index: { entry: configVike.server.entry, runtime: 'node' } }
-        : Object.entries(configVike.server.entry).reduce((acc, [name, value]) => {
-            if (typeof value === 'object') {
-              assertUsage(
-                RUNTIMES.includes(value.runtime),
-                `Invalid runtime "${value.runtime}" for entry "${name}". Valid runtimes are: ${RUNTIMES.join(', ')}.`
-              )
-            }
-            acc[name] = typeof value === 'string' ? { entry: value, runtime: 'node' } : value
-            return acc
-          }, {} as EntryResolved)
+    const entriesProvided: Record<string, string> =
+      typeof configVike.server.entry === 'string' ? { index: configVike.server.entry } : configVike.server.entry
 
     assertUsage('index' in entriesProvided, 'Missing index entry in server.entry')
     return {
       server: {
         entry: entriesProvided,
+        runtime: 'node',
         standalone: configVike.server.standalone ?? false,
         external: unique([...nativeDependecies, ...(configVike.server.external ?? [])])
       }
@@ -53,7 +39,8 @@ function resolveConfig(configVike: ConfigVikeNode): ConfigVikeNodeResolved {
   assertUsage(typeof configVike.server === 'string', 'config.server should be defined')
   return {
     server: {
-      entry: { index: { entry: configVike.server, runtime: 'node' } },
+      entry: { index: configVike.server },
+      runtime: 'node',
       standalone: false,
       external: nativeDependecies
     }

@@ -3,7 +3,6 @@ import path from 'node:path'
 import pc from '@brillout/picocolors'
 import type { ConfigVitePluginServerEntry } from 'vike/types'
 import type { Plugin, ResolvedConfig } from 'vite'
-import type { EntryResolved } from '../../types.js'
 import { assert, assertUsage } from '../../utils/assert.js'
 import { getConfigVikeNode } from '../utils/getConfigVikeNode.js'
 import { injectRollupInputs } from '../utils/injectRollupInputs.js'
@@ -20,18 +19,12 @@ export function serverEntryPlugin(): Plugin {
       const entries = Object.entries(entry)
       assert(entries.length > 0)
 
-      const resolvedEntries: EntryResolved = {
-        index: { entry: '', runtime: 'node' } // Initialize with a placeholder, will be overwritten
-      }
+      const resolvedEntries: Record<string, string> = {}
 
-      for (const [name, entryInfo] of entries) {
-        const { entry: entryPath, runtime } = entryInfo
+      for (const [name, entryPath] of entries) {
         const entryFilePath = path.join(config.root, entryPath)
         try {
-          resolvedEntries[name] = {
-            entry: require_.resolve(entryFilePath),
-            runtime
-          }
+          resolvedEntries[name] = require_.resolve(entryFilePath)
         } catch (err) {
           assert((err as Record<string, unknown>).code === 'MODULE_NOT_FOUND')
           assertUsage(
@@ -42,10 +35,7 @@ export function serverEntryPlugin(): Plugin {
       }
 
       if (viteIsSSR(config)) {
-        config.build.rollupOptions.input = injectRollupInputs(
-          Object.fromEntries(Object.entries(resolvedEntries).map(([name, { entry: path }]) => [name, path])),
-          config
-        )
+        config.build.rollupOptions.input = injectRollupInputs(resolvedEntries, config)
       }
 
       config.vitePluginServerEntry ??= {}

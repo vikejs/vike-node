@@ -3,14 +3,17 @@ export { commonConfig }
 import type { Plugin } from 'vite'
 import type { ConfigVikeNodePlugin, ConfigVikeNodeResolved } from '../../types.js'
 import { resolveConfig } from '../utils/resolveConfig.js'
+import { getRuntimeKey } from '@universal-middleware/core'
 
 function commonConfig(configVikeNodePlugin: ConfigVikeNodePlugin): Plugin[] {
   const resolvedConfig: ConfigVikeNodeResolved = resolveConfig({ server: configVikeNodePlugin })
+
   return [
     {
       enforce: 'pre',
       name: 'vike-server:commonConfig',
       config(config, env) {
+        const isDev = env.command === 'serve'
         ;(config as Record<string, unknown>).configVikeNode = resolvedConfig
         return {
           build: {
@@ -23,7 +26,8 @@ function commonConfig(configVikeNodePlugin: ConfigVikeNodePlugin): Plugin[] {
             exclude: resolvedConfig.server.external
           },
           define: {
-            __DEV__: JSON.stringify(env.command === 'serve')
+            __DEV__: JSON.stringify(isDev),
+            __VIKE_RUNTIME__: JSON.stringify(isDev ? getRuntimeKey() : resolvedConfig.server.runtime)
           }
         }
       }
