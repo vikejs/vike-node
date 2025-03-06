@@ -3,23 +3,38 @@ import type { ConfigVitePluginServerEntry } from 'vike/types'
 import type { Plugin, ResolvedConfig } from 'vite'
 import { assert, assertUsage } from '../../utils/assert.js'
 import { getConfigVikeNode } from '../utils/getConfigVikeNode.js'
-import { injectRollupInputs } from '../utils/injectRollupInputs.js'
-import { viteIsSSR } from '../utils/viteIsSSR.js'
+import type { ConfigVikeNodeResolved } from '../../types.js'
 
 export function serverEntryPlugin(): Plugin {
+  let resolvedVikeConfig: ConfigVikeNodeResolved
   let vikeEntries: Set<string> = new Set()
   const vikeInject: Set<string> = new Set()
 
   return {
     name: 'vike-server:serverEntry',
+
+    // TODO support vite@5?
+    applyToEnvironment(env) {
+      return env.name === 'ssr'
+    },
+
     async configResolved(config: ResolvedConfig & ConfigVitePluginServerEntry) {
-      const resolvedVikeConfig = getConfigVikeNode(config)
+      resolvedVikeConfig = getConfigVikeNode(config)
       const { entry } = resolvedVikeConfig.server
       vikeEntries = new Set(Object.values(entry))
       assert(vikeEntries.size > 0)
+    },
 
-      if (viteIsSSR(config)) {
-        config.build.rollupOptions.input = injectRollupInputs(entry, config)
+    buildStart() {
+      const { entry } = resolvedVikeConfig.server
+
+      for (const [name, filepath] of Object.entries(entry)) {
+        this.emitFile({
+          type: 'chunk',
+          fileName: `${name}.js`,
+          id: filepath,
+          importer: undefined
+        })
       }
     },
 
