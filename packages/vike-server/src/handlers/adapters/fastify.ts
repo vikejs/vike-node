@@ -21,11 +21,11 @@ function createServerAdapter<App extends Parameters<typeof applyAdapter>[0]>(app
   }
 }
 
-export function apply<App extends Parameters<typeof applyAdapter>[0]>(
+export async function apply<App extends Parameters<typeof applyAdapter>[0]>(
   app: App,
   options?: VikeOptions<'fastify'>
-): ApplyReturn<App> {
-  applyAdapter(app, renderPageUniversal(options))
+): Promise<ApplyReturn<App>> {
+  await applyAdapter(app, renderPageUniversal(options))
 
   return {
     serve: createServerAdapter<App>(app)
