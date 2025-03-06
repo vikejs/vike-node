@@ -1,5 +1,3 @@
-import { createRequire } from 'node:module'
-import path from 'node:path'
 import pc from '@brillout/picocolors'
 import type { ConfigVitePluginServerEntry } from 'vike/types'
 import type { Plugin, ResolvedConfig } from 'vite'
@@ -8,38 +6,46 @@ import { getConfigVikeNode } from '../utils/getConfigVikeNode.js'
 import { injectRollupInputs } from '../utils/injectRollupInputs.js'
 import { viteIsSSR } from '../utils/viteIsSSR.js'
 
-const require_ = createRequire(import.meta.url)
-
 export function serverEntryPlugin(): Plugin {
+  let vikeEntries: Set<string> = new Set()
+  const vikeInject: Set<string> = new Set()
+
   return {
     name: 'vike-server:serverEntry',
     async configResolved(config: ResolvedConfig & ConfigVitePluginServerEntry) {
-      const resolvedConfig = getConfigVikeNode(config)
-      const { entry } = resolvedConfig.server
-      const entries = Object.entries(entry)
-      assert(entries.length > 0)
-
-      const resolvedEntries: Record<string, string> = {}
-
-      for (const [name, entryPath] of entries) {
-        const entryFilePath = path.join(config.root, entryPath)
-        try {
-          resolvedEntries[name] = require_.resolve(entryFilePath)
-        } catch (err) {
-          assert((err as Record<string, unknown>).code === 'MODULE_NOT_FOUND')
-          assertUsage(
-            false,
-            `No file found at ${entryFilePath}. Make sure ${pc.cyan(`server.entry.${name}`)} points to an existing file.`
-          )
-        }
-      }
+      const resolvedVikeConfig = getConfigVikeNode(config)
+      const { entry } = resolvedVikeConfig.server
+      vikeEntries = new Set(Object.values(entry))
+      assert(vikeEntries.size > 0)
 
       if (viteIsSSR(config)) {
-        config.build.rollupOptions.input = injectRollupInputs(resolvedEntries, config)
+        config.build.rollupOptions.input = injectRollupInputs(entry, config)
       }
+    },
 
-      config.vitePluginServerEntry ??= {}
-      config.vitePluginServerEntry.inject = Object.keys(resolvedEntries)
+    async resolveId(id) {
+      if (vikeEntries.has(id)) {
+        if (id.startsWith('virtual:')) {
+          vikeInject.add(`\0${id}`)
+          return `\0${id}`
+        }
+        const resolved = await this.resolve(id)
+        assertUsage(
+          resolved,
+          `No file found at ${id}. Update your ${pc.cyan('server.entry')} configuration to point to an existing file.`
+        )
+
+        vikeInject.add(resolved.id)
+
+        return resolved
+      }
+    },
+
+    transform(code, id) {
+      // TODO support map
+      if (vikeInject.has(id)) {
+        return `import "virtual:@brillout/vite-plugin-server-entry:serverEntry";\n${code}`
+      }
     }
   }
 }
