@@ -17,6 +17,8 @@ function commonConfig(configVikeNodePlugin: ConfigVikeNodePlugin): Plugin[] {
         const isDev = env.command === 'serve'
         const NODE_ENV = isDev ? 'development' : 'production'
         const VIKE_RUNTIME = isDev ? getRuntimeKey() : resolvedConfig.server.runtime
+        process.env.NODE_ENV = NODE_ENV
+        process.env.VIKE_RUNTIME = VIKE_RUNTIME
         ;(config as Record<string, unknown>).configVikeNode = resolvedConfig
         return {
           build: {
@@ -31,10 +33,6 @@ function commonConfig(configVikeNodePlugin: ConfigVikeNodePlugin): Plugin[] {
           define: {
             'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
             'process.env.VIKE_RUNTIME': JSON.stringify(VIKE_RUNTIME)
-          },
-          env: {
-            NODE_ENV,
-            VIKE_RUNTIME
           }
         }
       }
