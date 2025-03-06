@@ -27,6 +27,7 @@ function commonConfig(configVikeNodePlugin: ConfigVikeNodePlugin): Plugin[] {
           },
           define: {
             __DEV__: JSON.stringify(isDev),
+            // Can be overriden by extensions like `vike-cloudflare` or `vike-vercel`
             __VIKE_RUNTIME__: JSON.stringify(isDev ? getRuntimeKey() : resolvedConfig.server.runtime)
           }
         }
