@@ -38,3 +38,18 @@ export function commonRuntimes(options: ServerOptions, handler: Handler) {
       break
   }
 }
+
+export function commonRuntimesNode(runtime: string) {
+  switch (__VIKE_RUNTIME__) {
+    case 'edge-light':
+      throw new Error('Please install `vike-vercel` to be able to deploy to Vercel Edge. See https://vike.dev/vercel')
+    case 'workerd':
+      throw new Error(
+        'Please install `vike-cloudflare` to be able to deploy to Cloudflare. See https://vike.dev/cloudflare-pages'
+      )
+    case 'deno':
+      throw new Error(`${runtime} is not compatible with Deno. Use another server like Hono or use NodeJS.`)
+    case 'bun':
+      throw new Error(`${runtime} is not compatible with Bun. Use another server like Hono or use NodeJS.`)
+  }
+}
