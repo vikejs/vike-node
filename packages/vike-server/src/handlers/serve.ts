@@ -11,16 +11,16 @@ export function onReady(options: { port: number }) {
   return () => console.log(`Server running at http://localhost:${options.port}`)
 }
 
-function denoServe(options: ServerOptions, handler: Handler) {
+export function denoServe(options: ServerOptions, handler: Handler) {
   Deno.serve({ ...options.deno, port: options.port, onListen: onReady(options) }, handler)
 }
 
-function bunServe(options: ServerOptions, handler: Handler) {
+export function bunServe(options: ServerOptions, handler: Handler) {
   Bun.serve({ ...options.bun, port: options.port, fetch: handler })
   onReady(options)()
 }
 
-export function commonRuntimes(options: ServerOptions, handler: Handler) {
+export function edgeRuntimes() {
   switch (__VIKE_RUNTIME__) {
     case 'edge-light':
       // TODO ensure this error is also triggered at build time
@@ -30,6 +30,12 @@ export function commonRuntimes(options: ServerOptions, handler: Handler) {
       throw new Error(
         'Please install `vike-cloudflare` to be able to deploy to Cloudflare. See https://vike.dev/cloudflare-pages'
       )
+  }
+}
+
+export function commonRuntimes(options: ServerOptions, handler: Handler) {
+  edgeRuntimes()
+  switch (__VIKE_RUNTIME__) {
     case 'deno':
       denoServe(options, handler)
       break
@@ -40,13 +46,8 @@ export function commonRuntimes(options: ServerOptions, handler: Handler) {
 }
 
 export function commonRuntimesNode(runtime: string) {
+  edgeRuntimes()
   switch (__VIKE_RUNTIME__) {
-    case 'edge-light':
-      throw new Error('Please install `vike-vercel` to be able to deploy to Vercel Edge. See https://vike.dev/vercel')
-    case 'workerd':
-      throw new Error(
-        'Please install `vike-cloudflare` to be able to deploy to Cloudflare. See https://vike.dev/cloudflare-pages'
-      )
     case 'deno':
       throw new Error(`${runtime} is not compatible with Deno. Use another server like Hono or use NodeJS.`)
     case 'bun':
