@@ -1,9 +1,6 @@
-import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
 import { apply } from 'vike-server/hono'
 import { init } from '../database/todoItems'
-
-startServer()
 
 async function startServer() {
   await init()
@@ -20,7 +17,7 @@ async function startServer() {
     ctx.header('x-test', 'test')
   })
 
-  apply(app, {
+  const { serve } = apply(app, {
     pageContext(runtime) {
       return {
         xRuntime: runtime.hono.get('xRuntime')
@@ -28,13 +25,7 @@ async function startServer() {
     }
   })
 
-  serve(
-    {
-      fetch: app.fetch,
-      port: +port,
-      // Needed for Bun
-      overrideGlobalObjects: false
-    },
-    () => console.log(`Server running at http://localhost:${port}`)
-  )
+  return serve({ port: +port })
 }
+
+export default startServer()

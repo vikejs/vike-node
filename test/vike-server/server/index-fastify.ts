@@ -10,7 +10,6 @@ if (two() !== 2) {
   throw new Error()
 }
 
-startServer()
 new Worker(new URL('./worker.mjs', import.meta.url))
 
 async function startServer() {
@@ -31,7 +30,7 @@ async function startServer() {
     done()
   })
 
-  await apply(app, {
+  const { serve } = await apply(app, {
     pageContext(runtime) {
       return {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
@@ -41,6 +40,7 @@ async function startServer() {
   })
 
   const port = process.env.PORT || 3000
-  app.listen({ port: +port })
-  console.log(`Server running at http://localhost:${port}`)
+  return serve({ port: +port })
 }
+
+export default startServer()

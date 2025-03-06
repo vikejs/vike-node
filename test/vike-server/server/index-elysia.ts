@@ -2,8 +2,6 @@ import { Elysia } from 'elysia'
 import { apply } from 'vike-server/elysia'
 import { init } from '../database/todoItems'
 
-startServer()
-
 async function startServer() {
   await init()
   const app = new Elysia().state('xRuntime', 'x-runtime')
@@ -14,7 +12,7 @@ async function startServer() {
     ctx.set.headers['x-test'] = 'test'
   })
 
-  apply(app, {
+  const { serve } = apply(app, {
     pageContext(runtime) {
       return {
         xRuntime: (runtime.elysia.store as { xRuntime: string }).xRuntime
@@ -22,5 +20,7 @@ async function startServer() {
     }
   })
 
-  app.listen(+port, () => console.log(`Server running at http://localhost:${port}`))
+  return serve({ port: +port })
 }
+
+export default startServer()
