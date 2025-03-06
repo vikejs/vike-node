@@ -12,6 +12,7 @@ function commonConfig(configVikeNodePlugin: ConfigVikeNodePlugin): Plugin[] {
     {
       enforce: 'pre',
       name: 'vike-server:commonConfig',
+
       config(config, env) {
         const isDev = env.command === 'serve'
         ;(config as Record<string, unknown>).configVikeNode = resolvedConfig
@@ -27,7 +28,6 @@ function commonConfig(configVikeNodePlugin: ConfigVikeNodePlugin): Plugin[] {
           },
           define: {
             __DEV__: JSON.stringify(isDev),
-            // Can be overriden by extensions like `vike-cloudflare` or `vike-vercel`
             __VIKE_RUNTIME__: JSON.stringify(isDev ? getRuntimeKey() : resolvedConfig.server.runtime)
           }
         }

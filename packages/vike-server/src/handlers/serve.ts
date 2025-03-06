@@ -20,21 +20,7 @@ export function bunServe(options: ServerOptions, handler: Handler) {
   onReady(options)()
 }
 
-export function edgeRuntimes() {
-  switch (__VIKE_RUNTIME__) {
-    case 'edge-light':
-      // TODO ensure this error is also triggered at build time
-      throw new Error('Please install `vike-vercel` to be able to deploy to Vercel Edge. See https://vike.dev/vercel')
-    case 'workerd':
-      // TODO ensure this error is also triggered at build time
-      throw new Error(
-        'Please install `vike-cloudflare` to be able to deploy to Cloudflare. See https://vike.dev/cloudflare-pages'
-      )
-  }
-}
-
 export function commonRuntimes(options: ServerOptions, handler: Handler) {
-  edgeRuntimes()
   switch (__VIKE_RUNTIME__) {
     case 'deno':
       denoServe(options, handler)
@@ -46,7 +32,6 @@ export function commonRuntimes(options: ServerOptions, handler: Handler) {
 }
 
 export function commonRuntimesNode(runtime: string) {
-  edgeRuntimes()
   switch (__VIKE_RUNTIME__) {
     case 'deno':
       throw new Error(`${runtime} is not compatible with Deno. Use another server like Hono or use NodeJS.`)
