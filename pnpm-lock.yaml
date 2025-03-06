@@ -208,6 +208,12 @@ importers:
       '@brillout/release-me':
         specifier: ^0.4.3
         version: 0.4.3
+      '@types/bun':
+        specifier: ^1.2.4
+        version: 1.2.4
+      '@types/deno':
+        specifier: ^2.2.0
+        version: 2.2.0
       '@types/node':
         specifier: ^20.17.23
         version: 20.17.23
@@ -1543,8 +1549,14 @@ packages:
   '@types/body-parser@1.19.5':
     resolution: {integrity: sha512-fB3Zu92ucau0iQ0JMCFQE7b/dv8Ot07NI3KaZIkIUNXq82k4eBAqUaneXfleGY9JWskeS9y+u0nXMyspcuQrCg==}
 
+  '@types/bun@1.2.4':
+    resolution: {integrity: sha512-QtuV5OMR8/rdKJs213iwXDpfVvnskPXY/S0ZiFbsTjQZycuqPbMW8Gf/XhLfwE5njW8sxI2WjISURXPlHypMFA==}
+
   '@types/connect@3.4.38':
     resolution: {integrity: sha512-K6uROf1LD88uDQqJCktA4yzL1YYAK6NgfsI0v/mTgyPKWsX1CnJ0XPSDhViejru1GcRkLWb8RlzFYJRqGUbaug==}
+
+  '@types/deno@2.2.0':
+    resolution: {integrity: sha512-4x6M/ZSyoQy6fJeMArP0dvvNT4IOolfySyukuqqKhsLmSXDV4wGanqXIZ+xFihw3TlReS6JTa4hRG9nAZInpmw==}
 
   '@types/estree@1.0.6':
     resolution: {integrity: sha512-AYnb1nQyY49te+VRAVgmzfcgjYS91mY5P0TKUDCLEM+gNnA+3T6rWITXRLYCpahpqSQbN5cE+gHpnPyXjHWxcw==}
@@ -1589,6 +1601,9 @@ packages:
 
   '@types/serve-static@1.15.7':
     resolution: {integrity: sha512-W8Ym+h8nhuRwaKPaDw34QUkwsGi6Rc4yYqvKFo5rm2FUEhCFbzVWrxXUxuKK8TASjWsysJY0nsmNCGhCOIsrOw==}
+
+  '@types/ws@8.5.14':
+    resolution: {integrity: sha512-bd/YFLW+URhBzMXurx7lWByOu+xzU9+kb3RboOteXYDfW+tr+JZa99OyNmPINEGB/ahzKrEuc8rcv4gnpJmxTw==}
 
   '@universal-middleware/compress@0.2.20':
     resolution: {integrity: sha512-CNDYdfkLSf6Qb4g4B2E3a3hHou3zkrpcaqnNHp3i96pZjoa0EU9OD1dRwpwc55PnaLUeCPeRa/MKGUknH8N/Vw==}
@@ -1766,6 +1781,9 @@ packages:
 
   buffer-from@1.1.2:
     resolution: {integrity: sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ==}
+
+  bun-types@1.2.4:
+    resolution: {integrity: sha512-nDPymR207ZZEoWD4AavvEaa/KZe/qlrbMSchqpQwovPZCKc7pwMoENjEtHgMKaAjJhy+x6vfqSBA1QU3bJgs0Q==}
 
   bundle-require@5.1.0:
     resolution: {integrity: sha512-3WrrOuZiyaaZPWiEt4G3+IffISVC9HYlWueJEBWED4ZH4aIAC2PnkdnuRrR94M+w6yGWn4AglWtJtBI8YqvgoA==}
@@ -4235,9 +4253,15 @@ snapshots:
       '@types/connect': 3.4.38
       '@types/node': 20.17.23
 
+  '@types/bun@1.2.4':
+    dependencies:
+      bun-types: 1.2.4
+
   '@types/connect@3.4.38':
     dependencies:
       '@types/node': 20.17.23
+
+  '@types/deno@2.2.0': {}
 
   '@types/estree@1.0.6': {}
 
@@ -4290,6 +4314,10 @@ snapshots:
       '@types/http-errors': 2.0.4
       '@types/node': 20.17.23
       '@types/send': 0.17.4
+
+  '@types/ws@8.5.14':
+    dependencies:
+      '@types/node': 20.17.23
 
   '@universal-middleware/compress@0.2.20': {}
 
@@ -4521,6 +4549,11 @@ snapshots:
       update-browserslist-db: 1.1.2(browserslist@4.24.4)
 
   buffer-from@1.1.2: {}
+
+  bun-types@1.2.4:
+    dependencies:
+      '@types/node': 20.17.23
+      '@types/ws': 8.5.14
 
   bundle-require@5.1.0(esbuild@0.25.0):
     dependencies:
