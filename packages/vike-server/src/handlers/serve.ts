@@ -21,7 +21,7 @@ export function bunServe(options: ServerOptions, handler: Handler) {
 }
 
 export function commonRuntimes(options: ServerOptions, handler: Handler) {
-  switch (__VIKE_RUNTIME__) {
+  switch (process.env.VIKE_RUNTIME) {
     case 'deno':
       denoServe(options, handler)
       break
@@ -32,7 +32,7 @@ export function commonRuntimes(options: ServerOptions, handler: Handler) {
 }
 
 export function commonRuntimesNode(runtime: string) {
-  switch (__VIKE_RUNTIME__) {
+  switch (process.env.VIKE_RUNTIME) {
     case 'deno':
       throw new Error(`${runtime} is not compatible with Deno. Use another server like Hono or use NodeJS.`)
     case 'bun':

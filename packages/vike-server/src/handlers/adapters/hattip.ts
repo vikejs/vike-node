@@ -7,7 +7,7 @@ import { type ApplyReturn, commonRuntimes, onReady, type Serve } from '../serve.
 
 function createServerAdapter<App extends Parameters<typeof applyAdapter>[0]>(app: App): Serve<App> {
   return function serve(options) {
-    if (__VIKE_RUNTIME__ === 'node') {
+    if (process.env.VIKE_RUNTIME === 'node') {
       createServer(app).listen(options.port, onReady(options))
     } else {
       commonRuntimes(options, app.fetch)

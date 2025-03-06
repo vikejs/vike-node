@@ -6,7 +6,7 @@ import { type ApplyReturn, commonRuntimesNode, onReady, type Serve } from '../se
 
 function createServerAdapter<App extends Parameters<typeof applyAdapter>[0]>(app: App): Serve<App> {
   return function serve(options) {
-    if (__VIKE_RUNTIME__ === 'node') {
+    if (process.env.VIKE_RUNTIME === 'node') {
       app.listen(
         {
           port: options.port

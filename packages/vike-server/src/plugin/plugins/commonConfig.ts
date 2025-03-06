@@ -15,6 +15,8 @@ function commonConfig(configVikeNodePlugin: ConfigVikeNodePlugin): Plugin[] {
 
       config(config, env) {
         const isDev = env.command === 'serve'
+        const NODE_ENV = isDev ? 'development' : 'production'
+        const VIKE_RUNTIME = isDev ? getRuntimeKey() : resolvedConfig.server.runtime
         ;(config as Record<string, unknown>).configVikeNode = resolvedConfig
         return {
           build: {
@@ -27,8 +29,12 @@ function commonConfig(configVikeNodePlugin: ConfigVikeNodePlugin): Plugin[] {
             exclude: resolvedConfig.server.external
           },
           define: {
-            __DEV__: JSON.stringify(isDev),
-            __VIKE_RUNTIME__: JSON.stringify(isDev ? getRuntimeKey() : resolvedConfig.server.runtime)
+            'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
+            'process.env.VIKE_RUNTIME': JSON.stringify(VIKE_RUNTIME)
+          },
+          env: {
+            NODE_ENV,
+            VIKE_RUNTIME
           }
         }
       }

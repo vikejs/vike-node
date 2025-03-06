@@ -8,11 +8,11 @@ import { node } from '@elysiajs/node'
 
 function createServerAdapter(app: Parameters<typeof applyAdapter>[0]): Serve<AnyElysia> {
   return function serve(options) {
-    if (__VIKE_RUNTIME__ === 'node') {
+    if (process.env.VIKE_RUNTIME === 'node') {
       return new Elysia({ adapter: node() }).mount(app).listen(options.port, onReady(options))
     }
 
-    switch (__VIKE_RUNTIME__) {
+    switch (process.env.VIKE_RUNTIME) {
       case 'deno':
         denoServe(options, app.fetch)
         break

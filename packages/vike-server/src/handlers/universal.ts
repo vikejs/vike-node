@@ -12,7 +12,7 @@ declare global {
 
 let renderPageUniversal: Get<[options?: VikeOptions], UniversalMiddleware[]>
 
-if (__DEV__) {
+if (process.env.NODE_ENV === 'development') {
   const universalDev = await import('./universal-dev.js')
   renderPageUniversal = universalDev.default
 } else {
