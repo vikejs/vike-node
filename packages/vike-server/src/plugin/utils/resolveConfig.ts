@@ -29,7 +29,7 @@ function resolveConfig(configVike: ConfigVikeNode): ConfigVikeNodeResolved {
     return {
       server: {
         entry: entriesProvided,
-        runtime: 'node',
+        runtime: configVike.server.runtime ?? 'node',
         standalone: configVike.server.standalone ?? false,
         external: unique([...nativeDependecies, ...(configVike.server.external ?? [])])
       }
