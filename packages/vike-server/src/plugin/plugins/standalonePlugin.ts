@@ -122,6 +122,8 @@ export function standalonePlugin(): Plugin {
   }
 
   async function traceAndCopyDependencies(base: string, relativeRoot: string, relativeOutDir: string) {
+    // FIXME: Must be aware of env vars such as `VIKE_RUNTIME` to perform optimally. Could be done via `readFile` hook
+    //  OR alternatively, make use of package.json `exports` and fill the `conditions` options in nodeFileTrace
     const { nodeFileTrace } = await import('@vercel/nft')
     const result = await nodeFileTrace(rollupEntryFilePaths, { base })
 
