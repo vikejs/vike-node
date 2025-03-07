@@ -21,21 +21,18 @@ export function bunServe(options: ServerOptions, handler: Handler) {
 }
 
 export function commonRuntimes(options: ServerOptions, handler: Handler) {
-  switch (process.env.VIKE_RUNTIME) {
-    case 'deno':
-      denoServe(options, handler)
-      break
-    case 'bun':
-      bunServe(options, handler)
-      break
+  if (process.env.VIKE_RUNTIME === 'deno') {
+    denoServe(options, handler)
+  } else if (process.env.VIKE_RUNTIME === 'bun') {
+    bunServe(options, handler)
   }
 }
 
 export function commonRuntimesNode(runtime: string) {
-  switch (process.env.VIKE_RUNTIME) {
-    case 'deno':
-      throw new Error(`${runtime} is not compatible with Deno. Use another server like Hono or use NodeJS.`)
-    case 'bun':
-      throw new Error(`${runtime} is not compatible with Bun. Use another server like Hono or use NodeJS.`)
+  if (process.env.VIKE_RUNTIME === 'deno') {
+    throw new Error(`${runtime} is not compatible with Deno. Use another server like Hono or use NodeJS.`)
+    // biome-ignore lint/style/noUselessElse: <explanation>
+  } else if (process.env.VIKE_RUNTIME === 'bun') {
+    throw new Error(`${runtime} is not compatible with Bun. Use another server like Hono or use NodeJS.`)
   }
 }

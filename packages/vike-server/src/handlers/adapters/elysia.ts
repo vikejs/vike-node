@@ -10,14 +10,11 @@ function createServerAdapter(app: Parameters<typeof applyAdapter>[0]): Serve<Any
   return function serve(options) {
     if (process.env.VIKE_RUNTIME === 'node') {
       return new Elysia({ adapter: node() }).mount(app).listen(options.port, onReady(options))
-    }
-
-    switch (process.env.VIKE_RUNTIME) {
-      case 'deno':
-        denoServe(options, app.fetch)
-        break
-      case 'bun':
-        return app.listen(options.port, onReady(options))
+      // biome-ignore lint/style/noUselessElse: <explanation>
+    } else if (process.env.VIKE_RUNTIME === 'deno') {
+      denoServe(options, app.fetch)
+    } else if (process.env.VIKE_RUNTIME === 'bun') {
+      return app.listen(options.port, onReady(options))
     }
 
     return app
