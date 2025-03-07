@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import esbuild, { type BuildOptions } from 'esbuild'
-import { type Plugin, type ResolvedConfig, searchForWorkspaceRoot } from 'vite'
+import { type Plugin, type ResolvedConfig, type Rollup, searchForWorkspaceRoot } from 'vite'
 import type { ConfigVikeNodeResolved } from '../../types.js'
 import { assert, assertUsage } from '../../utils/assert.js'
 import { toPosixPath } from '../utils/filesystemPathHandling.js'
@@ -45,7 +45,7 @@ export function standalonePlugin(): Plugin {
     },
     writeBundle(_, bundle) {
       if (!enabled) return
-      const entries = findRollupBundleEntries(bundle, configResolvedVike, root)
+      const entries = findRollupBundleEntries(bundle, configResolvedVike)
       rollupEntryFilePaths = entries.map((e) => path.posix.join(outDirAbs, e.fileName))
     },
     enforce: 'post',
@@ -122,6 +122,8 @@ export function standalonePlugin(): Plugin {
   }
 
   async function traceAndCopyDependencies(base: string, relativeRoot: string, relativeOutDir: string) {
+    // FIXME: Must be aware of env vars such as `VIKE_RUNTIME` to perform optimally. Could be done via `readFile` hook
+    //  OR alternatively, make use of package.json `exports` and fill the `conditions` options in nodeFileTrace
     const { nodeFileTrace } = await import('@vercel/nft')
     const result = await nodeFileTrace(rollupEntryFilePaths, { base })
 
@@ -220,29 +222,22 @@ function isYarnPnP(): boolean {
   }
 }
 
-function findRollupBundleEntries<OutputBundle extends Record<string, { name: string | undefined }>>(
-  bundle: OutputBundle,
-  resolvedConfig: ConfigVikeNodeResolved,
-  root: string
-): OutputBundle[string][] {
-  const entryPathsFromConfig = Object.entries(resolvedConfig.server.entry)
-    .filter(([_, entry]) => entry.runtime === 'node')
-    .map(([_, entry]) => path.posix.join(root, entry.entry))
+function findRollupBundleEntries(bundle: Rollup.OutputBundle, resolvedConfig: ConfigVikeNodeResolved) {
+  const entries = Object.keys(resolvedConfig.server.entry)
 
-  const entries: OutputBundle[string][] = []
+  const chunks: Rollup.OutputChunk[] = []
   for (const key in bundle) {
     // biome-ignore lint/style/noNonNullAssertion: <explanation>
     const entry = bundle[key]!
-    // https://github.com/brillout/vite-plugin-ssr/issues/612
-    if (!('facadeModuleId' in entry) || key.endsWith('.map') || key.endsWith('.json')) continue
-    assert(entry.facadeModuleId === null || typeof entry.facadeModuleId === 'string')
-    if (entry.facadeModuleId && entryPathsFromConfig.includes(entry.facadeModuleId)) {
-      entries.push(entry)
+    if (entry?.type !== 'chunk') continue
+    if (!entry.isEntry) continue
+    if (entries.includes(entry.name)) {
+      chunks.push(entry)
     }
   }
 
-  const serverIndex = entries.find((e) => e.name === 'index')
+  const serverIndex = chunks.find((e) => e.name === 'index')
   assert(serverIndex)
 
-  return entries.sort((a, b) => (a.name === 'index' ? -1 : b.name === 'index' ? 1 : 0))
+  return chunks.sort((a, b) => (a.name === 'index' ? -1 : b.name === 'index' ? 1 : 0))
 }

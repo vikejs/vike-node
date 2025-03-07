@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url'
 
 async function removeBaseUrl(req: Request) {
   if (!req.url) return req
-  const globalContext = await getGlobalContextAsync(!__DEV__)
+  const globalContext = await getGlobalContextAsync(process.env.NODE_ENV !== 'development')
   const baseAssets = globalContext.baseAssets as string
   // Don't choke on older Vike versions
   if (baseAssets === undefined) return req
