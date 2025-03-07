@@ -17,9 +17,8 @@ function commonConfig(configVikeNodePlugin: ConfigVikeNodePlugin): Plugin[] {
         ;(config as Record<string, unknown>).configVikeNode = resolvedConfig
         return {
           resolve: {
-            // Defaults to ['module', 'browser', 'development|production']
-            // See if we need to be more clever
-            // conditions: isDev ? ['development', 'module', 'browser', 'development'] : ['module', 'browser', 'production']
+            // vike-server conditions to respect
+            externalConditions: ['node', 'development']
           },
           build: {
             target: 'es2022'
