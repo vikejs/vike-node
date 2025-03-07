@@ -3,6 +3,7 @@ import { Worker } from 'node:worker_threads'
 import fastify from 'fastify'
 import rawBody from 'fastify-raw-body'
 import { apply } from 'vike-server/fastify'
+import { serve } from 'vike-server/fastify/serve'
 import { init } from '../database/todoItems.js'
 import { two } from './shared-chunk.js'
 
@@ -30,7 +31,7 @@ async function startServer() {
     done()
   })
 
-  const { serve } = await apply(app, {
+  await apply(app, {
     pageContext(runtime) {
       return {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
@@ -40,7 +41,7 @@ async function startServer() {
   })
 
   const port = process.env.PORT || 3000
-  return serve({ port: +port })
+  return serve(app, { port: +port })
 }
 
 export default startServer()

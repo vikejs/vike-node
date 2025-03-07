@@ -1,5 +1,6 @@
 import { Hono } from 'hono'
 import { apply } from 'vike-server/hono'
+import { serve } from 'vike-server/hono/serve'
 import { init } from '../database/todoItems'
 
 async function startServer() {
@@ -17,7 +18,7 @@ async function startServer() {
     ctx.header('x-test', 'test')
   })
 
-  const { serve } = apply(app, {
+  apply(app, {
     pageContext(runtime) {
       return {
         xRuntime: runtime.hono.get('xRuntime')
@@ -25,7 +26,7 @@ async function startServer() {
     }
   })
 
-  return serve({ port: +port })
+  return serve(app, { port: +port })
 }
 
 export default startServer()

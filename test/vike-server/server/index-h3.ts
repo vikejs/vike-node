@@ -1,5 +1,6 @@
 import { createApp, createRouter, eventHandler } from 'h3'
 import { apply } from 'vike-server/h3'
+import { serve } from 'vike-server/h3/serve'
 import { init } from '../database/todoItems'
 
 async function startServer() {
@@ -18,7 +19,7 @@ async function startServer() {
     })
   )
 
-  const { serve } = apply(app, {
+  apply(app, {
     pageContext(runtime) {
       return {
         xRuntime: runtime.h3.context.xRuntime
@@ -26,7 +27,7 @@ async function startServer() {
     }
   })
 
-  return serve({ port: +port })
+  return serve(app, { port: +port })
 }
 
 export default startServer()

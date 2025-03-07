@@ -1,5 +1,6 @@
 import { Elysia } from 'elysia'
 import { apply } from 'vike-server/elysia'
+import { serve } from 'vike-server/elysia/serve'
 import { init } from '../database/todoItems'
 
 async function startServer() {
@@ -12,7 +13,7 @@ async function startServer() {
     ctx.set.headers['x-test'] = 'test'
   })
 
-  const { serve } = apply(app, {
+  apply(app, {
     pageContext(runtime) {
       return {
         xRuntime: (runtime.elysia.store as { xRuntime: string }).xRuntime
@@ -20,7 +21,7 @@ async function startServer() {
     }
   })
 
-  return serve({ port: +port })
+  return serve(app, { port: +port })
 }
 
 export default startServer()

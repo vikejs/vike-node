@@ -1,6 +1,7 @@
 import { Worker } from 'node:worker_threads'
 import express from 'express'
 import { apply } from 'vike-server/express'
+import { serve } from 'vike-server/express/serve'
 import { init } from '../database/todoItems.js'
 import { two } from './shared-chunk.js'
 
@@ -19,7 +20,7 @@ async function startServer() {
     next()
   })
 
-  const { serve } = apply(app, {
+  apply(app, {
     pageContext(runtime) {
       return {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
@@ -30,7 +31,7 @@ async function startServer() {
 
   const port = process.env.PORT || 3000
 
-  return serve({ port: +port })
+  return serve(app, { port: +port })
 }
 
 export default startServer()
