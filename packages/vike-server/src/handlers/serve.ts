@@ -5,6 +5,7 @@ export interface ServerOptions {
 }
 export type Serve<App> = (options: ServerOptions) => App
 export type ApplyReturn<App> = { serve: Serve<App> }
+export type ApplyReturnAsync<App> = { serve: Serve<App | Promise<App>> }
 type Handler = (req: Request) => Response | Promise<Response>
 
 export function onReady(options: { port: number }) {

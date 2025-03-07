@@ -2,19 +2,25 @@ import { apply as applyAdapter } from '@universal-middleware/hono'
 import renderPageUniversal from '../universal.js'
 import type { VikeOptions } from '../../runtime/types.js'
 import type { RuntimeAdapterTarget } from '@universal-middleware/core'
-import { serve as honoServe } from '@hono/node-server'
-import { type ApplyReturn, commonRuntimes, onReady, type Serve } from '../serve.js'
+import { type ApplyReturnAsync, commonRuntimes, onReady, type ServerOptions } from '../serve.js'
 
-function createServerAdapter<App extends Parameters<typeof applyAdapter>[0]>(app: App): Serve<App> {
-  return function serve(options) {
+function createServerAdapter<App extends Parameters<typeof applyAdapter>[0]>(app: App) {
+  return function serve(options: ServerOptions) {
     if (process.env.VIKE_RUNTIME === 'node') {
-      honoServe(
-        {
-          fetch: app.fetch,
-          port: options.port
-        },
-        onReady(options)
-      )
+      // @hono/node-server has side-effects. Using a dynamic import allows esbuild and rollup to perform
+      // better tree-shaking
+      return import('@hono/node-server').then(({ serve: honoServe }) => {
+        honoServe(
+          {
+            fetch: app.fetch,
+            port: options.port,
+            overrideGlobalObjects: false
+          },
+          onReady(options)
+        )
+        return app
+      })
+      // biome-ignore lint/style/noUselessElse: <explanation>
     } else {
       commonRuntimes(options, app.fetch)
     }
@@ -28,7 +34,7 @@ function createServerAdapter<App extends Parameters<typeof applyAdapter>[0]>(app
 export function apply<App extends Parameters<typeof applyAdapter>[0]>(
   app: App,
   options?: VikeOptions<'hono'>
-): ApplyReturn<App> {
+): ApplyReturnAsync<App> {
   applyAdapter(app, renderPageUniversal(options))
 
   return {
