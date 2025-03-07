@@ -16,8 +16,6 @@ export default defineConfig([
     target: 'es2022',
     esbuildOptions(opts) {
       opts.outbase = 'src'
-      // TODO target each relevant package.exports condition
-      // opts.define...
     },
     external: builtinModules.flatMap((e) => [e, `node:${e}`]),
     dts: true,

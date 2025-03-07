@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import esbuild, { type BuildOptions } from 'esbuild'
-import { type Plugin, type ResolvedConfig, Rollup, searchForWorkspaceRoot } from 'vite'
+import { type Plugin, type ResolvedConfig, type Rollup, searchForWorkspaceRoot } from 'vite'
 import type { ConfigVikeNodeResolved } from '../../types.js'
 import { assert, assertUsage } from '../../utils/assert.js'
 import { toPosixPath } from '../utils/filesystemPathHandling.js'
