@@ -30,7 +30,9 @@ function checkEdge(configVikeNodePlugin: ConfigVikeNodePlugin): Plugin[] {
       configResolved(config) {
         for (const [runtime, edgeEnv] of Object.entries(edgePlugins)) {
           if (resolvedConfig.server.runtime === runtime) {
-            const plugin = config.plugins.find((p) => p.name === edgeEnv.pluginName)
+            const plugin = config.plugins.find(
+              (p) => p.name === edgeEnv.pluginName || p.name.startsWith(`${edgeEnv.pluginName}:`)
+            )
 
             if (!plugin) {
               throw new Error(
