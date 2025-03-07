@@ -40,10 +40,6 @@ export function serverEntryPlugin(): Plugin {
 
     async resolveId(id) {
       if (vikeEntries.has(id)) {
-        if (id.startsWith('virtual:')) {
-          vikeInject.add(`\0${id}`)
-          return `\0${id}`
-        }
         const resolved = await this.resolve(id)
         assertUsage(
           resolved,
