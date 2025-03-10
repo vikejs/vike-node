@@ -38,7 +38,9 @@ export function standalonePlugin(): Plugin {
       root = toPosixPath(config.root)
       outDir = toPosixPath(config.build.outDir)
       outDirAbs = path.isAbsolute(outDir) ? outDir : path.posix.join(root, outDir)
-      standaloneOutDirAbs = path.posix.resolve(path.posix.join(root, outDir, '..', 'server-standalone'))
+      standaloneOutDirAbs = path.isAbsolute(outDir)
+        ? path.posix.join(outDir, 'standalone')
+        : path.posix.join(root, outDir, 'standalone')
     },
     buildStart() {
       if (!enabled) return
