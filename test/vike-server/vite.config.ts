@@ -10,8 +10,7 @@ export default {
     react(),
     vike(),
     vikeServer({
-      entry: { index: `./server/index-${FRAMEWORK}.ts`, worker: './server/worker.mjs' },
-      standalone: true
+      entry: { index: `./server/index-${FRAMEWORK}.ts`, worker: './server/worker.js' }
     }),
     telefunc()
   ],

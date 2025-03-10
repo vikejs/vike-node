@@ -7,85 +7,85 @@ import { toPosixPath } from '../utils/filesystemPathHandling.js'
 import { getConfigVikeNode } from '../utils/getConfigVikeNode.js'
 
 const OPTIONAL_NPM_IMPORTS = [
-  "@nestjs/microservices",
-  "@nestjs/websockets",
-  "cache-manager",
-  "class-validator",
-  "class-transformer",
-];
+  '@nestjs/microservices',
+  '@nestjs/websockets',
+  'cache-manager',
+  'class-validator',
+  'class-transformer'
+]
 
 export function standalonePlugin(): Plugin {
-  let configResolved: ResolvedConfig;
-  let configResolvedVike: ConfigVikeNodeResolved;
-  let enabled = false;
-  let root = "";
-  let outDir = "";
-  let outDirAbs = "";
-  let rollupEntryFilePaths: Record<string, string> = {};
+  let configResolved: ResolvedConfig
+  let configResolvedVike: ConfigVikeNodeResolved
+  let enabled = false
+  let root = ''
+  let outDir = ''
+  let outDirAbs = ''
+  let rollupEntryFilePaths: Record<string, string> = {}
   // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  let rollupResolve: (...args: any[]) => Promise<any>;
+  let rollupResolve: (...args: any[]) => Promise<any>
 
   return {
-    name: "vike-server:standalone",
+    name: 'vike-server:standalone',
     apply: (_, env) => !!env.isSsrBuild,
     configResolved: async (config) => {
-      configResolved = config;
-      configResolvedVike = getConfigVikeNode(config);
-      enabled = Boolean(configResolvedVike.server.standalone);
-      if (!enabled) return;
-      root = toPosixPath(config.root);
-      outDir = toPosixPath(config.build.outDir);
-      outDirAbs = path.isAbsolute(outDir) ? outDir : path.posix.join(root, outDir);
+      configResolved = config
+      configResolvedVike = getConfigVikeNode(config)
+      enabled = Boolean(configResolvedVike.server.standalone)
+      if (!enabled) return
+      root = toPosixPath(config.root)
+      outDir = toPosixPath(config.build.outDir)
+      outDirAbs = path.isAbsolute(outDir) ? outDir : path.posix.join(root, outDir)
     },
     buildStart() {
-      if (!enabled) return;
-      rollupResolve = this.resolve.bind(this);
+      if (!enabled) return
+      rollupResolve = this.resolve.bind(this)
     },
     writeBundle(_, bundle) {
-      if (!enabled) return;
-      const entries = findRollupBundleEntries(bundle, configResolvedVike);
+      if (!enabled) return
+      const entries = findRollupBundleEntries(bundle, configResolvedVike)
       rollupEntryFilePaths = entries.reduce(
         (acc, cur) => {
-          acc[cur.fileName.replace(".js", ".standalone")] = path.posix.join(outDirAbs, cur.fileName);
-          return acc;
+          acc[cur.fileName.replace('.js', '.standalone')] = path.posix.join(outDirAbs, cur.fileName)
+          return acc
         },
-        {} as Record<string, string>,
-      );
+        {} as Record<string, string>
+      )
     },
-    enforce: "post",
+    enforce: 'post',
     async closeBundle() {
-      if (!enabled) return;
+      if (!enabled) return
 
       const userEsbuildOptions =
-        typeof configResolvedVike.server.standalone === "object" && configResolvedVike.server.standalone !== null
+        typeof configResolvedVike.server.standalone === 'object' && configResolvedVike.server.standalone !== null
           ? configResolvedVike.server.standalone.esbuild
-          : {};
+          : {}
 
-      await buildWithEsbuild(userEsbuildOptions);
+      await buildWithEsbuild(userEsbuildOptions)
     },
-    sharedDuringBuild: true,
-  };
+    sharedDuringBuild: true
+  }
 
   async function buildWithEsbuild(userEsbuildOptions: BuildOptions | undefined) {
     const res = await esbuild.build({
-      platform: "node",
-      format: "esm",
+      platform: 'node',
+      format: 'esm',
       bundle: true,
       external: configResolvedVike.server.external,
       entryPoints: rollupEntryFilePaths,
-      sourcemap: configResolved.build.sourcemap === "hidden" ? true : configResolved.build.sourcemap,
+      sourcemap: configResolved.build.sourcemap === 'hidden' ? true : configResolved.build.sourcemap,
       splitting: false,
-      outExtension: { ".js": ".mjs" },
+      outExtension: { '.js': '.mjs' },
       outdir: outDirAbs,
       allowOverwrite: true,
-      logOverride: { "ignored-bare-import": "silent" },
+      logOverride: { 'ignored-bare-import': 'silent' },
       banner: { js: generateBanner() },
       plugins: [createStandaloneIgnorePlugin(rollupResolve), ...(userEsbuildOptions?.plugins ?? [])],
       ...userEsbuildOptions,
-      metafile: true,
-    });
+      metafile: true
+    })
 
-    return res;
+    return res
   }
 }
 
@@ -94,48 +94,48 @@ function generateBanner() {
     "import { dirname as dirname987 } from 'path';",
     "import { fileURLToPath as fileURLToPath987 } from 'url';",
     "import { createRequire as createRequire987 } from 'module';",
-    "var require = createRequire987(import.meta.url);",
-    "var __filename = fileURLToPath987(import.meta.url);",
-    "var __dirname = dirname987(__filename);",
-  ].join("\n");
+    'var require = createRequire987(import.meta.url);',
+    'var __filename = fileURLToPath987(import.meta.url);',
+    'var __dirname = dirname987(__filename);'
+  ].join('\n')
 }
 
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 function createStandaloneIgnorePlugin(rollupResolve: (...args: any[]) => Promise<any>): esbuild.Plugin {
   return {
-    name: "standalone-ignore",
+    name: 'standalone-ignore',
     setup(build) {
-      build.onResolve({ filter: /.*/, namespace: "ignore" }, (args) => ({
+      build.onResolve({ filter: /.*/, namespace: 'ignore' }, (args) => ({
         path: args.path,
-        namespace: "ignore",
-      }));
-      build.onResolve({ filter: new RegExp(`^(${OPTIONAL_NPM_IMPORTS.join("|")})`) }, async (args) => {
-        const resolved = await rollupResolve(args.path);
+        namespace: 'ignore'
+      }))
+      build.onResolve({ filter: new RegExp(`^(${OPTIONAL_NPM_IMPORTS.join('|')})`) }, async (args) => {
+        const resolved = await rollupResolve(args.path)
         if (!resolved) {
-          return { path: args.path, namespace: "ignore" };
+          return { path: args.path, namespace: 'ignore' }
         }
-      });
-      build.onLoad({ filter: /.*/, namespace: "ignore" }, () => ({ contents: "" }));
-    },
-  };
+      })
+      build.onLoad({ filter: /.*/, namespace: 'ignore' }, () => ({ contents: '' }))
+    }
+  }
 }
 
 function findRollupBundleEntries(bundle: Rollup.OutputBundle, resolvedConfig: ConfigVikeNodeResolved) {
-  const entries = Object.keys(resolvedConfig.server.entry);
+  const entries = Object.keys(resolvedConfig.server.entry)
 
-  const chunks: Rollup.OutputChunk[] = [];
+  const chunks: Rollup.OutputChunk[] = []
   for (const key in bundle) {
     // biome-ignore lint/style/noNonNullAssertion: <explanation>
-    const entry = bundle[key]!;
-    if (entry?.type !== "chunk") continue;
-    if (!entry.isEntry) continue;
+    const entry = bundle[key]!
+    if (entry?.type !== 'chunk') continue
+    if (!entry.isEntry) continue
     if (entries.includes(entry.name)) {
-      chunks.push(entry);
+      chunks.push(entry)
     }
   }
 
-  const serverIndex = chunks.find((e) => e.name === "index");
-  assert(serverIndex);
+  const serverIndex = chunks.find((e) => e.name === 'index')
+  assert(serverIndex)
 
-  return chunks.sort((a, b) => (a.name === "index" ? -1 : b.name === "index" ? 1 : 0));
+  return chunks.sort((a, b) => (a.name === 'index' ? -1 : b.name === 'index' ? 1 : 0))
 }

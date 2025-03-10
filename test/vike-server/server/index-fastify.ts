@@ -11,7 +11,7 @@ if (two() !== 2) {
   throw new Error()
 }
 
-new Worker(new URL('./worker.mjs', import.meta.url))
+new Worker(new URL('./worker.js', import.meta.url))
 
 async function startServer() {
   await init()
