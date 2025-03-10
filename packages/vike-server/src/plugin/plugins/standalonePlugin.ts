@@ -1,4 +1,3 @@
-import fs from 'node:fs/promises'
 import path from 'node:path'
 import esbuild, { type BuildOptions } from 'esbuild'
 import type { Plugin, ResolvedConfig, Rollup } from 'vite'
@@ -6,6 +5,7 @@ import type { ConfigVikeNodeResolved } from '../../types.js'
 import { assert } from '../../utils/assert.js'
 import { toPosixPath } from '../utils/filesystemPathHandling.js'
 import { getConfigVikeNode } from '../utils/getConfigVikeNode.js'
+import pc from '@brillout/picocolors'
 
 const OPTIONAL_NPM_IMPORTS = [
   '@nestjs/microservices',
@@ -22,6 +22,7 @@ export function standalonePlugin(): Plugin {
   let root = ''
   let outDir = ''
   let outDirAbs = ''
+  let standaloneOutDirAbs = ''
   let rollupEntryFilePaths: string[] = []
   // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   let rollupResolve: (...args: any[]) => Promise<any>
@@ -37,6 +38,7 @@ export function standalonePlugin(): Plugin {
       root = toPosixPath(config.root)
       outDir = toPosixPath(config.build.outDir)
       outDirAbs = path.isAbsolute(outDir) ? outDir : path.posix.join(root, outDir)
+      standaloneOutDirAbs = path.posix.resolve(outDirAbs, '..', 'server-standalone')
     },
     buildStart() {
       if (!enabled) return
@@ -48,7 +50,7 @@ export function standalonePlugin(): Plugin {
       rollupEntryFilePaths = entries.map((e) => path.posix.join(outDirAbs, e.fileName))
     },
     enforce: 'post',
-    closeBundle: async () => {
+    async closeBundle() {
       if (!enabled) return
 
       const userEsbuildOptions =
@@ -56,8 +58,10 @@ export function standalonePlugin(): Plugin {
           ? configResolvedVike.server.standalone.esbuild
           : {}
 
-      const esbuildResult = await buildWithEsbuild(userEsbuildOptions)
-      await removeLeftoverFiles(esbuildResult)
+      await buildWithEsbuild(userEsbuildOptions)
+      this.environment.logger.info(
+        `Standalone server files generated in ${pc.cyan(path.posix.relative(root, standaloneOutDirAbs))} folder`
+      )
     },
     sharedDuringBuild: true
   }
@@ -70,9 +74,9 @@ export function standalonePlugin(): Plugin {
       external: configResolvedVike.server.external,
       entryPoints: rollupEntryFilePaths,
       sourcemap: configResolved.build.sourcemap === 'hidden' ? true : configResolved.build.sourcemap,
-      outExtension: { '.js': '.mjs' },
       splitting: false,
-      outdir: outDirAbs,
+      outExtension: { '.js': '.mjs' },
+      outdir: standaloneOutDirAbs,
       allowOverwrite: true,
       logOverride: { 'ignored-bare-import': 'silent' },
       banner: { js: generateBanner() },
@@ -82,38 +86,6 @@ export function standalonePlugin(): Plugin {
     })
 
     return res
-  }
-
-  async function removeLeftoverFiles(res: Awaited<ReturnType<typeof buildWithEsbuild>>) {
-    // Remove bundled files from outDir
-    // biome-ignore lint/style/noNonNullAssertion: <explanation>
-    const bundledFilesFromOutDir = Object.keys(res.metafile!.inputs).filter(
-      (relativeFile) =>
-        !rollupEntryFilePaths.some((entryFilePath) => entryFilePath.endsWith(relativeFile)) &&
-        relativeFile.startsWith(outDir)
-    )
-
-    await Promise.all(
-      bundledFilesFromOutDir.map(async (relativeFile) => {
-        await fs.rm(path.posix.join(root, relativeFile))
-        if (![false, 'inline'].includes(configResolved.build.sourcemap)) {
-          await fs.rm(path.posix.join(root, `${relativeFile}.map`))
-        }
-      })
-    )
-
-    // Remove empty directories
-    const relativeDirs = new Set(bundledFilesFromOutDir.map((file) => path.dirname(file)))
-    for (const relativeDir of relativeDirs) {
-      const absDir = path.posix.join(root, relativeDir)
-      const files = await fs.readdir(absDir)
-      if (!files.length) {
-        await fs.rm(absDir, { recursive: true })
-        if (relativeDir.startsWith(outDir)) {
-          relativeDirs.add(path.dirname(relativeDir))
-        }
-      }
-    }
   }
 }
 
