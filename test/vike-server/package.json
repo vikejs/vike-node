@@ -31,5 +31,8 @@
     "vike-server": "workspace:*",
     "vite": "^6.2.0"
   },
-  "type": "module"
+  "type": "module",
+  "devDependencies": {
+    "@hattip/router": "^0.0.49"
+  }
 }
