@@ -3,7 +3,8 @@ import { createServer } from '@hattip/adapter-node'
 import { onReady, type ServerOptions } from '../../../serve.js'
 
 export function serve<App extends Parameters<typeof applyAdapter>[0]>(app: App, options: ServerOptions) {
-  createServer(app.buildHandler()).listen(options.port, onReady(options))
+  const handler = app.buildHandler()
+  createServer(handler).listen(options.port, onReady(options))
 
-  return app
+  return handler
 }

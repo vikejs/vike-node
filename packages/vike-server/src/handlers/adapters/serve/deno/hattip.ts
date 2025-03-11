@@ -20,5 +20,5 @@ export function serve<App extends Parameters<typeof applyAdapter>[0]>(app: App, 
     })
   })
 
-  return app
+  return handler
 }
