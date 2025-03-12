@@ -4,14 +4,14 @@ import { installServerHMR, onReady, type ServerOptions } from '../../../serve.js
 export function serve<App extends Parameters<typeof applyAdapter>[0]>(app: App, options: ServerOptions) {
   app.listen(
     {
-      port: options.port,
+      port: options.port
     },
-    onReady(options),
-  );
+    onReady(options)
+  )
 
   if (import.meta.hot) {
-    installServerHMR(app.server);
+    installServerHMR(app.server)
   }
 
-  return app;
+  return app
 }

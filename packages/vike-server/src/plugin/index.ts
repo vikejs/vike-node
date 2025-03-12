@@ -1,4 +1,4 @@
-export { vikeServer, vikeServer as default };
+export { vikeServer, vikeServer as default }
 
 import pc from '@brillout/picocolors'
 import type { ConfigVikeNodePlugin } from '../types.js'
@@ -17,13 +17,13 @@ function vikeServer(config: ConfigVikeNodePlugin) {
     devServerPlugin(),
     standalonePlugin(),
     {
-      name: "vike-server:forbid-vite-preview-command",
+      name: 'vike-server:forbid-vite-preview-command',
       configurePreviewServer() {
         assertUsage(
           false,
-          `${pc.cyan("$ vike preview")} isn't supported: directly execute the server production entry (for example ${pc.cyan("$ node dist/server/index.mjs")}) instead.`,
-        );
-      },
-    },
-  ];
+          `${pc.cyan('$ vike preview')} isn't supported: directly execute the server production entry (for example ${pc.cyan('$ node dist/server/index.mjs')}) instead.`
+        )
+      }
+    }
+  ]
 }

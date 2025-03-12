@@ -7,14 +7,14 @@ export function serve<App extends Parameters<typeof applyAdapter>[0]>(app: App, 
     {
       fetch: app.fetch,
       port: options.port,
-      overrideGlobalObjects: false,
+      overrideGlobalObjects: false
     },
-    onReady(options),
-  );
+    onReady(options)
+  )
 
   if (import.meta.hot) {
-    installServerHMR(server);
+    installServerHMR(server)
   }
 
-  return app;
+  return app
 }
