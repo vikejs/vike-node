@@ -1,6 +1,5 @@
-import { fork } from 'node:child_process'
-import { createServer, type IncomingMessage, type Server } from 'node:http'
-import { EnvironmentModuleNode, isRunnableDevEnvironment, type Plugin, type ViteDevServer } from 'vite'
+import { createServer } from 'node:http'
+import { type EnvironmentModuleNode, isRunnableDevEnvironment, type Plugin, type ViteDevServer } from 'vite'
 import { globalStore } from '../../runtime/globalStore.js'
 import type { ConfigVikeNodeResolved } from '../../types.js'
 import { assert } from '../../utils/assert.js'
@@ -9,16 +8,13 @@ import { isBun } from '../utils/isBun.js'
 import { logViteInfo } from '../utils/logVite.js'
 import type { AddressInfo } from 'node:net'
 
-let viteDevServer: ViteDevServer;
-const VITE_HMR_PATH = "/__vite_hmr";
-const RESTART_EXIT_CODE = 33;
-const IS_RESTARTER_SET_UP = "__VIKE__IS_RESTARTER_SET_UP";
-
+let fixApplied = false;
 export function devServerPlugin(): Plugin {
   let resolvedConfig: ConfigVikeNodeResolved;
   let resolvedEntryId: string;
   let HMRServer: ReturnType<typeof createServer> | undefined;
-  let setupHMRProxyDone = false;
+  let clientPort = 0;
+  let viteDevServer: ViteDevServer;
   return {
     name: "vite-node:devserver",
     apply(_config, { command, mode }) {
@@ -26,8 +22,7 @@ export function devServerPlugin(): Plugin {
     },
     enforce: "pre",
     async config() {
-      // await setupProcessRestarter();
-
+      // FIXME
       if (isBun) {
         return {
           server: {
@@ -43,11 +38,11 @@ export function devServerPlugin(): Plugin {
           hmr: {
             get clientPort() {
               const port = (HMRServer?.address() as AddressInfo | undefined)?.port;
-              console.log("clientPort", port);
-              return port;
+              clientPort = port ?? clientPort;
+              console.log("clientPort", clientPort);
+              return clientPort;
             },
             server: HMRServer,
-            // path: VITE_HMR_PATH,
           },
         },
       };
@@ -64,18 +59,22 @@ export function devServerPlugin(): Plugin {
           this.environment.moduleGraph.invalidateModule(mod, invalidatedModules, ctx.timestamp, true);
         }
         console.log("SENDING HMR EVENT", this.environment.name);
-        this.environment.hot.send({ type: "custom", event: "vike-server:close-server", data: "GUY" });
+        this.environment.hot.send({ type: "custom", event: "vike-server:close-server" });
 
         return [];
       }
     },
 
     configureServer(vite) {
-      HMRServer?.listen();
       if (viteDevServer) {
-        // restartProcess();
         return;
       }
+
+      HMRServer?.listen(clientPort ?? 0);
+
+      vite.hot.on("vite:beforeFullReload", () => {
+        console.log("Server is restarting!");
+      });
 
       vite.environments.ssr.hot.on("vike-server:server-closed", () => {
         console.log("received", "vike-server:server-closed");
@@ -91,10 +90,12 @@ export function devServerPlugin(): Plugin {
 
       viteDevServer = vite;
       globalStore.viteDevServer = vite;
-      // globalStore.setupHMRProxy = setupHMRProxy;
-      patchViteServer(vite);
-      setupErrorStrackRewrite(vite);
-      setupErrorHandlers();
+      if (!fixApplied) {
+        fixApplied = true;
+        patchViteServer(vite);
+        setupErrorStackRewrite(vite);
+        setupErrorHandlers();
+      }
       initializeServerEntry(vite);
     },
   };
@@ -102,7 +103,7 @@ export function devServerPlugin(): Plugin {
   // FIXME: does not return true when editing +middleware file
   // TODO: could we just invalidate imports instead of restarting process?
   function isImported(id: string): boolean {
-    const moduleNode = viteDevServer.moduleGraph.getModuleById(id);
+    const moduleNode = viteDevServer?.moduleGraph.getModuleById(id);
     if (!moduleNode) {
       return false;
     }
@@ -122,6 +123,19 @@ export function devServerPlugin(): Plugin {
     // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     vite.listen = (() => {}) as any;
     vite.printUrls = () => {};
+    const originalClose = vite.close;
+    vite.close = async () => {
+      vite.environments.ssr.hot.send({ type: "custom", event: "vike-server:close-server" });
+
+      return new Promise((resolve, reject) => {
+        const onClose = () => {
+          vite.environments.ssr.hot.off("vike-server:server-closed", onClose);
+          originalClose().then(resolve).catch(reject);
+        };
+
+        vite.environments.ssr.hot.on("vike-server:server-closed", onClose);
+      });
+    };
   }
 
   async function initializeServerEntry(vite: ViteDevServer) {
@@ -135,50 +149,24 @@ export function devServerPlugin(): Plugin {
       ssr.runner.import(indexResolved.id).catch(logRestartMessage);
     }
   }
-
-  function setupHMRProxy(req: IncomingMessage) {
-    if (setupHMRProxyDone || isBun) {
-      return false;
-    }
-
-    setupHMRProxyDone = true;
-    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-    const server = (req.socket as any).server as Server;
-    server.on("upgrade", (clientReq, clientSocket, wsHead) => {
-      if (isHMRProxyRequest(clientReq)) {
-        assert(HMRServer);
-        HMRServer.emit("upgrade", clientReq, clientSocket, wsHead);
-      }
-    });
-    // true if we need to send an empty Response waiting for the upgrade
-    return isHMRProxyRequest(req);
-  }
-
-  function isHMRProxyRequest(req: IncomingMessage) {
-    if (req.url === undefined) {
-      return false;
-    }
-    const url = new URL(req.url, "http://example.com");
-    return url.pathname === VITE_HMR_PATH;
-  }
 }
 
 function logRestartMessage() {
-  logViteInfo('Server crash: Update a server file or type "r+enter" to restart the server.');
+  logViteInfo("Server crash: Update a server file or restart the server.");
 }
 
-function setupErrorStrackRewrite(vite: ViteDevServer) {
+function setupErrorStackRewrite(vite: ViteDevServer) {
   const rewroteStacktraces = new WeakSet();
 
   const _prepareStackTrace = Error.prepareStackTrace;
-  Error.prepareStackTrace = function prepareStackTrace(error, stack) {
+  Error.prepareStackTrace = function prepareStackTrace(error: Error, stack: NodeJS.CallSite[]) {
     let ret = _prepareStackTrace?.(error, stack);
     if (!ret) return ret;
     try {
       ret = vite.ssrRewriteStacktrace(ret);
       rewroteStacktraces.add(error);
     } catch (e) {
-      console.warn("Failed to apply Vite SSR stack trace fix:", e);
+      console.debug("Failed to apply Vite SSR stack trace fix:", e);
     }
     return ret;
   };
@@ -198,47 +186,4 @@ function setupErrorHandlers() {
 
   process.on("unhandledRejection", onError);
   process.on("uncaughtException", onError);
-}
-
-// We hijack the CLI root process: we block Vite and make it orchestrates server restarts instead.
-// We execute the CLI again as a child process which does the actual work.
-async function setupProcessRestarter() {
-  if (isRestarterSetUp()) return;
-  process.env[IS_RESTARTER_SET_UP] = "true";
-
-  async function start() {
-    return new Promise<void>((resolve) => {
-      // biome-ignore lint/style/noNonNullAssertion: <explanation>
-      const cliEntry = process.argv[1]!;
-      const cliArgs = process.argv.slice(2);
-      // Re-run the exact same CLI
-      const clone = fork(cliEntry, cliArgs, { stdio: "inherit" });
-      clone.on("exit", (code) => {
-        if (code === RESTART_EXIT_CODE) {
-          start().then(resolve);
-        } else {
-          resolve();
-          process.exit(code);
-        }
-      });
-
-      process.on("exit", () => {
-        if (!clone.killed) {
-          clone.kill();
-        }
-      });
-    });
-  }
-  // Trick: never-resolving-promise in order to block the CLI root process
-  await start();
-}
-
-function isRestarterSetUp() {
-  return process.env[IS_RESTARTER_SET_UP] === "true";
-}
-
-function restartProcess() {
-  logViteInfo("Restarting server...");
-  assert(isRestarterSetUp());
-  process.exit(RESTART_EXIT_CODE);
 }
