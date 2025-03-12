@@ -220,18 +220,12 @@ importers:
       '@types/deno':
         specifier: ^2.2.0
         version: 2.2.0
-      '@types/etag':
-        specifier: ^1.8.3
-        version: 1.8.3
       '@types/node':
         specifier: ^20.17.23
         version: 20.17.24
       elysia:
         specifier: ^1.2.24
         version: 1.2.25(@sinclair/typebox@0.34.28)(typescript@5.8.2)
-      etag:
-        specifier: ^1.8.1
-        version: 1.8.1
       fastify:
         specifier: ^5.2.1
         version: 5.2.1
@@ -1594,9 +1588,6 @@ packages:
 
   '@types/estree@1.0.6':
     resolution: {integrity: sha512-AYnb1nQyY49te+VRAVgmzfcgjYS91mY5P0TKUDCLEM+gNnA+3T6rWITXRLYCpahpqSQbN5cE+gHpnPyXjHWxcw==}
-
-  '@types/etag@1.8.3':
-    resolution: {integrity: sha512-QYHv9Yeh1ZYSMPQOoxY4XC4F1r+xRUiAriB303F4G6uBsT3KKX60DjiogvVv+2VISVDuJhcIzMdbjT+Bm938QQ==}
 
   '@types/express-serve-static-core@4.19.6':
     resolution: {integrity: sha512-N4LZ2xG7DatVqhCZzOGb1Yi5lMbXSZcmdLDe9EzSndPV2HpWYWzRbaerl2n27irrm94EPpprqa8KpskPT085+A==}
@@ -4292,10 +4283,6 @@ snapshots:
   '@types/deno@2.2.0': {}
 
   '@types/estree@1.0.6': {}
-
-  '@types/etag@1.8.3':
-    dependencies:
-      '@types/node': 20.17.24
 
   '@types/express-serve-static-core@4.19.6':
     dependencies:
