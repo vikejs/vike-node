@@ -1,4 +1,4 @@
-export { vikeNode, vikeNode as default }
+export { vikeServer, vikeServer as default };
 
 import pc from '@brillout/picocolors'
 import type { ConfigVikeNodePlugin } from '../types.js'
@@ -9,7 +9,7 @@ import { serverEntryPlugin } from './plugins/serverEntryPlugin.js'
 import { standalonePlugin } from './plugins/standalonePlugin.js'
 import { checkEdge } from './plugins/edgePlugin.js'
 
-function vikeNode(config: ConfigVikeNodePlugin) {
+function vikeServer(config: ConfigVikeNodePlugin) {
   return [
     ...commonConfig(config),
     ...checkEdge(config),
@@ -17,13 +17,13 @@ function vikeNode(config: ConfigVikeNodePlugin) {
     devServerPlugin(),
     standalonePlugin(),
     {
-      name: 'vike-server:forbid-vite-preview-command',
+      name: "vike-server:forbid-vite-preview-command",
       configurePreviewServer() {
         assertUsage(
           false,
-          `${pc.cyan('$ vike preview')} isn't supported: directly execute the server production entry (for example ${pc.cyan('$ node dist/server/index.mjs')}) instead.`
-        )
-      }
-    }
-  ]
+          `${pc.cyan("$ vike preview")} isn't supported: directly execute the server production entry (for example ${pc.cyan("$ node dist/server/index.mjs")}) instead.`,
+        );
+      },
+    },
+  ];
 }
