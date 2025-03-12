@@ -59,9 +59,11 @@ export function installServerHMR(server: Server | Http2Server | Http2SecureServe
     const callback = () => {
       import.meta.hot?.off('vike-server:close-server', callback)
       destroy(() => {
+        // Signal that the server is properly closed, so that we can continue the hot-reload process
         import.meta.hot?.send('vike-server:server-closed')
       })
     }
+    // Event sent signaling that the server file needs to be hot-reloaded
     import.meta.hot.on('vike-server:close-server', callback)
   }
 }

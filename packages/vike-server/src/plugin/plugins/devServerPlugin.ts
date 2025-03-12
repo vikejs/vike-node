@@ -56,6 +56,7 @@ export function devServerPlugin(): Plugin {
           this.environment.moduleGraph.invalidateModule(mod, invalidatedModules, ctx.timestamp, true)
         }
         console.log('SENDING HMR EVENT', this.environment.name)
+        // The server files should listen to this event to know when to close before hot-reloading
         this.environment.hot.send({ type: 'custom', event: 'vike-server:close-server' })
 
         return []
@@ -67,6 +68,7 @@ export function devServerPlugin(): Plugin {
         return
       }
 
+      // Once existing server is closed, reimport its updated entry file
       vite.environments.ssr.hot.on('vike-server:server-closed', () => {
         console.log('received', 'vike-server:server-closed')
         setupHMRProxyDone = false
@@ -75,6 +77,7 @@ export function devServerPlugin(): Plugin {
         }
       })
 
+      // Once we confirm that the server file is reloaded, tells client to refresh
       vite.environments.ssr.hot.on('vike-server:reloaded', () => {
         console.log('received', 'vike-server:reloaded')
         vite.environments.client.hot.send({ type: 'full-reload' })
@@ -147,6 +150,8 @@ export function devServerPlugin(): Plugin {
     vite.listen = (() => {}) as any
     vite.printUrls = () => {}
     const originalClose = vite.close
+    // FIXME trying to override vike.close to handle r+enter Vite restart shortcut
+    //  currently generates errors
     vite.close = async () => {
       vite.environments.ssr.hot.send({ type: 'custom', event: 'vike-server:close-server' })
 
