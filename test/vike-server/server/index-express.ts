@@ -1,14 +1,14 @@
 import { Worker } from 'node:worker_threads'
 import express from 'express'
 import { apply } from 'vike-server/express'
+import { serve } from 'vike-server/express/serve'
 import { init } from '../database/todoItems.js'
 import { two } from './shared-chunk.js'
 
 if (two() !== 2) {
   throw new Error()
 }
-startServer()
-new Worker(new URL('./worker.mjs', import.meta.url))
+new Worker(new URL('./worker.js', import.meta.url))
 
 async function startServer() {
   await init()
@@ -30,6 +30,8 @@ async function startServer() {
   })
 
   const port = process.env.PORT || 3000
-  app.listen(port)
-  console.log(`Server running at http://localhost:${port}`)
+
+  return serve(app, { port: +port })
 }
+
+export default startServer()

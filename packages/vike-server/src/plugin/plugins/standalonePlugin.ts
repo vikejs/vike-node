@@ -1,12 +1,10 @@
-import fs from 'node:fs/promises'
 import path from 'node:path'
 import esbuild, { type BuildOptions } from 'esbuild'
-import { type Plugin, type ResolvedConfig, searchForWorkspaceRoot } from 'vite'
+import type { Plugin, ResolvedConfig, Rollup } from 'vite'
 import type { ConfigVikeNodeResolved } from '../../types.js'
-import { assert, assertUsage } from '../../utils/assert.js'
+import { assert } from '../../utils/assert.js'
 import { toPosixPath } from '../utils/filesystemPathHandling.js'
 import { getConfigVikeNode } from '../utils/getConfigVikeNode.js'
-import { pLimit } from '../utils/pLimit.js'
 
 const OPTIONAL_NPM_IMPORTS = [
   '@nestjs/microservices',
@@ -23,7 +21,7 @@ export function standalonePlugin(): Plugin {
   let root = ''
   let outDir = ''
   let outDirAbs = ''
-  let rollupEntryFilePaths: string[] = []
+  let rollupEntryFilePaths: Record<string, string> = {}
   // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   let rollupResolve: (...args: any[]) => Promise<any>
 
@@ -45,24 +43,25 @@ export function standalonePlugin(): Plugin {
     },
     writeBundle(_, bundle) {
       if (!enabled) return
-      const entries = findRollupBundleEntries(bundle, configResolvedVike, root)
-      rollupEntryFilePaths = entries.map((e) => path.posix.join(outDirAbs, e.fileName))
+      const entries = findRollupBundleEntries(bundle, configResolvedVike)
+      rollupEntryFilePaths = entries.reduce(
+        (acc, cur) => {
+          acc[cur.fileName.replace('.js', '.standalone')] = path.posix.join(outDirAbs, cur.fileName)
+          return acc
+        },
+        {} as Record<string, string>
+      )
     },
     enforce: 'post',
-    closeBundle: async () => {
+    async closeBundle() {
       if (!enabled) return
 
-      const base = toPosixPath(searchForWorkspaceRoot(root))
-      const relativeRoot = path.posix.relative(base, root)
-      const relativeOutDir = path.posix.join(relativeRoot, outDir)
       const userEsbuildOptions =
         typeof configResolvedVike.server.standalone === 'object' && configResolvedVike.server.standalone !== null
           ? configResolvedVike.server.standalone.esbuild
           : {}
 
-      const esbuildResult = await buildWithEsbuild(userEsbuildOptions)
-      await removeLeftoverFiles(esbuildResult)
-      await traceAndCopyDependencies(base, relativeRoot, relativeOutDir)
+      await buildWithEsbuild(userEsbuildOptions)
     },
     sharedDuringBuild: true
   }
@@ -75,8 +74,8 @@ export function standalonePlugin(): Plugin {
       external: configResolvedVike.server.external,
       entryPoints: rollupEntryFilePaths,
       sourcemap: configResolved.build.sourcemap === 'hidden' ? true : configResolved.build.sourcemap,
-      outExtension: { '.js': '.mjs' },
       splitting: false,
+      outExtension: { '.js': '.mjs' },
       outdir: outDirAbs,
       allowOverwrite: true,
       logOverride: { 'ignored-bare-import': 'silent' },
@@ -87,79 +86,6 @@ export function standalonePlugin(): Plugin {
     })
 
     return res
-  }
-
-  async function removeLeftoverFiles(res: Awaited<ReturnType<typeof buildWithEsbuild>>) {
-    // Remove bundled files from outDir
-    // biome-ignore lint/style/noNonNullAssertion: <explanation>
-    const bundledFilesFromOutDir = Object.keys(res.metafile!.inputs).filter(
-      (relativeFile) =>
-        !rollupEntryFilePaths.some((entryFilePath) => entryFilePath.endsWith(relativeFile)) &&
-        relativeFile.startsWith(outDir)
-    )
-
-    await Promise.all(
-      bundledFilesFromOutDir.map(async (relativeFile) => {
-        await fs.rm(path.posix.join(root, relativeFile))
-        if (![false, 'inline'].includes(configResolved.build.sourcemap)) {
-          await fs.rm(path.posix.join(root, `${relativeFile}.map`))
-        }
-      })
-    )
-
-    // Remove empty directories
-    const relativeDirs = new Set(bundledFilesFromOutDir.map((file) => path.dirname(file)))
-    for (const relativeDir of relativeDirs) {
-      const absDir = path.posix.join(root, relativeDir)
-      const files = await fs.readdir(absDir)
-      if (!files.length) {
-        await fs.rm(absDir, { recursive: true })
-        if (relativeDir.startsWith(outDir)) {
-          relativeDirs.add(path.dirname(relativeDir))
-        }
-      }
-    }
-  }
-
-  async function traceAndCopyDependencies(base: string, relativeRoot: string, relativeOutDir: string) {
-    const { nodeFileTrace } = await import('@vercel/nft')
-    const result = await nodeFileTrace(rollupEntryFilePaths, { base })
-
-    const tracedDeps = new Set(
-      [...result.fileList].filter(
-        (file) => !result.reasons.get(file)?.type.includes('initial') && !file.startsWith('usr/')
-      )
-    )
-
-    const filesToCopy = [...tracedDeps].map(toPosixPath).filter((path) => !path.startsWith(relativeOutDir))
-
-    if (!filesToCopy.length) return
-
-    if (result.warnings.size && isYarnPnP()) {
-      assertUsage(false, 'Standalone build is not supported when using Yarn PnP and native dependencies.')
-    }
-
-    const commonAncestor = findCommonAncestor(filesToCopy)
-    const concurrencyLimit = pLimit(10)
-    const copiedFiles = new Set<string>()
-
-    await Promise.all(
-      filesToCopy.map((relativeFile) =>
-        concurrencyLimit(async () => {
-          const tracedFilePath = path.posix.join(base, relativeFile)
-          const isNodeModules = relativeFile.includes('node_modules')
-
-          const relativeFileBis = relativeFile.replace(relativeRoot, '').replace(commonAncestor, '')
-          const relativeFileHoisted = `node_modules${relativeFileBis.split('node_modules').pop()}`
-          const fileOutputPath = path.posix.join(outDirAbs, isNodeModules ? relativeFileHoisted : relativeFileBis)
-
-          if (!(await fs.stat(tracedFilePath)).isDirectory() && !copiedFiles.has(fileOutputPath)) {
-            copiedFiles.add(fileOutputPath)
-            await fs.cp(tracedFilePath, fileOutputPath, { recursive: true, dereference: true })
-          }
-        })
-      )
-    )
   }
 }
 
@@ -194,55 +120,22 @@ function createStandaloneIgnorePlugin(rollupResolve: (...args: any[]) => Promise
   }
 }
 
-function findCommonAncestor(paths: string[]): string {
-  if (paths.length <= 1) return ''
+function findRollupBundleEntries(bundle: Rollup.OutputBundle, resolvedConfig: ConfigVikeNodeResolved) {
+  const entries = Object.keys(resolvedConfig.server.entry)
 
-  const pathComponents = paths.map((path) => path.split('/'))
-  let commonAncestor = ''
-  let index = 0
-
-  // biome-ignore lint/style/noNonNullAssertion: <explanation>
-  while (pathComponents.every((components) => components[index] === pathComponents[0]![index])) {
-    // biome-ignore lint/style/noNonNullAssertion: <explanation>
-    commonAncestor += `${pathComponents[0]![index]}/`
-    index++
-  }
-
-  return commonAncestor ? commonAncestor.slice(0, -1) : ''
-}
-
-function isYarnPnP(): boolean {
-  try {
-    require('pnpapi')
-    return true
-  } catch {
-    return false
-  }
-}
-
-function findRollupBundleEntries<OutputBundle extends Record<string, { name: string | undefined }>>(
-  bundle: OutputBundle,
-  resolvedConfig: ConfigVikeNodeResolved,
-  root: string
-): OutputBundle[string][] {
-  const entryPathsFromConfig = Object.entries(resolvedConfig.server.entry)
-    .filter(([_, entry]) => entry.runtime === 'node')
-    .map(([_, entry]) => path.posix.join(root, entry.entry))
-
-  const entries: OutputBundle[string][] = []
+  const chunks: Rollup.OutputChunk[] = []
   for (const key in bundle) {
     // biome-ignore lint/style/noNonNullAssertion: <explanation>
     const entry = bundle[key]!
-    // https://github.com/brillout/vite-plugin-ssr/issues/612
-    if (!('facadeModuleId' in entry) || key.endsWith('.map') || key.endsWith('.json')) continue
-    assert(entry.facadeModuleId === null || typeof entry.facadeModuleId === 'string')
-    if (entry.facadeModuleId && entryPathsFromConfig.includes(entry.facadeModuleId)) {
-      entries.push(entry)
+    if (entry?.type !== 'chunk') continue
+    if (!entry.isEntry) continue
+    if (entries.includes(entry.name)) {
+      chunks.push(entry)
     }
   }
 
-  const serverIndex = entries.find((e) => e.name === 'index')
+  const serverIndex = chunks.find((e) => e.name === 'index')
   assert(serverIndex)
 
-  return entries.sort((a, b) => (a.name === 'index' ? -1 : b.name === 'index' ? 1 : 0))
+  return chunks.sort((a, b) => (a.name === 'index' ? -1 : b.name === 'index' ? 1 : 0))
 }

@@ -1,8 +1,7 @@
 import { Elysia } from 'elysia'
 import { apply } from 'vike-server/elysia'
+import { serve } from 'vike-server/elysia/serve'
 import { init } from '../database/todoItems'
-
-startServer()
 
 async function startServer() {
   await init()
@@ -22,5 +21,7 @@ async function startServer() {
     }
   })
 
-  app.listen(+port, () => console.log(`Server running at http://localhost:${port}`))
+  return serve(app, { port: +port })
 }
+
+export default startServer()

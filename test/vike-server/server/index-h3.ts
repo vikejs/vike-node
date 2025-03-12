@@ -1,9 +1,7 @@
-import { createServer } from 'node:http'
-import { createApp, createRouter, eventHandler, toNodeListener } from 'h3'
+import { createApp, createRouter, eventHandler } from 'h3'
 import { apply } from 'vike-server/h3'
+import { serve } from 'vike-server/h3/serve'
 import { init } from '../database/todoItems'
-
-startServer()
 
 async function startServer() {
   await init()
@@ -29,9 +27,7 @@ async function startServer() {
     }
   })
 
-  const server = createServer(toNodeListener(app)).listen(port)
-
-  server.on('listening', () => {
-    console.log(`Server running at http://localhost:${port}`)
-  })
+  return serve(app, { port: +port })
 }
+
+export default startServer()

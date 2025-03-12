@@ -15,7 +15,7 @@ const IS_RESTARTER_SET_UP = '__VIKE__IS_RESTARTER_SET_UP'
 
 export function devServerPlugin(): Plugin {
   let resolvedConfig: ConfigVikeNodeResolved
-  let entryAbs: string
+  let resolvedEntryId: string
   let HMRServer: ReturnType<typeof createServer> | undefined
   let setupHMRProxyDone = false
   return {
@@ -73,6 +73,8 @@ export function devServerPlugin(): Plugin {
     }
   }
 
+  // FIXME: does not return true when editing +middleware file
+  // TODO: could we just invalidate imports instead of restarting process?
   function isImported(id: string): boolean {
     const moduleNode = viteDevServer.moduleGraph.getModuleById(id)
     if (!moduleNode) {
@@ -80,7 +82,7 @@ export function devServerPlugin(): Plugin {
     }
     const modules = new Set([moduleNode])
     for (const module of modules) {
-      if (module.file === entryAbs) return true
+      if (module.file === resolvedEntryId) return true
       // biome-ignore lint/complexity/noForEach: <explanation>
       module.importers.forEach((importer) => modules.add(importer))
     }
@@ -99,10 +101,10 @@ export function devServerPlugin(): Plugin {
   async function initializeServerEntry(vite: ViteDevServer) {
     assert(resolvedConfig.server)
     const { index } = resolvedConfig.server.entry
-    const indexResolved = await vite.pluginContainer.resolveId(index.entry)
+    const indexResolved = await vite.pluginContainer.resolveId(index as string)
     assert(indexResolved?.id)
-    entryAbs = indexResolved.id
-    vite.ssrLoadModule(entryAbs).catch(logRestartMessage)
+    resolvedEntryId = indexResolved.id
+    vite.ssrLoadModule(indexResolved.id).catch(logRestartMessage)
   }
 
   function setupHMRProxy(req: IncomingMessage) {
