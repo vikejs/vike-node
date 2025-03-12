@@ -1,4 +1,4 @@
-import { createServer } from 'node:http'
+import { createServer, type IncomingMessage, type Server } from 'node:http'
 import { type EnvironmentModuleNode, isRunnableDevEnvironment, type Plugin, type ViteDevServer } from 'vite'
 import { globalStore } from '../../runtime/globalStore.js'
 import type { ConfigVikeNodeResolved } from '../../types.js'
@@ -6,15 +6,18 @@ import { assert } from '../../utils/assert.js'
 import { getConfigVikeNode } from '../utils/getConfigVikeNode.js'
 import { isBun } from '../utils/isBun.js'
 import { logViteInfo } from '../utils/logVite.js'
-import type { AddressInfo } from 'node:net'
 
 let fixApplied = false;
+
+const VITE_HMR_PATH = "/__vite_hmr";
+
 export function devServerPlugin(): Plugin {
   let resolvedConfig: ConfigVikeNodeResolved;
   let resolvedEntryId: string;
   let HMRServer: ReturnType<typeof createServer> | undefined;
   let clientPort = 0;
   let viteDevServer: ViteDevServer;
+  let setupHMRProxyDone = false;
   return {
     name: "vite-node:devserver",
     apply(_config, { command, mode }) {
@@ -36,13 +39,14 @@ export function devServerPlugin(): Plugin {
         server: {
           middlewareMode: true,
           hmr: {
-            get clientPort() {
-              const port = (HMRServer?.address() as AddressInfo | undefined)?.port;
-              clientPort = port ?? clientPort;
-              console.log("clientPort", clientPort);
-              return clientPort;
-            },
+            // get clientPort() {
+            //   const port = (HMRServer?.address() as AddressInfo | undefined)?.port;
+            //   clientPort = port ?? clientPort;
+            //   console.log("clientPort", clientPort);
+            //   return clientPort;
+            // },
             server: HMRServer,
+            path: VITE_HMR_PATH,
           },
         },
       };
@@ -72,12 +76,9 @@ export function devServerPlugin(): Plugin {
 
       HMRServer?.listen(clientPort ?? 0);
 
-      vite.hot.on("vite:beforeFullReload", () => {
-        console.log("Server is restarting!");
-      });
-
       vite.environments.ssr.hot.on("vike-server:server-closed", () => {
         console.log("received", "vike-server:server-closed");
+        setupHMRProxyDone = false;
         if (isRunnableDevEnvironment(vite.environments.ssr)) {
           vite.environments.ssr.runner.import(resolvedEntryId).catch(logRestartMessage);
         }
@@ -90,6 +91,7 @@ export function devServerPlugin(): Plugin {
 
       viteDevServer = vite;
       globalStore.viteDevServer = vite;
+      globalStore.setupHMRProxy = setupHMRProxy;
       if (!fixApplied) {
         fixApplied = true;
         patchViteServer(vite);
@@ -99,6 +101,36 @@ export function devServerPlugin(): Plugin {
       initializeServerEntry(vite);
     },
   };
+
+  function setupHMRProxy(req: IncomingMessage) {
+    if (setupHMRProxyDone || isBun) {
+      return false;
+    }
+
+    console.log("setupHMRProxy");
+
+    setupHMRProxyDone = true;
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    const server = (req.socket as any).server as Server;
+    server.on("upgrade", (clientReq, clientSocket, wsHead) => {
+      console.log("upgrade", clientReq.url);
+      if (isHMRProxyRequest(clientReq)) {
+        console.log("setupHMRProxy", "isHMRProxyRequest");
+        assert(HMRServer);
+        HMRServer.emit("upgrade", clientReq, clientSocket, wsHead);
+      }
+    });
+    // true if we need to send an empty Response waiting for the upgrade
+    return isHMRProxyRequest(req);
+  }
+
+  function isHMRProxyRequest(req: IncomingMessage) {
+    if (req.url === undefined) {
+      return false;
+    }
+    const url = new URL(req.url, "http://example.com");
+    return url.pathname === VITE_HMR_PATH;
+  }
 
   // FIXME: does not return true when editing +middleware file
   // TODO: could we just invalidate imports instead of restarting process?

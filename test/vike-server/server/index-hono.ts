@@ -13,7 +13,7 @@ async function startServer() {
   const port = process.env.PORT || 3000;
 
   app.use("*", async (ctx, next) => {
-    ctx.set("xRuntime", "x-guy-1");
+    ctx.set("xRuntime", "x-runtime");
     await next();
     ctx.header("x-test", "test");
   });
