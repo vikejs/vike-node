@@ -1,20 +1,16 @@
+import { getVikeServerConfig } from '../utils/getVikeServerConfig.js'
+import type { Plugin } from 'vite'
+
 export { commonConfig }
 
-import type { Plugin } from 'vite'
-import type { ConfigVikeNodePlugin, ConfigVikeNodeResolved } from '../../types.js'
-import { resolveConfig } from '../utils/resolveConfig.js'
-
-function commonConfig(configVikeNodePlugin: ConfigVikeNodePlugin): Plugin[] {
-  const resolvedConfig: ConfigVikeNodeResolved = resolveConfig({ server: configVikeNodePlugin })
-
+function commonConfig(): Plugin[] {
   return [
     {
       enforce: 'pre',
       name: 'vike-server:commonConfig',
 
       config(config, env) {
-        const isDev = env.command === 'serve'
-        ;(config as Record<string, unknown>).configVikeNode = resolvedConfig
+        const vikeServerConfig = getVikeServerConfig(config)
         return {
           resolve: {
             // vike-server conditions to respect
@@ -24,10 +20,10 @@ function commonConfig(configVikeNodePlugin: ConfigVikeNodePlugin): Plugin[] {
             target: 'es2022'
           },
           ssr: {
-            external: resolvedConfig.server.external
+            external: vikeServerConfig.external
           },
           optimizeDeps: {
-            exclude: resolvedConfig.server.external
+            exclude: vikeServerConfig.external
           }
         }
       }

@@ -34,7 +34,7 @@ type ConfigVikeNode = {
 
 type ConfigVikeNodeResolved = {
   server: {
-    entry: Record<string, string>
+    entry: { index: string; [name: string]: string }
     runtime: Runtime['runtime']
     external: string[]
     standalone: boolean | { esbuild: Omit<BuildOptions, 'manifest'> }

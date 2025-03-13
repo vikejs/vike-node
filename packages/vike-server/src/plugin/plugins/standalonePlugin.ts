@@ -4,7 +4,7 @@ import type { Plugin, ResolvedConfig, Rollup } from 'vite'
 import type { ConfigVikeNodeResolved } from '../../types.js'
 import { assert } from '../../utils/assert.js'
 import { toPosixPath } from '../utils/filesystemPathHandling.js'
-import { getConfigVikeNode } from '../utils/getConfigVikeNode.js'
+import { getVikeServerConfig } from '../utils/getVikeServerConfig.js'
 
 const OPTIONAL_NPM_IMPORTS = [
   '@nestjs/microservices',
@@ -16,7 +16,7 @@ const OPTIONAL_NPM_IMPORTS = [
 
 export function standalonePlugin(): Plugin {
   let configResolved: ResolvedConfig
-  let configResolvedVike: ConfigVikeNodeResolved
+  let vikeServerConfig: ConfigVikeNodeResolved['server']
   let enabled = false
   let root = ''
   let outDir = ''
@@ -30,8 +30,8 @@ export function standalonePlugin(): Plugin {
     apply: (_, env) => !!env.isSsrBuild,
     configResolved: async (config) => {
       configResolved = config
-      configResolvedVike = getConfigVikeNode(config)
-      enabled = Boolean(configResolvedVike.server.standalone)
+      vikeServerConfig = getVikeServerConfig(config)
+      enabled = Boolean(vikeServerConfig.standalone)
       if (!enabled) return
       root = toPosixPath(config.root)
       outDir = toPosixPath(config.build.outDir)
@@ -43,7 +43,7 @@ export function standalonePlugin(): Plugin {
     },
     writeBundle(_, bundle) {
       if (!enabled) return
-      const entries = findRollupBundleEntries(bundle, configResolvedVike)
+      const entries = findRollupBundleEntries(bundle, vikeServerConfig)
       rollupEntryFilePaths = entries.reduce(
         (acc, cur) => {
           acc[cur.fileName.replace('.js', '.standalone')] = path.posix.join(outDirAbs, cur.fileName)
@@ -57,8 +57,8 @@ export function standalonePlugin(): Plugin {
       if (!enabled) return
 
       const userEsbuildOptions =
-        typeof configResolvedVike.server.standalone === 'object' && configResolvedVike.server.standalone !== null
-          ? configResolvedVike.server.standalone.esbuild
+        typeof vikeServerConfig.standalone === 'object' && vikeServerConfig.standalone !== null
+          ? vikeServerConfig.standalone.esbuild
           : {}
 
       await buildWithEsbuild(userEsbuildOptions)
@@ -71,7 +71,7 @@ export function standalonePlugin(): Plugin {
       platform: 'node',
       format: 'esm',
       bundle: true,
-      external: configResolvedVike.server.external,
+      external: vikeServerConfig.external,
       entryPoints: rollupEntryFilePaths,
       sourcemap: configResolved.build.sourcemap === 'hidden' ? true : configResolved.build.sourcemap,
       splitting: false,
@@ -120,8 +120,8 @@ function createStandaloneIgnorePlugin(rollupResolve: (...args: any[]) => Promise
   }
 }
 
-function findRollupBundleEntries(bundle: Rollup.OutputBundle, resolvedConfig: ConfigVikeNodeResolved) {
-  const entries = Object.keys(resolvedConfig.server.entry)
+function findRollupBundleEntries(bundle: Rollup.OutputBundle, vikeServerConfig: ConfigVikeNodeResolved['server']) {
+  const entries = Object.keys(vikeServerConfig.entry)
 
   const chunks: Rollup.OutputChunk[] = []
   for (const key in bundle) {

@@ -10,16 +10,16 @@ import {
 import { globalStore } from '../../runtime/globalStore.js'
 import type { ConfigVikeNodeResolved } from '../../types.js'
 import { assert } from '../../utils/assert.js'
-import { getConfigVikeNode } from '../utils/getConfigVikeNode.js'
 import { isBun } from '../utils/isBun.js'
 import { logViteInfo } from '../utils/logVite.js'
+import { getVikeServerConfig } from '../utils/getVikeServerConfig.js'
 
 let fixApplied = false
 
 const VITE_HMR_PATH = '/__vite_hmr'
 
 export function devServerPlugin(): Plugin {
-  let resolvedConfig: ConfigVikeNodeResolved
+  let vikeServerConfig: ConfigVikeNodeResolved['server']
   let resolvedEntryId: string
   let HMRServer: ReturnType<typeof createServer> | undefined
   let viteDevServer: ViteDevServer
@@ -53,7 +53,7 @@ export function devServerPlugin(): Plugin {
     },
 
     configResolved(config) {
-      resolvedConfig = getConfigVikeNode(config)
+      vikeServerConfig = getVikeServerConfig(config)
     },
 
     async hotUpdate(ctx) {
@@ -186,8 +186,8 @@ export function devServerPlugin(): Plugin {
   }
 
   async function initializeServerEntry(vite: ViteDevServer) {
-    assert(resolvedConfig.server)
-    const { index } = resolvedConfig.server.entry
+    assert(vikeServerConfig)
+    const { index } = vikeServerConfig.entry
     const indexResolved = await vite.pluginContainer.resolveId(index as string)
     assert(indexResolved?.id)
     resolvedEntryId = indexResolved.id
