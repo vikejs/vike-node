@@ -13,7 +13,6 @@ export function onReady(options: { port: number }) {
   return () => {
     if (import.meta.hot) {
       if (import.meta.hot.data.vikeServerStarted) {
-        import.meta.hot.send('vike-server:reloaded')
         return
       }
       import.meta.hot.data.vikeServerStarted = true
@@ -58,15 +57,21 @@ export function installServerHMR(server: Server | Http2Server | Http2SecureServe
   if (import.meta.hot) {
     const destroy = onServerClose(server)
 
-    const callback = () => {
-      import.meta.hot?.off('vike-server:close-server', callback)
-      destroy(() => {
-        console.log('DESTROY')
-        // Signal that the server is properly closed, so that we can continue the hot-reload process
-        import.meta.hot?.send('vike-server:server-closed')
-      })
-    }
-    // Event sent signaling that the server file needs to be hot-reloaded
-    import.meta.hot.on('vike-server:close-server', callback)
+    return new Promise<void>((resolve) => {
+      const callback = () => {
+        destroy(() => {
+          resolve()
+          // Signal that the server is properly closed, so that we can continue the hot-reload process
+          import.meta.hot?.send('vike-server:server-closed')
+        })
+      }
+
+      // biome-ignore lint/style/noNonNullAssertion: <explanation>
+      import.meta.hot!.on('vite:beforeFullReload', callback)
+
+      // Sent when vite server restarts
+      // biome-ignore lint/style/noNonNullAssertion: <explanation>
+      import.meta.hot!.on('vike-server:close-server', callback)
+    })
   }
 }

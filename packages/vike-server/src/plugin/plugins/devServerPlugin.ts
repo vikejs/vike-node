@@ -1,5 +1,12 @@
 import { createServer, type IncomingMessage, type Server } from 'node:http'
-import { type EnvironmentModuleNode, isRunnableDevEnvironment, type Plugin, type ViteDevServer } from 'vite'
+import {
+  type DevEnvironment,
+  type EnvironmentModuleNode,
+  isRunnableDevEnvironment,
+  type Plugin,
+  type ViteDevServer
+} from 'vite'
+
 import { globalStore } from '../../runtime/globalStore.js'
 import type { ConfigVikeNodeResolved } from '../../types.js'
 import { assert } from '../../utils/assert.js'
@@ -49,16 +56,19 @@ export function devServerPlugin(): Plugin {
       resolvedConfig = getConfigVikeNode(config)
     },
 
-    hotUpdate(ctx) {
-      if (isImported(ctx.file)) {
+    async hotUpdate(ctx) {
+      const imported = isImported(ctx.modules)
+      if (imported) {
         const invalidatedModules = new Set<EnvironmentModuleNode>()
         for (const mod of ctx.modules) {
           this.environment.moduleGraph.invalidateModule(mod, invalidatedModules, ctx.timestamp, true)
         }
-        console.log('SENDING HMR EVENT', this.environment.name)
-        // The server files should listen to this event to know when to close before hot-reloading
-        this.environment.hot.send({ type: 'custom', event: 'vike-server:close-server' })
 
+        invalidateEntry(this.environment, invalidatedModules, ctx.timestamp, true)
+        // Wait for updated file to be ready
+        await ctx.read()
+
+        this.environment.hot.send({ type: 'full-reload' })
         return []
       }
     },
@@ -70,17 +80,10 @@ export function devServerPlugin(): Plugin {
 
       // Once existing server is closed and invalidated, reimport its updated entry file
       vite.environments.ssr.hot.on('vike-server:server-closed', () => {
-        console.log('received', 'vike-server:server-closed')
         setupHMRProxyDone = false
         if (isRunnableDevEnvironment(vite.environments.ssr)) {
           vite.environments.ssr.runner.import(resolvedEntryId).catch(logRestartMessage)
         }
-      })
-
-      // Once we confirm that the server file is reloaded, tells client to refresh
-      vite.environments.ssr.hot.on('vike-server:reloaded', () => {
-        console.log('received', 'vike-server:reloaded')
-        vite.environments.client.hot.send({ type: 'full-reload' })
       })
 
       viteDevServer = vite
@@ -96,20 +99,29 @@ export function devServerPlugin(): Plugin {
     }
   }
 
+  function invalidateEntry(
+    env: DevEnvironment,
+    invalidatedModules?: Set<EnvironmentModuleNode>,
+    timestamp?: number,
+    isHmr?: boolean
+  ) {
+    const entryModule = env.moduleGraph.getModuleById(resolvedEntryId)
+    if (entryModule) {
+      // Always invalidate server entry so that
+      env.moduleGraph.invalidateModule(entryModule, invalidatedModules, timestamp, isHmr)
+    }
+  }
+
   function setupHMRProxy(req: IncomingMessage) {
     if (setupHMRProxyDone || isBun) {
       return false
     }
 
-    console.log('setupHMRProxy')
-
     setupHMRProxyDone = true
     // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     const server = (req.socket as any).server as Server
     server.on('upgrade', (clientReq, clientSocket, wsHead) => {
-      console.log('upgrade', clientReq.url)
       if (isHMRProxyRequest(clientReq)) {
-        console.log('setupHMRProxy', 'isHMRProxyRequest')
         assert(HMRServer)
         HMRServer.emit('upgrade', clientReq, clientSocket, wsHead)
       }
@@ -126,21 +138,24 @@ export function devServerPlugin(): Plugin {
     return url.pathname === VITE_HMR_PATH
   }
 
-  // FIXME: does not return true when editing +middleware file
-  // TODO: could we just invalidate imports instead of restarting process?
-  function isImported(id: string): boolean {
-    const moduleNode = viteDevServer?.moduleGraph.getModuleById(id)
-    if (!moduleNode) {
-      return false
-    }
-    const modules = new Set([moduleNode])
-    for (const module of modules) {
-      if (module.file === resolvedEntryId) return true
+  function isImported(
+    modules: EnvironmentModuleNode[]
+  ): { type: 'entry' | '+middleware'; module: EnvironmentModuleNode } | undefined {
+    const modulesSet = new Set(modules)
+    for (const module of modulesSet.values()) {
+      if (module.file === resolvedEntryId)
+        return {
+          type: 'entry',
+          module
+        }
+      if (module.file?.match(/\+middleware\.[mc]?[jt]sx?$/))
+        return {
+          type: '+middleware',
+          module
+        }
       // biome-ignore lint/complexity/noForEach: <explanation>
-      module.importers.forEach((importer) => modules.add(importer))
+      module.importers.forEach((importer) => modulesSet.add(importer))
     }
-
-    return false
   }
 
   function patchViteServer(vite: ViteDevServer) {
@@ -151,16 +166,17 @@ export function devServerPlugin(): Plugin {
     vite.printUrls = () => {}
     const originalClose = vite.close
     vite.close = async () => {
-      console.log('SENDING CLOSE')
-      vite.environments.ssr.hot.send({ type: 'custom', event: 'vike-server:close-server' })
+      invalidateEntry(vite.environments.ssr)
 
-      return new Promise((resolve, reject) => {
+      return new Promise<void>((resolve, reject) => {
         const onClose = () => {
           vite.environments.ssr.hot.off('vike-server:server-closed', onClose)
           originalClose().then(resolve).catch(reject)
         }
 
         vite.environments.ssr.hot.on('vike-server:server-closed', onClose)
+        // The server files should listen to this event to know when to close before hot-reloading
+        vite.environments.ssr.hot.send({ type: 'custom', event: 'vike-server:close-server' })
       })
     }
   }

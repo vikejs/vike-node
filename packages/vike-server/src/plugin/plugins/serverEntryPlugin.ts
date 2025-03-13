@@ -13,7 +13,6 @@ export function serverEntryPlugin(): Plugin {
   return {
     name: 'vike-server:serverEntry',
 
-    // TODO support vite@5?
     applyToEnvironment(env) {
       return env.name === 'ssr'
     },
