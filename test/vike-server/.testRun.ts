@@ -117,7 +117,7 @@ function testRun(cmd: 'pnpm run dev' | 'pnpm run prod', options?: { skipServerHM
       await autoRetry(async () => {
         expect(await page.textContent('h3')).toBe('x-runtime')
       })
-      expectLog('__vite_hmr', { filter: (entry) => entry.logSource === 'Browser Error' })
+      expectLog('__vite_hmr')
     })
 
   if (isProd)
