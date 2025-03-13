@@ -78,12 +78,12 @@ function _installServerHMR(server: Server | Http2Server | Http2SecureServer) {
 }
 
 export function installServerHMR(serve: () => Server | Http2Server | Http2SecureServer) {
-  // biome-ignore lint/style/noNonNullAssertion: <explanation>
+  // biome-ignore lint/style/noNonNullAssertion: asserted by wrapping function, and e2e tested
   const previousServerClosing: Promise<void> = import.meta.hot!.data.previousServerClosing ?? Promise.resolve()
 
   previousServerClosing.then(() => {
     const server = serve()
-    // biome-ignore lint/style/noNonNullAssertion: <explanation>
+    // biome-ignore lint/style/noNonNullAssertion: asserted by wrapping function, and e2e tested
     import.meta.hot!.data.previousServerClosing = _installServerHMR(server)
   })
 }
