@@ -45,10 +45,12 @@ function onServerClose(server: Server | Http2Server | Http2SecureServer) {
     })
   })
 
+  // biome-ignore lint/complexity/noForEach: <explanation>
+  const closeAllConnections = () => connections.forEach((c) => c.destroy())
+
   return function destroy(cb: () => void) {
     server.close(cb)
-    // biome-ignore lint/complexity/noForEach: <explanation>
-    connections.forEach((c) => c.destroy())
+    closeAllConnections()
   }
 }
 
@@ -59,6 +61,7 @@ export function installServerHMR(server: Server | Http2Server | Http2SecureServe
     const callback = () => {
       import.meta.hot?.off('vike-server:close-server', callback)
       destroy(() => {
+        console.log('DESTROY')
         // Signal that the server is properly closed, so that we can continue the hot-reload process
         import.meta.hot?.send('vike-server:server-closed')
       })

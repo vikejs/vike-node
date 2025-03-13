@@ -15,7 +15,10 @@ new Worker(new URL('./worker.js', import.meta.url))
 
 async function startServer() {
   await init()
-  const app = fastify()
+  const app = fastify({
+    // /!\ Mandatory for server HMR support
+    forceCloseConnections: true
+  })
 
   // /!\ Mandatory for vike middleware to operate as intended
   await app.register(rawBody)
