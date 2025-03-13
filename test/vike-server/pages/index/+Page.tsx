@@ -10,7 +10,7 @@ function Page({ todoItemsInitial, xRuntime }: { todoItemsInitial: Todo[]; xRunti
       <h1>To-do List</h1>
       <TodoList todoItemsInitial={todoItemsInitial} />
       <Counter />
-      {xRuntime}
+      <h3>{xRuntime}</h3>
     </>
   )
 }

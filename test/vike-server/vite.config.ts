@@ -4,7 +4,6 @@ import vike from 'vike/plugin'
 import vikeServer from 'vike-server/plugin'
 
 const FRAMEWORK = process.env.VIKE_NODE_FRAMEWORK || 'hono'
-
 export default {
   plugins: [
     react(),

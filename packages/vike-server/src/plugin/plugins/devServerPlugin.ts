@@ -1,6 +1,12 @@
-import { fork } from 'node:child_process'
 import { createServer, type IncomingMessage, type Server } from 'node:http'
-import type { Plugin, ViteDevServer } from 'vite'
+import {
+  type DevEnvironment,
+  type EnvironmentModuleNode,
+  isRunnableDevEnvironment,
+  type Plugin,
+  type ViteDevServer
+} from 'vite'
+
 import { globalStore } from '../../runtime/globalStore.js'
 import type { ConfigVikeNodeResolved } from '../../types.js'
 import { assert } from '../../utils/assert.js'
@@ -8,15 +14,15 @@ import { getConfigVikeNode } from '../utils/getConfigVikeNode.js'
 import { isBun } from '../utils/isBun.js'
 import { logViteInfo } from '../utils/logVite.js'
 
-let viteDevServer: ViteDevServer
+let fixApplied = false
+
 const VITE_HMR_PATH = '/__vite_hmr'
-const RESTART_EXIT_CODE = 33
-const IS_RESTARTER_SET_UP = '__VIKE__IS_RESTARTER_SET_UP'
 
 export function devServerPlugin(): Plugin {
   let resolvedConfig: ConfigVikeNodeResolved
   let resolvedEntryId: string
   let HMRServer: ReturnType<typeof createServer> | undefined
+  let viteDevServer: ViteDevServer
   let setupHMRProxyDone = false
   return {
     name: 'vite-node:devserver',
@@ -24,9 +30,8 @@ export function devServerPlugin(): Plugin {
       return command === 'serve' && mode !== 'test'
     },
     enforce: 'pre',
-    config: async () => {
-      await setupProcessRestarter()
-
+    async config() {
+      // FIXME
       if (isBun) {
         return {
           server: {
@@ -51,60 +56,64 @@ export function devServerPlugin(): Plugin {
       resolvedConfig = getConfigVikeNode(config)
     },
 
-    handleHotUpdate(ctx) {
-      if (isImported(ctx.file)) {
-        restartProcess()
+    async hotUpdate(ctx) {
+      const imported = isImported(ctx.modules)
+      if (imported) {
+        const invalidatedModules = new Set<EnvironmentModuleNode>()
+        for (const mod of ctx.modules) {
+          this.environment.moduleGraph.invalidateModule(mod, invalidatedModules, ctx.timestamp, true)
+        }
+
+        invalidateEntry(this.environment, invalidatedModules, ctx.timestamp, true)
+        // Wait for updated file to be ready
+        await ctx.read()
+
+        this.environment.hot.send({ type: 'full-reload' })
+        return []
       }
     },
 
     configureServer(vite) {
       if (viteDevServer) {
-        restartProcess()
         return
       }
+
+      // Once existing server is closed and invalidated, reimport its updated entry file
+      vite.environments.ssr.hot.on('vike-server:server-closed', () => {
+        setupHMRProxyDone = false
+        if (isRunnableDevEnvironment(vite.environments.ssr)) {
+          vite.environments.ssr.runner.import(resolvedEntryId).catch(logRestartMessage)
+        }
+      })
+
+      vite.environments.ssr.hot.on('vike-server:reloaded', () => {
+        vite.environments.client.hot.send({ type: 'full-reload' })
+      })
 
       viteDevServer = vite
       globalStore.viteDevServer = vite
       globalStore.setupHMRProxy = setupHMRProxy
+      if (!fixApplied) {
+        fixApplied = true
+        setupErrorStackRewrite(vite)
+        setupErrorHandlers()
+      }
       patchViteServer(vite)
-      setupErrorStrackRewrite(vite)
-      setupErrorHandlers()
       initializeServerEntry(vite)
     }
   }
 
-  // FIXME: does not return true when editing +middleware file
-  // TODO: could we just invalidate imports instead of restarting process?
-  function isImported(id: string): boolean {
-    const moduleNode = viteDevServer.moduleGraph.getModuleById(id)
-    if (!moduleNode) {
-      return false
+  function invalidateEntry(
+    env: DevEnvironment,
+    invalidatedModules?: Set<EnvironmentModuleNode>,
+    timestamp?: number,
+    isHmr?: boolean
+  ) {
+    const entryModule = env.moduleGraph.getModuleById(resolvedEntryId)
+    if (entryModule) {
+      // Always invalidate server entry so that
+      env.moduleGraph.invalidateModule(entryModule, invalidatedModules, timestamp, isHmr)
     }
-    const modules = new Set([moduleNode])
-    for (const module of modules) {
-      if (module.file === resolvedEntryId) return true
-      // biome-ignore lint/complexity/noForEach: <explanation>
-      module.importers.forEach((importer) => modules.add(importer))
-    }
-
-    return false
-  }
-
-  function patchViteServer(vite: ViteDevServer) {
-    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-    vite.httpServer = { on: () => {} } as any
-    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-    vite.listen = (() => {}) as any
-    vite.printUrls = () => {}
-  }
-
-  async function initializeServerEntry(vite: ViteDevServer) {
-    assert(resolvedConfig.server)
-    const { index } = resolvedConfig.server.entry
-    const indexResolved = await vite.pluginContainer.resolveId(index as string)
-    assert(indexResolved?.id)
-    resolvedEntryId = indexResolved.id
-    vite.ssrLoadModule(indexResolved.id).catch(logRestartMessage)
   }
 
   function setupHMRProxy(req: IncomingMessage) {
@@ -132,24 +141,79 @@ export function devServerPlugin(): Plugin {
     const url = new URL(req.url, 'http://example.com')
     return url.pathname === VITE_HMR_PATH
   }
+
+  function isImported(
+    modules: EnvironmentModuleNode[]
+  ): { type: 'entry' | '+middleware'; module: EnvironmentModuleNode } | undefined {
+    const modulesSet = new Set(modules)
+    for (const module of modulesSet.values()) {
+      if (module.file === resolvedEntryId)
+        return {
+          type: 'entry',
+          module
+        }
+      if (module.file?.match(/\+middleware\.[mc]?[jt]sx?$/))
+        return {
+          type: '+middleware',
+          module
+        }
+      // biome-ignore lint/complexity/noForEach: <explanation>
+      module.importers.forEach((importer) => modulesSet.add(importer))
+    }
+  }
+
+  function patchViteServer(vite: ViteDevServer) {
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    vite.httpServer = { on: () => {} } as any
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    vite.listen = (() => {}) as any
+    vite.printUrls = () => {}
+    const originalClose = vite.close
+    vite.close = async () => {
+      invalidateEntry(vite.environments.ssr)
+
+      return new Promise<void>((resolve, reject) => {
+        const onClose = () => {
+          vite.environments.ssr.hot.off('vike-server:server-closed', onClose)
+          originalClose().then(resolve).catch(reject)
+        }
+
+        vite.environments.ssr.hot.on('vike-server:server-closed', onClose)
+        // The server files should listen to this event to know when to close before hot-reloading
+        vite.environments.ssr.hot.send({ type: 'custom', event: 'vike-server:close-server' })
+      })
+    }
+  }
+
+  async function initializeServerEntry(vite: ViteDevServer) {
+    assert(resolvedConfig.server)
+    const { index } = resolvedConfig.server.entry
+    const indexResolved = await vite.pluginContainer.resolveId(index as string)
+    assert(indexResolved?.id)
+    resolvedEntryId = indexResolved.id
+    const ssr = vite.environments.ssr
+    if (isRunnableDevEnvironment(ssr)) {
+      ssr.runner.import(indexResolved.id).catch(logRestartMessage)
+    }
+  }
 }
 
 function logRestartMessage() {
   logViteInfo('Server crash: Update a server file or type "r+enter" to restart the server.')
 }
 
-function setupErrorStrackRewrite(vite: ViteDevServer) {
+function setupErrorStackRewrite(vite: ViteDevServer) {
   const rewroteStacktraces = new WeakSet()
 
   const _prepareStackTrace = Error.prepareStackTrace
-  Error.prepareStackTrace = function prepareStackTrace(error, stack) {
+  Error.prepareStackTrace = function prepareStackTrace(error: Error, stack: NodeJS.CallSite[]) {
     let ret = _prepareStackTrace?.(error, stack)
     if (!ret) return ret
     try {
       ret = vite.ssrRewriteStacktrace(ret)
       rewroteStacktraces.add(error)
     } catch (e) {
-      console.warn('Failed to apply Vite SSR stack trace fix:', e)
+      console.debug('Failed to apply Vite SSR stack trace fix:', e)
     }
     return ret
   }
@@ -169,47 +233,4 @@ function setupErrorHandlers() {
 
   process.on('unhandledRejection', onError)
   process.on('uncaughtException', onError)
-}
-
-// We hijack the CLI root process: we block Vite and make it orchestrates server restarts instead.
-// We execute the CLI again as a child process which does the actual work.
-async function setupProcessRestarter() {
-  if (isRestarterSetUp()) return
-  process.env[IS_RESTARTER_SET_UP] = 'true'
-
-  async function start() {
-    return new Promise<void>((resolve) => {
-      // biome-ignore lint/style/noNonNullAssertion: <explanation>
-      const cliEntry = process.argv[1]!
-      const cliArgs = process.argv.slice(2)
-      // Re-run the exact same CLI
-      const clone = fork(cliEntry, cliArgs, { stdio: 'inherit' })
-      clone.on('exit', (code) => {
-        if (code === RESTART_EXIT_CODE) {
-          start().then(resolve)
-        } else {
-          resolve()
-          process.exit(code)
-        }
-      })
-
-      process.on('exit', () => {
-        if (!clone.killed) {
-          clone.kill()
-        }
-      })
-    })
-  }
-  // Trick: never-resolving-promise in order to block the CLI root process
-  await start()
-}
-
-function isRestarterSetUp() {
-  return process.env[IS_RESTARTER_SET_UP] === 'true'
-}
-
-function restartProcess() {
-  logViteInfo('Restarting server...')
-  assert(isRestarterSetUp())
-  process.exit(RESTART_EXIT_CODE)
 }

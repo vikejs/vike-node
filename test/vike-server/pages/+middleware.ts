@@ -1,3 +1,4 @@
 import { middlewareTelefunc } from './middlewareTelefunc'
+import { middlewareDummy } from './middlewareDummy'
 
-export default [middlewareTelefunc]
+export default [middlewareTelefunc, middlewareDummy]

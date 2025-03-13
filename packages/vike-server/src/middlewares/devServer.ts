@@ -19,4 +19,11 @@ export const devServerMiddleware = (() => async (request, context, runtime) => {
   const handled = await connectToWeb(handleViteDevServer)(request, context, runtime)
 
   if (handled) return handled
+
+  return (response) => {
+    if (!response.headers.has('ETag')) {
+      response.headers.set('Cache-Control', 'no-store')
+    }
+    return response
+  }
 }) satisfies Get<[], UniversalMiddleware>
