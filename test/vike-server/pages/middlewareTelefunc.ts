@@ -16,6 +16,7 @@ const telefuncUniversalMiddleware: UniversalMiddleware = async (request, context
     }
   })
   const { body, statusCode, contentType } = httpResponse
+
   return new Response(body, {
     status: statusCode,
     headers: {

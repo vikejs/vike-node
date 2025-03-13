@@ -6,6 +6,7 @@ import {
   editFileRevert,
   expect,
   expectLog,
+  fetch,
   fetchHtml,
   getServerUrl,
   page,
@@ -89,19 +90,15 @@ function testRun(cmd: 'pnpm run dev' | 'pnpm run prod', options?: { skipServerHM
 
   if (!isProd)
     test('vite hmr websocket', async () => {
-      const logs: string[] = []
-      page.on('console', (msg) => logs.push(msg.text()))
-
       await page.goto(`${getServerUrl()}/`)
 
       // Wait for the connection message
       await autoRetry(async () => {
-        const connected = logs.some((log) => log.includes('[vite] connected.'))
-        expect(connected).toBe(true)
+        expectLog('[vite] connected.')
       })
     })
 
-  if (!isProd && !options?.skipServerHMR)
+  if (!isProd && !options?.skipServerHMR) {
     test('vike-server server-side HMR (server-entry)', async () => {
       await page.goto(`${getServerUrl()}/`)
 
@@ -120,6 +117,37 @@ function testRun(cmd: 'pnpm run dev' | 'pnpm run prod', options?: { skipServerHM
       // ignore logs
       expectLog('')
     })
+
+    test('vike-server server-side HMR (+middleware)', async () => {
+      const dummyMiddlewarePath = './pages/middlewareDummy.ts'
+      {
+        const response: Response = await fetch(`${getServerUrl()}/dummy`)
+
+        expect(await response.text()).toBe('OK')
+      }
+
+      editFile(dummyMiddlewarePath, (content) => content.replaceAll('OK', 'OK-edited'))
+
+      await autoRetry(async () => {
+        {
+          const response: Response = await fetch(`${getServerUrl()}/dummy`)
+
+          expect(await response.text()).toBe('OK-edited')
+        }
+      })
+      await sleep(300)
+      editFileRevert()
+      await autoRetry(async () => {
+        {
+          const response: Response = await fetch(`${getServerUrl()}/dummy`)
+
+          expect(await response.text()).toBe('OK')
+        }
+      })
+      // ignore logs
+      expectLog('')
+    })
+  }
 
   if (isProd)
     test('Compression and headers in production', async () => {
