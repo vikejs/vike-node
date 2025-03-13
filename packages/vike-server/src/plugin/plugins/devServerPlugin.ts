@@ -88,10 +88,10 @@ export function devServerPlugin(): Plugin {
       globalStore.setupHMRProxy = setupHMRProxy
       if (!fixApplied) {
         fixApplied = true
-        patchViteServer(vite)
         setupErrorStackRewrite(vite)
         setupErrorHandlers()
       }
+      patchViteServer(vite)
       initializeServerEntry(vite)
     }
   }
@@ -150,9 +150,8 @@ export function devServerPlugin(): Plugin {
     vite.listen = (() => {}) as any
     vite.printUrls = () => {}
     const originalClose = vite.close
-    // FIXME trying to override vike.close to handle r+enter Vite restart shortcut
-    //  currently generates errors
     vite.close = async () => {
+      console.log('SENDING CLOSE')
       vite.environments.ssr.hot.send({ type: 'custom', event: 'vike-server:close-server' })
 
       return new Promise((resolve, reject) => {
@@ -180,7 +179,7 @@ export function devServerPlugin(): Plugin {
 }
 
 function logRestartMessage() {
-  logViteInfo('Server crash: Update a server file or restart the server.')
+  logViteInfo('Server crash: Update a server file or type "r+enter" to restart the server.')
 }
 
 function setupErrorStackRewrite(vite: ViteDevServer) {

@@ -233,8 +233,8 @@
     "vite": ">=6.2.0"
   },
   "peerDependencies": {
-    "vike": "^0.4.213",
-    "vite": ">=5.0.10"
+    "vike": "^0.4.225",
+    "vite": ">=6"
   },
   "peerDependenciesMeta": {
     "vite": {
@@ -255,7 +255,7 @@
     "hono": "^4.7.4",
     "tsup": "^8.4.0",
     "typescript": "^5.8.2",
-    "vike": "^0.4.224",
+    "vike": "^0.4.225",
     "vite": "^6.2.0"
   },
   "files": [
