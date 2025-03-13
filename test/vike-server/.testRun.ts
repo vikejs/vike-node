@@ -1,9 +1,22 @@
 export { testRun }
 
-import { autoRetry, expect, fetchHtml, getServerUrl, isCI, page, run, test } from '@brillout/test-e2e'
+import {
+  autoRetry,
+  editFile,
+  editFileRevert,
+  expect,
+  expectLog,
+  fetchHtml,
+  getServerUrl,
+  page,
+  run,
+  sleep,
+  test
+} from '@brillout/test-e2e'
 
-function testRun(cmd: 'pnpm run dev' | 'pnpm run prod') {
+function testRun(cmd: 'pnpm run dev' | 'pnpm run prod', options?: { skipServerHMR?: boolean }) {
   run(cmd, { serverUrl: 'http://127.0.0.1:3000' })
+  const entry = `./server/index-${process.env.VIKE_NODE_FRAMEWORK || 'hono'}.ts`
   const isProd = cmd === 'pnpm run prod'
 
   test('HTML', async () => {
@@ -86,6 +99,25 @@ function testRun(cmd: 'pnpm run dev' | 'pnpm run prod') {
         const connected = logs.some((log) => log.includes('[vite] connected.'))
         expect(connected).toBe(true)
       })
+    })
+
+  if (!isProd && !options?.skipServerHMR)
+    test('vike-server server-side HMR (server-entry)', async () => {
+      await page.goto(`${getServerUrl()}/`)
+
+      expect(await page.textContent('h3')).toBe('x-runtime')
+
+      editFile(entry, (content) => content.replaceAll('x-runtime', 'x-runtime-edited'))
+
+      await autoRetry(async () => {
+        expect(await page.textContent('h3')).toBe('x-runtime-edited')
+      })
+      await sleep(300)
+      editFileRevert()
+      await autoRetry(async () => {
+        expect(await page.textContent('h3')).toBe('x-runtime')
+      })
+      expectLog('__vite_hmr', { filter: (entry) => entry.logSource === 'Browser Error' })
     })
 
   if (isProd)

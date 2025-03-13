@@ -68,7 +68,7 @@ export function devServerPlugin(): Plugin {
         return
       }
 
-      // Once existing server is closed, reimport its updated entry file
+      // Once existing server is closed and invalidated, reimport its updated entry file
       vite.environments.ssr.hot.on('vike-server:server-closed', () => {
         console.log('received', 'vike-server:server-closed')
         setupHMRProxyDone = false
