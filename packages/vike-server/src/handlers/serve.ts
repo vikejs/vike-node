@@ -13,6 +13,7 @@ export function onReady(options: { port: number }) {
   return () => {
     if (import.meta.hot) {
       if (import.meta.hot.data.vikeServerStarted) {
+        import.meta.hot.send('vike-server:reloaded')
         return
       }
       import.meta.hot.data.vikeServerStarted = true
@@ -53,7 +54,7 @@ function onServerClose(server: Server | Http2Server | Http2SecureServer) {
   }
 }
 
-export function installServerHMR(server: Server | Http2Server | Http2SecureServer) {
+function _installServerHMR(server: Server | Http2Server | Http2SecureServer) {
   if (import.meta.hot) {
     const destroy = onServerClose(server)
 
@@ -74,4 +75,15 @@ export function installServerHMR(server: Server | Http2Server | Http2SecureServe
       import.meta.hot!.on('vike-server:close-server', callback)
     })
   }
+}
+
+export function installServerHMR(serve: () => Server | Http2Server | Http2SecureServer) {
+  // biome-ignore lint/style/noNonNullAssertion: <explanation>
+  const previousServerClosing: Promise<void> = import.meta.hot!.data.previousServerClosing ?? Promise.resolve()
+
+  previousServerClosing.then(() => {
+    const server = serve()
+    // biome-ignore lint/style/noNonNullAssertion: <explanation>
+    import.meta.hot!.data.previousServerClosing = _installServerHMR(server)
+  })
 }

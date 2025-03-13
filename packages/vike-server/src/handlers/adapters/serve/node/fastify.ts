@@ -3,12 +3,15 @@ import type { apply as applyAdapter } from '@universal-middleware/fastify'
 import { installServerHMR, onReady, type ServerOptions } from '../../../serve.js'
 
 export function serve<App extends Parameters<typeof applyAdapter>[0]>(app: App, options: ServerOptions) {
-  app.listen(
-    {
-      port: options.port
-    },
-    onReady(options)
-  )
+  const _serve = () => {
+    app.listen(
+      {
+        port: options.port
+      },
+      onReady(options)
+    )
+    return app.server
+  }
 
   if (import.meta.hot) {
     const optionsSymbol = Object.getOwnPropertySymbols(app).find((s) => s.toString() === 'Symbol(fastify.options)')
@@ -23,7 +26,9 @@ export function serve<App extends Parameters<typeof applyAdapter>[0]>(app: App, 
       )
     }
 
-    installServerHMR(app.server)
+    installServerHMR(_serve)
+  } else {
+    _serve()
   }
 
   return app

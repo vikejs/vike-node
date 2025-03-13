@@ -4,10 +4,12 @@ import { toNodeListener } from 'h3'
 import { installServerHMR, onReady, type ServerOptions } from '../../../serve.js'
 
 export function serve<App extends Parameters<typeof applyAdapter>[0]>(app: App, options: ServerOptions) {
-  const server = createServer(toNodeListener(app)).listen(options.port, onReady(options))
+  const _serve = () => createServer(toNodeListener(app)).listen(options.port, onReady(options))
 
   if (import.meta.hot) {
-    installServerHMR(server)
+    installServerHMR(_serve)
+  } else {
+    _serve()
   }
 
   return app

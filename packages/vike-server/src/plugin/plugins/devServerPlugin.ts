@@ -86,6 +86,10 @@ export function devServerPlugin(): Plugin {
         }
       })
 
+      vite.environments.ssr.hot.on('vike-server:reloaded', () => {
+        vite.environments.client.hot.send({ type: 'full-reload' })
+      })
+
       viteDevServer = vite
       globalStore.viteDevServer = vite
       globalStore.setupHMRProxy = setupHMRProxy

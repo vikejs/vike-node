@@ -15,13 +15,7 @@ export function serve<App extends Parameters<typeof applyAdapter>[0]>(app: App, 
   }
 
   if (import.meta.hot) {
-    const previousServerClosing: Promise<void> = import.meta.hot.data.previousServerClosing ?? Promise.resolve()
-
-    previousServerClosing.then(() => {
-      const server = _serve()
-      // biome-ignore lint/style/noNonNullAssertion: <explanation>
-      import.meta.hot!.data.previousServerClosing = installServerHMR(server)
-    })
+    installServerHMR(_serve)
   } else {
     _serve()
   }

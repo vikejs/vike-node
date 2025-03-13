@@ -4,10 +4,12 @@ import { installServerHMR, onReady, type ServerOptions } from '../../../serve.js
 
 export function serve<App extends Parameters<typeof applyAdapter>[0]>(app: App, options: ServerOptions) {
   const handler = app.buildHandler()
-  const server = createServer(handler).listen(options.port, onReady(options))
+  const _serve = () => createServer(handler).listen(options.port, onReady(options))
 
   if (import.meta.hot) {
-    installServerHMR(server)
+    installServerHMR(_serve)
+  } else {
+    _serve()
   }
 
   return handler
