@@ -13,10 +13,7 @@ const config = {
   vite: {
     plugins: [vikeServer()]
   },
-  prerender: {
-    value: null,
-    disableAutoRun: true
-  },
+  vite6BuilderApp: true,
   meta: {
     server: {
       env: { config: true },

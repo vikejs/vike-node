@@ -5,7 +5,7 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
-    "./plugin": "./dist/plugin/index.js",
+    "./config": "./dist/config.js",
     ".": "./dist/index.js",
     "./hono": {
       "types": "./dist/hono.d.ts",

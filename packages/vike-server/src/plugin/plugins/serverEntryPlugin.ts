@@ -2,11 +2,9 @@ import pc from '@brillout/picocolors'
 import type { ConfigVitePluginServerEntry } from 'vike/types'
 import type { Plugin, ResolvedConfig } from 'vite'
 import { assert, assertUsage } from '../../utils/assert.js'
-import type { ConfigVikeNodeResolved } from '../../types.js'
 import { getVikeServerConfig } from '../utils/getVikeServerConfig.js'
 
 export function serverEntryPlugin(): Plugin {
-  let vikeServerConfig: ConfigVikeNodeResolved['server']
   let vikeEntries: Set<string> = new Set()
   const vikeInject: Set<string> = new Set()
 
@@ -18,13 +16,14 @@ export function serverEntryPlugin(): Plugin {
     },
 
     async configResolved(config: ResolvedConfig & ConfigVitePluginServerEntry) {
-      vikeServerConfig = getVikeServerConfig(config)
+      const vikeServerConfig = getVikeServerConfig(config)
       const { entry } = vikeServerConfig
       vikeEntries = new Set(Object.values(entry))
       assert(vikeEntries.size > 0)
     },
 
     buildStart() {
+      const vikeServerConfig = getVikeServerConfig(this.environment.config)
       const { entry } = vikeServerConfig
 
       for (const [name, filepath] of Object.entries(entry)) {

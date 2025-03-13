@@ -15,9 +15,6 @@ const OPTIONAL_NPM_IMPORTS = [
 ]
 
 export function standalonePlugin(): Plugin {
-  let configResolved: ResolvedConfig
-  let vikeServerConfig: ConfigVikeNodeResolved['server']
-  let enabled = false
   let root = ''
   let outDir = ''
   let outDirAbs = ''
@@ -27,22 +24,23 @@ export function standalonePlugin(): Plugin {
 
   return {
     name: 'vike-server:standalone',
-    apply: (_, env) => !!env.isSsrBuild,
-    configResolved: async (config) => {
-      configResolved = config
-      vikeServerConfig = getVikeServerConfig(config)
-      enabled = Boolean(vikeServerConfig.standalone)
-      if (!enabled) return
+    apply: 'build',
+    applyToEnvironment(env) {
+      if (env.name === 'ssr') {
+        return Boolean(getVikeServerConfig(env.config).standalone)
+      }
+      return false
+    },
+    async configResolved(config) {
       root = toPosixPath(config.root)
       outDir = toPosixPath(config.build.outDir)
       outDirAbs = path.isAbsolute(outDir) ? outDir : path.posix.join(root, outDir)
     },
     buildStart() {
-      if (!enabled) return
       rollupResolve = this.resolve.bind(this)
     },
     writeBundle(_, bundle) {
-      if (!enabled) return
+      const vikeServerConfig = getVikeServerConfig(this.environment.config)
       const entries = findRollupBundleEntries(bundle, vikeServerConfig)
       rollupEntryFilePaths = entries.reduce(
         (acc, cur) => {
@@ -54,26 +52,26 @@ export function standalonePlugin(): Plugin {
     },
     enforce: 'post',
     async closeBundle() {
-      if (!enabled) return
-
+      const vikeServerConfig = getVikeServerConfig(this.environment.config)
       const userEsbuildOptions =
         typeof vikeServerConfig.standalone === 'object' && vikeServerConfig.standalone !== null
           ? vikeServerConfig.standalone.esbuild
           : {}
 
-      await buildWithEsbuild(userEsbuildOptions)
+      await buildWithEsbuild(userEsbuildOptions, this.environment.config)
     },
     sharedDuringBuild: true
   }
 
-  async function buildWithEsbuild(userEsbuildOptions: BuildOptions | undefined) {
+  async function buildWithEsbuild(userEsbuildOptions: BuildOptions | undefined, resolvedConfig: ResolvedConfig) {
+    const vikeServerConfig = getVikeServerConfig(resolvedConfig)
     const res = await esbuild.build({
       platform: 'node',
       format: 'esm',
       bundle: true,
       external: vikeServerConfig.external,
       entryPoints: rollupEntryFilePaths,
-      sourcemap: configResolved.build.sourcemap === 'hidden' ? true : configResolved.build.sourcemap,
+      sourcemap: resolvedConfig.build.sourcemap === 'hidden' ? true : resolvedConfig.build.sourcemap,
       splitting: false,
       outExtension: { '.js': '.mjs' },
       outdir: outDirAbs,

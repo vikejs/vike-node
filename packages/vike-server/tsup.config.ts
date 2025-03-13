@@ -62,7 +62,7 @@ export default defineConfig([
   },
   {
     entry: {
-      'plugin/index': './src/plugin/index.ts',
+      config: './src/config.ts',
       index: './src/index.ts'
     },
     format: ['esm'],
