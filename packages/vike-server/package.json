@@ -6,7 +6,6 @@
   "types": "./dist/index.d.ts",
   "exports": {
     "./config": "./dist/config.js",
-    "./api": "./dist/api.js",
     ".": "./dist/index.js",
     "./hono": {
       "types": "./dist/hono.d.ts",
