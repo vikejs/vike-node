@@ -1,7 +1,7 @@
 import path from 'node:path'
 import esbuild, { type BuildOptions } from 'esbuild'
 import type { Plugin, ResolvedConfig, Rollup } from 'vite'
-import type { ConfigVikeNodeResolved } from '../../types.js'
+import type { ConfigVikeServerResolved } from '../../types.js'
 import { assert } from '../../utils/assert.js'
 import { toPosixPath } from '../utils/filesystemPathHandling.js'
 import { getVikeServerConfig } from '../utils/getVikeServerConfig.js'
@@ -118,7 +118,7 @@ function createStandaloneIgnorePlugin(rollupResolve: (...args: any[]) => Promise
   }
 }
 
-function findRollupBundleEntries(bundle: Rollup.OutputBundle, vikeServerConfig: ConfigVikeNodeResolved['server']) {
+function findRollupBundleEntries(bundle: Rollup.OutputBundle, vikeServerConfig: ConfigVikeServerResolved) {
   const entries = Object.keys(vikeServerConfig.entry)
 
   const chunks: Rollup.OutputChunk[] = []

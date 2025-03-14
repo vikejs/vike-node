@@ -1,9 +1,9 @@
 import { getVikeConfig } from 'vike/plugin'
 import type { ResolvedConfig, UserConfig } from 'vite'
-import type { ConfigVikeNodeResolved } from '../../types.js'
+import type { ConfigVikeServerResolved } from '../../types.js'
+import { resolveServerConfig } from './resolveServerConfig.js'
 
-export function getVikeServerConfig(config: UserConfig | ResolvedConfig): ConfigVikeNodeResolved['server'] {
+export function getVikeServerConfig(config: UserConfig | ResolvedConfig): ConfigVikeServerResolved {
   const vikeConfig = getVikeConfig(config)
-
-  return vikeConfig.config.server as ConfigVikeNodeResolved['server']
+  return resolveServerConfig(vikeConfig.config.server)
 }

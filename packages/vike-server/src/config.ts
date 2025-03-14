@@ -1,6 +1,5 @@
-import { resolveConfig } from './plugin/utils/resolveConfig.js'
 import { vikeServer } from './plugin/index.js'
-import type { ConfigVikeNode, ConfigVikeNodePlugin } from './types.js'
+import type { ConfigVikeServer } from './types.js'
 import type { Config } from 'vike/types'
 
 export { config as default }
@@ -17,10 +16,7 @@ const config = {
   meta: {
     server: {
       env: { config: true },
-      global: true,
-      effect({ configValue }) {
-        return resolveConfig(configValue as ConfigVikeNodePlugin)
-      }
+      global: true
     }
   }
 } satisfies Config
@@ -28,7 +24,7 @@ const config = {
 declare global {
   namespace Vike {
     interface Config {
-      server?: ConfigVikeNode['server']
+      server?: ConfigVikeServer['server']
     }
   }
 }

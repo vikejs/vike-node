@@ -1,11 +1,11 @@
 import { getVikeServerConfig } from '../utils/getVikeServerConfig.js'
 import type { Plugin } from 'vite'
-import type { ConfigVikeNodeResolved } from '../../types.js'
+import type { ConfigVikeServerResolved } from '../../types.js'
 
 export { commonConfig }
 
 function commonConfig(): Plugin[] {
-  let vikeServerConfig: ConfigVikeNodeResolved['server']
+  let vikeServerConfig: ConfigVikeServerResolved
   return [
     {
       enforce: 'pre',

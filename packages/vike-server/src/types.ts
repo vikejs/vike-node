@@ -1,11 +1,11 @@
-export type { ConfigVikeNode, ConfigVikeNodeResolved, ConfigVikeNodePlugin }
+export type { ConfigVikeServer, ConfigVikeServerResolved, ConfigVikeServerPlugin }
 
 import type { Runtime } from '@universal-middleware/core'
 import type { BuildOptions } from 'esbuild'
 
-type ConfigVikeNode = {
-  /** Server entry path.
-   *
+type ConfigVikeServer = {
+  /**
+   * Server entry path.
    */
   server:
     | string
@@ -17,7 +17,8 @@ type ConfigVikeNode = {
          */
         runtime?: Runtime['runtime']
         /**
-         * This is an experimental feature. In case of issue, please disable standalone mode and try again.
+         * This is an experimental feature. If an error occurs during build, please disable standalone mode and try again.
+         *
          * Enable standalone build.
          *
          * @experimental
@@ -32,13 +33,11 @@ type ConfigVikeNode = {
       }
 }
 
-type ConfigVikeNodeResolved = {
-  server: {
-    entry: { index: string; [name: string]: string }
-    runtime: Runtime['runtime']
-    external: string[]
-    standalone: boolean | { esbuild: Omit<BuildOptions, 'manifest'> }
-  }
+interface ConfigVikeServerResolved {
+  entry: { index: string; [name: string]: string }
+  runtime: Runtime['runtime']
+  external: string[]
+  standalone: boolean | { esbuild: Omit<BuildOptions, 'manifest'> }
 }
 
-type ConfigVikeNodePlugin = ConfigVikeNode['server']
+type ConfigVikeServerPlugin = ConfigVikeServer['server']

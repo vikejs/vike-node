@@ -1,12 +1,9 @@
-export { resolveConfig }
+export { resolveServerConfig }
 
-import type { ConfigVikeNodePlugin, ConfigVikeNodeResolved } from '../../types.js'
+import type { ConfigVikeServerPlugin, ConfigVikeServerResolved } from '../../types.js'
 import { assertUsage } from '../../utils/assert.js'
-import { unique } from './unique.js'
 
-export const nativeDependecies = ['sharp', '@prisma/client', '@node-rs/*']
-
-function resolveConfig(configServerValue: ConfigVikeNodePlugin): ConfigVikeNodeResolved {
+function resolveServerConfig(configServerValue: ConfigVikeServerPlugin | undefined): ConfigVikeServerResolved {
   if (typeof configServerValue === 'object' && configServerValue !== null) {
     if ('entry' in configServerValue) {
       assertUsage(
@@ -29,22 +26,18 @@ function resolveConfig(configServerValue: ConfigVikeNodePlugin): ConfigVikeNodeR
 
     assertUsage('index' in entriesProvided, 'Missing index entry in server.entry')
     return {
-      server: {
-        entry: entriesProvided,
-        runtime: configServerValue.runtime ?? 'node',
-        standalone: configServerValue.standalone ?? false,
-        external: unique([...nativeDependecies, ...(configServerValue.external ?? [])])
-      }
+      entry: entriesProvided,
+      runtime: configServerValue.runtime ?? 'node',
+      standalone: configServerValue.standalone ?? false,
+      external: configServerValue.external ?? []
     }
   }
 
   assertUsage(typeof configServerValue === 'string', 'config.server should be defined')
   return {
-    server: {
-      entry: { index: configServerValue },
-      runtime: 'node',
-      standalone: false,
-      external: nativeDependecies
-    }
+    entry: { index: configServerValue },
+    runtime: 'node',
+    standalone: false,
+    external: []
   }
 }

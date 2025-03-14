@@ -8,7 +8,7 @@ import {
 } from 'vite'
 
 import { globalStore } from '../../runtime/globalStore.js'
-import type { ConfigVikeNodeResolved } from '../../types.js'
+import type { ConfigVikeServerResolved } from '../../types.js'
 import { assert } from '../../utils/assert.js'
 import { isBun } from '../utils/isBun.js'
 import { logViteInfo } from '../utils/logVite.js'
@@ -19,7 +19,7 @@ let fixApplied = false
 const VITE_HMR_PATH = '/__vite_hmr'
 
 export function devServerPlugin(): Plugin {
-  let vikeServerConfig: ConfigVikeNodeResolved['server']
+  let vikeServerConfig: ConfigVikeServerResolved
   let resolvedEntryId: string
   let HMRServer: ReturnType<typeof createServer> | undefined
   let viteDevServer: ViteDevServer
