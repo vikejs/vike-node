@@ -1,9 +1,8 @@
-export { checkEdge }
-
+import { getVikeServerConfig } from '../utils/getVikeServerConfig.js'
 import type { Plugin } from 'vite'
 import type { Runtime } from '@universal-middleware/core'
-import type { ConfigVikeNodePlugin, ConfigVikeNodeResolved } from '../../types.js'
-import { resolveConfig } from '../utils/resolveConfig.js'
+
+export { checkEdge }
 
 type EdgePlugins = Partial<Record<Runtime['runtime'], { pluginName: string; label: string; link: string }>>
 
@@ -20,16 +19,16 @@ const edgePlugins = {
   }
 } satisfies EdgePlugins
 
-function checkEdge(configVikeNodePlugin: ConfigVikeNodePlugin): Plugin[] {
-  const resolvedConfig: ConfigVikeNodeResolved = resolveConfig({ server: configVikeNodePlugin })
-
+function checkEdge(): Plugin[] {
   return [
     {
       name: 'vike-server:check-edge',
 
       configResolved(config) {
+        const vikeServerConfig = getVikeServerConfig(config)
+
         for (const [runtime, edgeEnv] of Object.entries(edgePlugins)) {
-          if (resolvedConfig.server.runtime === runtime) {
+          if (vikeServerConfig.runtime === runtime) {
             const plugin = config.plugins.find(
               (p) => p.name === edgeEnv.pluginName || p.name.startsWith(`${edgeEnv.pluginName}:`)
             )

@@ -1,35 +1,38 @@
+import { getVikeServerConfig } from '../utils/getVikeServerConfig.js'
+import type { Plugin } from 'vite'
+import type { ConfigVikeServerResolved } from '../../types.js'
+
 export { commonConfig }
 
-import type { Plugin } from 'vite'
-import type { ConfigVikeNodePlugin, ConfigVikeNodeResolved } from '../../types.js'
-import { resolveConfig } from '../utils/resolveConfig.js'
-
-function commonConfig(configVikeNodePlugin: ConfigVikeNodePlugin): Plugin[] {
-  const resolvedConfig: ConfigVikeNodeResolved = resolveConfig({ server: configVikeNodePlugin })
-
+function commonConfig(): Plugin[] {
+  let vikeServerConfig: ConfigVikeServerResolved
   return [
     {
       enforce: 'pre',
       name: 'vike-server:commonConfig',
 
-      config(config, env) {
-        const isDev = env.command === 'serve'
-        ;(config as Record<string, unknown>).configVikeNode = resolvedConfig
+      applyToEnvironment(env) {
+        return env.name === 'ssr'
+      },
+
+      configEnvironment() {
         return {
           resolve: {
+            external: vikeServerConfig.external,
             // vike-server conditions to respect
-            externalConditions: ['node', 'development']
+            externalConditions: ['node', 'development|production']
           },
           build: {
             target: 'es2022'
           },
-          ssr: {
-            external: resolvedConfig.server.external
-          },
           optimizeDeps: {
-            exclude: resolvedConfig.server.external
+            exclude: vikeServerConfig.external
           }
         }
+      },
+
+      config(config) {
+        vikeServerConfig = getVikeServerConfig(config)
       }
     }
   ]

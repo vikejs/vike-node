@@ -1,7 +1,6 @@
 export { vikeServer, vikeServer as default }
 
 import pc from '@brillout/picocolors'
-import type { ConfigVikeNodePlugin } from '../types.js'
 import { assertUsage } from '../utils/assert.js'
 import { commonConfig } from './plugins/commonConfig.js'
 import { devServerPlugin } from './plugins/devServerPlugin.js'
@@ -9,10 +8,10 @@ import { serverEntryPlugin } from './plugins/serverEntryPlugin.js'
 import { standalonePlugin } from './plugins/standalonePlugin.js'
 import { checkEdge } from './plugins/edgePlugin.js'
 
-function vikeServer(config: ConfigVikeNodePlugin) {
+function vikeServer() {
   return [
-    ...commonConfig(config),
-    ...checkEdge(config),
+    ...commonConfig(),
+    ...checkEdge(),
     serverEntryPlugin(),
     devServerPlugin(),
     standalonePlugin(),
