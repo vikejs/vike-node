@@ -63,6 +63,7 @@ export default defineConfig([
   {
     entry: {
       config: './src/config.ts',
+      api: './src/api.ts',
       index: './src/index.ts'
     },
     format: ['esm'],
