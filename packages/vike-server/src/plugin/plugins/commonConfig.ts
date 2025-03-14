@@ -11,9 +11,9 @@ function commonConfig(): Plugin[] {
       enforce: 'pre',
       name: 'vike-server:commonConfig',
 
-      // applyToEnvironment(env) {
-      //   return env.name === 'ssr'
-      // },
+      applyToEnvironment(env) {
+        return env.name === 'ssr'
+      },
 
       configEnvironment() {
         return {
