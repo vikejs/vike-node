@@ -1,4 +1,4 @@
-export type { ConfigVikeServer, ConfigVikeServerResolved, ConfigVikeServerPlugin }
+export type { ConfigVikeServer, ConfigVikeServerResolved }
 
 import type { Runtime } from '@universal-middleware/core'
 import type { BuildOptions } from 'esbuild'
@@ -39,5 +39,3 @@ interface ConfigVikeServerResolved {
   external: string[]
   standalone: boolean | { esbuild: Omit<BuildOptions, 'manifest'> }
 }
-
-type ConfigVikeServerPlugin = ConfigVikeServer['server']

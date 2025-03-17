@@ -1,9 +1,9 @@
 export { resolveServerConfig }
 
-import type { ConfigVikeServerPlugin, ConfigVikeServerResolved } from '../../types.js'
-import { assertUsage } from '../../utils/assert.js'
+import type { ConfigVikeServer, ConfigVikeServerResolved } from '../../types.js'
+import { assert, assertUsage } from '../../utils/assert.js'
 
-function resolveServerConfig(configServerValue: ConfigVikeServerPlugin | undefined): ConfigVikeServerResolved {
+function _resolveServerConfig(configServerValue: ConfigVikeServer['server'] | undefined): ConfigVikeServerResolved {
   if (typeof configServerValue === 'object' && configServerValue !== null) {
     if ('entry' in configServerValue) {
       assertUsage(
@@ -14,6 +14,7 @@ function resolveServerConfig(configServerValue: ConfigVikeServerPlugin | undefin
             )),
         'server.entry should be a string or an entry mapping { index: string; [name: string]: string }'
       )
+
       assertUsage(
         typeof configServerValue.entry !== 'object' ||
           Object.entries(configServerValue.entry as Record<string, unknown>).some(([name]) => name === 'index'),
@@ -40,4 +41,14 @@ function resolveServerConfig(configServerValue: ConfigVikeServerPlugin | undefin
     standalone: false,
     external: []
   }
+}
+
+// Cache result
+const configServerValueResolved = new WeakMap<ConfigVikeServer['server'][], ConfigVikeServerResolved[]>()
+function resolveServerConfig(configServerValue: ConfigVikeServer['server'][] | undefined): ConfigVikeServerResolved[] {
+  assert(configServerValue)
+  if (!configServerValueResolved.has(configServerValue)) {
+    configServerValueResolved.set(configServerValue, configServerValue.map(_resolveServerConfig))
+  }
+  return configServerValueResolved.get(configServerValue) as ConfigVikeServerResolved[]
 }

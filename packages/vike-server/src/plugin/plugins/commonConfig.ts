@@ -1,11 +1,11 @@
-import { getVikeServerConfig } from '../utils/getVikeServerConfig.js'
+import { getVikeServerConfigs } from '../utils/getVikeServerConfig.js'
 import type { Plugin } from 'vite'
 import type { ConfigVikeServerResolved } from '../../types.js'
 
 export { commonConfig }
 
 function commonConfig(): Plugin[] {
-  let vikeServerConfig: ConfigVikeServerResolved
+  let vikeServerConfigs: ConfigVikeServerResolved[]
   return [
     {
       enforce: 'pre',
@@ -16,9 +16,10 @@ function commonConfig(): Plugin[] {
       },
 
       configEnvironment() {
+        const external = vikeServerConfigs.flatMap((c) => c.external)
         return {
           resolve: {
-            external: vikeServerConfig.external,
+            external,
             // vike-server conditions to respect
             externalConditions: ['node', 'development|production']
           },
@@ -26,13 +27,13 @@ function commonConfig(): Plugin[] {
             target: 'es2022'
           },
           optimizeDeps: {
-            exclude: vikeServerConfig.external
+            exclude: external
           }
         }
       },
 
       config(config) {
-        vikeServerConfig = getVikeServerConfig(config)
+        vikeServerConfigs = getVikeServerConfigs(config)
       }
     }
   ]

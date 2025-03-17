@@ -16,6 +16,8 @@ const config = {
   meta: {
     server: {
       env: { config: true },
+      // The server entry can be overriden by vike-cloudflare and such
+      cumulative: true,
       global: true
     }
   }
@@ -25,6 +27,9 @@ declare global {
   namespace Vike {
     interface Config {
       server?: ConfigVikeServer['server']
+    }
+    interface ConfigResolved {
+      server?: ConfigVikeServer['server'][]
     }
   }
 }
