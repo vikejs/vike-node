@@ -1,6 +1,5 @@
 export type { ConfigVikeServer, ConfigVikeServerResolved }
 
-import type { Runtime } from '@universal-middleware/core'
 import type { BuildOptions } from 'esbuild'
 
 type ConfigVikeServer = {
@@ -11,11 +10,6 @@ type ConfigVikeServer = {
     | string
     | {
         entry: string | { index: string; [name: string]: string }
-        /**
-         * Under which runtime will your built code run
-         * @default "node"
-         */
-        runtime?: Runtime['runtime']
         /**
          * This is an experimental feature. If an error occurs during build, please disable standalone mode and try again.
          *
@@ -35,7 +29,6 @@ type ConfigVikeServer = {
 
 interface ConfigVikeServerResolved {
   entry: { index: string; [name: string]: string }
-  runtime: Runtime['runtime']
   external: string[]
   standalone: boolean | { esbuild: Omit<BuildOptions, 'manifest'> }
 }

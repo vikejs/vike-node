@@ -28,7 +28,6 @@ function _resolveServerConfig(configServerValue: ConfigVikeServer['server'] | un
     assertUsage('index' in entriesProvided, 'Missing index entry in server.entry')
     return {
       entry: entriesProvided,
-      runtime: configServerValue.runtime ?? 'node',
       standalone: configServerValue.standalone ?? false,
       external: configServerValue.external ?? []
     }
@@ -37,18 +36,25 @@ function _resolveServerConfig(configServerValue: ConfigVikeServer['server'] | un
   assertUsage(typeof configServerValue === 'string', 'config.server should be defined')
   return {
     entry: { index: configServerValue },
-    runtime: 'node',
     standalone: false,
     external: []
   }
 }
 
-// Cache result
+// cache
 const configServerValueResolved = new WeakMap<ConfigVikeServer['server'][], ConfigVikeServerResolved[]>()
-function resolveServerConfig(configServerValue: ConfigVikeServer['server'][] | undefined): ConfigVikeServerResolved[] {
+function resolveServerConfig(
+  configServerValue: ConfigVikeServer['server'][] | undefined
+): [ConfigVikeServerResolved] | [ConfigVikeServerResolved, ConfigVikeServerResolved] {
   assert(configServerValue)
+  assertUsage(configServerValue.length > 0, 'config.server should be defined')
+  // length 1: user entry, or virtual entry
+  // length 2: [user entry, virtual entry]
+  assert(configServerValue.length <= 2)
   if (!configServerValueResolved.has(configServerValue)) {
     configServerValueResolved.set(configServerValue, configServerValue.map(_resolveServerConfig))
   }
-  return configServerValueResolved.get(configServerValue) as ConfigVikeServerResolved[]
+  return configServerValueResolved.get(configServerValue) as
+    | [ConfigVikeServerResolved]
+    | [ConfigVikeServerResolved, ConfigVikeServerResolved]
 }
