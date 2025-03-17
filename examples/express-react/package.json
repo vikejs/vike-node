@@ -1,7 +1,8 @@
 {
   "scripts": {
     "dev": "vike dev",
-    "prod": "vike build && cross-env NODE_ENV=production node dist/server/index.mjs"
+    "build": "vike build",
+    "prod": "vike build && cross-env NODE_ENV=production node dist/server/index.js"
   },
   "dependencies": {
     "@vitejs/plugin-react": "^4.3.4",
