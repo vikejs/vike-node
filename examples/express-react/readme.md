@@ -1,4 +1,4 @@
-Minimal example of using `vike-server` and `vike-react`.
+Minimal example of using `vike-server` and `vike-react` with `express`.
 
 ```bash
 git clone git@github.com:vikejs/vike-server
