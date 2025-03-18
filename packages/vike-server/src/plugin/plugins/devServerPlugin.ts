@@ -13,10 +13,13 @@ import { assert } from '../../utils/assert.js'
 import { isBun } from '../utils/isBun.js'
 import { logViteInfo } from '../utils/logVite.js'
 import { getVikeServerConfig } from '../utils/getVikeServerConfig.js'
+import { fork } from 'node:child_process'
 
 let fixApplied = false
 
 const VITE_HMR_PATH = '/__vite_hmr'
+const RESTART_EXIT_CODE = 33
+const IS_RESTARTER_SET_UP = '__VIKE__IS_RESTARTER_SET_UP'
 
 export function devServerPlugin(): Plugin {
   let vikeServerConfig: ConfigVikeServerResolved
@@ -30,7 +33,11 @@ export function devServerPlugin(): Plugin {
       return command === 'serve' && mode !== 'test'
     },
     enforce: 'pre',
-    async config() {
+    async config(userConfig) {
+      if (getVikeServerConfig(userConfig).hmr === 'prefer-restart') {
+        await setupProcessRestarter()
+      }
+
       // FIXME
       if (isBun) {
         return {
@@ -57,38 +64,48 @@ export function devServerPlugin(): Plugin {
     },
 
     async hotUpdate(ctx) {
+      if (vikeServerConfig.hmr === false) return
       const imported = isImported(ctx.modules)
       if (imported) {
-        const invalidatedModules = new Set<EnvironmentModuleNode>()
-        for (const mod of ctx.modules) {
-          this.environment.moduleGraph.invalidateModule(mod, invalidatedModules, ctx.timestamp, true)
+        if (vikeServerConfig.hmr === 'prefer-restart') {
+          restartProcess()
+        } else {
+          const invalidatedModules = new Set<EnvironmentModuleNode>()
+          for (const mod of ctx.modules) {
+            this.environment.moduleGraph.invalidateModule(mod, invalidatedModules, ctx.timestamp, true)
+          }
+
+          invalidateEntry(this.environment, invalidatedModules, ctx.timestamp, true)
+          // Wait for updated file to be ready
+          await ctx.read()
+
+          this.environment.hot.send({ type: 'full-reload' })
+          return []
         }
-
-        invalidateEntry(this.environment, invalidatedModules, ctx.timestamp, true)
-        // Wait for updated file to be ready
-        await ctx.read()
-
-        this.environment.hot.send({ type: 'full-reload' })
-        return []
       }
     },
 
     configureServer(vite) {
       if (viteDevServer) {
+        if (vikeServerConfig.hmr === 'prefer-restart') {
+          restartProcess()
+        }
         return
       }
 
-      // Once existing server is closed and invalidated, reimport its updated entry file
-      vite.environments.ssr.hot.on('vike-server:server-closed', () => {
-        setupHMRProxyDone = false
-        if (isRunnableDevEnvironment(vite.environments.ssr)) {
-          vite.environments.ssr.runner.import(resolvedEntryId).catch(logRestartMessage)
-        }
-      })
+      if (vikeServerConfig.hmr === true) {
+        // Once existing server is closed and invalidated, reimport its updated entry file
+        vite.environments.ssr.hot.on('vike-server:server-closed', () => {
+          setupHMRProxyDone = false
+          if (isRunnableDevEnvironment(vite.environments.ssr)) {
+            vite.environments.ssr.runner.import(resolvedEntryId).catch(logRestartMessage)
+          }
+        })
 
-      vite.environments.ssr.hot.on('vike-server:reloaded', () => {
-        vite.environments.client.hot.send({ type: 'full-reload' })
-      })
+        vite.environments.ssr.hot.on('vike-server:reloaded', () => {
+          vite.environments.client.hot.send({ type: 'full-reload' })
+        })
+      }
 
       viteDevServer = vite
       globalStore.viteDevServer = vite
@@ -168,20 +185,23 @@ export function devServerPlugin(): Plugin {
     // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     vite.listen = (() => {}) as any
     vite.printUrls = () => {}
-    const originalClose = vite.close
-    vite.close = async () => {
-      invalidateEntry(vite.environments.ssr)
 
-      return new Promise<void>((resolve, reject) => {
-        const onClose = () => {
-          vite.environments.ssr.hot.off('vike-server:server-closed', onClose)
-          originalClose().then(resolve).catch(reject)
-        }
+    if (vikeServerConfig.hmr === true) {
+      const originalClose = vite.close
+      vite.close = async () => {
+        invalidateEntry(vite.environments.ssr)
 
-        vite.environments.ssr.hot.on('vike-server:server-closed', onClose)
-        // The server files should listen to this event to know when to close before hot-reloading
-        vite.environments.ssr.hot.send({ type: 'custom', event: 'vike-server:close-server' })
-      })
+        return new Promise<void>((resolve, reject) => {
+          const onClose = () => {
+            vite.environments.ssr.hot.off('vike-server:server-closed', onClose)
+            originalClose().then(resolve).catch(reject)
+          }
+
+          vite.environments.ssr.hot.on('vike-server:server-closed', onClose)
+          // The server files should listen to this event to know when to close before hot-reloading
+          vite.environments.ssr.hot.send({ type: 'custom', event: 'vike-server:close-server' })
+        })
+      }
     }
   }
 
@@ -233,4 +253,40 @@ function setupErrorHandlers() {
 
   process.on('unhandledRejection', onError)
   process.on('uncaughtException', onError)
+}
+
+// We hijack the CLI root process: we block Vite and make it orchestrates server restarts instead.
+// We execute the CLI again as a child process which does the actual work.
+async function setupProcessRestarter() {
+  if (isRestarterSetUp()) return
+  process.env[IS_RESTARTER_SET_UP] = 'true'
+
+  function start() {
+    // biome-ignore lint/style/noNonNullAssertion: <explanation>
+    const cliEntry = process.argv[1]!
+    const cliArgs = process.argv.slice(2)
+    // Re-run the exact same CLI
+    const clone = fork(cliEntry, cliArgs, { stdio: 'inherit' })
+    clone.on('exit', (code) => {
+      if (code === RESTART_EXIT_CODE) {
+        start()
+      } else {
+        process.exit(code)
+      }
+    })
+  }
+  start()
+
+  // Trick: never-resolving-promise in order to block the CLI root process
+  await new Promise(() => {})
+}
+
+function isRestarterSetUp() {
+  return process.env[IS_RESTARTER_SET_UP] === 'true'
+}
+
+function restartProcess() {
+  logViteInfo('Restarting server...')
+  assert(isRestarterSetUp())
+  process.exit(RESTART_EXIT_CODE)
 }

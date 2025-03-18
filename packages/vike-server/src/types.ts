@@ -24,6 +24,17 @@ type ConfigVikeServer = {
          * List of external/native dependencies.
          */
         external?: string[]
+
+        /**
+         * HMR support for server files.
+         * If true, rely on Vite HMR implementation.
+         * If 'prefer-restart', restart the whole server process upon change.
+         * If false, disables HMR.
+         *
+         * @experimental
+         * @default true
+         */
+        hmr?: boolean | 'prefer-restart'
       }
 }
 
@@ -31,4 +42,5 @@ interface ConfigVikeServerResolved {
   entry: { index: string; [name: string]: string }
   external: string[]
   standalone: boolean | { esbuild: Omit<BuildOptions, 'manifest'> }
+  hmr: boolean | 'prefer-restart'
 }
