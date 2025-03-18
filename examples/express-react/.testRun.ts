@@ -1,6 +1,6 @@
 export { testRun }
 
-import { autoRetry, expect, fetchHtml, getServerUrl, page, run, test } from '@brillout/test-e2e'
+import { autoRetry, expect, fetch, fetchHtml, getServerUrl, page, run, test } from '@brillout/test-e2e'
 
 function testRun(cmd: 'pnpm run dev' | 'pnpm run prod') {
   run(cmd, { serverUrl: 'http://127.0.0.1:3000' })
@@ -14,6 +14,13 @@ function testRun(cmd: 'pnpm run dev' | 'pnpm run prod') {
     await page.goto(`${getServerUrl()}/`)
 
     await testCounter()
+  })
+
+  test('Static files', async () => {
+    const response: Response = await fetch(`${getServerUrl()}/vike.svg`)
+
+    expect(response.status).toBe(200)
+    expect(response.headers.get('Content-Type')).toBe('image/svg+xml')
   })
 }
 
