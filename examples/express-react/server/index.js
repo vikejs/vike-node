@@ -1,5 +1,6 @@
 import express from 'express'
 import { apply } from 'vike-server/express'
+import { serve } from 'vike-server/express/serve'
 
 startServer()
 
@@ -7,5 +8,6 @@ function startServer() {
   const app = express()
   apply(app)
   const port = process.env.PORT || 3000
-  app.listen(port, () => console.log(`Server running at http://localhost:${port}`))
+
+  return serve(app, { port })
 }
