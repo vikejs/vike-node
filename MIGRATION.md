@@ -1,4 +1,4 @@
-## Migrate from `vike-node`
+## Migration from `vike-node`
 
 ### Vike extension syntax
 Replace `vike-node` Vite plugin by `vike-server` Vike extension:
@@ -11,7 +11,6 @@ export default {
   // ...
 -  plugins: [vikeNode('server/index.js')]
 }
-
 ```
 
 #### `+config.ts`
@@ -48,3 +47,9 @@ function startServer() {
 
 +export default startServer()
 ```
+
+### Cloudflare support
+TODO
+
+### Vercel support
+TODO
