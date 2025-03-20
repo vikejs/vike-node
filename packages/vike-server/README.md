@@ -279,6 +279,10 @@ With `standalone: true`, the build output directory ([`dist/`](https://vite.dev/
 > If the production code built with `standalone: true` fails to run with errors like `ENOENT: no such file or directory`, please disable standalone mode, or replace
 > the dependency throwing the error with one that does not rely on filesystem operations.
 
+> [!TIP]
+> Instead of using `standalone: true`, we recommend tools like [`pnpm deploy --prod`](https://pnpm.io/cli/deploy).  
+> This provides better control over packed files and ensures greater compatibility.
+
 ```js
 // +config.js
 
