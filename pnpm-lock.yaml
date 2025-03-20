@@ -86,6 +86,9 @@ importers:
       '@brillout/picocolors':
         specifier: ^1.0.26
         version: 1.0.26
+      '@brillout/vite-plugin-server-entry':
+        specifier: 0.6.3-commit-0c67c6a
+        version: 0.6.3-commit-0c67c6a
       '@universal-middleware/compress':
         specifier: ^0.2.21
         version: 0.2.21

@@ -219,6 +219,7 @@
   },
   "dependencies": {
     "@brillout/picocolors": "^1.0.26",
+    "@brillout/vite-plugin-server-entry": "0.6.3-commit-0c67c6a",
     "@universal-middleware/compress": "^0.2.21",
     "@universal-middleware/core": "^0.4.4",
     "@universal-middleware/elysia": "^0.4.5",
