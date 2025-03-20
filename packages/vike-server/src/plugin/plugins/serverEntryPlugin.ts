@@ -24,7 +24,7 @@ export function serverEntryPlugin(): Plugin {
     config() {
       return {
         // Tell Vike that we're injecting imports of the virtual ID of the server entry
-        vitePluginServerEntry: { inject: true }
+        vitePluginServerEntry: { inject: ['TODO/now'] as any as boolean }
       }
     },
 
