@@ -9,9 +9,11 @@
 
 Server integration for Vike.
 
-With this extension, your server is transpiled with Vite. So that you don't need `ts-node`/`tsx` anymore.
+The most important feature you unlock:
+ - Your server is transpiled with Vite. So that you don't need `ts-node`/`tsx` anymore
+ - Seamless deployment on cloud platforms thanks to extensions like `vike-cloudflare` and `vike-vercel`
+ - In development, your server supports HMR!
 
-In development, the server process is restarted when a change is detected.
 
 [Installation](#installation)  
 [Custom `pageContext`](#custom-pagecontext)  
@@ -37,41 +39,47 @@ Example of adding `vike-server` and Express.js to a Vike app that doesn't use a 
 > - See [Supported servers](#supported-servers) for installing `vike-server` with a server other than Express.js.
 
 1. `npm install vike-server express`
-1. Extend `vite.config.js`:
-   ```js
-   // vite.config.js
+1. Extend or create [`+config.js`](https://vike.dev/config):
+   ```ts
+   // +config.js
+   
+   import vikeServer from 'vike-server/config'
 
-   import vikeNode from 'vike-server/plugin'
-
-   export default {
+   export const config = {
      // ...
-     plugins: [vikeNode('server/index.js')]
+     extends: [vikeServer],
+     server: 'server/index.js'
    }
    ```
 1. Create `server/index.js`:
    ```js
    // server/index.js
-
+   
    import express from 'express'
-   import vike from 'vike-server/express'
-
-   startServer()
+   import { apply } from 'vike-server/express'
+   import { serve } from 'vike-server/express/serve'
 
    function startServer() {
      const app = express()
-     app.use(vike())
+     // Applies Vike's middlewares
+     apply(app);
      const port = 3000
-     app.listen(port, () => console.log(`Server running at http://localhost:${port}`))
+     // In dev, runs with specificed port. This also enables HMR
+     // In prod, using `serve` ensures compatibility with any build target (like Cloudflare, Vercel, NodeJS, etc.)
+     return serve(app, { port })
    }
+   
+   // Always export default the result of `serve` function
+   export default startServer();
    ```
-1. Add production `script`:
+1. Add production `script` in `package.json` (run compiled code with NodeJS):
    ```diff
-     // package.json
-
+   // package.json
+   
      "scripts": {
-       "dev": "vike",
+       "dev": "vike dev",
        "build": "vike build",
-   +   "prod": "NODE_ENV=production node dist/server/index.mjs"
+   +   "prod": "NODE_ENV=production node dist/server/index.js"
      }
    ```
 
@@ -83,7 +91,8 @@ If you already have a server:
 // server/index.js
 
 - import { renderPage } from 'vike/server'
-+ import vike from 'vike-server/express'
++ import { apply } from 'vike-server/express'
++ import { serve } from 'vike-server/express/serve'
 
 - if (isProduction) {
 -   app.use(express.static(`${root}/dist/client`))
@@ -114,7 +123,8 @@ If you already have a server:
 -   }
 - })
 
-+ app.use(vike())
++ apply(app);
++ export default serve(app, { port: +process.env.PORT || 3000 });
 ```
 
 ```diff
@@ -123,15 +133,15 @@ If you already have a server:
   "scripts": {
     "build": "vike build",
 -   "dev": "node ./server/index.js",
-+   "dev": "vite",
++   "dev": "vike dev",
 -   "prod": "NODE_ENV=production node ./server/index.js"
-+   "prod": "NODE_ENV=production node dist/server/index.mjs"
++   "prod": "NODE_ENV=production node dist/server/index.js"
   }
 ```
 
 ### Supported servers
 
-`vike-server` includes middlewares for all commonly used server frameworks.
+`vike-server` supports all commonly used server frameworks.
 
 - [Express](#express)
 - [Fastify](#fastify)
@@ -147,16 +157,17 @@ If you already have a server:
 // server/index.js
 
 import express from 'express'
-import vike from 'vike-server/express'
-
-startServer()
+import { apply } from 'vike-server/express'
+import { serve } from 'vike-server/express/serve'
 
 function startServer() {
   const app = express()
-  app.use(vike())
+  apply(app)
   const port = 3000
-  app.listen(port, () => console.log(`Server running at http://localhost:${port}`))
+  return serve(app, { port })
 }
+
+export default startServer()
 ```
 
 #### Fastify
@@ -165,16 +176,17 @@ function startServer() {
 // server/index.js
 
 import fastify from 'fastify'
-import vike from 'vike-server/fastify'
-
-startServer()
+import { apply } from 'vike-server/fastify'
+import { serve } from 'vike-server/fastify/serve'
 
 function startServer() {
   const app = fastify()
-  app.all('/*', vike())
+  apply(app)
   const port = 3000
-  app.listen({ port }, () => console.log(`Server running at http://localhost:${port}`))
+  return serve(app, { port })
 }
+
+export default startServer()
 ```
 
 #### Hono
@@ -182,24 +194,18 @@ function startServer() {
 ```js
 // server/index.js
 
-import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
-import vike from 'vike-server/hono'
-
-startServer()
+import { apply } from 'vike-server/hono'
+import { serve } from 'vike-server/hono/serve'
 
 function startServer() {
   const app = new Hono()
-  app.use(vike())
+  apply(app)
   const port = 3000
-  serve(
-    {
-      fetch: app.fetch,
-      port
-    },
-    () => console.log(`Server running at http://localhost:${port}`)
-  )
+  return serve(app, { port })
 }
+
+export default startServer()
 ```
 
 #### H3
@@ -208,20 +214,17 @@ function startServer() {
 // server/index.js
 
 import { createApp, toNodeListener } from 'h3'
-import { createServer } from 'http'
-import vike from 'vike-server/h3'
-
-startServer()
+import { apply } from 'vike-server/h3'
+import { serve } from 'vike-server/h3/serve'
 
 async function startServer() {
   const app = createApp()
-  app.use(vike())
+  apply(app)
   const port = 3000
-  const server = createServer(toNodeListener(app)).listen(port)
-  server.on('listening', () => {
-    console.log(`Server running at http://localhost:${port}`)
-  })
+  return serve(app, { port })
 }
+
+export default startServer()
 ```
 
 #### Elysia
@@ -230,16 +233,17 @@ async function startServer() {
 // server/index.js
 
 import { Elysia } from 'elysia'
-import vike from 'vike-server/elysia'
-
-startServer()
+import { apply } from 'vike-server/elysia'
+import { serve } from 'vike-server/elysia/serve'
 
 function startServer() {
   const app = new Elysia()
-  app.get('/*', vike())
+  apply(app)
   const port = 3000
-  app.listen(port, () => console.log(`Server running at http://localhost:${port}`))
+  return serve(app, { port })
 }
+
+export default startServer()
 ```
 
 <br/>
@@ -249,17 +253,13 @@ function startServer() {
 You can define custom [pageContext](https://vike.dev/pageContext) properties:
 
 ```ts
-import { type RuntimeAdapter } from 'vike-server/express';
-
-app.use(
-  vike({
-    pageContext(runtime: RuntimeAdapter) {
-      return {
-        user: runtime.req.user
-      }
+apply(app, {
+  pageContext(runtime) {
+    return {
+      user: runtime.req.user
     }
-  })
-)
+  }
+})
 ```
 
 > [!NOTE]
@@ -271,54 +271,47 @@ app.use(
 
 <br/>
 
-## Standalone build
+## Standalone build (experimental)
 
 With `standalone: true`, the build output directory ([`dist/`](https://vite.dev/config/build-options.html#build-outdir)) contains everything needed for deployment. This means that, in production, only `dist/` is required (i.e. you can remove `node_modules/` and skip `npm install`).
 
+> [!WARNING]
+> If the production code built with `standalone: true` fails to run with errors like `ENOENT: no such file or directory`, please disable standalone mode, or replace
+> the dependency throwing the error with one that does not rely on filesystem operations.
+
 ```js
-// vite.config.js
+// +config.js
 
-import vikeNode from 'vike-server/plugin'
+import vikeServer from 'vike-server/config'
 
-export default {
-  plugins: [
-    vikeNode({
-      entry: 'server/index.js',
-      standalone: true
-    })
-  ]
+export const config = {
+  // ...
+  extends: [vikeServer],
+  server: {
+    entry: 'server/index.js',
+    standalone: true
+  }
 }
 ```
 
 Options:
 
 ```js
-vikeNode({
-  external: ['my-rust-package'],
-  standalone: {
-    esbuild: {
-      minify: true,
-      // ... or any other esbuild option
+export const config = {
+  // ...
+  extends: [vikeServer],
+  server: {
+    entry: 'server/index.js',
+    external: ['my-rust-package'],
+    standalone: {
+      esbuild: {
+        minify: true,
+        // ... or any other esbuild option
+      }
     }
   }
-})
+}
 ```
-
-### `external`
-
-If a npm package uses native binaries / custom assets then it needs to be added to `external`. (Its assets will then be copied to `dist/`.)
-
-> [!NOTE]
-> The following are `external` by default:
-> - `sharp`
-> - `@prisma/client`
-> - `@node-rs/*`
->
-> PR welcome to add other packages known to have a native dependency.
-
-### `esbuild`
-
-`vike-server` uses [esbuild](https://esbuild.github.io) for bundling server code; you can use `standalone.esbuild` to set esbuild options.
 
 <br/>
 
@@ -330,9 +323,7 @@ In production, `vike-server` compresses all Vike responses.
 You can disable it:
 
 ```js
-app.use(
-  vike({
-    compress: false
-  })
-)
+apply(app, {
+  compress: false
+})
 ```
