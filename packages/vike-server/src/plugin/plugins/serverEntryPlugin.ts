@@ -23,8 +23,10 @@ export function serverEntryPlugin(): Plugin {
 
     config() {
       return {
-        // Tell Vike that we're injecting imports of the virtual ID of the server entry
-        vitePluginServerEntry: { inject: ['TODO/now'] as any as boolean }
+        vitePluginServerEntry: {
+          inject: ['TODO/now'] as any as boolean, // Tell Vike that we're injecting imports of the virtual ID of the server entry
+          disableAutoImport: true
+        }
       }
     },
 
