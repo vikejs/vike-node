@@ -11,24 +11,15 @@ declare module 'vite' {
   }
 }
 
-export function serverEntryPlugin(): Plugin {
+export function serverEntryPlugin(): Plugin[] {
   let vikeEntries: Set<string> = new Set()
   const vikeInject: Set<string> = new Set()
 
-  return {
-    name: 'vike-server:serverEntry',
+  const plugin1: Plugin = {
+    name: 'vike-server:serverEntry-1',
 
     applyToEnvironment(env) {
       return env.name === 'ssr'
-    },
-
-    config() {
-      return {
-        vitePluginServerEntry: {
-          inject: true, // Tell Vike that we're injecting imports of the virtual ID of the server entry
-          disableAutoImport: true
-        }
-      }
     },
 
     async configResolved(config: ResolvedConfig) {
@@ -73,4 +64,20 @@ export function serverEntryPlugin(): Plugin {
       }
     }
   }
+  return [
+    // TODO/now refactor: inline plugin1
+    plugin1,
+    {
+      name: 'vike-server:serverEntry-2',
+      enforce: 'pre',
+      config() {
+        return {
+          vitePluginServerEntry: {
+            inject: true, // Tell Vike that we're injecting imports of the virtual ID of the server entry
+            disableAutoImport: true
+          }
+        }
+      }
+    }
+  ]
 }

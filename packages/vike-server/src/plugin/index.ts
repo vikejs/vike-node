@@ -9,7 +9,7 @@ function vikeServer() {
   return [
     //
     ...commonConfig(),
-    serverEntryPlugin(),
+    ...serverEntryPlugin(),
     devServerPlugin(),
     standalonePlugin()
   ]
