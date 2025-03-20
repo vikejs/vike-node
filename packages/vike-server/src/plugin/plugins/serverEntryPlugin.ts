@@ -17,6 +17,7 @@ export function serverEntryPlugin(): Plugin[] {
 
   const plugin1: Plugin = {
     name: 'vike-server:serverEntry-1',
+    apply: 'build',
 
     applyToEnvironment(env) {
       return env.name === 'ssr'
@@ -69,7 +70,7 @@ export function serverEntryPlugin(): Plugin[] {
     plugin1,
     {
       name: 'vike-server:serverEntry-2',
-      enforce: 'pre',
+      apply: 'build',
       config() {
         return {
           vitePluginServerEntry: {
