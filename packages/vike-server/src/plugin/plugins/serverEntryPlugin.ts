@@ -1,8 +1,14 @@
 import pc from '@brillout/picocolors'
-import type { ConfigVitePluginServerEntry } from 'vike/types'
+import { serverEntryVirtualId, type VitePluginServerEntryOptions } from '@brillout/vite-plugin-server-entry/plugin'
 import type { Plugin, ResolvedConfig } from 'vite'
 import { assert, assertUsage } from '../../utils/assert.js'
 import { getVikeServerConfig } from '../utils/getVikeServerConfig.js'
+
+declare module 'vite' {
+  interface UserConfig {
+    vitePluginServerEntry?: VitePluginServerEntryOptions
+  }
+}
 
 export function serverEntryPlugin(): Plugin {
   let vikeEntries: Set<string> = new Set()
@@ -15,7 +21,14 @@ export function serverEntryPlugin(): Plugin {
       return env.name === 'ssr'
     },
 
-    async configResolved(config: ResolvedConfig & ConfigVitePluginServerEntry) {
+    config() {
+      return {
+        // Tell Vike that we're injecting imports of the virtual ID of the server entry
+        vitePluginServerEntry: { inject: true }
+      }
+    },
+
+    async configResolved(config: ResolvedConfig) {
       const vikeServerConfig = getVikeServerConfig(config)
       const { entry } = vikeServerConfig
       vikeEntries = new Set(Object.values(entry))
@@ -53,7 +66,7 @@ export function serverEntryPlugin(): Plugin {
     transform(code, id) {
       // TODO support map
       if (vikeInject.has(id)) {
-        return `import "virtual:@brillout/vite-plugin-server-entry:serverEntry";\n${code}`
+        return `import "${serverEntryVirtualId}";\n${code}`
       }
     }
   }
