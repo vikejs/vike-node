@@ -67,7 +67,6 @@ export function serverEntryPlugin(): Plugin[] {
     },
 
     transform(code, id) {
-      console.log('transform', id)
       // TODO support map
       if (vikeEntries.has(id) || vikeInject.has(id)) {
         serverEntryInjected = true
