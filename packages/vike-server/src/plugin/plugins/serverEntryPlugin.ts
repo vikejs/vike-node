@@ -15,7 +15,7 @@ declare module 'vite' {
 export function serverEntryPlugin(): Plugin[] {
   let vikeEntries: Set<string> = new Set()
   const vikeInject: Set<string> = new Set()
-  let serverEntryInjected = true
+  let serverEntryInjected = false
 
   const plugin1: Plugin = {
     name: 'vike-server:serverEntry-1',
