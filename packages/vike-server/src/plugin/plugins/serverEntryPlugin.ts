@@ -97,10 +97,7 @@ export function serverEntryPlugin(): Plugin[] {
 function pathResolve(p1: string, p2: string) {
   assertPosixPath(p1)
   assertPosixPath(p2)
-  console.log('p1', p1)
-  console.log('p2', p2)
   if (path.isAbsolute(p2)) return p2
   const res = path.resolve(p1, p2)
-  console.log('res', res)
   return toPosixPath(res)
 }
