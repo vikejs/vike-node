@@ -3,6 +3,7 @@ import { serverEntryVirtualId, type VitePluginServerEntryOptions } from '@brillo
 import type { Plugin, ResolvedConfig } from 'vite'
 import { assert, assertUsage } from '../../utils/assert.js'
 import { getVikeServerConfig } from '../utils/getVikeServerConfig.js'
+import path from 'node:path'
 
 declare module 'vite' {
   interface UserConfig {
@@ -33,7 +34,8 @@ export function serverEntryPlugin(): Plugin {
     async configResolved(config: ResolvedConfig) {
       const vikeServerConfig = getVikeServerConfig(config)
       const { entry } = vikeServerConfig
-      vikeEntries = new Set(Object.values(entry))
+      vikeEntries = new Set(Object.values(entry).map((filePath) => path.resolve(config.root, filePath)))
+      console.log('vikeEntries', vikeEntries)
       assert(vikeEntries.size > 0)
     },
 
@@ -66,8 +68,11 @@ export function serverEntryPlugin(): Plugin {
     },
 
     transform(code, id) {
+      console.log('transform', id)
       // TODO support map
       if (vikeInject.has(id)) {
+        console.log('id', id)
+        throw new Error('bla')
         return `import "${serverEntryVirtualId}";\n${code}`
       }
     }
