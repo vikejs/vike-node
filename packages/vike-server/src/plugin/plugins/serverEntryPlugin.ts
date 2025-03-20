@@ -4,7 +4,7 @@ import type { Plugin, ResolvedConfig } from 'vite'
 import { assert, assertUsage } from '../../utils/assert.js'
 import { getVikeServerConfig } from '../utils/getVikeServerConfig.js'
 import path from 'node:path'
-import { assertPosixPath } from '../utils/filesystemPathHandling.js'
+import { assertPosixPath, toPosixPath } from '../utils/filesystemPathHandling.js'
 
 declare module 'vite' {
   interface UserConfig {
@@ -102,5 +102,5 @@ function pathResolve(p1: string, p2: string) {
   if (path.isAbsolute(p2)) return p2
   const res = path.resolve(p1, p2)
   console.log('res', res)
-  return res
+  return toPosixPath(res)
 }
