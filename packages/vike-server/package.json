@@ -254,7 +254,7 @@
     "hono": "^4.7.4",
     "tsup": "^8.4.0",
     "typescript": "^5.8.2",
-    "vike": "^0.4.225",
+    "vike": "0.4.225-commit-6fc12fc",
     "vite": "^6.2.1"
   },
   "files": [
