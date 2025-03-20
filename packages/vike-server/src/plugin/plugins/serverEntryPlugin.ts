@@ -29,6 +29,7 @@ export function serverEntryPlugin(): Plugin[] {
       const vikeServerConfig = getVikeServerConfig(config)
       const { entry } = vikeServerConfig
       vikeEntries = new Set(Object.values(entry).map((filePath) => pathResolve(config.root, filePath)))
+      console.log('vikeEntries', vikeEntries)
       assert(vikeEntries.size > 0)
     },
 
@@ -55,6 +56,7 @@ export function serverEntryPlugin(): Plugin[] {
         )
 
         vikeInject.add(resolved.id)
+        console.log('vikeInject', resolved.id)
 
         return resolved
       }
@@ -68,6 +70,7 @@ export function serverEntryPlugin(): Plugin[] {
       // TODO support map
       if (vikeEntries.has(id) || vikeInject.has(id)) {
         serverEntryInjected = true
+        console.log('inject', id)
         return `import "${serverEntryVirtualId}";\n${code}`
       }
     }
