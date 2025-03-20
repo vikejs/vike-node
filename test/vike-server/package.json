@@ -27,7 +27,7 @@
     "sharp": "^0.33.5",
     "telefunc": "^0.2.1",
     "typescript": "^5.8.2",
-    "vike": "0.4.225-commit-765fb9c",
+    "vike": "^0.4.226",
     "vike-server": "workspace:*",
     "vite": "^6.2.1"
   },
