@@ -15,6 +15,7 @@ declare module 'vite' {
 export function serverEntryPlugin(): Plugin[] {
   let vikeEntries: Set<string> = new Set()
   const vikeInject: Set<string> = new Set()
+  let serverEntryInjected = true
 
   const plugin1: Plugin = {
     name: 'vike-server:serverEntry-1',
@@ -59,9 +60,14 @@ export function serverEntryPlugin(): Plugin[] {
       }
     },
 
+    buildEnd() {
+      assert(serverEntryInjected)
+    },
+
     transform(code, id) {
       // TODO support map
       if (vikeEntries.has(id) || vikeInject.has(id)) {
+        serverEntryInjected = true
         return `import "${serverEntryVirtualId}";\n${code}`
       }
     }
