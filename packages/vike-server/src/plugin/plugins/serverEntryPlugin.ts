@@ -74,8 +74,8 @@ export function serverEntryPlugin(): Plugin[] {
       config() {
         return {
           vitePluginServerEntry: {
-            inject: true, // Tell Vike that we're injecting imports of the virtual ID of the server entry
-            disableAutoImport: true
+            inject: true // Tell Vike that we're injecting imports of the virtual ID of the server entry
+            // disableAutoImport: true
           }
         }
       }
