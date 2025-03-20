@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  '@brillout/vite-plugin-server-entry@0.6.3-commit-0c67c6a':
+    hash: 54dkelyuwt6kgu57keueb2t56i
+    path: patches/@brillout__vite-plugin-server-entry@0.6.3-commit-0c67c6a.patch
+
 importers:
 
   .:
@@ -88,7 +93,7 @@ importers:
         version: 1.0.26
       '@brillout/vite-plugin-server-entry':
         specifier: 0.6.3-commit-0c67c6a
-        version: 0.6.3-commit-0c67c6a
+        version: 0.6.3-commit-0c67c6a(patch_hash=54dkelyuwt6kgu57keueb2t56i)
       '@universal-middleware/compress':
         specifier: ^0.2.21
         version: 0.2.21
@@ -3170,7 +3175,7 @@ snapshots:
       '@brillout/import': 0.2.6
       '@brillout/picocolors': 1.0.26
 
-  '@brillout/vite-plugin-server-entry@0.6.3-commit-0c67c6a':
+  '@brillout/vite-plugin-server-entry@0.6.3-commit-0c67c6a(patch_hash=54dkelyuwt6kgu57keueb2t56i)':
     dependencies:
       '@brillout/import': 0.2.6
       '@brillout/picocolors': 1.0.26
@@ -5478,7 +5483,7 @@ snapshots:
       '@brillout/json-serializer': 0.5.15
       '@brillout/picocolors': 1.0.26
       '@brillout/require-shim': 0.1.2
-      '@brillout/vite-plugin-server-entry': 0.6.3-commit-0c67c6a
+      '@brillout/vite-plugin-server-entry': 0.6.3-commit-0c67c6a(patch_hash=54dkelyuwt6kgu57keueb2t56i)
       acorn: 8.14.1
       cac: 6.7.14
       es-module-lexer: 1.6.0

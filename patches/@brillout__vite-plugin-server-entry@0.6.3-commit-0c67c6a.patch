@@ -1,0 +1,13 @@
+diff --git a/dist/esm/shared/debug.js b/dist/esm/shared/debug.js
+index 22c1f028f0a3b440ea54c8ef1d7eff542ee9159c..3b7c6c45b481becd384fd1fd1465a2b554cd2646 100644
+--- a/dist/esm/shared/debug.js
++++ b/dist/esm/shared/debug.js
+@@ -1,7 +1,7 @@
+ export { DEBUG };
+ export { logDebug };
+ import { logLabel } from './utils.js';
+-const DEBUG = false;
++const DEBUG = true;
+ function logDebug(...msgs) {
+     console.log(`${logLabel}[DEBUG]`, ...msgs);
+ }

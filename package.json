@@ -26,5 +26,10 @@
     "@brillout/test-types": "^0.1.15",
     "playwright": "^1.50.1"
   },
-  "packageManager": "pnpm@9.15.5"
+  "packageManager": "pnpm@9.15.5",
+  "pnpm": {
+    "patchedDependencies": {
+      "@brillout/vite-plugin-server-entry@0.6.3-commit-0c67c6a": "patches/@brillout__vite-plugin-server-entry@0.6.3-commit-0c67c6a.patch"
+    }
+  }
 }
