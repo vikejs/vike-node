@@ -4,6 +4,7 @@ import type { Plugin, ResolvedConfig } from 'vite'
 import { assert, assertUsage } from '../../utils/assert.js'
 import { getVikeServerConfig } from '../utils/getVikeServerConfig.js'
 import path from 'node:path'
+import { assertPosixPath } from '../utils/filesystemPathHandling.js'
 
 declare module 'vite' {
   interface UserConfig {
@@ -26,7 +27,7 @@ export function serverEntryPlugin(): Plugin[] {
     async configResolved(config: ResolvedConfig) {
       const vikeServerConfig = getVikeServerConfig(config)
       const { entry } = vikeServerConfig
-      vikeEntries = new Set(Object.values(entry).map((filePath) => path.resolve(config.root, filePath)))
+      vikeEntries = new Set(Object.values(entry).map((filePath) => pathResolve(config.root, filePath)))
       assert(vikeEntries.size > 0)
     },
 
@@ -81,4 +82,10 @@ export function serverEntryPlugin(): Plugin[] {
       }
     }
   ]
+}
+
+function pathResolve(p1: string, p2: string) {
+  assertPosixPath(p1)
+  assertPosixPath(p2)
+  return path.posix.resolve(p1, p2)
 }
