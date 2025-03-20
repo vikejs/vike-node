@@ -233,7 +233,7 @@
     "vite": ">=6.2.1"
   },
   "peerDependencies": {
-    "vike": "^0.4.225",
+    "vike": "^0.4.226",
     "vite": ">=6"
   },
   "peerDependenciesMeta": {

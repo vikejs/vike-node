@@ -7,7 +7,7 @@ export { config as default }
 const config = {
   name: 'vike-server',
   require: {
-    vike: '>=0.4.224'
+    vike: '>=0.4.226'
   },
   vite: {
     plugins: [vikeServer()]
