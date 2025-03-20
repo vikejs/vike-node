@@ -48,6 +48,32 @@ function startServer() {
 +export default startServer()
 ```
 
+### `external` config
+`vike-node`'s `external` config as been removed, but can be replaced by the following Vite config:
+```js
+// vite.config.ts
+export default {
+  // ...
+  resolve: {
+    external: [...]
+  },
+}
+```
+
+When used with in `standalone` mode, `+config.ts` also needs to be updated:
+```ts
+// +config.ts
+
+export const config = {
+  // ...
+  server: {
+    standalone: {
+      external: [...]
+    }
+  }
+}
+```
+
 ### Cloudflare support
 TODO
 
