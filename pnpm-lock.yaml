@@ -45,7 +45,7 @@ importers:
         specifier: ^0.5.13
         version: 0.5.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.225(react-streaming@0.3.50(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@6.2.2(@types/node@20.17.24)))
       vike-server:
-        specifier: ^0.3.7
+        specifier: ^1.0.0-beta.1
         version: link:../../packages/vike-server
       vite:
         specifier: ^6.2.1
@@ -75,7 +75,7 @@ importers:
         specifier: ^0.5.13
         version: 0.5.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.225(react-streaming@0.3.50(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@6.2.2(@types/node@20.17.24)))
       vike-server:
-        specifier: ^0.3.7
+        specifier: ^1.0.0-beta.1
         version: link:../../packages/vike-server
       vite:
         specifier: ^6.2.1
@@ -116,12 +116,6 @@ importers:
       esbuild:
         specifier: ^0.25.0
         version: 0.25.1
-      resolve-from:
-        specifier: ^5.0.0
-        version: 5.0.0
-      unenv-nightly:
-        specifier: 2.0.0-20241015-162228-03257ee
-        version: 2.0.0-20241015-162228-03257ee
       vite:
         specifier: '>=6.2.1'
         version: 6.2.2(@types/node@20.17.24)
@@ -2293,9 +2287,6 @@ packages:
     resolution: {integrity: sha512-W67iLl4J2EXEGTbfeHCffrjDfitvLANg0UlX3wFUUSTx92KXRFegMHUVgSqE+wvhAbi4WqjGg9czysTV2Epbew==}
     engines: {node: '>= 0.4'}
 
-  ohash@1.1.6:
-    resolution: {integrity: sha512-TBu7PtV8YkAZn0tSxobKY2n2aAQva936lhRrj6957aDaCf9IEtqsKbgMzXE/F/sjqYOwmrukeORHNLe5glk7Cg==}
-
   on-exit-leak-free@2.1.2:
     resolution: {integrity: sha512-0eJJY6hXLGf1udHwfNftBqH+g73EU4B504nZeKpz1sYRKafAghwxEJunB2O7rDZkL4PGfsMVnTXZ2EjibbqcsA==}
     engines: {node: '>=14.0.0'}
@@ -2347,9 +2338,6 @@ packages:
 
   path-to-regexp@0.1.12:
     resolution: {integrity: sha512-RA1GjUVMnvYFxuqovrEqZoxxW5NUZqbwKtYz/Tt7nXerk0LbLblQmrsgdeOxV5SFHf0UDggjS/bSeOZwt1pmEQ==}
-
-  pathe@1.1.2:
-    resolution: {integrity: sha512-whLdWMYL2TwI08hn8/ZqAbrVemu0LNaNNJZX73O6qaIdCTfXutsLhMkjdENX0qhsQ9uIimo4/aQOmXkoon2nDQ==}
 
   pathval@1.1.1:
     resolution: {integrity: sha512-Dp6zGqpTdETdR63lehJYPeIOqpiNBNtc7BpWSLrOje7UaIsE5aY92r/AunQA7rsXvet3lrJ3JnZX29UPTKXyKQ==}
@@ -2834,9 +2822,6 @@ packages:
 
   undici-types@6.19.8:
     resolution: {integrity: sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw==}
-
-  unenv-nightly@2.0.0-20241015-162228-03257ee:
-    resolution: {integrity: sha512-7bW2ro8iwTMinr1goqA64Vd87na8REBRMqMZu0FovV7XcG1g1p0/Y4ccfuQnwVi4eqD2ga0M0B90IuUN0IG5Ng==}
 
   unpipe@1.0.0:
     resolution: {integrity: sha512-pjy2bYhSsufwWlKwPc+l3cN7+wuJlK6uz0YdJEOlQDbl6jo/YlPi4mb8agUkVC8BF7V8NuzeyPNqRksA3hztKQ==}
@@ -4865,8 +4850,6 @@ snapshots:
 
   object-inspect@1.13.4: {}
 
-  ohash@1.1.6: {}
-
   on-exit-leak-free@2.1.2: {}
 
   on-finished@2.4.1:
@@ -4913,8 +4896,6 @@ snapshots:
       minipass: 7.1.2
 
   path-to-regexp@0.1.12: {}
-
-  pathe@1.1.2: {}
 
   pathval@1.1.1: {}
 
@@ -5419,13 +5400,6 @@ snapshots:
   uncrypto@0.1.3: {}
 
   undici-types@6.19.8: {}
-
-  unenv-nightly@2.0.0-20241015-162228-03257ee:
-    dependencies:
-      defu: 6.1.4
-      ohash: 1.1.6
-      pathe: 1.1.2
-      ufo: 1.5.4
 
   unpipe@1.0.0: {}
 
