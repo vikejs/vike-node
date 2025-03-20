@@ -87,8 +87,8 @@ importers:
         specifier: ^1.0.26
         version: 1.0.26
       '@brillout/vite-plugin-server-entry':
-        specifier: 0.6.3-commit-0c67c6a
-        version: 0.6.3-commit-0c67c6a
+        specifier: ^0.7.0
+        version: 0.7.0
       '@universal-middleware/compress':
         specifier: ^0.2.21
         version: 0.2.21
@@ -417,6 +417,9 @@ packages:
 
   '@brillout/vite-plugin-server-entry@0.6.3-commit-0c67c6a':
     resolution: {integrity: sha512-gHbn65lpzlOfzKQPViGfAwIqV+CNzXvX61nWi/4yxhgrfQGUmtHnjSilaIaxrj6V9os6RCifp94cd0VdI7W8cA==}
+
+  '@brillout/vite-plugin-server-entry@0.7.0':
+    resolution: {integrity: sha512-YQ72DYNNbHgHz04KcUBta8d1ILaqhjdcO4+tflgVlls0Or20sOZ/63AQCQBB9wz5u6JEVvJ7VLpyi6nC6Lw9Ww==}
 
   '@elysiajs/node@1.2.6':
     resolution: {integrity: sha512-qauTs0YNLvfSyqW8k8pDCazd3nPQtFOeDH/cSz1wBhAGn1HL1PQlywnK6V0+bOGemkKlxLIjhmvbHxGrNzZMSg==}
@@ -3171,6 +3174,11 @@ snapshots:
       '@brillout/picocolors': 1.0.26
 
   '@brillout/vite-plugin-server-entry@0.6.3-commit-0c67c6a':
+    dependencies:
+      '@brillout/import': 0.2.6
+      '@brillout/picocolors': 1.0.26
+
+  '@brillout/vite-plugin-server-entry@0.7.0':
     dependencies:
       '@brillout/import': 0.2.6
       '@brillout/picocolors': 1.0.26
