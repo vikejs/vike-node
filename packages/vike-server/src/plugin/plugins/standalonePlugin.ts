@@ -64,12 +64,10 @@ export function standalonePlugin(): Plugin {
   }
 
   async function buildWithEsbuild(userEsbuildOptions: BuildOptions | undefined, resolvedConfig: ResolvedConfig) {
-    const vikeServerConfig = getVikeServerConfig(resolvedConfig)
     const res = await esbuild.build({
       platform: 'node',
       format: 'esm',
       bundle: true,
-      external: vikeServerConfig.external,
       entryPoints: rollupEntryFilePaths,
       sourcemap: resolvedConfig.build.sourcemap === 'hidden' ? true : resolvedConfig.build.sourcemap,
       splitting: false,

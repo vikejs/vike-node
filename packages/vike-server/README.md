@@ -306,7 +306,6 @@ export const config = {
   extends: [vikeServer],
   server: {
     entry: 'server/index.js',
-    external: ['my-rust-package'],
     standalone: {
       esbuild: {
         minify: true,

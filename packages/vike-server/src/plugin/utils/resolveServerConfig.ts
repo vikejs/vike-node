@@ -29,7 +29,6 @@ function _resolveServerConfig(configServerValue: ConfigVikeServer['server'] | un
     return {
       entry: entriesProvided,
       standalone: configServerValue.standalone ?? false,
-      external: configServerValue.external ?? [],
       hmr: configServerValue.hmr ?? true
     }
   }
@@ -38,7 +37,6 @@ function _resolveServerConfig(configServerValue: ConfigVikeServer['server'] | un
   return {
     entry: { index: configServerValue },
     standalone: false,
-    external: [],
     hmr: true
   }
 }
