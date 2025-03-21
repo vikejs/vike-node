@@ -3,8 +3,6 @@ import { serverEntryVirtualId, type VitePluginServerEntryOptions } from '@brillo
 import type { Plugin, ResolvedConfig } from 'vite'
 import { assert, assertUsage } from '../../utils/assert.js'
 import { getVikeServerConfig } from '../utils/getVikeServerConfig.js'
-import path from 'node:path'
-import { assertPosixPath, toPosixPath } from '../utils/filesystemPathHandling.js'
 
 declare module 'vite' {
   interface UserConfig {
@@ -20,6 +18,7 @@ export function serverEntryPlugin(): Plugin[] {
   const plugin1: Plugin = {
     name: 'vike-server:serverEntry-1',
     apply: 'build',
+    enforce: 'pre',
 
     applyToEnvironment(env) {
       return env.name === 'ssr'
@@ -28,7 +27,7 @@ export function serverEntryPlugin(): Plugin[] {
     async configResolved(config: ResolvedConfig) {
       const vikeServerConfig = getVikeServerConfig(config)
       const { entry } = vikeServerConfig
-      vikeEntries = new Set(Object.values(entry).map((filePath) => pathResolve(config.root, filePath)))
+      vikeEntries = new Set(Object.values(entry))
       assert(vikeEntries.size > 0)
     },
 
@@ -66,7 +65,7 @@ export function serverEntryPlugin(): Plugin[] {
 
     transform(code, id) {
       // TODO support map
-      if (vikeEntries.has(id) || vikeInject.has(id)) {
+      if (vikeInject.has(id)) {
         serverEntryInjected = true
         return `import "${serverEntryVirtualId}";\n${code}`
       }
@@ -89,12 +88,4 @@ export function serverEntryPlugin(): Plugin[] {
       }
     }
   ]
-}
-
-function pathResolve(p1: string, p2: string) {
-  assertPosixPath(p1)
-  assertPosixPath(p2)
-  if (path.isAbsolute(p2)) return p2
-  const res = path.resolve(p1, p2)
-  return toPosixPath(res)
 }
