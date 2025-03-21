@@ -1,4 +1,5 @@
 import pc from '@brillout/picocolors'
+import MagicString from 'magic-string'
 import { serverEntryVirtualId, type VitePluginServerEntryOptions } from '@brillout/vite-plugin-server-entry/plugin'
 import type { Plugin, ResolvedConfig } from 'vite'
 import { assert, assertUsage } from '../../utils/assert.js'
@@ -65,10 +66,17 @@ export function serverEntryPlugin(): Plugin[] {
       },
 
       transform(code, id) {
-        // TODO support map
         if (vikeInject.has(id)) {
+          const ms = new MagicString(code)
+          ms.prepend(`import "${serverEntryVirtualId}";\n`)
           serverEntryInjected = true
-          return `import "${serverEntryVirtualId}";\n${code}`
+          return {
+            code: ms.toString(),
+            map: ms.generateMap({
+              hires: true,
+              source: id
+            })
+          }
         }
       }
     },
