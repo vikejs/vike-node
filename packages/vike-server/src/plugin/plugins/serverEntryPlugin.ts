@@ -15,67 +15,65 @@ export function serverEntryPlugin(): Plugin[] {
   const vikeInject: Set<string> = new Set()
   let serverEntryInjected = false
 
-  const plugin1: Plugin = {
-    name: 'vike-server:serverEntry-1',
-    apply: 'build',
-    enforce: 'pre',
-
-    applyToEnvironment(env) {
-      return env.name === 'ssr'
-    },
-
-    async configResolved(config: ResolvedConfig) {
-      const vikeServerConfig = getVikeServerConfig(config)
-      const { entry } = vikeServerConfig
-      vikeEntries = new Set(Object.values(entry))
-      assert(vikeEntries.size > 0)
-    },
-
-    buildStart() {
-      const vikeServerConfig = getVikeServerConfig(this.environment.config)
-      const { entry } = vikeServerConfig
-
-      for (const [name, filepath] of Object.entries(entry)) {
-        this.emitFile({
-          type: 'chunk',
-          fileName: `${name}.js`,
-          id: filepath,
-          importer: undefined
-        })
-      }
-    },
-
-    async resolveId(id) {
-      if (vikeEntries.has(id)) {
-        const resolved = await this.resolve(id)
-        assertUsage(
-          resolved,
-          `No file found at ${id}. Update your ${pc.cyan('server.entry')} configuration to point to an existing file.`
-        )
-
-        vikeInject.add(resolved.id)
-
-        return resolved
-      }
-    },
-
-    buildEnd() {
-      assert(serverEntryInjected)
-    },
-
-    transform(code, id) {
-      // TODO support map
-      if (vikeInject.has(id)) {
-        serverEntryInjected = true
-        return `import "${serverEntryVirtualId}";\n${code}`
-      }
-    }
-  }
   return [
-    // TODO/now refactor: inline plugin1
-    plugin1,
     {
-      name: 'vike-server:serverEntry-2',
+      name: 'vike-server:serverEntry',
+      apply: 'build',
+      enforce: 'pre',
+
+      applyToEnvironment(env) {
+        return env.name === 'ssr'
+      },
+
+      async configResolved(config: ResolvedConfig) {
+        const vikeServerConfig = getVikeServerConfig(config)
+        const { entry } = vikeServerConfig
+        vikeEntries = new Set(Object.values(entry))
+        assert(vikeEntries.size > 0)
+      },
+
+      buildStart() {
+        const vikeServerConfig = getVikeServerConfig(this.environment.config)
+        const { entry } = vikeServerConfig
+
+        for (const [name, filepath] of Object.entries(entry)) {
+          this.emitFile({
+            type: 'chunk',
+            fileName: `${name}.js`,
+            id: filepath,
+            importer: undefined
+          })
+        }
+      },
+
+      async resolveId(id) {
+        if (vikeEntries.has(id)) {
+          const resolved = await this.resolve(id)
+          assertUsage(
+            resolved,
+            `No file found at ${id}. Update your ${pc.cyan('server.entry')} configuration to point to an existing file.`
+          )
+
+          vikeInject.add(resolved.id)
+
+          return resolved
+        }
+      },
+
+      buildEnd() {
+        assert(serverEntryInjected)
+      },
+
+      transform(code, id) {
+        // TODO support map
+        if (vikeInject.has(id)) {
+          serverEntryInjected = true
+          return `import "${serverEntryVirtualId}";\n${code}`
+        }
+      }
+    },
+    {
+      name: 'vike-server:serverEntry:setConfig',
       apply: 'build',
       config() {
         return {
