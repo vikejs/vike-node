@@ -219,6 +219,7 @@
   },
   "dependencies": {
     "@brillout/picocolors": "^1.0.26",
+    "@brillout/vite-plugin-server-entry": "^0.7.0",
     "@universal-middleware/compress": "^0.2.21",
     "@universal-middleware/core": "^0.4.4",
     "@universal-middleware/elysia": "^0.4.5",
@@ -232,7 +233,7 @@
     "vite": ">=6.2.1"
   },
   "peerDependencies": {
-    "vike": "^0.4.225",
+    "vike": "^0.4.226",
     "vite": ">=6"
   },
   "peerDependenciesMeta": {
@@ -254,7 +255,7 @@
     "hono": "^4.7.4",
     "tsup": "^8.4.0",
     "typescript": "^5.8.2",
-    "vike": "^0.4.225",
+    "vike": "^0.4.226",
     "vite": "^6.2.1"
   },
   "files": [
