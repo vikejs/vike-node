@@ -31,16 +31,15 @@ export function standalonePlugin(): Plugin {
       }
       return false
     },
-    async configResolved(config) {
-      root = toPosixPath(config.root)
-      outDir = toPosixPath(config.build.outDir)
-      outDirAbs = path.isAbsolute(outDir) ? outDir : path.posix.join(root, outDir)
-    },
     buildStart() {
       rollupResolve = this.resolve.bind(this)
     },
     writeBundle(_, bundle) {
-      const vikeServerConfig = getVikeServerConfig(this.environment.config)
+      const config = this.environment.config;
+      root = toPosixPath(config.root);
+      outDir = toPosixPath(config.build.outDir);
+      outDirAbs = path.isAbsolute(outDir) ? outDir : path.posix.join(root, outDir);
+      const vikeServerConfig = getVikeServerConfig(config)
       const entries = findRollupBundleEntries(bundle, vikeServerConfig)
       rollupEntryFilePaths = entries.reduce(
         (acc, cur) => {
