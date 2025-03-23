@@ -32,6 +32,7 @@ import pLimit from 'p-limit'
 import { getVikeServerConfig } from '../utils/getVikeServerConfig.js'
 import { logViteInfo } from '../utils/logVite.js'
 import { toPosixPath } from '../utils/filesystemPathHandling.js'
+import { assert } from '../../utils/assert.js'
 
 // -----------------------------------------------------------------------------
 // Constants
@@ -1117,20 +1118,4 @@ function isYarnPnP(): boolean {
     debug(`Yarn PnP not detected`)
     return false
   }
-}
-
-/**
- * Assert helper for internal errors
- * @param condition - Condition to check
- * @param message - Optional error message to display
- * @throws Error if condition is falsy
- */
-function assert(condition: unknown, message?: string): asserts condition {
-  if (condition) return
-
-  const errorMessage =
-    message || "You stumbled upon a bug in vike-server-externals's source code. Please report this issue on GitHub."
-  debug(`ASSERTION FAILED: ${errorMessage}`)
-
-  throw new Error(errorMessage)
 }
