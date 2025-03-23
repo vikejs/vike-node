@@ -39,7 +39,7 @@ function commonConfig(): Plugin[] {
             ...commonConfig,
             resolve: {
               ...commonConfig.resolve,
-              conditions: ['node', 'development|production']
+              externalConditions: ['node', 'development|production']
             }
           }
         }
