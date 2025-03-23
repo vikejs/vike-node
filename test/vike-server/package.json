@@ -3,7 +3,7 @@
     "dev": "vike dev",
     "build": "vike build",
     "prepare": "pnpm prisma generate && pnpm prisma db push",
-    "prod": "pnpm run build && cross-env NODE_ENV=production node build/server/index.js"
+    "prod": "pnpm run build && cp ./prisma/test.db ./build/server/node_modules/.prisma/client/test.db && cross-env NODE_ENV=production node build/server/index.standalone.mjs"
   },
   "dependencies": {
     "@hono/node-server": "^1.13.8",
