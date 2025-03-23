@@ -38,20 +38,6 @@ import { assert } from '../../utils/assert.js'
 // Constants
 // -----------------------------------------------------------------------------
 
-/**
- * Default external packages that should not be bundled
- *
- * These packages are excluded from bundling because:
- * - They contain native/binary components that can't be properly bundled
- * - They're significantly large and rarely change, so bundling provides little benefit
- * - They may have special loading requirements or side effects that break when bundled
- *
- * Example:
- * - @node-rs/argon2: Contains native Rust bindings for argon2 hashing
- * - @prisma/client: Dynamically loads generated DB client code, contains native Rust bindings
- * - sharp: Contains native image processing dependencies
- */
-
 // Enable verbose debugging
 const DEBUG = process.env.DEBUG_VIKE_EXTERNALS === 'true'
 
