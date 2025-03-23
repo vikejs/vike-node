@@ -35,10 +35,10 @@ export function standalonePlugin(): Plugin {
       rollupResolve = this.resolve.bind(this)
     },
     writeBundle(_, bundle) {
-      const config = this.environment.config;
-      root = toPosixPath(config.root);
-      outDir = toPosixPath(config.build.outDir);
-      outDirAbs = path.isAbsolute(outDir) ? outDir : path.posix.join(root, outDir);
+      const config = this.environment.config
+      root = toPosixPath(config.root)
+      outDir = toPosixPath(config.build.outDir)
+      outDirAbs = path.isAbsolute(outDir) ? outDir : path.posix.join(root, outDir)
       const vikeServerConfig = getVikeServerConfig(config)
       const entries = findRollupBundleEntries(bundle, vikeServerConfig)
       rollupEntryFilePaths = entries.reduce(
@@ -57,12 +57,16 @@ export function standalonePlugin(): Plugin {
           ? vikeServerConfig.standalone.esbuild
           : {}
 
-      await buildWithEsbuild(userEsbuildOptions, this.environment.config)
+      await buildWithEsbuild(userEsbuildOptions, vikeServerConfig, this.environment.config)
     },
     sharedDuringBuild: true
   }
 
-  async function buildWithEsbuild(userEsbuildOptions: BuildOptions | undefined, resolvedConfig: ResolvedConfig) {
+  async function buildWithEsbuild(
+    userEsbuildOptions: BuildOptions | undefined,
+    vikeServerConfig: ConfigVikeServerResolved,
+    resolvedConfig: ResolvedConfig
+  ) {
     const res = await esbuild.build({
       platform: 'node',
       format: 'esm',
@@ -76,6 +80,7 @@ export function standalonePlugin(): Plugin {
       logOverride: { 'ignored-bare-import': 'silent' },
       banner: { js: generateBanner() },
       plugins: [createStandaloneIgnorePlugin(rollupResolve), ...(userEsbuildOptions?.plugins ?? [])],
+      external: Array.from(new Set([...(userEsbuildOptions?.external ?? []), ...vikeServerConfig.external])),
       ...userEsbuildOptions,
       metafile: true
     })
