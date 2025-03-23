@@ -219,7 +219,7 @@ async function processStandalone(standaloneFiles: string[], root: string, outDir
 
   // Step 1: Trace dependencies and build dependency graph
   debug('Starting dependency tracing...')
-  const { dependencies, dependencyInfo } = await traceDependencies(standaloneFiles, workspaceRoot, outDirAbs)
+  const { dependencies, dependencyInfo } = await traceDependencies(standaloneFiles, root, workspaceRoot, outDirAbs)
 
   if (dependencies.length === 0) {
     logViteInfo('No dependencies found to process.')
@@ -260,6 +260,7 @@ async function processStandalone(standaloneFiles: string[], root: string, outDir
  */
 async function traceDependencies(
   entryFiles: string[],
+  root: string,
   workspaceRoot: string,
   outDirAbs: string
 ): Promise<{ dependencies: string[]; dependencyInfo: DependencyInfo }> {
@@ -278,7 +279,7 @@ async function traceDependencies(
 
   // Use Vercel's NFT to trace all dependencies
   debug('Starting nodeFileTrace...')
-  const result = await nodeFileTrace(entryFiles, { base: workspaceRoot })
+  const result = await nodeFileTrace(entryFiles, { base: workspaceRoot, processCwd: root })
   debug('nodeFileTrace completed')
 
   assert(result?.fileList && result?.reasons, 'File tracing must return fileList and reasons')
@@ -949,8 +950,7 @@ function ensurePathIsWithinDirectory(filePath: string, containingDir: string): s
   debug(`  Is path within directory? ${isPathWithinDir}`)
 
   if (!isPathWithinDir) {
-    debug(`Security warning: Path would escape output directory: ${filePath}`)
-    debug(`  SECURITY WARNING: Path escape detected`)
+    debug(`  WARNING: Path escape detected`)
     debug(`  Original path: ${filePath}`)
     debug(`  Normalized path: ${normalizedPath}`)
     debug(`  Target dir: ${normalizedDir}`)
