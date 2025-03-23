@@ -9,7 +9,7 @@ export default {
   hydrationCanBeAborted: true,
   extends: [vikeServer],
   server: {
-    entry: { index: `./server/index-${FRAMEWORK}.ts`, worker: './server/worker.js' },
+    entry: `./server/index-${FRAMEWORK}.ts`,
     external: ['@node-rs/argon2'],
     standalone: true
   }

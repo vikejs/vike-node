@@ -19,16 +19,9 @@ function commonConfig(): Plugin[] {
       // applyToEnvironment(experimental) runs after config/configEnvironment and has no effect on them
       // (last time checked: vite@6.2.2)
       configEnvironment(name) {
-        if (name !== 'ssr')
-          return {
-            build: {
-              target: 'es2022'
-            }
-          }
         const { external } = vikeServerConfig
-        return {
+        const commonConfig = {
           resolve: {
-            externalConditions: ['node', 'development|production'],
             noExternal: ['vike-server'],
             external
           },
@@ -40,6 +33,18 @@ function commonConfig(): Plugin[] {
             }
           }
         }
+
+        if (name === 'ssr') {
+          return {
+            ...commonConfig,
+            resolve: {
+              ...commonConfig.resolve,
+              conditions: ['node', 'development|production']
+            }
+          }
+        }
+
+        return commonConfig
       }
     }
   ]
