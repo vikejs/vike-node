@@ -231,8 +231,6 @@
     "@universal-middleware/sirv": "^0.1.12",
     "@vercel/nft": "^0.29.2",
     "esbuild": "^0.25.0",
-    "p-limit": "^6.2.0",
-    "semver": "^7.7.1",
     "vite": ">=6.2.1"
   },
   "peerDependencies": {
