@@ -7,6 +7,8 @@ import { escapeInject, dangerouslySkipEscape } from 'vike/server'
 import { PageLayout } from './PageLayout'
 import type { PageContextServer } from 'vike/types'
 
+import 'package1'
+
 async function onRenderHtml(pageContext: PageContextServer) {
   const { Page, pageProps } = pageContext
   const page = (

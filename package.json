@@ -26,5 +26,11 @@
     "@brillout/test-types": "^0.1.15",
     "playwright": "^1.50.1"
   },
-  "packageManager": "pnpm@9.15.5"
+  "packageManager": "pnpm@9.15.5",
+  "pnpm": {
+    "overrides": {
+      "package1": "link:./test/package1/",
+      "package2": "link:./test/package2/"
+    }
+  }
 }

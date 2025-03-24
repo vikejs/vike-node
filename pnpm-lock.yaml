@@ -4,6 +4,10 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  package1: link:./test/package1/
+  package2: link:./test/package2/
+
 importers:
 
   .:
@@ -125,6 +129,9 @@ importers:
       p-limit:
         specifier: ^6.2.0
         version: 6.2.0
+      semver:
+        specifier: ^7.7.1
+        version: 7.7.1
       vite:
         specifier: '>=6.2.1'
         version: 6.2.2(@types/node@20.17.25)
@@ -175,6 +182,21 @@ importers:
         specifier: ^0.4.226
         version: 0.4.226(react-streaming@0.3.50(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@6.2.2(@types/node@20.17.25))
 
+  test/package1:
+    dependencies:
+      lodash:
+        specifier: 4.17.19
+        version: 4.17.19
+      package2:
+        specifier: link:../package2
+        version: link:../package2
+
+  test/package2:
+    dependencies:
+      lodash:
+        specifier: 4.17.18
+        version: 4.17.18
+
   test/vike-server:
     dependencies:
       '@hono/node-server':
@@ -222,6 +244,9 @@ importers:
       hono:
         specifier: ^4.7.4
         version: 4.7.5
+      package1:
+        specifier: link:../package1
+        version: link:../package1
       prisma:
         specifier: ^6.4.1
         version: 6.5.0(typescript@5.8.2)
@@ -2227,6 +2252,12 @@ packages:
 
   lodash.sortby@4.7.0:
     resolution: {integrity: sha512-HDWXG8isMntAyRF5vZ7xKuEvOhT4AhlRt/3czTSjvGUxjYCBVRQY48ViDHyfYz9VIoBkW4TMGQNapx+l3RUwdA==}
+
+  lodash@4.17.18:
+    resolution: {integrity: sha512-au4L1q0HKcaaa37qOdpWWhwzDnB/taYJfRiKULnaT+Ml9UaBIjJ2SOJMeLtSeeLT+zUdyFMm0+ts+j4eeuUpIA==}
+
+  lodash@4.17.19:
+    resolution: {integrity: sha512-JNvd8XER9GQX0v2qJgsaN/mzFCNA5BRe/j8JN9d+tWyGLSodKQHKFicdwNYzWwI3wjRnaKPsGj1XkBjx/F96DQ==}
 
   loose-envify@1.4.0:
     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
@@ -4971,6 +5002,10 @@ snapshots:
       p-locate: 6.0.0
 
   lodash.sortby@4.7.0: {}
+
+  lodash@4.17.18: {}
+
+  lodash@4.17.19: {}
 
   loose-envify@1.4.0:
     dependencies:
