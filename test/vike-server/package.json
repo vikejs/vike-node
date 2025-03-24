@@ -31,7 +31,8 @@
     "vike": "^0.4.226",
     "vike-server": "workspace:*",
     "vite": "^6.2.1",
-    "rimraf": "^6.0.1"
+    "rimraf": "^6.0.1",
+    "package1": "workspace:*"
   },
   "type": "module",
   "devDependencies": {

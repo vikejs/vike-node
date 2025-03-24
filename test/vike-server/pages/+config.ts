@@ -10,7 +10,7 @@ export default {
   extends: [vikeServer],
   server: {
     entry: `./server/index-${FRAMEWORK}.ts`,
-    external: ['@node-rs/argon2', '@prisma/client', 'sharp'],
+    external: ['@node-rs/argon2', '@prisma/client', 'sharp', 'package1'],
     standalone: true
   }
 } satisfies Config
