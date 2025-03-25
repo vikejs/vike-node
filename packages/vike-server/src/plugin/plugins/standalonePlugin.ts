@@ -35,10 +35,10 @@ export function standalonePlugin(): Plugin {
       rollupResolve = this.resolve.bind(this)
     },
     writeBundle(_, bundle) {
-      const config = this.environment.config;
-      root = toPosixPath(config.root);
-      outDir = toPosixPath(config.build.outDir);
-      outDirAbs = path.isAbsolute(outDir) ? outDir : path.posix.join(root, outDir);
+      const config = this.environment.config
+      root = toPosixPath(config.root)
+      outDir = toPosixPath(config.build.outDir)
+      outDirAbs = path.isAbsolute(outDir) ? outDir : path.posix.join(root, outDir)
       const vikeServerConfig = getVikeServerConfig(config)
       const entries = findRollupBundleEntries(bundle, vikeServerConfig)
       rollupEntryFilePaths = entries.reduce(
