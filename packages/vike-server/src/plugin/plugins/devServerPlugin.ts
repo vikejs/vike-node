@@ -115,7 +115,19 @@ export function devServerPlugin(): Plugin {
         setupErrorStackRewrite(vite)
         setupErrorHandlers()
       }
+      patchViteServer(vite)
       initializeServerEntry(vite)
+    }
+  }
+
+  function patchViteServer(vite: ViteDevServer) {
+    const bindCLIShortcuts = vite.bindCLIShortcuts
+    vite.bindCLIShortcuts = (...args) => {
+      // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+      vite.httpServer = { on: () => {} } as any
+      bindCLIShortcuts(...args)
+      vite.httpServer = null
+      return
     }
   }
 
