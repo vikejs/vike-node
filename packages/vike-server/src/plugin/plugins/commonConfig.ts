@@ -15,6 +15,7 @@ function commonConfig(): Plugin[] {
       configEnvironment() {
         return {
           resolve: {
+            noExternal: 'vike-server',
             externalConditions: ['node', 'development|production']
           },
           build: {
