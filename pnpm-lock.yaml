@@ -119,9 +119,6 @@ importers:
       esbuild:
         specifier: ^0.25.0
         version: 0.25.1
-      vite:
-        specifier: '>=6.2.1'
-        version: 6.2.2(@types/node@20.17.25)
     devDependencies:
       '@brillout/release-me':
         specifier: ^0.4.3
@@ -168,6 +165,9 @@ importers:
       vike:
         specifier: ^0.4.227
         version: 0.4.227(react-streaming@0.3.50(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@6.2.2(@types/node@20.17.25))
+      vite:
+        specifier: ^6.2.1
+        version: 6.2.2(@types/node@20.17.25)
 
   test/vike-server:
     dependencies:
