@@ -49,7 +49,10 @@ export function serverEntryPlugin(): Plugin[] {
 
       async resolveId(id) {
         if (vikeEntries.has(id)) {
-          const resolved = await this.resolve(id)
+          let resolved = await this.resolve(id)
+          if (!resolved) {
+            resolved = await this.resolve(`${this.environment.config.root}/${id}`)
+          }
           assertUsage(
             resolved,
             `No file found at ${id}. Update your ${pc.cyan('server.entry')} configuration to point to an existing file.`
