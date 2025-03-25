@@ -15,6 +15,10 @@ import {
   test
 } from '@brillout/test-e2e'
 
+import fs from 'node:fs/promises'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+
 function testRun(cmd: 'pnpm run dev' | 'pnpm run prod', options?: { skipServerHMR?: boolean }) {
   run(cmd, { serverUrl: 'http://127.0.0.1:3000' })
   const entry = `./server/index-${process.env.VIKE_NODE_FRAMEWORK || 'hono'}.ts`
@@ -156,6 +160,64 @@ function testRun(cmd: 'pnpm run dev' | 'pnpm run prod', options?: { skipServerHM
       expect(contentEncoding).toBe('gzip')
       const varyHeader = await response.headerValue('vary')
       expect(varyHeader).toContain('Accept-Encoding')
+    })
+
+  /**
+   * Tests Vike Server Standalone Externals Plugin's multi-version package handling
+   *
+   * Verifies that the plugin correctly handles scenarios where different parts of an
+   * application depend on different versions of the same package (lodash 4.17.18 and 4.17.19).
+   *
+   * This test ensures:
+   * 1. Multiple versions are isolated in .vike directory with correct versioning
+   * 2. Symlinks are created for multi-version packages
+   * 3. Symlinks follow correct precedence (newest version at root)
+   * 4. Package-specific dependencies point to their required versions
+   * 5. Package metadata is preserved correctly
+   *
+   * This test is critical because correct handling of multiple package versions is
+   * essential for maintaining Node.js resolution compatibility in standalone builds.
+   */
+  if (isProd)
+    test('standaloneExternalsPlugin multi-version and workspace package handling', async () => {
+      async function checkSymlink(from: string, to: string) {
+        const fromResolved = fileURLToPath(import.meta.resolve(from))
+        const toResolved = fileURLToPath(import.meta.resolve(to))
+        const stats = await fs.lstat(fromResolved)
+        expect(stats.isSymbolicLink()).toBe(true)
+        const linkTarget = await fs.readlink(fromResolved)
+        const expectedTarget = path.relative(path.dirname(fromResolved), toResolved)
+        expect(linkTarget).toBe(expectedTarget)
+      }
+
+      async function checkPackageJson(_path: string, version: string) {
+        const pathResolved = fileURLToPath(import.meta.resolve(_path))
+        const packagePath = path.join(pathResolved, 'package.json')
+        const packageContent = await fs.readFile(packagePath, 'utf8')
+        const packageJson = JSON.parse(packageContent)
+        expect(packageJson.version).toBe(version)
+      }
+
+      function checkExists(_path: string) {
+        const pathResolved = fileURLToPath(import.meta.resolve(_path))
+        return fs.access(pathResolved)
+      }
+
+      await checkExists('./build/server/node_modules/.vike/lodash@4.17.18/lodash.js')
+      await checkExists('./build/server/node_modules/.vike/lodash@4.17.19/lodash.js')
+
+      await checkSymlink(
+        './build/server/node_modules/package1/node_modules/lodash',
+        './build/server/node_modules/.vike/lodash@4.17.19'
+      )
+
+      await checkSymlink(
+        './build/server/node_modules/package2/node_modules/lodash',
+        './build/server/node_modules/.vike/lodash@4.17.18'
+      )
+
+      await checkSymlink('./build/server/node_modules/lodash', './build/server/node_modules/.vike/lodash@4.17.19')
+      await checkPackageJson('./build/server/node_modules/lodash', '4.17.19')
     })
 }
 
