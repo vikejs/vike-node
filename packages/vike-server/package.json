@@ -233,7 +233,7 @@
     "vite": ">=6.2.1"
   },
   "peerDependencies": {
-    "vike": "^0.4.226",
+    "vike": "0.4.226-commit-8f5c172",
     "vite": ">=6"
   },
   "peerDependenciesMeta": {
@@ -256,7 +256,7 @@
     "magic-string": "^0.30.17",
     "tsup": "^8.4.0",
     "typescript": "^5.8.2",
-    "vike": "^0.4.226",
+    "vike": "0.4.226-commit-8f5c172",
     "vite": "^6.2.1"
   },
   "files": [
