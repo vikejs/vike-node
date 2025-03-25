@@ -205,19 +205,17 @@ function testRun(cmd: 'pnpm run dev' | 'pnpm run prod', options?: { skipServerHM
 
       await checkExists('./build/server/node_modules/.vike/lodash@4.17.18/lodash.js')
       await checkExists('./build/server/node_modules/.vike/lodash@4.17.19/lodash.js')
-
+      await checkPackageJson('./build/server/node_modules/.vike/lodash@4.17.18', '4.17.18')
+      await checkPackageJson('./build/server/node_modules/.vike/lodash@4.17.19', '4.17.19')
       await checkSymlink(
         './build/server/node_modules/package1/node_modules/lodash',
         './build/server/node_modules/.vike/lodash@4.17.19'
       )
-
       await checkSymlink(
         './build/server/node_modules/package2/node_modules/lodash',
         './build/server/node_modules/.vike/lodash@4.17.18'
       )
-
       await checkSymlink('./build/server/node_modules/lodash', './build/server/node_modules/.vike/lodash@4.17.19')
-      await checkPackageJson('./build/server/node_modules/lodash', '4.17.19')
     })
 }
 
