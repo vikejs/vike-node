@@ -1,3 +1,12 @@
+## [1.0.2](https://github.com/vikejs/vike-server/compare/v1.0.1...v1.0.2) (2025-03-25)
+
+
+### Bug Fixes
+
+* better entry resolution when Vite root is specified. Fixes [#83](https://github.com/vikejs/vike-server/issues/83) ([9a6a91f](https://github.com/vikejs/vike-server/commit/9a6a91f9563f6ece0f7bc129153e68272c27b34d))
+
+
+
 ## [1.0.1](https://github.com/vikejs/vike-server/compare/v1.0.0...v1.0.1) (2025-03-25)
 
 
