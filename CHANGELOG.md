@@ -1,3 +1,12 @@
+# [1.0.0](https://github.com/vikejs/vike-server/compare/v0.3.7...v1.0.0) (2025-03-25)
+
+
+### Features
+
+* `vike-server` ([#64](https://github.com/vikejs/vike-server/issues/64)) ([e618e63](https://github.com/vikejs/vike-server/commit/e618e6343c68c62cbb00d1548fde7e3492023043))
+
+
+
 ## [0.3.7](https://github.com/vikejs/vike-node/compare/v0.3.6...v0.3.7) (2025-02-25)
 
 
