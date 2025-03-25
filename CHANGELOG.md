@@ -1,3 +1,12 @@
+## [1.0.1](https://github.com/vikejs/vike-server/compare/v1.0.0...v1.0.1) (2025-03-25)
+
+
+### Bug Fixes
+
+* monkey-patch bindCLIShortcuts to show Vite server shortcuts ([6b30ebb](https://github.com/vikejs/vike-server/commit/6b30ebb324b58e8b01bb3aeed2fff26d7281b17a))
+
+
+
 # [1.0.0](https://github.com/vikejs/vike-server/compare/v0.3.7...v1.0.0) (2025-03-25)
 
 
