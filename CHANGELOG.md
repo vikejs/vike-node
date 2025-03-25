@@ -3,8 +3,15 @@
 
 ### Features
 
-* `vike-server` ([#64](https://github.com/vikejs/vike-server/issues/64)) ([e618e63](https://github.com/vikejs/vike-server/commit/e618e6343c68c62cbb00d1548fde7e3492023043))
+* `vike-node` superseded by `vike-server` ([#64](https://github.com/vikejs/vike-server/issues/64)) ([e618e63](https://github.com/vikejs/vike-server/commit/e618e6343c68c62cbb00d1548fde7e3492023043))
 
+### BREAKING CHANGES
+
+#### Migration from `vike-node`
+https://github.com/vikejs/vike-server/blob/main/MIGRATION.md
+
+#### Official documentation
+https://vike.dev/server
 
 
 ## [0.3.7](https://github.com/vikejs/vike-node/compare/v0.3.6...v0.3.7) (2025-02-25)
