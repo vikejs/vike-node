@@ -115,7 +115,6 @@ export function devServerPlugin(): Plugin {
         setupErrorStackRewrite(vite)
         setupErrorHandlers()
       }
-      patchViteServer(vite)
       initializeServerEntry(vite)
     }
   }
@@ -176,32 +175,6 @@ export function devServerPlugin(): Plugin {
         }
       // biome-ignore lint/complexity/noForEach: <explanation>
       module.importers.forEach((importer) => modulesSet.add(importer))
-    }
-  }
-
-  function patchViteServer(vite: ViteDevServer) {
-    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-    vite.httpServer = { on: () => {} } as any
-    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-    vite.listen = (() => {}) as any
-    vite.printUrls = () => {}
-
-    if (vikeServerConfig.hmr === true) {
-      const originalClose = vite.close
-      vite.close = async () => {
-        invalidateEntry(vite.environments.ssr)
-
-        return new Promise<void>((resolve, reject) => {
-          const onClose = () => {
-            vite.environments.ssr.hot.off('vike-server:server-closed', onClose)
-            originalClose().then(resolve).catch(reject)
-          }
-
-          vite.environments.ssr.hot.on('vike-server:server-closed', onClose)
-          // The server files should listen to this event to know when to close before hot-reloading
-          vite.environments.ssr.hot.send({ type: 'custom', event: 'vike-server:close-server' })
-        })
-      }
     }
   }
 
