@@ -5,11 +5,11 @@ import type { Socket } from 'node:net'
 export interface ServerOptions {
   port: number
   bun?: Omit<Parameters<typeof Bun.serve>[0], 'fetch' | 'port'>
-  deno?: Omit<Deno.ServeTcpOptions, 'port' | 'handler'>
+  deno?: Omit<Deno.ServeTcpOptions | (Deno.ServeTcpOptions & Deno.TlsCertifiedKeyPem), 'port' | 'handler'>
 }
 type Handler = (req: Request) => Response | Promise<Response>
 
-export function onReady(options: { port: number }) {
+export function onReady(options: { port: number; isHttps?: boolean }) {
   return () => {
     if (import.meta.hot) {
       if (import.meta.hot.data.vikeServerStarted) {
@@ -18,17 +18,21 @@ export function onReady(options: { port: number }) {
       }
       import.meta.hot.data.vikeServerStarted = true
     }
-    console.log(`Server running at http://localhost:${options.port}`)
+    console.log(`Server running at ${options.isHttps ? 'https' : 'http'}://localhost:${options.port}`)
   }
 }
 
 export function denoServe(options: ServerOptions, handler: Handler) {
-  Deno.serve({ ...options.deno, port: options.port, onListen: onReady(options) }, handler)
+  const denoOptions = options.deno ?? {}
+  const isHttps = 'cert' in denoOptions ? Boolean(denoOptions.cert) : false
+  Deno.serve({ ...denoOptions, port: options.port, onListen: onReady({ isHttps, ...options }) }, handler)
 }
 
 export function bunServe(options: ServerOptions, handler: Handler) {
+  const bunOptions = options.bun ?? {}
+  const isHttps = 'tls' in bunOptions ? Boolean(bunOptions.tls) : false
   Bun.serve({ ...options.bun, port: options.port, fetch: handler })
-  onReady(options)()
+  onReady({ isHttps, ...options })()
 }
 
 /**
