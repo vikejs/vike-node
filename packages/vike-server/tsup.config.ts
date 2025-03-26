@@ -1,6 +1,8 @@
 import { defineConfig } from 'tsup'
 import { builtinModules } from 'node:module'
 
+const externalServers: string[] = ['elysia', 'fastify', 'h3', 'hono']
+
 export default defineConfig([
   {
     entry: {
@@ -54,7 +56,7 @@ export default defineConfig([
     esbuildOptions(opts) {
       opts.outbase = 'src'
     },
-    external: builtinModules.flatMap((e) => [e, `node:${e}`]),
+    external: externalServers.concat(...builtinModules.flatMap((e) => [e, `node:${e}`])),
     dts: true,
     outDir: 'dist',
     bundle: true,
