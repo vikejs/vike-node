@@ -1,3 +1,12 @@
+## [1.0.3](https://github.com/vikejs/vike-server/compare/v1.0.2...v1.0.3) (2025-03-26)
+
+
+### Features
+
+* forward serve options ([#88](https://github.com/vikejs/vike-server/issues/88)) (fixes [#86](https://github.com/vikejs/vike-server/issues/86)) ([4278420](https://github.com/vikejs/vike-server/commit/42784206f3b2c7ec06d6d2dec5d87a991f49e401))
+
+
+
 ## [1.0.2](https://github.com/vikejs/vike-server/compare/v1.0.1...v1.0.2) (2025-03-25)
 
 
