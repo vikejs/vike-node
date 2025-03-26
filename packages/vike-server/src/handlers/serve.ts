@@ -83,7 +83,7 @@ export function denoServe(options: ServerOptions, handler: Handler) {
 export function bunServe(options: ServerOptions, handler: Handler) {
   const bunOptions = options.bun ?? {}
   const isHttps = 'tls' in bunOptions ? Boolean(bunOptions.tls) : false
-  Bun.serve({ ...options.bun, port: options.port, fetch: handler })
+  Bun.serve({ ...options.bun, port: options.port, fetch: handler } as Parameters<typeof Bun.serve>[0])
   onReady({ isHttps, ...options })()
 }
 
