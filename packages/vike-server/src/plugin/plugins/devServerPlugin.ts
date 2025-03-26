@@ -203,7 +203,10 @@ export function devServerPlugin(): Plugin {
   }
 }
 
-function logRestartMessage() {
+function logRestartMessage(err?: unknown) {
+  if (err) {
+    console.error(err)
+  }
   logViteInfo('Server crash: Update a server file or type "r+enter" to restart the server.')
 }
 
