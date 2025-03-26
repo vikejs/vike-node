@@ -1,6 +1,6 @@
 import type { apply as applyAdapter } from '@universal-middleware/hono'
-import type { ServerOptions } from '../../serve.js'
+import type { MergedHonoServerOptions } from './hono-types.js'
 
-export function serve<App extends Parameters<typeof applyAdapter>[0]>(app: App, _options: ServerOptions) {
+export function serve<App extends Parameters<typeof applyAdapter>[0]>(app: App, _options: MergedHonoServerOptions) {
   return app
 }

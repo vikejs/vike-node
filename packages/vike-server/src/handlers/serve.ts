@@ -1,15 +1,56 @@
-import type { Server } from 'node:http'
-import type { Http2SecureServer, Http2Server } from 'node:http2'
+import type {
+  createServer as createServerHTTP,
+  IncomingMessage,
+  Server,
+  ServerOptions as ServerOptionsHTTP,
+  ServerResponse
+} from 'node:http'
+import type { createServer as createServerHTTPS, ServerOptions as ServerOptionsHTTPS } from 'node:https'
+import type {
+  createSecureServer as createServerHTTP2,
+  Http2SecureServer,
+  Http2Server,
+  Http2ServerRequest,
+  Http2ServerResponse,
+  SecureServerOptions as ServerOptionsHTTP2
+} from 'node:http2'
 import type { Socket } from 'node:net'
+import { assert } from '../utils/assert.js'
 
-export interface ServerOptions {
+export type ServerType = Server | Http2Server | Http2SecureServer
+
+export type ServerOptions = ServerOptionsBase &
+  (ServerOptionsHTTPBase | ServerOptionsHTTPSBase | ServerOptionsHTTP2Base)
+
+interface ServerOptionsHTTPBase {
+  createServer?: typeof createServerHTTP
+  serverOptions?: ServerOptionsHTTP
+}
+
+interface ServerOptionsHTTPSBase {
+  createServer?: typeof createServerHTTPS
+  serverOptions?: ServerOptionsHTTPS
+}
+
+interface ServerOptionsHTTP2Base {
+  createServer?: typeof createServerHTTP2
+  serverOptions?: ServerOptionsHTTP2
+}
+
+export interface ServerOptionsBase {
   port: number
   bun?: Omit<Parameters<typeof Bun.serve>[0], 'fetch' | 'port'>
-  deno?: Omit<Deno.ServeTcpOptions, 'port' | 'handler'>
+  deno?: Omit<Deno.ServeTcpOptions | (Deno.ServeTcpOptions & Deno.TlsCertifiedKeyPem), 'port' | 'handler'>
 }
+
 type Handler = (req: Request) => Response | Promise<Response>
 
-export function onReady(options: { port: number }) {
+export interface NodeHandler {
+  (req: IncomingMessage, res: ServerResponse, next?: (err?: unknown) => void): void
+  (req: Http2ServerRequest, res: Http2ServerResponse, next?: (err?: unknown) => void): void
+}
+
+export function onReady(options: { port: number; isHttps?: boolean }) {
   return () => {
     if (import.meta.hot) {
       if (import.meta.hot.data.vikeServerStarted) {
@@ -18,17 +59,32 @@ export function onReady(options: { port: number }) {
       }
       import.meta.hot.data.vikeServerStarted = true
     }
-    console.log(`Server running at http://localhost:${options.port}`)
+    console.log(`Server running at ${options.isHttps ? 'https' : 'http'}://localhost:${options.port}`)
   }
 }
 
+export function nodeServe(options: ServerOptions, handler: NodeHandler): ServerType {
+  assert(options.createServer)
+  const serverOptions = options.serverOptions ?? {}
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  const createServer: any = options.createServer
+  const server: ServerType = createServer(serverOptions, handler)
+  const isHttps = Boolean('cert' in serverOptions && serverOptions.cert)
+  server.listen(options.port, onReady({ isHttps, ...options }))
+  return server
+}
+
 export function denoServe(options: ServerOptions, handler: Handler) {
-  Deno.serve({ ...options.deno, port: options.port, onListen: onReady(options) }, handler)
+  const denoOptions = options.deno ?? {}
+  const isHttps = 'cert' in denoOptions ? Boolean(denoOptions.cert) : false
+  Deno.serve({ ...denoOptions, port: options.port, onListen: onReady({ isHttps, ...options }) }, handler)
 }
 
 export function bunServe(options: ServerOptions, handler: Handler) {
+  const bunOptions = options.bun ?? {}
+  const isHttps = 'tls' in bunOptions ? Boolean(bunOptions.tls) : false
   Bun.serve({ ...options.bun, port: options.port, fetch: handler })
-  onReady(options)()
+  onReady({ isHttps, ...options })()
 }
 
 /**
