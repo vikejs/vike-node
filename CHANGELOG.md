@@ -1,3 +1,13 @@
+## [1.0.4](https://github.com/vikejs/vike-server/compare/v1.0.3...v1.0.4) (2025-03-26)
+
+
+### Bug Fixes
+
+* **elysia:** applied middlewares can now return early responses ([#89](https://github.com/vikejs/vike-server/issues/89)) ([5ae0c1c](https://github.com/vikejs/vike-server/commit/5ae0c1c23610966e6c4e01d9b4c2f03b8033c471))
+* servers as external dependencies ([4e03b4b](https://github.com/vikejs/vike-server/commit/4e03b4bfb269687ad7170db915af1879180180ab))
+
+
+
 ## [1.0.3](https://github.com/vikejs/vike-server/compare/v1.0.2...v1.0.3) (2025-03-26)
 
 
