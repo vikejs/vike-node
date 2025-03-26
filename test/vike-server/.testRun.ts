@@ -55,6 +55,10 @@ function testRun(cmd: 'pnpm run dev' | 'pnpm run prod', options?: { skipServerHM
       expect(await getNumberOfItems()).toBe(4)
     })
     expect(await page.textContent('body')).toContain('Buy bananas')
+    if (!isProd && options?.skipServerHMR) {
+      // ignore logs
+      expectLog('')
+    }
   })
 
   test('New to-do item is persisted & rendered to HTML', async () => {
@@ -71,6 +75,10 @@ function testRun(cmd: 'pnpm run dev' | 'pnpm run prod', options?: { skipServerHM
       await page.click('button[type="submit"]')
       expect(await page.textContent('body')).toContain('Valid password')
     })
+    if (!isProd && options?.skipServerHMR) {
+      // ignore logs
+      expectLog('')
+    }
   })
 
   test('sharp', async () => {
@@ -80,6 +88,10 @@ function testRun(cmd: 'pnpm run dev' | 'pnpm run prod', options?: { skipServerHM
       await page.click('button[type="button"]')
       expect(await page.textContent('body')).toContain('240000 bytes')
     })
+    if (!isProd && options?.skipServerHMR) {
+      // ignore logs
+      expectLog('')
+    }
   })
 
   test('x-test header is present', async () => {
@@ -88,7 +100,7 @@ function testRun(cmd: 'pnpm run dev' | 'pnpm run prod', options?: { skipServerHM
     expect(xTestHeader).toBe('test')
   })
 
-  if (!isProd)
+  if (!isProd && !options?.skipServerHMR) {
     test('vite hmr websocket', async () => {
       await page.goto(`${getServerUrl()}/`)
 
@@ -98,7 +110,6 @@ function testRun(cmd: 'pnpm run dev' | 'pnpm run prod', options?: { skipServerHM
       })
     })
 
-  if (!isProd && !options?.skipServerHMR) {
     test('vike-server server-side HMR (server-entry)', async () => {
       await page.goto(`${getServerUrl()}/`)
 
