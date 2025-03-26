@@ -26,6 +26,19 @@ async function startServer() {
     }
   })
 
+  // if (process.env.VIKE_HTTPS) {
+  //   const { createServer } = await import('node:https')
+  //   const { readFileSync } = await import('node:fs')
+  //   return serve(app, {
+  //     port: +port,
+  //     createServer: createServer,
+  //     serverOptions: {
+  //       key: readFileSync('./localhost.key'),
+  //       cert: readFileSync('./localhost.crt')
+  //     }
+  //   })
+  // }
+
   return serve(app, {
     port: +port
   })
