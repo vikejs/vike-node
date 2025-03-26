@@ -76,14 +76,14 @@
     "./elysia": {
       "types": "./dist/elysia.d.ts",
       "development": {
-        "types": "./dist/h3.elysia.d.ts",
-        "import": "./dist/h3.elysia.js",
-        "default": "./dist/h3.elysia.js"
+        "types": "./dist/elysia.dev.d.ts",
+        "import": "./dist/elysia.dev.js",
+        "default": "./dist/elysia.dev.js"
       },
       "worker": {
-        "types": "./dist/h3.elysia.d.ts",
-        "import": "./dist/h3.elysia.js",
-        "default": "./dist/h3.elysia.js"
+        "types": "./dist/elysia.edge.d.ts",
+        "import": "./dist/elysia.edge.js",
+        "default": "./dist/elysia.edge.js"
       },
       "import": "./dist/elysia.js",
       "default": "./dist/elysia.js"

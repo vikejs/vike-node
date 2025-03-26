@@ -1,4 +1,6 @@
 import type { Plugin } from 'vite'
+import { isBun } from '../utils/isBun.js'
+import { isDeno } from '../utils/isDeno.js'
 
 export { commonConfig }
 
@@ -16,7 +18,7 @@ function commonConfig(): Plugin[] {
         return {
           resolve: {
             noExternal: 'vike-server',
-            externalConditions: ['node', 'development|production']
+            externalConditions: [...(isBun ? ['bun'] : isDeno ? ['deno'] : []), 'node', 'development|production']
           },
           build: {
             target: 'es2022'
