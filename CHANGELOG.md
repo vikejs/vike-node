@@ -1,3 +1,13 @@
+## [1.0.5](https://github.com/vikejs/vike-server/compare/v1.0.4...v1.0.5) (2025-03-27)
+
+
+### Bug Fixes
+
+* environment config conflicted with other packages ([c1a46a8](https://github.com/vikejs/vike-server/commit/c1a46a8afd71a4f371db24ce5f577daacbceb1d3))
+* show server crash reason ([3b4ddf1](https://github.com/vikejs/vike-server/commit/3b4ddf191f98c66037f661b0f4e68cc5b2e97fa9))
+
+
+
 ## [1.0.4](https://github.com/vikejs/vike-server/compare/v1.0.3...v1.0.4) (2025-03-26)
 
 
