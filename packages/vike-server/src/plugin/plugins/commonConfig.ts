@@ -15,6 +15,7 @@ function commonConfig(): Plugin[] {
         }
         return {
           resolve: {
+            dedupe: ['vike-server'],
             noExternal: 'vike-server',
             externalConditions:
               config.consumer === 'server'
