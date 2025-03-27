@@ -7,18 +7,19 @@ export { commonConfig }
 function commonConfig(): Plugin[] {
   return [
     {
-      enforce: 'pre',
       name: 'vike-server:commonConfig',
 
-      applyToEnvironment(env) {
-        return env.name === 'ssr'
-      },
-
-      configEnvironment() {
+      configEnvironment(name, config) {
+        if (!config.consumer) {
+          config.consumer = name === 'client' ? 'client' : 'server'
+        }
         return {
           resolve: {
             noExternal: 'vike-server',
-            externalConditions: [...(isBun ? ['bun'] : isDeno ? ['deno'] : []), 'node', 'development|production']
+            externalConditions:
+              config.consumer === 'server'
+                ? [...(isBun ? ['bun'] : isDeno ? ['deno'] : []), 'node', 'development|production']
+                : undefined
           },
           build: {
             target: 'es2022'
