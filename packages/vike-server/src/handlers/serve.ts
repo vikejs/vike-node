@@ -45,12 +45,15 @@ export interface ServerOptionsBase {
 
 type Handler = (req: Request) => Response | Promise<Response>
 
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+export type Callback = boolean | (() => any)
+
 export interface NodeHandler {
   (req: IncomingMessage, res: ServerResponse, next?: (err?: unknown) => void): void
   (req: Http2ServerRequest, res: Http2ServerResponse, next?: (err?: unknown) => void): void
 }
 
-export function onReady(options: { port: number; isHttps?: boolean }) {
+export function onReady(options: { port: number; isHttps?: boolean; callback?: boolean | Callback }) {
   return () => {
     if (import.meta.hot) {
       if (import.meta.hot.data.vikeServerStarted) {
@@ -59,32 +62,36 @@ export function onReady(options: { port: number; isHttps?: boolean }) {
       }
       import.meta.hot.data.vikeServerStarted = true
     }
-    console.log(`Server running at ${options.isHttps ? 'https' : 'http'}://localhost:${options.port}`)
+    if (options?.callback === true || options?.callback === undefined) {
+      console.log(`Server running at ${options.isHttps ? 'https' : 'http'}://localhost:${options.port}`)
+    } else if (typeof options?.callback === 'function') {
+      options.callback()
+    }
   }
 }
 
-export function nodeServe(options: ServerOptions, handler: NodeHandler): ServerType {
+export function nodeServe(options: ServerOptions, handler: NodeHandler, callback?: Callback): ServerType {
   assert(options.createServer)
   const serverOptions = options.serverOptions ?? {}
   // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   const createServer: any = options.createServer
   const server: ServerType = createServer(serverOptions, handler)
   const isHttps = Boolean('cert' in serverOptions && serverOptions.cert)
-  server.listen(options.port, onReady({ isHttps, ...options }))
+  server.listen(options.port, onReady({ isHttps, callback, ...options }))
   return server
 }
 
-export function denoServe(options: ServerOptions, handler: Handler) {
+export function denoServe(options: ServerOptions, handler: Handler, callback?: Callback) {
   const denoOptions = options.deno ?? {}
   const isHttps = 'cert' in denoOptions ? Boolean(denoOptions.cert) : false
-  Deno.serve({ ...denoOptions, port: options.port, onListen: onReady({ isHttps, ...options }) }, handler)
+  Deno.serve({ ...denoOptions, port: options.port, onListen: onReady({ isHttps, callback, ...options }) }, handler)
 }
 
-export function bunServe(options: ServerOptions, handler: Handler) {
+export function bunServe(options: ServerOptions, handler: Handler, callback?: Callback) {
   const bunOptions = options.bun ?? {}
   const isHttps = 'tls' in bunOptions ? Boolean(bunOptions.tls) : false
   Bun.serve({ ...options.bun, port: options.port, fetch: handler } as Parameters<typeof Bun.serve>[0])
-  onReady({ isHttps, ...options })()
+  onReady({ isHttps, callback, ...options })()
 }
 
 /**
