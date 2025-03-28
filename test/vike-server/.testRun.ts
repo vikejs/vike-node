@@ -15,8 +15,14 @@ import {
   test
 } from '@brillout/test-e2e'
 
-function testRun(cmd: 'pnpm run dev' | 'pnpm run prod', options?: { skipServerHMR?: boolean; https?: boolean }) {
-  run(cmd, { serverUrl: options?.https ? 'https://localhost:3000' : 'http://127.0.0.1:3000' })
+function testRun(
+  cmd: 'pnpm run dev' | 'pnpm run prod',
+  options?: { skipServerHMR?: boolean; https?: boolean; isFlaky?: boolean }
+) {
+  run(cmd, {
+    serverUrl: options?.https ? 'https://localhost:3000' : 'http://127.0.0.1:3000',
+    isFlaky: options?.isFlaky
+  })
   const entry = `./server/index-${process.env.VIKE_NODE_FRAMEWORK || 'hono'}.ts`
   const isProd = cmd === 'pnpm run prod'
 
