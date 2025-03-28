@@ -38,7 +38,16 @@ interface ServerOptionsHTTP2Base {
 }
 
 export interface ServerOptionsBase {
+  /**
+   * Server port
+   */
   port: number
+  /**
+   * Callback triggered when the server is listening for connections.
+   * By default, it prints a message to the console.
+   * Can be disabled by setting this to `false`
+   */
+  onReady: Callback
   bun?: Omit<Parameters<typeof Bun.serve>[0], 'fetch' | 'port'>
   deno?: Omit<Deno.ServeTcpOptions | (Deno.ServeTcpOptions & Deno.TlsCertifiedKeyPem), 'port' | 'handler'>
 }
