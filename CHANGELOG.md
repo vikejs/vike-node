@@ -1,3 +1,12 @@
+## [1.0.6](https://github.com/vikejs/vike-server/compare/v1.0.5...v1.0.6) (2025-03-28)
+
+
+### Features
+
+* add callback parameter to `serve` functions ([#90](https://github.com/vikejs/vike-server/issues/90)) ([e27e96a](https://github.com/vikejs/vike-server/commit/e27e96a0dbef6d566d86f01d4945facd889670f8))
+
+
+
 ## [1.0.5](https://github.com/vikejs/vike-server/compare/v1.0.4...v1.0.5) (2025-03-27)
 
 
