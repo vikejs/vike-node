@@ -47,7 +47,7 @@ export interface ServerOptionsBase {
    * By default, it prints a message to the console.
    * Can be disabled by setting this to `false`
    */
-  onReady: Callback
+  onReady?: Callback
   bun?: Omit<Parameters<typeof Bun.serve>[0], 'fetch' | 'port'>
   deno?: Omit<Deno.ServeTcpOptions | (Deno.ServeTcpOptions & Deno.TlsCertifiedKeyPem), 'port' | 'handler'>
 }
