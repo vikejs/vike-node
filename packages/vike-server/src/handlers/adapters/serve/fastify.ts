@@ -1,10 +1,6 @@
 import type { apply as applyAdapter } from '@universal-middleware/fastify'
-import type { Callback, ServerOptionsBase } from '../../serve.js'
+import type { ServerOptionsBase } from '../../serve.js'
 
-export function serve<App extends Parameters<typeof applyAdapter>[0]>(
-  app: App,
-  _options: ServerOptionsBase,
-  _callback?: Callback
-) {
+export function serve<App extends Parameters<typeof applyAdapter>[0]>(app: App, _options: ServerOptionsBase) {
   return app
 }
