@@ -1,3 +1,12 @@
+## [1.0.7](https://github.com/vikejs/vike-server/compare/v1.0.6...v1.0.7) (2025-03-28)
+
+
+### Features
+
+* move callback to onReady option ([#91](https://github.com/vikejs/vike-server/issues/91)) ([ddaa284](https://github.com/vikejs/vike-server/commit/ddaa284bc84731026b6293aed632842396301143))
+
+
+
 ## [1.0.6](https://github.com/vikejs/vike-server/compare/v1.0.5...v1.0.6) (2025-03-28)
 
 
