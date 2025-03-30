@@ -55,7 +55,7 @@ export function serverEntryPlugin(): Plugin[] {
           }
           assertUsage(
             resolved,
-            `No file found at ${id}. Update your ${pc.cyan('server.entry')} configuration to point to an existing file.`
+            `No file found at ${id}. Update your ${pc.cyan('server.entry')} configuration to point to an existing file. This file should be relative to your project's root.`
           )
 
           vikeInject.add(resolved.id)

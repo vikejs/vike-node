@@ -9,7 +9,7 @@ import {
 
 import { globalStore } from '../../runtime/globalStore.js'
 import type { ConfigVikeServerResolved } from '../../types.js'
-import { assert } from '../../utils/assert.js'
+import { assert, assertUsage } from '../../utils/assert.js'
 import { isBun } from '../utils/isBun.js'
 import { logViteInfo } from '../utils/logVite.js'
 import { getVikeServerConfig } from '../utils/getVikeServerConfig.js'
@@ -194,7 +194,10 @@ export function devServerPlugin(): Plugin {
     assert(vikeServerConfig)
     const { index } = vikeServerConfig.entry
     const indexResolved = await vite.pluginContainer.resolveId(index as string)
-    assert(indexResolved?.id)
+    assertUsage(
+      indexResolved?.id,
+      `Cannot find server entry "${index}". Please make sure its path is relative to the root of your project`
+    )
     resolvedEntryId = indexResolved.id
     const ssr = vite.environments.ssr
     if (isRunnableDevEnvironment(ssr)) {
