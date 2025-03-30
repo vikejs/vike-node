@@ -1,3 +1,12 @@
+## [1.0.8](https://github.com/vikejs/vike-server/compare/v1.0.7...v1.0.8) (2025-03-30)
+
+
+### Bug Fixes
+
+* Show better error messages when entry file cannot be found ([6c95b57](https://github.com/vikejs/vike-server/commit/6c95b57d39155dce933b4b89001149a81132368f))
+
+
+
 ## [1.0.7](https://github.com/vikejs/vike-server/compare/v1.0.6...v1.0.7) (2025-03-28)
 
 
