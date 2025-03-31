@@ -7,7 +7,7 @@ export function serve<App extends Parameters<typeof applyAdapter>[0]>(app: App, 
   const serverOptions = options.serverOptions ?? {}
   const isHttps = Boolean('cert' in serverOptions && serverOptions.cert)
   function _serve() {
-    return honoServe(
+    const server = honoServe(
       {
         overrideGlobalObjects: options?.overrideGlobalObjects ?? false,
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
@@ -16,6 +16,9 @@ export function serve<App extends Parameters<typeof applyAdapter>[0]>(app: App, 
       },
       onReady({ isHttps, ...options })
     )
+    // onServer hook
+    options.onServer?.(server)
+    return server
   }
 
   if (import.meta.hot) {
