@@ -1,3 +1,12 @@
+## [1.0.9](https://github.com/vikejs/vike-server/compare/v1.0.8...v1.0.9) (2025-03-31)
+
+
+### Features
+
+* `onServer` hook ([#94](https://github.com/vikejs/vike-server/issues/94)) ([26c1162](https://github.com/vikejs/vike-server/commit/26c1162d28f91f867b0583b4893cd7f6fa026854))
+
+
+
 ## [1.0.8](https://github.com/vikejs/vike-server/compare/v1.0.7...v1.0.8) (2025-03-30)
 
 
