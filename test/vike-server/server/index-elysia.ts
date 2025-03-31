@@ -21,7 +21,9 @@ async function startServer() {
     }
   })
 
-  return serve(app, { port: +port })
+  return serve(app, {
+    port: +port
+  })
 }
 
 export default startServer()

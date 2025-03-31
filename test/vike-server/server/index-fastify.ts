@@ -1,4 +1,4 @@
-Error.stackTraceLimit = Number.POSITIVE_INFINITY
+import type { Server } from 'node:http'
 import { Worker } from 'node:worker_threads'
 import fastify from 'fastify'
 import rawBody from 'fastify-raw-body'
@@ -6,6 +6,8 @@ import { apply } from 'vike-server/fastify'
 import { serve } from 'vike-server/fastify/serve'
 import { init } from '../database/todoItems.js'
 import { two } from './shared-chunk.js'
+
+Error.stackTraceLimit = Number.POSITIVE_INFINITY
 
 if (two() !== 2) {
   throw new Error()
@@ -44,7 +46,12 @@ async function startServer() {
   })
 
   const port = process.env.PORT || 3000
-  return serve(app, { port: +port })
+  return serve(app, {
+    port: +port,
+    onServer(server?: Server) {
+      console.log('Server:', server?.constructor.name)
+    }
+  })
 }
 
 export default startServer()

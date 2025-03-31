@@ -2,6 +2,7 @@ import { createRouter, type RouterContext } from '@hattip/router'
 import { apply } from 'vike-server/hattip'
 import { serve } from 'vike-server/hattip/serve'
 import { init } from '../database/todoItems'
+import type { Server } from 'node:http'
 
 declare module '@hattip/compose' {
   interface Locals {
@@ -29,7 +30,12 @@ async function startServer() {
     }
   })
 
-  return serve(app, { port: +port })
+  return serve(app, {
+    port: +port,
+    onServer(server?: Server) {
+      console.log('Server:', server?.constructor.name)
+    }
+  })
 }
 
 export default startServer()

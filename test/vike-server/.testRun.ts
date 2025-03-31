@@ -17,7 +17,7 @@ import {
 
 function testRun(
   cmd: 'pnpm run dev' | 'pnpm run prod',
-  options?: { skipServerHMR?: boolean; https?: boolean; isFlaky?: boolean }
+  options?: { skipServerHMR?: boolean; https?: boolean; isFlaky?: boolean; noServerHook?: boolean }
 ) {
   run(cmd, {
     serverUrl: options?.https ? 'https://localhost:3000' : 'http://127.0.0.1:3000',
@@ -33,6 +33,9 @@ function testRun(
     expect(html).toContain('<li>Buy strawberries</li>')
     // provided through pageContext function
     expect(html).toContain('x-runtime')
+    if (!options?.noServerHook) {
+      expectNodeServerLog('Server')
+    }
   })
 
   test('Add to-do item', async () => {
@@ -178,4 +181,13 @@ function testRun(
 
 async function getNumberOfItems() {
   return await page.evaluate(() => document.querySelectorAll('li').length)
+}
+
+function expectNodeServerLog(serverType: 'Server') {
+  expectLog(`Server: ${serverType}`, {
+    filter(logEntry) {
+      return logEntry.logSource === 'stdout'
+    },
+    allLogs: true
+  })
 }
