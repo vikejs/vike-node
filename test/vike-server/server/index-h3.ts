@@ -34,8 +34,8 @@ async function startServer() {
       console.log(`Server running at http://localhost:${port}`)
       console.log('HOOK CALLED: onReady')
     },
-    onServer(server?: Server) {
-      console.log('HOOK CALLED: onServer:', server?.constructor.name)
+    onCreate(server?: Server) {
+      console.log('HOOK CALLED: onCreate:', server?.constructor.name)
     }
   })
 }

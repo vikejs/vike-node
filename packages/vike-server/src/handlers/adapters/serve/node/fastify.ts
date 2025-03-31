@@ -11,8 +11,8 @@ export function serve<App extends Parameters<typeof applyAdapter>[0]>(app: App, 
       onReady(options)
     )
     const server = app.server
-    // onServer hook
-    options.onServer?.(server)
+    // onCreate hook
+    options.onCreate?.(server)
     return server
   }
 

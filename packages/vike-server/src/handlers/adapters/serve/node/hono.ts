@@ -16,8 +16,8 @@ export function serve<App extends Parameters<typeof applyAdapter>[0]>(app: App, 
       },
       onReady({ isHttps, ...options })
     )
-    // onServer hook
-    options.onServer?.(server)
+    // onCreate hook
+    options.onCreate?.(server)
     return server
   }
 
