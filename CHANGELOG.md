@@ -1,3 +1,12 @@
+## [1.0.10](https://github.com/vikejs/vike-server/compare/v1.0.9...v1.0.10) (2025-03-31)
+
+
+### Bug Fixes
+
+* rename `onServer` hook to `onCreate` ([#95](https://github.com/vikejs/vike-server/issues/95)) ([9da0f94](https://github.com/vikejs/vike-server/commit/9da0f94ab36307d4d4c95ea64f498d4e4807dc8a))
+
+
+
 ## [1.0.9](https://github.com/vikejs/vike-server/compare/v1.0.8...v1.0.9) (2025-03-31)
 
 
