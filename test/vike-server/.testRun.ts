@@ -194,7 +194,7 @@ function expectOnReadyLog() {
 }
 
 function expectNodeServerLog(serverType: 'Server') {
-  expectLog(`HOOK CALLED: onServer: ${serverType}`, {
+  expectLog(`HOOK CALLED: onCreate: ${serverType}`, {
     filter(logEntry) {
       return logEntry.logSource === 'stdout'
     },
