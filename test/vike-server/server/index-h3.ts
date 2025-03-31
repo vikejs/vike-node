@@ -30,8 +30,11 @@ async function startServer() {
 
   return serve(app, {
     port: +port,
+    onReady() {
+      console.log('HOOK CALLED: onReady')
+    },
     onServer(server?: Server) {
-      console.log('Server:', server?.constructor.name)
+      console.log('HOOK CALLED: onServer:', server?.constructor.name)
     }
   })
 }

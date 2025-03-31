@@ -22,7 +22,10 @@ async function startServer() {
   })
 
   return serve(app, {
-    port: +port
+    port: +port,
+    onReady() {
+      console.log('HOOK CALLED: onReady')
+    }
   })
 }
 

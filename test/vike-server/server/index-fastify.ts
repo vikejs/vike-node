@@ -48,8 +48,11 @@ async function startServer() {
   const port = process.env.PORT || 3000
   return serve(app, {
     port: +port,
+    onReady() {
+      console.log('HOOK CALLED: onReady')
+    },
     onServer(server?: Server) {
-      console.log('Server:', server?.constructor.name)
+      console.log('HOOK CALLED: onServer:', server?.constructor.name)
     }
   })
 }
