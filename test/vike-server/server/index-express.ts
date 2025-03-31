@@ -4,6 +4,7 @@ import { apply } from 'vike-server/express'
 import { serve } from 'vike-server/express/serve'
 import { init } from '../database/todoItems.js'
 import { two } from './shared-chunk.js'
+import type { Server } from 'node:http'
 
 if (two() !== 2) {
   throw new Error()
@@ -31,7 +32,16 @@ async function startServer() {
 
   const port = process.env.PORT || 3000
 
-  return serve(app, { port: +port })
+  return serve(app, {
+    port: +port,
+    onReady() {
+      console.log(`Server running at http://localhost:${port}`)
+      console.log('HOOK CALLED: onReady')
+    },
+    onServer(server?: Server) {
+      console.log('HOOK CALLED: onServer:', server?.constructor.name)
+    }
+  })
 }
 
 export default startServer()

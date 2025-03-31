@@ -21,7 +21,13 @@ async function startServer() {
     }
   })
 
-  return serve(app, { port: +port })
+  return serve(app, {
+    port: +port,
+    onReady() {
+      console.log(`Server running at http://localhost:${port}`)
+      console.log('HOOK CALLED: onReady')
+    }
+  })
 }
 
 export default startServer()

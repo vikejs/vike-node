@@ -2,6 +2,7 @@ import { createApp, createRouter, eventHandler } from 'h3'
 import { apply } from 'vike-server/h3'
 import { serve } from 'vike-server/h3/serve'
 import { init } from '../database/todoItems'
+import type { Server } from 'node:http'
 
 async function startServer() {
   await init()
@@ -27,7 +28,16 @@ async function startServer() {
     }
   })
 
-  return serve(app, { port: +port })
+  return serve(app, {
+    port: +port,
+    onReady() {
+      console.log(`Server running at http://localhost:${port}`)
+      console.log('HOOK CALLED: onReady')
+    },
+    onServer(server?: Server) {
+      console.log('HOOK CALLED: onServer:', server?.constructor.name)
+    }
+  })
 }
 
 export default startServer()

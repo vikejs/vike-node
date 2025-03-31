@@ -10,7 +10,10 @@ export function serve<App extends Parameters<typeof applyAdapter>[0]>(app: App, 
       },
       onReady(options)
     )
-    return app.server
+    const server = app.server
+    // onServer hook
+    options.onServer?.(server)
+    return server
   }
 
   if (import.meta.hot) {
