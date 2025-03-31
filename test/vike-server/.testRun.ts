@@ -33,10 +33,10 @@ function testRun(
     expect(html).toContain('<li>Buy strawberries</li>')
     // provided through pageContext function
     expect(html).toContain('x-runtime')
-    // expectOnReadyLog()
-    // if (!options?.noServerHook) {
-    //   expectNodeServerLog('Server')
-    // }
+    expectOnReadyLog()
+    if (!options?.noServerHook) {
+      expectNodeServerLog('Server')
+    }
   })
 
   test('Add to-do item', async () => {
