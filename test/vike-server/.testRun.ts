@@ -41,7 +41,7 @@ function testRun(
 
   test('Add to-do item', async () => {
     if (isProd && process.env.VIKE_NODE_FRAMEWORK === 'h3') {
-      // h3 handlers streaming very poorly, so we have to preload the page for now
+      // h3 handles streaming very poorly, so we have to preload the page for now
       // See https://github.com/unjs/h3/issues/986
       page.goto(`${getServerUrl()}/`)
       await sleep(300)
