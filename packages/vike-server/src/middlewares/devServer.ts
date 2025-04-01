@@ -22,7 +22,11 @@ export const devServerMiddleware = (() => async (request, context, runtime) => {
 
   return (response) => {
     if (!response.headers.has('ETag')) {
-      response.headers.set('Cache-Control', 'no-store')
+      try {
+        response.headers.set('Cache-Control', 'no-store')
+      } catch {
+        // Headers already sent
+      }
     }
     return response
   }

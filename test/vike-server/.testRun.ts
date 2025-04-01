@@ -40,6 +40,13 @@ function testRun(
   })
 
   test('Add to-do item', async () => {
+    if (isProd && process.env.VIKE_NODE_FRAMEWORK === 'h3') {
+      // h3 handles streaming very poorly, so we have to preload the page for now
+      // See https://github.com/unjs/h3/issues/986
+      page.goto(`${getServerUrl()}/`)
+      await sleep(300)
+    }
+
     await page.goto(`${getServerUrl()}/`)
     {
       const text = await page.textContent('body')
@@ -74,6 +81,12 @@ function testRun(
   test('New to-do item is persisted & rendered to HTML', async () => {
     const html = await fetchHtml('/')
     expect(html).toContain('<li>Buy bananas</li>')
+  })
+
+  test('redirect', async () => {
+    const response: Response = await fetch(`${getServerUrl()}/guarded`, { redirect: 'manual' })
+    expect(response.status).toBe(302)
+    expect(response.headers.get('location')).toBe(`${getServerUrl()}/`)
   })
 
   test('argon2', async () => {
