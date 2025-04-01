@@ -84,8 +84,10 @@ export function serverEntryPlugin(): Plugin[] {
       }
     },
     {
-      name: 'vike-server:serverEntry:setConfig',
+      name: 'vike-server:serverEntry:vitePluginServerEntry',
+      /* `inject: true` also needs to be set when running `$ vike preview`, see https://github.com/vikejs/vike/blob/97f1a076cb62fd6b9b210769474a06e368792459/vike/node/api/preview.ts#L21
       apply: 'build',
+      */
       config() {
         return {
           vitePluginServerEntry: {
