@@ -76,6 +76,12 @@ function testRun(
     expect(html).toContain('<li>Buy bananas</li>')
   })
 
+  test('redirect', async () => {
+    const response: Response = await fetch(`${getServerUrl()}/guarded`, { redirect: 'manual' })
+    expect(response.status).toBe(302)
+    expect(response.headers.get('location')).toBe(`${getServerUrl()}/`)
+  })
+
   test('argon2', async () => {
     await page.goto(`${getServerUrl()}/argon2`)
     expect(await page.textContent('button[type="submit"]')).toBe('Sign in')
