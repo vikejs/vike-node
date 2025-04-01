@@ -14,6 +14,7 @@ import { isBun } from '../utils/isBun.js'
 import { logViteInfo } from '../utils/logVite.js'
 import { getVikeServerConfig } from '../utils/getVikeServerConfig.js'
 import { fork } from 'node:child_process'
+import pc from '@brillout/picocolors'
 
 let fixApplied = false
 
@@ -196,7 +197,7 @@ export function devServerPlugin(): Plugin {
     const indexResolved = await vite.pluginContainer.resolveId(index as string)
     assertUsage(
       indexResolved?.id,
-      `Cannot find server entry "${index}". Please make sure its path is relative to the root of your project`
+      `Cannot find server entry ${pc.cyan(index)}. Make sure its path is relative to the root of your project.`
     )
     resolvedEntryId = indexResolved.id
     const ssr = vite.environments.ssr
