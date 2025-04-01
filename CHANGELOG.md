@@ -1,3 +1,12 @@
+## [1.0.11](https://github.com/vikejs/vike-server/compare/v1.0.10...v1.0.11) (2025-04-01)
+
+
+### Bug Fixes
+
+* do not crash upon late errors (fix [#96](https://github.com/vikejs/vike-server/issues/96)) ([#97](https://github.com/vikejs/vike-server/issues/97)) ([950d2a2](https://github.com/vikejs/vike-server/commit/950d2a264a1971d6fe818f8f70f0e48a31b78e53))
+
+
+
 ## [1.0.10](https://github.com/vikejs/vike-server/compare/v1.0.9...v1.0.10) (2025-03-31)
 
 
