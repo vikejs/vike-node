@@ -220,15 +220,15 @@
   "dependencies": {
     "@brillout/picocolors": "^1.0.26",
     "@brillout/vite-plugin-server-entry": "^0.7.1",
-    "@universal-middleware/compress": "^0.2.24",
+    "@universal-middleware/compress": "^0.2.25",
     "@universal-middleware/core": "^0.4.6",
     "@universal-middleware/elysia": "^0.4.7",
-    "@universal-middleware/express": "^0.4.11",
-    "@universal-middleware/fastify": "^0.5.12",
+    "@universal-middleware/express": "^0.4.12",
+    "@universal-middleware/fastify": "^0.5.13",
     "@universal-middleware/h3": "^0.4.8",
     "@universal-middleware/hattip": "^0.4.7",
     "@universal-middleware/hono": "^0.4.8",
-    "@universal-middleware/sirv": "^0.1.15",
+    "@universal-middleware/sirv": "^0.1.16",
     "esbuild": "^0.25.2"
   },
   "peerDependencies": {
