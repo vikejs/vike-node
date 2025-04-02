@@ -6,6 +6,10 @@ const externalServers: string[] = ['elysia', 'fastify', 'h3', 'hono']
 export default defineConfig([
   {
     entry: {
+      // Universal Middlewares and Handler
+      universal: './src/handlers/universal-prod.ts',
+      'universal.dev': './src/handlers/universal-dev.ts',
+      'universal.edge': './src/handlers/universal-prod.edge.ts',
       // apply (node)
       elysia: './src/handlers/adapters/node/elysia.ts',
       express: './src/handlers/adapters/node/express.ts',

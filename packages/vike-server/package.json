@@ -8,6 +8,21 @@
     "./config": "./dist/config.js",
     "./api": "./dist/api.js",
     ".": "./dist/index.js",
+    "./universal-middlewares": {
+      "types": "./dist/universal.d.ts",
+      "development": {
+        "types": "./dist/universal.dev.d.ts",
+        "import": "./dist/universal.dev.js",
+        "default": "./dist/universal.dev.js"
+      },
+      "worker": {
+        "types": "./dist/universal.edge.d.ts",
+        "import": "./dist/universal.edge.js",
+        "default": "./dist/universal.edge.js"
+      },
+      "import": "./dist/universal.js",
+      "default": "./dist/universal.js"
+    },
     "./hono": {
       "types": "./dist/hono.d.ts",
       "development": {
