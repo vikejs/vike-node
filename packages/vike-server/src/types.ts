@@ -37,6 +37,8 @@ export interface ConfigVikeServerResolved {
   hmr: boolean | 'prefer-restart'
 }
 
+export type SupportedServers = 'hono' | 'hattip' | 'elysia' | 'express' | 'fastify' | 'h3'
+
 export interface PhotonEntry {
   id: string
   type?: 'auto' | 'server' | 'universal-handler'
