@@ -83,10 +83,23 @@ function testRun(
     expect(html).toContain('<li>Buy bananas</li>')
   })
 
-  test('redirect', async () => {
+  test('redirect throw', async () => {
     const response: Response = await fetch(`${getServerUrl()}/guarded`, { redirect: 'manual' })
     expect(response.status).toBe(302)
     expect(response.headers.get('location')).toBe(`${getServerUrl()}/`)
+  })
+
+  test('redirect config', async () => {
+    {
+      const response: Response = await fetch(`${getServerUrl()}/about-redirect`, { redirect: 'manual' })
+      expect(response.status).toBe(301)
+      expect(response.headers.get('location')).toBe(`${getServerUrl()}/about`)
+    }
+    {
+      const response: Response = await fetch(`${getServerUrl()}/external-redirect`, { redirect: 'manual' })
+      expect(response.status).toBe(301)
+      expect(response.headers.get('location')).toBe('https://vike.dev/')
+    }
   })
 
   test('argon2', async () => {

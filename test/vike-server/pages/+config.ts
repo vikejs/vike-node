@@ -10,5 +10,9 @@ export default {
   extends: [vikeServer],
   server: {
     entry: { index: `./server/index-${FRAMEWORK}.ts`, worker: './server/worker.js' }
+  },
+  redirects: {
+    '/about-redirect': '/about',
+    '/external-redirect': 'https://vike.dev/'
   }
 } satisfies Config
