@@ -4,7 +4,8 @@ import type { IncomingMessage } from 'node:http'
 import { globalStore } from '../runtime/globalStore.js'
 import { connectToWeb } from '@universal-middleware/express'
 
-export const devServerMiddleware = (() => async (request, context, runtime) => {
+export const devServerMiddleware = ((options?) => async (request, context, runtime) => {
+  if (!options?.vite?.middlewareMode) return
   const nodeReq: IncomingMessage | undefined = 'req' in runtime ? runtime.req : undefined
 
   if (nodeReq) {
@@ -30,4 +31,4 @@ export const devServerMiddleware = (() => async (request, context, runtime) => {
     }
     return response
   }
-}) satisfies Get<[], UniversalMiddleware>
+}) satisfies Get<[options?: { vite?: { middlewareMode?: boolean } }], UniversalMiddleware>

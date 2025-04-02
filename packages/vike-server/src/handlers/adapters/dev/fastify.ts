@@ -7,7 +7,7 @@ export async function apply<App extends Parameters<typeof applyAdapter>[0]>(
   app: App,
   options?: VikeOptions<'fastify'>
 ) {
-  await applyAdapter(app, renderPageUniversal(options))
+  await applyAdapter(app, renderPageUniversal({ ...options, vite: { middlewareMode: true } }))
 
   return app
 }
