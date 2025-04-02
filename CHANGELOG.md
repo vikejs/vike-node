@@ -1,3 +1,14 @@
+## [1.0.12](https://github.com/vikejs/vike-server/compare/v1.0.11...v1.0.12) (2025-04-02)
+
+
+### Bug Fixes
+
+* fix `$ vike preview` ([914d267](https://github.com/vikejs/vike-server/commit/914d267c750ae333976ada4f2c83836e4938ed0b))
+* polish error message ([ce635a6](https://github.com/vikejs/vike-server/commit/ce635a61c8beee633005ddc895e47df9ecbfb691))
+* update express adapter to fix redirect URL (fix [#103](https://github.com/vikejs/vike-server/issues/103)) ([#104](https://github.com/vikejs/vike-server/issues/104)) ([c3e8fca](https://github.com/vikejs/vike-server/commit/c3e8fcaafa96a3d221add11a1d621daa23ae5b11))
+
+
+
 ## [1.0.11](https://github.com/vikejs/vike-server/compare/v1.0.10...v1.0.11) (2025-04-01)
 
 
