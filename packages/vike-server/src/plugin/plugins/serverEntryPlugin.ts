@@ -29,7 +29,7 @@ export function serverEntryPlugin(): Plugin[] {
       async configResolved(config: ResolvedConfig) {
         const vikeServerConfig = getVikeServerConfig(config)
         const { entry } = vikeServerConfig
-        vikeEntries = new Set(Object.values(entry))
+        vikeEntries = new Set(Object.values(entry).map((e) => e.id))
         assert(vikeEntries.size > 0)
       },
 
@@ -37,11 +37,11 @@ export function serverEntryPlugin(): Plugin[] {
         const vikeServerConfig = getVikeServerConfig(this.environment.config)
         const { entry } = vikeServerConfig
 
-        for (const [name, filepath] of Object.entries(entry)) {
+        for (const [name, photonEntry] of Object.entries(entry)) {
           this.emitFile({
             type: 'chunk',
             fileName: `${name}.js`,
-            id: filepath,
+            id: photonEntry.id,
             importer: undefined
           })
         }

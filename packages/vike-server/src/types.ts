@@ -1,15 +1,13 @@
-export type { ConfigVikeServer, ConfigVikeServerResolved }
-
 import type { BuildOptions } from 'esbuild'
 
-type ConfigVikeServer = {
+export type ConfigVikeServer = {
   /**
    * Server entry path.
    */
   server:
     | string
     | {
-        entry: string | { index: string; [name: string]: string }
+        entry: string | PhotonEntry | { index: string | PhotonEntry; [name: string]: string | PhotonEntry }
         /**
          * This is an experimental feature. If an error occurs during build, please disable standalone mode and try again.
          *
@@ -33,8 +31,18 @@ type ConfigVikeServer = {
       }
 }
 
-interface ConfigVikeServerResolved {
-  entry: { index: string; [name: string]: string }
+export interface ConfigVikeServerResolved {
+  entry: { index: PhotonEntry; [name: string]: PhotonEntry }
   standalone: boolean | { esbuild: Omit<BuildOptions, 'manifest'> }
   hmr: boolean | 'prefer-restart'
+}
+
+export interface PhotonEntry {
+  id: string
+  type?: 'auto' | 'server' | 'universal-handler'
+}
+
+export interface PhotonEntryResolved {
+  id: string
+  type: 'server' | 'universal-handler'
 }

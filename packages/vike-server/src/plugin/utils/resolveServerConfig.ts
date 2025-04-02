@@ -1,7 +1,28 @@
 export { resolveServerConfig }
 
-import type { ConfigVikeServer, ConfigVikeServerResolved } from '../../types.js'
+import type { ConfigVikeServer, ConfigVikeServerResolved, PhotonEntry } from '../../types.js'
 import { assert, assertUsage } from '../../utils/assert.js'
+
+function entryToPhoton(entry: string | PhotonEntry): PhotonEntry {
+  if (typeof entry === 'string')
+    return {
+      id: entry,
+      type: 'auto'
+    }
+  return entry
+}
+
+function entriesToPhoton(
+  entry: string | PhotonEntry | Record<string, PhotonEntry | string>
+): Record<string, PhotonEntry> {
+  if (typeof entry === 'string' || 'id' in entry) {
+    return {
+      index: entryToPhoton(entry as string | PhotonEntry)
+    }
+  }
+
+  return Object.fromEntries(Object.entries(entry).map(([key, value]) => [key, entryToPhoton(value)]))
+}
 
 function _resolveServerConfig(configServerValue: ConfigVikeServer['server'] | undefined): ConfigVikeServerResolved {
   if (typeof configServerValue === 'object' && configServerValue !== null) {
@@ -22,12 +43,11 @@ function _resolveServerConfig(configServerValue: ConfigVikeServer['server'] | un
       )
     }
 
-    const entriesProvided: { index: string; [name: string]: string } =
-      typeof configServerValue.entry === 'string' ? { index: configServerValue.entry } : configServerValue.entry
+    const entriesProvided = entriesToPhoton(configServerValue.entry)
 
     assertUsage('index' in entriesProvided, 'Missing index entry in server.entry')
     return {
-      entry: entriesProvided,
+      entry: entriesProvided as { index: PhotonEntry; [name: string]: PhotonEntry },
       standalone: configServerValue.standalone ?? false,
       hmr: configServerValue.hmr ?? true
     }
@@ -35,7 +55,7 @@ function _resolveServerConfig(configServerValue: ConfigVikeServer['server'] | un
 
   assertUsage(typeof configServerValue === 'string', 'config.server should be defined')
   return {
-    entry: { index: configServerValue },
+    entry: { index: entryToPhoton(configServerValue) },
     standalone: false,
     hmr: true
   }
