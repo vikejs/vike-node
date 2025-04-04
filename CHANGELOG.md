@@ -2,9 +2,11 @@
 
 
 ### Bug Fixes
+
 * allow any `NODE_ENV` value (fix [#101](https://github.com/vikejs/vike-server/issues/101)) ([#109](https://github.com/vikejs/vike-server/issues/109)) ([49cdff7](https://github.com/vikejs/vike-server/commit/49cdff7e5eedb7e87c99eda96d80ce46e82f572a))
-  > [!NOTE]
-  > Requires `vike` to be updated to `0.4.228`
+
+> [!NOTE]
+> Update `vike` to `0.4.228` or above.
 
 
 
