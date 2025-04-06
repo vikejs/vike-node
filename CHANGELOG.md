@@ -1,3 +1,12 @@
+## [1.0.14](https://github.com/vikejs/vike-server/compare/v1.0.13...v1.0.14) (2025-04-06)
+
+
+### Features
+
+* add support for express@5 ([6e6d7a8](https://github.com/vikejs/vike-server/commit/6e6d7a8790f0c9d2654168601b6a6945329f5de2))
+
+
+
 ## [1.0.13](https://github.com/vikejs/vike-server/compare/v1.0.12...v1.0.13) (2025-04-04)
 
 
