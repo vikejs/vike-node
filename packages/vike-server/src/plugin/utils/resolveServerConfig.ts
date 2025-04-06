@@ -1,15 +1,19 @@
-export { resolveServerConfig }
-
+import { asPhotonEntryId } from "./entry.js";
 import type { ConfigVikeServer, ConfigVikeServerResolved, PhotonEntry } from '../../types.js'
 import { assert, assertUsage } from '../../utils/assert.js'
+
+export { resolveServerConfig }
 
 function entryToPhoton(entry: string | PhotonEntry): PhotonEntry {
   if (typeof entry === 'string')
     return {
-      id: entry,
+      id: asPhotonEntryId(entry),
       type: 'auto'
     }
-  return entry
+  return {
+    ...entry,
+    id: asPhotonEntryId(entry.id)
+  }
 }
 
 function entriesToPhoton(

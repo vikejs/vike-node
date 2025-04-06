@@ -1,10 +1,10 @@
-import pc from '@brillout/picocolors'
 import MagicString from 'magic-string'
 import { serverEntryVirtualId, type VitePluginServerEntryOptions } from '@brillout/vite-plugin-server-entry/plugin'
-import type { Plugin, ResolvedConfig } from 'vite'
+import type { Plugin } from 'vite'
 import { assert, assertUsage } from '../../utils/assert.js'
 import { getVikeServerConfig } from '../utils/getVikeServerConfig.js'
-import type { PhotonEntry, SupportedServers } from '../../types.js'
+import type { SupportedServers } from '../../types.js'
+import { asPhotonEntryId, assertPhotonEntryId, isPhotonEntryId, stripPhotonEntryId } from '../utils/entry.js'
 
 declare module 'vite' {
   interface UserConfig {
@@ -21,15 +21,137 @@ const idsToServers: Record<string, SupportedServers> = {
   'vike-server/elysia': 'elysia'
 }
 
-export function serverEntryPlugin(options?: { fallbackUniversalEntry?: string }): Plugin[] {
+// biome-ignore lint/complexity/noBannedTypes: <explanation>
+type LoadPluginContext = ThisParameterType<Extract<Plugin['load'], Function>>
+// biome-ignore lint/complexity/noBannedTypes: <explanation>
+type ResolveIdPluginContext = ThisParameterType<Extract<Plugin['resolveId'], Function>>
+type PluginContext = LoadPluginContext | ResolveIdPluginContext
+
+async function loadGraphAndExtractMeta<C extends PluginContext>(
+  pluginContext: C,
+  resolvedPlugins: Map<string, SupportedServers>,
+  id: string
+) {
+  console.log('loadGraphAndExtractMeta')
+  // Resolve entry graph until we find a plugin
+  const resolved = await pluginContext.resolve(id)
+  console.log('RESOLVED', id, resolved)
+  assertUsage(resolved, `Failed to resolve: ${id}`)
+  assertUsage(!resolved.external, `Entry should not be external: ${id}`)
+  const loaded = await pluginContext.load({ ...resolved, resolveDependencies: true })
+  console.log('GUY', pluginContext.environment.name, resolved, loaded)
+  // early return for better performance
+  if (loaded.meta?.photon?.type && loaded.meta.photon.type !== 'auto') return loaded
+  const graph = new Set([...loaded.importedIdResolutions, ...loaded.dynamicallyImportedIdResolutions])
+
+  let found: SupportedServers | undefined
+  for (const imported of graph.values()) {
+    found = resolvedPlugins.get(imported.id)
+    if (found) break
+    if (imported.external) continue
+    const sub = await pluginContext.load({ ...imported, resolveDependencies: true })
+    for (const imp of [...sub.importedIdResolutions, ...sub.dynamicallyImportedIdResolutions]) {
+      graph.add(imp)
+    }
+  }
+
+  if (found) {
+    return {
+      ...loaded,
+      meta: {
+        photon: {
+          type: 'server',
+          server: found
+        }
+      }
+    }
+  }
+
+  return {
+    ...loaded,
+    meta: {
+      photon: {
+        type: 'universal-handler'
+      }
+    }
+  }
+}
+
+function asPhotonEntry<T extends { id: string } | null | undefined>(entry: T, bypass?: boolean): T {
+  if (bypass) return entry
+  return entry
+    ? {
+        ...entry,
+        id: asPhotonEntryId(entry.id)
+      }
+    : entry
+}
+
+export function serverEntryPlugin(): Plugin[] {
   const resolvedPlugins = new Map<string, SupportedServers>()
-  let vikeEntries: Map<string, PhotonEntry> = new Map()
-  const vikeInject: Set<string> = new Set()
+  const photonEntries = new Set<string>()
   let serverEntryInjected = false
 
   return [
     {
-      name: 'vike-server:resolve-entries:pre',
+      name: 'photonjs:resolve-entry-meta',
+      enforce: 'pre',
+
+      applyToEnvironment(env) {
+        return env.name === 'ssr'
+      },
+
+      resolveId: {
+        order: 'post',
+        async handler(id, importer, opts) {
+          const resolved =
+            importer && isPhotonEntryId(importer)
+              ? await this.resolve(id, stripPhotonEntryId(importer), {
+                  ...opts,
+                  skipSelf: false
+                })
+              : isPhotonEntryId(id)
+                ? await this.resolve(stripPhotonEntryId(id), importer, {
+                    ...opts,
+                    isEntry: true,
+                    skipSelf: false
+                  })
+                : null
+
+          if (resolved) {
+            if (isPhotonEntryId(id)) {
+              photonEntries.add(resolved.id)
+
+              if (!opts.custom?.simple) {
+                console.log('LOADING', id, resolved)
+                const loaded = await loadGraphAndExtractMeta(this, resolvedPlugins, stripPhotonEntryId(id))
+                console.log('LOADED', loaded)
+              }
+            }
+            console.log('RESOLED', id, resolved, importer)
+            return {
+              ...resolved,
+              resolvedBy: 'photonjs'
+            }
+          }
+        }
+      },
+      // load: {
+      //   order: 'pre',
+      //   async handler(id) {
+      //     // TODO use `resolvedBy` or `meta` prop?
+      //     if (isPhotonEntryId(id) || photonEntries.has(id)) {
+      //       const loaded = await this.load({ id })
+      //       console.log('LOADING', id, loaded)
+      //       return loaded
+      //       return loadGraphAndExtractMeta(this, resolvedPlugins, stripPhotonEntryId(id)) as any
+      //     }
+      //   }
+      // },
+      sharedDuringBuild: true
+    },
+    {
+      name: 'photonjs:server-type-resolve-helper',
       enforce: 'pre',
       async resolveId(id, importer, opts) {
         if (id in idsToServers) {
@@ -39,22 +161,15 @@ export function serverEntryPlugin(options?: { fallbackUniversalEntry?: string })
             resolvedPlugins.set(resolved.id, idsToServers[id]!)
           }
         }
-      }
+      },
+      sharedDuringBuild: true
     },
     {
       name: 'vike-server:serverEntry',
       apply: 'build',
-      enforce: 'pre',
 
       applyToEnvironment(env) {
         return env.name === 'ssr'
-      },
-
-      async configResolved(config: ResolvedConfig) {
-        const vikeServerConfig = getVikeServerConfig(config)
-        const { entry } = vikeServerConfig
-        vikeEntries = new Map(Object.values(entry).map((e) => [e.id, e]))
-        assert(vikeEntries.size > 0)
       },
 
       buildStart() {
@@ -62,6 +177,7 @@ export function serverEntryPlugin(options?: { fallbackUniversalEntry?: string })
         const { entry } = vikeServerConfig
 
         for (const [name, photonEntry] of Object.entries(entry)) {
+          assertPhotonEntryId(photonEntry.id)
           this.emitFile({
             type: 'chunk',
             fileName: `${name}.js`,
@@ -71,29 +187,12 @@ export function serverEntryPlugin(options?: { fallbackUniversalEntry?: string })
         }
       },
 
-      async resolveId(id) {
-        if (vikeEntries.has(id)) {
-          let resolved = await this.resolve(id)
-          if (!resolved) {
-            resolved = await this.resolve(`${this.environment.config.root}/${id}`)
-          }
-          assertUsage(
-            resolved,
-            `No file found at ${id}. Update your ${pc.cyan('server.entry')} configuration to point to an existing file. This file should be relative to your project's root.`
-          )
-
-          vikeInject.add(resolved.id)
-
-          return resolved
-        }
-      },
-
       buildEnd() {
         assert(serverEntryInjected)
       },
 
       transform(code, id) {
-        if (vikeInject.has(id)) {
+        if (isPhotonEntryId(id) || photonEntries.has(id)) {
           const ms = new MagicString(code)
           ms.prepend(`import "${serverEntryVirtualId}";\n`)
           serverEntryInjected = true
@@ -105,58 +204,8 @@ export function serverEntryPlugin(options?: { fallbackUniversalEntry?: string })
             })
           }
         }
-      }
-    },
-    {
-      name: 'vike-server:resolve-entries',
-      async load(id) {
-        if (vikeInject.has(id)) {
-          // biome-ignore lint/style/noNonNullAssertion: <explanation>
-          const photonEntry = vikeEntries.get(id)!
-
-          assert(photonEntry.type)
-
-          if (photonEntry.type === 'auto' || photonEntry.type === 'server') {
-            // Resolve entry graph until we find a plugin
-            const loaded = await this.load({ id, resolveDependencies: true })
-            // early return for better performance
-            if (photonEntry.type === 'server') return loaded
-            const graph = new Set([...loaded.importedIdResolutions, ...loaded.dynamicallyImportedIdResolutions])
-
-            let found: SupportedServers | undefined
-            for (const imported of graph.values()) {
-              found = resolvedPlugins.get(imported.id)
-              if (found) break
-              if (imported.external) continue
-              const sub = await this.load({ id: imported.id, resolveDependencies: true })
-              for (const imp of [...sub.importedIdResolutions, ...sub.dynamicallyImportedIdResolutions]) {
-                graph.add(imp)
-              }
-            }
-            if (found) {
-              // FIXME
-              return {
-                ...loaded,
-                meta: {
-                  photon: {
-                    server: found
-                  }
-                }
-              }
-            }
-          }
-          // else, assume Universal Handler entry
-
-          assertUsage(
-            options?.fallbackUniversalEntry,
-            '[vike-server] Framework must provide { fallbackUniversalEntry }'
-          )
-
-          // FIXME In dev, this MUST then be used by viteServer middleware
-          // FIXME In prod, this MUST be imported by another adapter
-          return this.load({ id: options?.fallbackUniversalEntry })
-        }
-      }
+      },
+      sharedDuringBuild: true
     },
     {
       name: 'vike-server:serverEntry:vitePluginServerEntry',
@@ -171,7 +220,8 @@ export function serverEntryPlugin(options?: { fallbackUniversalEntry?: string })
             disableAutoImport: true
           }
         }
-      }
+      },
+      sharedDuringBuild: true
     }
   ]
 }
