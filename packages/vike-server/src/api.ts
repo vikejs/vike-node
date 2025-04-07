@@ -1,2 +1,15 @@
+import 'vite';
+import type { PhotonConfig, PhotonConfigResolved } from './types.js'
+
 export { PhotonEntry, PhotonConfig, PhotonConfigResolved, type SupportedServers } from './types.js'
 export { isPhotonMeta, type PhotonMeta } from './plugin/utils/entry.js'
+
+declare module 'vite' {
+  interface UserConfig {
+    photonjs?: typeof PhotonConfig.infer
+  }
+
+  interface ResolvedConfig {
+    photonjs: typeof PhotonConfigResolved.infer
+  }
+}

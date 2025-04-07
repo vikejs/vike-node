@@ -1,18 +1,8 @@
 import type { Plugin } from 'vite'
 import { resolvePhotonConfig } from '../utils/resolveServerConfig.js'
-import type { PhotonConfig, PhotonConfigResolved } from '../../types.js'
+import type { PhotonConfig } from '../../types.js'
 
-declare module 'vite' {
-  interface UserConfig {
-    photonjs?: PhotonConfig
-  }
-
-  interface ResolvedConfig {
-    photonjs: PhotonConfigResolved
-  }
-}
-
-export function resolvePhotonConfigPlugin(userConfig?: PhotonConfig): Plugin {
+export function resolvePhotonConfigPlugin(userConfig?: typeof PhotonConfig.infer): Plugin {
   return {
     name: 'photonjs:resolve-config',
     enforce: 'pre',

@@ -3,7 +3,7 @@ import { PhotonConfig, PhotonConfigResolved, PhotonEntry } from '../../types.js'
 import { match, type } from 'arktype'
 import type { BuildOptions } from 'esbuild'
 
-function entryToPhoton(entry: string | PhotonEntry): PhotonEntry {
+function entryToPhoton(entry: string | typeof PhotonEntry.infer): PhotonEntry {
   if (typeof entry === 'string')
     return {
       id: asPhotonEntryId(entry),
