@@ -13,17 +13,6 @@ const idsToServers: Record<string, SupportedServers> = {
   'vike-server/elysia': 'elysia'
 }
 
-async function resolveIdsToServers(pluginContext: PluginContext): Promise<Record<string, SupportedServers>> {
-  const resolvedIdsToServers: Record<string, SupportedServers> = {}
-  for (const [key, value] of Object.entries(idsToServers)) {
-    const resolved = await pluginContext.resolve(key)
-    if (resolved) {
-      resolvedIdsToServers[resolved.id] = value
-    }
-  }
-  return resolvedIdsToServers
-}
-
 function computePhotonMeta(
   pluginContext: PluginContext,
   resolvedIdsToServers: Record<string, SupportedServers>,
@@ -60,7 +49,7 @@ function computePhotonMeta(
 }
 
 export function photonEntryPlugin(): Plugin[] {
-  let resolvedIdsToServers: Record<string, SupportedServers>
+  const resolvedIdsToServers: Record<string, SupportedServers> = {}
 
   return [
     {
@@ -72,8 +61,7 @@ export function photonEntryPlugin(): Plugin[] {
         return env.config.consumer === 'server'
       },
 
-      async buildStart() {
-        resolvedIdsToServers = await resolveIdsToServers(this)
+      buildStart() {
         const { entry } = this.environment.config.photonjs
 
         for (const [name, photonEntry] of Object.entries(entry)) {
@@ -83,6 +71,16 @@ export function photonEntryPlugin(): Plugin[] {
             fileName: `${name}.js`,
             id: photonEntry.id
           })
+        }
+      },
+
+      async resolveId(id, importer, opts) {
+        if (id in idsToServers) {
+          const resolved = await this.resolve(id, importer, opts)
+          if (resolved) {
+            // biome-ignore lint/style/noNonNullAssertion: <explanation>
+            resolvedIdsToServers[resolved.id] = idsToServers[id]!
+          }
         }
       },
 
