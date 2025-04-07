@@ -159,6 +159,9 @@ importers:
       magic-string:
         specifier: ^0.30.17
         version: 0.30.17
+      rollup:
+        specifier: 4.38.0
+        version: 4.38.0
       tsup:
         specifier: ^8.4.0
         version: 8.4.0(postcss@8.5.3)(typescript@5.8.3)

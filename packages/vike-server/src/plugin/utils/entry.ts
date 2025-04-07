@@ -1,9 +1,16 @@
 import { assert } from '../../utils/assert.js'
+import type { CustomPluginOptions, ModuleInfo } from 'rollup'
+import type { SupportedServers } from '../../types.js'
 
 export const virtualPhotonEntry = 'photonjs:entry'
 
 export function isPhotonEntryId(id: string) {
   return id.startsWith(virtualPhotonEntry)
+}
+
+export function isPhotonEntryInfo(info: ModuleInfo | undefined | null) {
+  if (!info) return false
+  return isPhotonEntryId(info.id) || info.meta
 }
 
 export function asPhotonEntryId(id: string) {
@@ -18,3 +25,18 @@ export function assertPhotonEntryId(id: string) {
 export function stripPhotonEntryId(id: string) {
   return isPhotonEntryId(id) ? id.substring(virtualPhotonEntry.length + 1) : id
 }
+
+export function isPhotonMeta(meta?: CustomPluginOptions): meta is { photonjs: PhotonMeta } {
+  return Boolean(meta && 'photonjs' in meta)
+}
+
+export interface PhotonMetaServer {
+  type: 'server'
+  server: SupportedServers
+}
+
+export interface PhotonMetaUniversalHandler {
+  type: 'universal-handler'
+}
+
+export type PhotonMeta = PhotonMetaServer | PhotonMetaUniversalHandler | { type?: 'auto' }

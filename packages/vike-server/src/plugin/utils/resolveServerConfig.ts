@@ -1,4 +1,4 @@
-import { asPhotonEntryId } from "./entry.js";
+import { asPhotonEntryId } from './entry.js'
 import type { ConfigVikeServer, ConfigVikeServerResolved, PhotonEntry } from '../../types.js'
 import { assert, assertUsage } from '../../utils/assert.js'
 

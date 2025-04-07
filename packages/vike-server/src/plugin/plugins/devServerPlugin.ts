@@ -194,13 +194,9 @@ export function devServerPlugin(): Plugin {
   async function initializeServerEntry(vite: ViteDevServer) {
     assert(vikeServerConfig)
     const { index } = vikeServerConfig.entry
-    console.log('ASKING', index.id)
     const indexResolved = await vite.environments.ssr.pluginContainer.resolveId(index.id, undefined, {
-      isEntry: true,
-      custom: { simple: true }
+      isEntry: true
     })
-
-    console.log('REC', indexResolved)
     assertUsage(
       indexResolved?.id,
       `Cannot find server entry ${pc.cyan(index.id)}. Make sure its path is relative to the root of your project.`

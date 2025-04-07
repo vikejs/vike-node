@@ -4,7 +4,8 @@ import type { Plugin } from 'vite'
 import { assert, assertUsage } from '../../utils/assert.js'
 import { getVikeServerConfig } from '../utils/getVikeServerConfig.js'
 import type { SupportedServers } from '../../types.js'
-import { asPhotonEntryId, assertPhotonEntryId, isPhotonEntryId, stripPhotonEntryId } from '../utils/entry.js'
+import { assertPhotonEntryId, isPhotonEntryId, isPhotonMeta, stripPhotonEntryId } from '../utils/entry.js'
+import type { ModuleInfo, PluginContext } from 'rollup'
 
 declare module 'vite' {
   interface UserConfig {
@@ -21,78 +22,60 @@ const idsToServers: Record<string, SupportedServers> = {
   'vike-server/elysia': 'elysia'
 }
 
-// biome-ignore lint/complexity/noBannedTypes: <explanation>
-type LoadPluginContext = ThisParameterType<Extract<Plugin['load'], Function>>
-// biome-ignore lint/complexity/noBannedTypes: <explanation>
-type ResolveIdPluginContext = ThisParameterType<Extract<Plugin['resolveId'], Function>>
-type PluginContext = LoadPluginContext | ResolveIdPluginContext
-
-async function loadGraphAndExtractMeta<C extends PluginContext>(
-  pluginContext: C,
+async function computePhotonMeta(
+  pluginContext: PluginContext,
   resolvedPlugins: Map<string, SupportedServers>,
-  id: string
+  info: ModuleInfo
 ) {
-  console.log('loadGraphAndExtractMeta')
-  // Resolve entry graph until we find a plugin
-  const resolved = await pluginContext.resolve(id)
-  console.log('RESOLVED', id, resolved)
-  assertUsage(resolved, `Failed to resolve: ${id}`)
-  assertUsage(!resolved.external, `Entry should not be external: ${id}`)
-  const loaded = await pluginContext.load({ ...resolved, resolveDependencies: true })
-  console.log('GUY', pluginContext.environment.name, resolved, loaded)
+  assertUsage(!info.isExternal, `Entry should not be external: ${info.id}`)
   // early return for better performance
-  if (loaded.meta?.photon?.type && loaded.meta.photon.type !== 'auto') return loaded
-  const graph = new Set([...loaded.importedIdResolutions, ...loaded.dynamicallyImportedIdResolutions])
+  if (isPhotonMeta(info.meta) && info.meta.photonjs.type && info.meta.photonjs.type !== 'auto') return
+  const graph = new Set([...info.importedIdResolutions, ...info.dynamicallyImportedIdResolutions])
 
   let found: SupportedServers | undefined
   for (const imported of graph.values()) {
     found = resolvedPlugins.get(imported.id)
     if (found) break
     if (imported.external) continue
-    const sub = await pluginContext.load({ ...imported, resolveDependencies: true })
-    for (const imp of [...sub.importedIdResolutions, ...sub.dynamicallyImportedIdResolutions]) {
-      graph.add(imp)
+    const sub = pluginContext.getModuleInfo(imported.id)
+    if (sub) {
+      for (const imp of [...sub.importedIdResolutions, ...sub.dynamicallyImportedIdResolutions]) {
+        graph.add(imp)
+      }
     }
   }
 
   if (found) {
-    return {
-      ...loaded,
-      meta: {
-        photon: {
-          type: 'server',
-          server: found
-        }
-      }
-    }
+    info.meta ??= {}
+    info.meta.photonjs ??= {}
+    info.meta.photonjs.type = 'server'
+    info.meta.photonjs.server = found
+  } else {
+    info.meta.photonjs.type = 'universal-handler'
   }
-
-  return {
-    ...loaded,
-    meta: {
-      photon: {
-        type: 'universal-handler'
-      }
-    }
-  }
-}
-
-function asPhotonEntry<T extends { id: string } | null | undefined>(entry: T, bypass?: boolean): T {
-  if (bypass) return entry
-  return entry
-    ? {
-        ...entry,
-        id: asPhotonEntryId(entry.id)
-      }
-    : entry
 }
 
 export function serverEntryPlugin(): Plugin[] {
   const resolvedPlugins = new Map<string, SupportedServers>()
-  const photonEntries = new Set<string>()
   let serverEntryInjected = false
 
   return [
+    {
+      name: 'photonjs:resolve-entry-meta:build',
+      apply: 'build',
+
+      applyToEnvironment(env) {
+        return env.name === 'ssr'
+      },
+
+      async moduleParsed(info) {
+        if (isPhotonMeta(info.meta)) {
+          await computePhotonMeta(this, resolvedPlugins, info)
+        }
+      },
+
+      sharedDuringBuild: true
+    },
     {
       name: 'photonjs:resolve-entry-meta',
       enforce: 'pre',
@@ -120,34 +103,20 @@ export function serverEntryPlugin(): Plugin[] {
 
           if (resolved) {
             if (isPhotonEntryId(id)) {
-              photonEntries.add(resolved.id)
-
-              if (!opts.custom?.simple) {
-                console.log('LOADING', id, resolved)
-                const loaded = await loadGraphAndExtractMeta(this, resolvedPlugins, stripPhotonEntryId(id))
-                console.log('LOADED', loaded)
+              return {
+                ...resolved,
+                meta: {
+                  photonjs: {
+                    type: 'auto'
+                  }
+                },
+                resolvedBy: 'photonjs'
               }
             }
-            console.log('RESOLED', id, resolved, importer)
-            return {
-              ...resolved,
-              resolvedBy: 'photonjs'
-            }
+            return resolved
           }
         }
       },
-      // load: {
-      //   order: 'pre',
-      //   async handler(id) {
-      //     // TODO use `resolvedBy` or `meta` prop?
-      //     if (isPhotonEntryId(id) || photonEntries.has(id)) {
-      //       const loaded = await this.load({ id })
-      //       console.log('LOADING', id, loaded)
-      //       return loaded
-      //       return loadGraphAndExtractMeta(this, resolvedPlugins, stripPhotonEntryId(id)) as any
-      //     }
-      //   }
-      // },
       sharedDuringBuild: true
     },
     {
@@ -192,7 +161,7 @@ export function serverEntryPlugin(): Plugin[] {
       },
 
       transform(code, id) {
-        if (isPhotonEntryId(id) || photonEntries.has(id)) {
+        if (isPhotonMeta(this.getModuleInfo(id)?.meta)) {
           const ms = new MagicString(code)
           ms.prepend(`import "${serverEntryVirtualId}";\n`)
           serverEntryInjected = true
