@@ -7,17 +7,20 @@ export type SupportedServers = typeof SupportedServers.infer
 
 export const PhotonEntryServer = type({
   id: 'string',
+  'resolvedId?': 'string',
   type: "'server'",
   server: SupportedServers
 })
 
 export const PhotonEntryUniversalHandler = type({
   id: 'string',
+  'resolvedId?': 'string',
   type: "'universal-handler'"
 })
 
 export const PhotonEntry = type(PhotonEntryServer).or(PhotonEntryUniversalHandler).or({
   id: 'string',
+  'resolvedId?': 'string',
   'type?': "'auto'"
 })
 

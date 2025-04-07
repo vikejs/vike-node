@@ -1,6 +1,6 @@
 import type { Plugin } from 'vite'
-import { assertUsage } from '../../utils/assert.js'
-import type { SupportedServers } from '../../types.js'
+import { assert, assertUsage } from '../../utils/assert.js'
+import type { PhotonEntryServer, SupportedServers } from '../../types.js'
 import { assertPhotonEntryId, isPhotonEntryId, isPhotonMeta, stripPhotonEntryId } from '../utils/entry.js'
 import type { ModuleInfo, PluginContext } from 'rollup'
 
@@ -36,16 +36,20 @@ function computePhotonMeta(
     }
   }
 
+  const entry = Object.values(pluginContext.environment.config.photonjs.entry).find((e) => e.resolvedId === info.id)
+  assert(entry)
+
   if (found) {
     info.meta ??= {}
     info.meta.photonjs ??= {}
     info.meta.photonjs.type = 'server'
     info.meta.photonjs.server = found
+    entry.type = info.meta.photonjs.type
+    ;(entry as typeof PhotonEntryServer.infer).server = info.meta.photonjs.server
   } else {
     info.meta.photonjs.type = 'universal-handler'
+    entry.type = info.meta.photonjs.type
   }
-  // TODO also update env config
-  // pluginContext.environment.config.photonjs.entry[...] = ...
 }
 
 export function photonEntryPlugin(): Plugin[] {
@@ -120,6 +124,10 @@ export function photonEntryPlugin(): Plugin[] {
 
           if (resolved) {
             if (isPhotonEntryId(id)) {
+              const entry = Object.values(this.environment.config.photonjs.entry).find((e) => e.id === id)
+              assert(entry)
+              entry.resolvedId = resolved.id
+
               return {
                 ...resolved,
                 meta: {
