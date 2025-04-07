@@ -24,12 +24,15 @@ async function resolveIdsToServers(pluginContext: PluginContext): Promise<Record
   return resolvedIdsToServers
 }
 
-async function computePhotonMeta(pluginContext: PluginContext, info: ModuleInfo) {
+function computePhotonMeta(
+  pluginContext: PluginContext,
+  resolvedIdsToServers: Record<string, SupportedServers>,
+  info: ModuleInfo
+) {
   assertUsage(!info.isExternal, `Entry should not be external: ${info.id}`)
   // early return for better performance
   if (isPhotonMeta(info.meta) && info.meta.photonjs.type && info.meta.photonjs.type !== 'auto') return
   const graph = new Set([...info.importedIdResolutions, ...info.dynamicallyImportedIdResolutions])
-  const resolvedIdsToServers = await resolveIdsToServers(pluginContext)
 
   let found: SupportedServers | undefined
   for (const imported of graph.values()) {
@@ -52,9 +55,13 @@ async function computePhotonMeta(pluginContext: PluginContext, info: ModuleInfo)
   } else {
     info.meta.photonjs.type = 'universal-handler'
   }
+  // TODO also update env config
+  // pluginContext.environment.config.photonjs.entry[...] = ...
 }
 
 export function photonEntryPlugin(): Plugin[] {
+  let resolvedIdsToServers: Record<string, SupportedServers>
+
   return [
     {
       name: 'photonjs:set-entry',
@@ -65,7 +72,8 @@ export function photonEntryPlugin(): Plugin[] {
         return env.config.consumer === 'server'
       },
 
-      buildStart() {
+      async buildStart() {
+        resolvedIdsToServers = await resolveIdsToServers(this)
         const { entry } = this.environment.config.photonjs
 
         for (const [name, photonEntry] of Object.entries(entry)) {
@@ -78,9 +86,10 @@ export function photonEntryPlugin(): Plugin[] {
         }
       },
 
-      async moduleParsed(info) {
+      moduleParsed(info) {
         if (isPhotonMeta(info.meta)) {
-          await computePhotonMeta(this, info)
+          // Must be kept sync
+          computePhotonMeta(this, resolvedIdsToServers, info)
         }
       },
 
