@@ -1,4 +1,4 @@
-import 'vite';
+import 'vite'
 import type { PhotonConfig, PhotonConfigResolved } from './types.js'
 
 export { PhotonEntry, PhotonConfig, PhotonConfigResolved, SupportedServers } from './types.js'
