@@ -22,19 +22,27 @@ const idsToServers: Record<string, SupportedServers> = {
   'vike-server/elysia': 'elysia'
 }
 
-async function computePhotonMeta(
-  pluginContext: PluginContext,
-  resolvedPlugins: Map<string, SupportedServers>,
-  info: ModuleInfo
-) {
+async function resolveIdsToServers(pluginContext: PluginContext): Promise<Record<string, SupportedServers>> {
+  const resolvedIdsToServers: Record<string, SupportedServers> = {}
+  for (const [key, value] of Object.entries(idsToServers)) {
+    const resolved = await pluginContext.resolve(key)
+    if (resolved) {
+      resolvedIdsToServers[resolved.id] = value
+    }
+  }
+  return resolvedIdsToServers
+}
+
+async function computePhotonMeta(pluginContext: PluginContext, info: ModuleInfo) {
   assertUsage(!info.isExternal, `Entry should not be external: ${info.id}`)
   // early return for better performance
   if (isPhotonMeta(info.meta) && info.meta.photonjs.type && info.meta.photonjs.type !== 'auto') return
   const graph = new Set([...info.importedIdResolutions, ...info.dynamicallyImportedIdResolutions])
+  const resolvedIdsToServers = await resolveIdsToServers(pluginContext)
 
   let found: SupportedServers | undefined
   for (const imported of graph.values()) {
-    found = resolvedPlugins.get(imported.id)
+    found = resolvedIdsToServers[imported.id]
     if (found) break
     if (imported.external) continue
     const sub = pluginContext.getModuleInfo(imported.id)
@@ -56,13 +64,13 @@ async function computePhotonMeta(
 }
 
 export function serverEntryPlugin(): Plugin[] {
-  const resolvedPlugins = new Map<string, SupportedServers>()
   let serverEntryInjected = false
 
   return [
     {
-      name: 'photonjs:resolve-entry-meta:build',
+      name: 'photonjs:set-entry-meta',
       apply: 'build',
+      enforce: 'pre',
 
       applyToEnvironment(env) {
         return env.name === 'ssr'
@@ -70,7 +78,7 @@ export function serverEntryPlugin(): Plugin[] {
 
       async moduleParsed(info) {
         if (isPhotonMeta(info.meta)) {
-          await computePhotonMeta(this, resolvedPlugins, info)
+          await computePhotonMeta(this, info)
         }
       },
 
@@ -114,20 +122,6 @@ export function serverEntryPlugin(): Plugin[] {
               }
             }
             return resolved
-          }
-        }
-      },
-      sharedDuringBuild: true
-    },
-    {
-      name: 'photonjs:server-type-resolve-helper',
-      enforce: 'pre',
-      async resolveId(id, importer, opts) {
-        if (id in idsToServers) {
-          const resolved = await this.resolve(id, importer, opts)
-          if (resolved) {
-            // biome-ignore lint/style/noNonNullAssertion: <explanation>
-            resolvedPlugins.set(resolved.id, idsToServers[id]!)
           }
         }
       },
