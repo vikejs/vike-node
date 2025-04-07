@@ -20,7 +20,7 @@ function commonConfig(): Plugin[] {
             externalConditions:
               config.consumer === 'server'
                 ? [...(isBun ? ['bun'] : isDeno ? ['deno'] : []), 'node', 'development|production']
-                : undefined
+                : []
           },
           build: {
             target: 'es2022'

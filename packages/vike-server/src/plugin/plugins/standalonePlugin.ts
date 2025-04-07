@@ -1,10 +1,9 @@
 import path from 'node:path'
 import esbuild, { type BuildOptions } from 'esbuild'
 import type { Plugin, ResolvedConfig, Rollup } from 'vite'
-import type { ConfigVikeServerResolved } from '../../types.js'
 import { assert } from '../../utils/assert.js'
 import { toPosixPath } from '../utils/filesystemPathHandling.js'
-import { getVikeServerConfig } from '../utils/getVikeServerConfig.js'
+import type { PhotonConfigResolved } from '../../types.js'
 
 const OPTIONAL_NPM_IMPORTS = [
   '@nestjs/microservices',
@@ -27,7 +26,7 @@ export function standalonePlugin(): Plugin {
     apply: 'build',
     applyToEnvironment(env) {
       if (env.name === 'ssr') {
-        return Boolean(getVikeServerConfig(env.config).standalone)
+        return Boolean(env.config.photonjs.standalone)
       }
       return false
     },
@@ -39,7 +38,7 @@ export function standalonePlugin(): Plugin {
       root = toPosixPath(config.root)
       outDir = toPosixPath(config.build.outDir)
       outDirAbs = path.isAbsolute(outDir) ? outDir : path.posix.join(root, outDir)
-      const vikeServerConfig = getVikeServerConfig(config)
+      const vikeServerConfig = this.environment.config.photonjs
       const entries = findRollupBundleEntries(bundle, vikeServerConfig)
       rollupEntryFilePaths = entries.reduce(
         (acc, cur) => {
@@ -51,7 +50,7 @@ export function standalonePlugin(): Plugin {
     },
     enforce: 'post',
     async closeBundle() {
-      const vikeServerConfig = getVikeServerConfig(this.environment.config)
+      const vikeServerConfig = this.environment.config.photonjs
       const userEsbuildOptions =
         typeof vikeServerConfig.standalone === 'object' && vikeServerConfig.standalone !== null
           ? vikeServerConfig.standalone.esbuild
@@ -115,7 +114,7 @@ function createStandaloneIgnorePlugin(rollupResolve: (...args: any[]) => Promise
   }
 }
 
-function findRollupBundleEntries(bundle: Rollup.OutputBundle, vikeServerConfig: ConfigVikeServerResolved) {
+function findRollupBundleEntries(bundle: Rollup.OutputBundle, vikeServerConfig: PhotonConfigResolved) {
   const entries = Object.keys(vikeServerConfig.entry)
 
   const chunks: Rollup.OutputChunk[] = []

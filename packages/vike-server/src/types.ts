@@ -1,50 +1,37 @@
 import type { BuildOptions } from 'esbuild'
+import { type } from 'arktype'
 
-export type ConfigVikeServer = {
-  /**
-   * Server entry path.
-   */
-  server:
-    | string
-    | {
-        entry: string | PhotonEntry | { index: string | PhotonEntry; [name: string]: string | PhotonEntry }
-        /**
-         * This is an experimental feature. If an error occurs during build, please disable standalone mode and try again.
-         *
-         * Enable standalone build.
-         *
-         * @experimental
-         * @default false
-         */
-        standalone?: boolean | { esbuild: Omit<BuildOptions, 'manifest'> }
+export const PhotonEntry = type({
+  id: 'string',
+  'type?': "'auto' | 'server' | 'universal-handler'"
+})
 
-        /**
-         * HMR support for server files.
-         * If true, rely on Vite HMR implementation.
-         * If 'prefer-restart', restart the whole server process upon change.
-         * If false, disables HMR.
-         *
-         * @experimental
-         * @default true
-         */
-        hmr?: boolean | 'prefer-restart'
-      }
-}
+export type PhotonEntry = typeof PhotonEntry.infer
 
-export interface ConfigVikeServerResolved {
-  entry: { index: PhotonEntry; [name: string]: PhotonEntry }
-  standalone: boolean | { esbuild: Omit<BuildOptions, 'manifest'> }
-  hmr: boolean | 'prefer-restart'
-}
+export const PhotonConfig = type('string').or({
+  entry: PhotonEntry.or({
+    index: type('string').or(PhotonEntry),
+    '[string]': type('string').or(PhotonEntry)
+  }).or('string'),
+  'hmr?': "boolean | 'prefer-restart'",
+  'standalone?': type('boolean').or({
+    esbuild: 'object' as type.cast<Omit<BuildOptions, 'manifest'>>
+  })
+})
+
+export type PhotonConfig = typeof PhotonConfig.infer
+
+export const PhotonConfigResolved = type({
+  entry: {
+    index: PhotonEntry,
+    '[string]': PhotonEntry
+  },
+  hmr: "boolean | 'prefer-restart'",
+  standalone: type('boolean').or({
+    esbuild: 'object' as type.cast<Omit<BuildOptions, 'manifest'>>
+  })
+})
+
+export type PhotonConfigResolved = typeof PhotonConfigResolved.infer
 
 export type SupportedServers = 'hono' | 'hattip' | 'elysia' | 'express' | 'fastify' | 'h3'
-
-export interface PhotonEntry {
-  id: string
-  type?: 'auto' | 'server' | 'universal-handler'
-}
-
-export interface PhotonEntryResolved {
-  id: string
-  type: 'server' | 'universal-handler'
-}

@@ -245,6 +245,7 @@
     "@universal-middleware/hattip": "^0.4.7",
     "@universal-middleware/hono": "^0.4.8",
     "@universal-middleware/sirv": "^0.1.18",
+    "arktype": "^2.1.18",
     "esbuild": "^0.25.2"
   },
   "peerDependencies": {

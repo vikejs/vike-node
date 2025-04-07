@@ -1,8 +1,7 @@
 import { asPhotonEntryId } from './entry.js'
-import type { ConfigVikeServer, ConfigVikeServerResolved, PhotonEntry } from '../../types.js'
-import { assert, assertUsage } from '../../utils/assert.js'
-
-export { resolveServerConfig }
+import { PhotonConfig, PhotonConfigResolved, PhotonEntry } from '../../types.js'
+import { match, type } from 'arktype'
+import type { BuildOptions } from 'esbuild'
 
 function entryToPhoton(entry: string | PhotonEntry): PhotonEntry {
   if (typeof entry === 'string')
@@ -28,57 +27,47 @@ function entriesToPhoton(
   return Object.fromEntries(Object.entries(entry).map(([key, value]) => [key, entryToPhoton(value)]))
 }
 
-function _resolveServerConfig(configServerValue: ConfigVikeServer['server'] | undefined): ConfigVikeServerResolved {
-  if (typeof configServerValue === 'object' && configServerValue !== null) {
-    if ('entry' in configServerValue) {
-      assertUsage(
-        typeof configServerValue.entry === 'string' ||
-          (typeof configServerValue.entry === 'object' &&
-            Object.entries(configServerValue.entry as Record<string, unknown>).every(
-              ([, value]) => typeof value === 'string'
-            )),
-        'server.entry should be a string or an entry mapping { index: string; [name: string]: string }'
+export function resolvePhotonConfig(config: PhotonConfig | undefined): PhotonConfigResolved {
+  const out = PhotonConfig.pipe.try((c) => {
+    const toPhotonEntry = match
+      .in<PhotonConfig>()
+      .match({
+        string: (v) => entriesToPhoton(v)
+      })
+      .default(
+        match
+          .in<PhotonConfig>()
+          .at('entry')
+          .case({ id: 'string' }, (v) => entriesToPhoton(v.entry))
+          .case({ '[string]': 'string' }, (v) => entriesToPhoton(v.entry))
+          .case({ '[string]': PhotonEntry }, (v) => entriesToPhoton(v.entry))
+          .default('assert')
       )
 
-      assertUsage(
-        typeof configServerValue.entry !== 'object' ||
-          Object.entries(configServerValue.entry as Record<string, unknown>).some(([name]) => name === 'index'),
-        'missing index entry in server.entry'
-      )
-    }
+    const toHmr = match
+      .in<PhotonConfig>()
+      .match({
+        'boolean | "prefer-restart"': (v) => v
+      })
+      .default(() => true)
 
-    const entriesProvided = entriesToPhoton(configServerValue.entry)
+    const toStandalone = match
+      .in<PhotonConfig>()
+      .case({ standalone: 'boolean' }, (v) => v)
+      .case({ standalone: 'object' }, (v) => v as type.cast<Omit<BuildOptions, 'manifest'>>)
+      .default(() => false)
 
-    assertUsage('index' in entriesProvided, 'Missing index entry in server.entry')
+    const entry = toPhotonEntry(c)
+    const hmr = toHmr(c)
+    const standalone = toStandalone(c)
+
     return {
-      entry: entriesProvided as { index: PhotonEntry; [name: string]: PhotonEntry },
-      standalone: configServerValue.standalone ?? false,
-      hmr: configServerValue.hmr ?? true
+      entry,
+      hmr,
+      standalone
     }
-  }
+  }, PhotonConfigResolved)(config)
 
-  assertUsage(typeof configServerValue === 'string', 'config.server should be defined')
-  return {
-    entry: { index: entryToPhoton(configServerValue) },
-    standalone: false,
-    hmr: true
-  }
-}
-
-// cache
-const configServerValueResolved = new WeakMap<ConfigVikeServer['server'][], ConfigVikeServerResolved[]>()
-function resolveServerConfig(
-  configServerValue: ConfigVikeServer['server'][] | undefined
-): [ConfigVikeServerResolved] | [ConfigVikeServerResolved, ConfigVikeServerResolved] {
-  assert(configServerValue)
-  assertUsage(configServerValue.length > 0, 'config.server should be defined')
-  // length 1: user entry, or virtual entry
-  // length 2: [user entry, virtual entry]
-  assert(configServerValue.length <= 2)
-  if (!configServerValueResolved.has(configServerValue)) {
-    configServerValueResolved.set(configServerValue, configServerValue.map(_resolveServerConfig))
-  }
-  return configServerValueResolved.get(configServerValue) as
-    | [ConfigVikeServerResolved]
-    | [ConfigVikeServerResolved, ConfigVikeServerResolved]
+  if (out instanceof type.errors) return out.throw()
+  return out
 }

@@ -8,11 +8,9 @@ import {
 } from 'vite'
 
 import { globalStore } from '../../runtime/globalStore.js'
-import type { ConfigVikeServerResolved } from '../../types.js'
 import { assert, assertUsage } from '../../utils/assert.js'
 import { isBun } from '../utils/isBun.js'
 import { logViteInfo } from '../utils/logVite.js'
-import { getVikeServerConfig } from '../utils/getVikeServerConfig.js'
 import { fork } from 'node:child_process'
 import pc from '@brillout/picocolors'
 
@@ -20,25 +18,20 @@ let fixApplied = false
 
 const VITE_HMR_PATH = '/__vite_hmr'
 const RESTART_EXIT_CODE = 33
-const IS_RESTARTER_SET_UP = '__VIKE__IS_RESTARTER_SET_UP'
+const IS_RESTARTER_SET_UP = '__PHOTON__IS_RESTARTER_SET_UP'
 
 export function devServerPlugin(): Plugin {
-  let vikeServerConfig: ConfigVikeServerResolved
   let resolvedEntryId: string
   let HMRServer: ReturnType<typeof createServer> | undefined
   let viteDevServer: ViteDevServer
   let setupHMRProxyDone = false
   return {
-    name: 'vite-node:devserver',
+    name: 'photonjs:devserver',
     apply(_config, { command, mode }) {
       return command === 'serve' && mode !== 'test'
     },
     enforce: 'pre',
-    async config(userConfig) {
-      if (getVikeServerConfig(userConfig).hmr === 'prefer-restart') {
-        await setupProcessRestarter()
-      }
-
+    async config() {
       // FIXME
       if (isBun) {
         return {
@@ -60,15 +53,12 @@ export function devServerPlugin(): Plugin {
       }
     },
 
-    configResolved(config) {
-      vikeServerConfig = getVikeServerConfig(config)
-    },
-
     async hotUpdate(ctx) {
-      if (vikeServerConfig.hmr === false) return
+      if (this.environment.config.photonjs.hmr === false) return
+      // FIXME: tag modules like +middlewares as meta.photonjs.importedByType = 'server'
       const imported = isImported(ctx.modules)
       if (imported) {
-        if (vikeServerConfig.hmr === 'prefer-restart') {
+        if (this.environment.config.photonjs.hmr === 'prefer-restart') {
           restartProcess()
         } else {
           const invalidatedModules = new Set<EnvironmentModuleNode>()
@@ -88,22 +78,22 @@ export function devServerPlugin(): Plugin {
 
     configureServer(vite) {
       if (viteDevServer) {
-        if (vikeServerConfig.hmr === 'prefer-restart') {
+        if (vite.config.photonjs.hmr === 'prefer-restart') {
           restartProcess()
         }
         return
       }
 
-      if (vikeServerConfig.hmr === true) {
+      if (vite.config.photonjs.hmr === true) {
         // Once existing server is closed and invalidated, reimport its updated entry file
-        vite.environments.ssr.hot.on('vike-server:server-closed', () => {
+        vite.environments.ssr.hot.on('photonjs:server-closed', () => {
           setupHMRProxyDone = false
           if (isRunnableDevEnvironment(vite.environments.ssr)) {
             vite.environments.ssr.runner.import(resolvedEntryId).catch(logRestartMessage)
           }
         })
 
-        vite.environments.ssr.hot.on('vike-server:reloaded', () => {
+        vite.environments.ssr.hot.on('photonjs:reloaded', () => {
           vite.environments.client.hot.send({ type: 'full-reload' })
         })
       }
@@ -192,8 +182,7 @@ export function devServerPlugin(): Plugin {
   }
 
   async function initializeServerEntry(vite: ViteDevServer) {
-    assert(vikeServerConfig)
-    const { index } = vikeServerConfig.entry
+    const { index } = vite.config.photonjs.entry
     const indexResolved = await vite.environments.ssr.pluginContainer.resolveId(index.id, undefined, {
       isEntry: true
     })
