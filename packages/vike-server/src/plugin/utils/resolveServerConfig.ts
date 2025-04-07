@@ -39,7 +39,7 @@ export function resolvePhotonConfig(config: PhotonConfig | undefined): PhotonCon
           .in<PhotonConfig>()
           .at('entry')
           .match({
-            string: (v) => entriesToPhoton(v)
+            string: (v) => entriesToPhoton(v.entry)
           })
           .case({ id: 'string' }, (v) => entriesToPhoton(v.entry))
           .case({ '[string]': 'string' }, (v) => entriesToPhoton(v.entry))
