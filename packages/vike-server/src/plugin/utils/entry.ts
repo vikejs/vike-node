@@ -1,16 +1,11 @@
 import { assert } from '../../utils/assert.js'
-import type { CustomPluginOptions, ModuleInfo } from 'rollup'
+import type { CustomPluginOptions } from 'rollup'
 import type { SupportedServers } from '../../types.js'
 
 export const virtualPhotonEntry = 'photonjs:entry'
 
 export function isPhotonEntryId(id: string) {
   return id.startsWith(virtualPhotonEntry)
-}
-
-export function isPhotonEntryInfo(info: ModuleInfo | undefined | null) {
-  if (!info) return false
-  return isPhotonEntryId(info.id) || info.meta
 }
 
 export function asPhotonEntryId(id: string) {
