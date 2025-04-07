@@ -1,9 +1,24 @@
 import type { BuildOptions } from 'esbuild'
 import { type } from 'arktype'
 
-export const PhotonEntry = type({
+export const SupportedServers = type("'hono' | 'hattip' | 'elysia' | 'express' | 'fastify' | 'h3'")
+
+export type SupportedServers = typeof SupportedServers.infer
+
+export const PhotonEntryServer = type({
   id: 'string',
-  'type?': "'auto' | 'server' | 'universal-handler'"
+  type: "'server'",
+  server: SupportedServers
+})
+
+export const PhotonEntryUniversalHandler = type({
+  id: 'string',
+  type: "'universal-handler'"
+})
+
+export const PhotonEntry = type(PhotonEntryServer).or(PhotonEntryUniversalHandler).or({
+  id: 'string',
+  'type?': "'auto'"
 })
 
 export type PhotonEntry = typeof PhotonEntry.infer
@@ -33,5 +48,3 @@ export const PhotonConfigResolved = type({
 })
 
 export type PhotonConfigResolved = typeof PhotonConfigResolved.infer
-
-export type SupportedServers = 'hono' | 'hattip' | 'elysia' | 'express' | 'fastify' | 'h3'
