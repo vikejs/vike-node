@@ -73,7 +73,7 @@ export function serverEntryPlugin(): Plugin[] {
       enforce: 'pre',
 
       applyToEnvironment(env) {
-        return env.name === 'ssr'
+        return env.config.consumer === 'server'
       },
 
       async moduleParsed(info) {
@@ -89,7 +89,7 @@ export function serverEntryPlugin(): Plugin[] {
       enforce: 'pre',
 
       applyToEnvironment(env) {
-        return env.name === 'ssr'
+        return env.config.consumer === 'server'
       },
 
       resolveId: {
@@ -132,7 +132,7 @@ export function serverEntryPlugin(): Plugin[] {
       apply: 'build',
 
       applyToEnvironment(env) {
-        return env.name === 'ssr'
+        return env.config.consumer === 'server'
       },
 
       buildStart() {
