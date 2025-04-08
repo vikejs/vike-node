@@ -1,6 +1,7 @@
-import { vikeServer } from './plugin/index.js'
-import type { PhotonConfig } from './types.js'
+import type { PhotonConfig } from '@photonjs/core/api'
+import { photonjs } from '@photonjs/core/plugin'
 import type { Config } from 'vike/types'
+import { vikeServer } from './plugin/index.js'
 
 export { config as default }
 
@@ -10,7 +11,7 @@ const config = {
     vike: '>=0.4.228'
   },
   vite: {
-    plugins: [vikeServer()]
+    plugins: [photonjs(), vikeServer()]
   },
   vite6BuilderApp: true,
   meta: {

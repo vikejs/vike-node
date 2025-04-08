@@ -2,7 +2,7 @@ import MagicString from 'magic-string'
 import { serverEntryVirtualId, type VitePluginServerEntryOptions } from '@brillout/vite-plugin-server-entry/plugin'
 import type { Plugin } from 'vite'
 import { assert } from '../../utils/assert.js'
-import { isPhotonMeta } from '../utils/entry.js'
+import { isPhotonMeta } from '@photonjs/core/api'
 
 declare module 'vite' {
   interface UserConfig {

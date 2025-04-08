@@ -103,126 +103,6 @@
       },
       "import": "./dist/elysia.js",
       "default": "./dist/elysia.js"
-    },
-    "./hono/serve": {
-      "types": "./dist/hono/serve.d.ts",
-      "deno": {
-        "types": "./dist/hono/serve.deno.d.ts",
-        "import": "./dist/hono/serve.deno.js",
-        "default": "./dist/hono/serve.deno.js"
-      },
-      "bun": {
-        "types": "./dist/hono/serve.bun.d.ts",
-        "import": "./dist/hono/serve.bun.js",
-        "default": "./dist/hono/serve.bun.js"
-      },
-      "worker": {
-        "types": "./dist/hono/serve.d.ts",
-        "import": "./dist/hono/serve.js",
-        "default": "./dist/hono/serve.js"
-      },
-      "node": {
-        "types": "./dist/hono/serve.node.d.ts",
-        "import": "./dist/hono/serve.node.js",
-        "default": "./dist/hono/serve.node.js"
-      },
-      "import": "./dist/hono/serve.js",
-      "default": "./dist/hono/serve.js"
-    },
-    "./hattip/serve": {
-      "types": "./dist/hattip/serve.d.ts",
-      "deno": {
-        "types": "./dist/hattip/serve.deno.d.ts",
-        "import": "./dist/hattip/serve.deno.js",
-        "default": "./dist/hattip/serve.deno.js"
-      },
-      "bun": {
-        "types": "./dist/hattip/serve.bun.d.ts",
-        "import": "./dist/hattip/serve.bun.js",
-        "default": "./dist/hattip/serve.bun.js"
-      },
-      "worker": {
-        "types": "./dist/hattip/serve.d.ts",
-        "import": "./dist/hattip/serve.js",
-        "default": "./dist/hattip/serve.js"
-      },
-      "node": {
-        "types": "./dist/hattip/serve.node.d.ts",
-        "import": "./dist/hattip/serve.node.js",
-        "default": "./dist/hattip/serve.node.js"
-      },
-      "import": "./dist/hattip/serve.js",
-      "default": "./dist/hattip/serve.js"
-    },
-    "./h3/serve": {
-      "types": "./dist/h3/serve.d.ts",
-      "deno": {
-        "types": "./dist/h3/serve.deno.d.ts",
-        "import": "./dist/h3/serve.deno.js",
-        "default": "./dist/h3/serve.deno.js"
-      },
-      "bun": {
-        "types": "./dist/h3/serve.bun.d.ts",
-        "import": "./dist/h3/serve.bun.js",
-        "default": "./dist/h3/serve.bun.js"
-      },
-      "worker": {
-        "types": "./dist/h3/serve.d.ts",
-        "import": "./dist/h3/serve.js",
-        "default": "./dist/h3/serve.js"
-      },
-      "node": {
-        "types": "./dist/h3/serve.node.d.ts",
-        "import": "./dist/h3/serve.node.js",
-        "default": "./dist/h3/serve.node.js"
-      },
-      "import": "./dist/h3/serve.js",
-      "default": "./dist/h3/serve.js"
-    },
-    "./elysia/serve": {
-      "types": "./dist/elysia/serve.d.ts",
-      "deno": {
-        "types": "./dist/elysia/serve.deno.d.ts",
-        "import": "./dist/elysia/serve.deno.js",
-        "default": "./dist/elysia/serve.deno.js"
-      },
-      "bun": {
-        "types": "./dist/elysia/serve.bun.d.ts",
-        "import": "./dist/elysia/serve.bun.js",
-        "default": "./dist/elysia/serve.bun.js"
-      },
-      "worker": {
-        "types": "./dist/elysia/serve.d.ts",
-        "import": "./dist/elysia/serve.js",
-        "default": "./dist/elysia/serve.js"
-      },
-      "node": {
-        "types": "./dist/elysia/serve.node.d.ts",
-        "import": "./dist/elysia/serve.node.js",
-        "default": "./dist/elysia/serve.node.js"
-      },
-      "import": "./dist/elysia/serve.js",
-      "default": "./dist/elysia/serve.js"
-    },
-    "./express/serve": {
-      "types": "./dist/express/serve.d.ts",
-      "node": {
-        "types": "./dist/express/serve.node.d.ts",
-        "import": "./dist/express/serve.node.js",
-        "default": "./dist/express/serve.node.js"
-      },
-      "import": "./dist/express/serve.js",
-      "default": "./dist/express/serve.js"
-    },
-    "./fastify/serve": {
-      "types": "./dist/fastify/serve.d.ts",
-      "node": {
-        "types": "./dist/fastify/serve.node.d.ts",
-        "import": "./dist/fastify/serve.node.js",
-        "default": "./dist/fastify/serve.node.js"
-      },
-      "import": "./dist/fastify/serve.js",
-      "default": "./dist/fastify/serve.js"
     }
   },
   "scripts": {
@@ -236,6 +116,7 @@
   "dependencies": {
     "@brillout/picocolors": "^1.0.26",
     "@brillout/vite-plugin-server-entry": "^0.7.5",
+    "@photonjs/core": "workspace:^",
     "@universal-middleware/compress": "^0.2.27",
     "@universal-middleware/core": "^0.4.6",
     "@universal-middleware/elysia": "^0.4.7",

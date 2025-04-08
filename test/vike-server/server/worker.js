@@ -21,3 +21,6 @@ express()
 if (two() !== 2) {
   throw new Error()
 }
+
+// FIXME do not test workers this way, doesn't make much sense
+export default () => {}
