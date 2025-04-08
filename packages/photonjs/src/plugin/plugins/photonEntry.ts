@@ -1,8 +1,8 @@
-import type { Plugin } from 'vite'
-import { assert, assertUsage } from '../../utils/assert.js'
-import type { PhotonEntryServer, SupportedServers } from '../../types.js'
-import { assertPhotonEntryId, isPhotonEntryId, isPhotonMeta, stripPhotonEntryId } from '../utils/entry.js'
 import type { ModuleInfo, PluginContext } from 'rollup'
+import type { Plugin } from 'vite'
+import type { PhotonEntryServer, SupportedServers } from '../../types.js'
+import { assert, assertUsage } from '../../utils/assert.js'
+import { assertPhotonEntryId, isPhotonEntryId, isPhotonMeta, stripPhotonEntryId } from '../utils/entry.js'
 
 const idsToServers: Record<string, SupportedServers> = {
   '@photonjs/hono': 'hono',
@@ -10,7 +10,13 @@ const idsToServers: Record<string, SupportedServers> = {
   '@photonjs/express': 'express',
   '@photonjs/fastify': 'fastify',
   '@photonjs/h3': 'h3',
-  '@photonjs/elysia': 'elysia'
+  '@photonjs/elysia': 'elysia',
+  '@photonjs/core/hono': 'hono',
+  '@photonjs/core/hattip': 'hattip',
+  '@photonjs/core/express': 'express',
+  '@photonjs/core/fastify': 'fastify',
+  '@photonjs/core/h3': 'h3',
+  '@photonjs/core/elysia': 'elysia'
 }
 
 function computePhotonMeta(
