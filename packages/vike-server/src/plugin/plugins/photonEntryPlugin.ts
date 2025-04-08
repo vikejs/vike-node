@@ -40,15 +40,24 @@ function computePhotonMeta(
   assert(entry)
 
   if (found) {
+    if (!info.hasDefaultExport) {
+      // TODO better error message with link to documentation
+      pluginContext.error(`Entry "${info.id}" seems to use "${found}", but no default export was found`)
+    }
     info.meta ??= {}
     info.meta.photonjs ??= {}
     info.meta.photonjs.type = 'server'
     info.meta.photonjs.server = found
     entry.type = info.meta.photonjs.type
     ;(entry as typeof PhotonEntryServer.infer).server = info.meta.photonjs.server
-  } else {
+  } else if (info.hasDefaultExport) {
     info.meta.photonjs.type = 'universal-handler'
     entry.type = info.meta.photonjs.type
+  } else {
+    // TODO better error message with link to documentation
+    pluginContext.error(
+      `Cannot guess "${info.id}" entry type. Make sure to provide a default export, and if you use a server, use "vike-server/<server>" package`
+    )
   }
 }
 
