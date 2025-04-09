@@ -1,5 +1,4 @@
 import { builtinModules } from 'node:module'
-import virtualApply from '@photonjs/core/esbuild'
 import { defineConfig } from 'tsup'
 
 const externalServers: string[] = ['elysia', 'fastify', 'h3', 'hono']
@@ -18,19 +17,6 @@ export default defineConfig([
     esbuildOptions(opts) {
       opts.outbase = 'src'
     },
-    esbuildPlugins: [
-      virtualApply({
-        // TODO probably provide a custom API instead of a generic resolveId
-        resolveId(id) {
-          // TODO VikeOptions typing of RuntimeAdapter is generic because this export is generic
-          //  if we had an export per server, we could properly type VikeOptions
-          return {
-            id: 'vike-server/universal-middlewares',
-            external: true
-          }
-        }
-      })
-    ],
     external: externalServers.concat(...builtinModules.flatMap((e) => [e, `node:${e}`])),
     dts: true,
     outDir: 'dist',

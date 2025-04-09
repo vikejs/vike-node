@@ -1,7 +1,7 @@
 import { dirname, isAbsolute, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import type { Get, UniversalMiddleware } from '@universal-middleware/core'
-import { cloneRequest, url as getUrl } from '@universal-middleware/core'
+import { cloneRequest, enhance, url as getUrl } from '@universal-middleware/core'
 import { getGlobalContext } from 'vike/server'
 import { isVercel } from '../../utils/isVercel.js'
 import type { VikeOptions } from '../types.js'
@@ -48,20 +48,27 @@ function resolveStaticConfig(static_: VikeOptions['static']): false | { root: st
   }
 }
 
-export const serveStaticMiddleware = ((options?) => async (request, context, runtime) => {
-  const staticConfig = resolveStaticConfig(options?.static)
-  let staticMiddleware: UniversalMiddleware
+export const serveStaticMiddleware = ((options?) =>
+  enhance(
+    async (request, context, runtime) => {
+      const staticConfig = resolveStaticConfig(options?.static)
+      let staticMiddleware: UniversalMiddleware
 
-  async function serveStaticFiles(req: Request) {
-    const newReq = await removeBaseUrl(req)
+      async function serveStaticFiles(req: Request) {
+        const newReq = await removeBaseUrl(req)
 
-    if (!staticMiddleware) {
-      const { default: sirv } = await import('@universal-middleware/sirv')
-      staticMiddleware = sirv((staticConfig as { root: string; cache: boolean }).root, { etag: true })
+        if (!staticMiddleware) {
+          const { default: sirv } = await import('@universal-middleware/sirv')
+          staticMiddleware = sirv((staticConfig as { root: string; cache: boolean }).root, { etag: true })
+        }
+
+        return staticMiddleware(newReq, context, runtime)
+      }
+
+      return serveStaticFiles(request)
+    },
+    {
+      name: 'photonjs:sirv',
+      immutable: false
     }
-
-    return staticMiddleware(newReq, context, runtime)
-  }
-
-  return serveStaticFiles(request)
-}) satisfies Get<[options: VikeOptions], UniversalMiddleware>
+  )) satisfies Get<[options: VikeOptions], UniversalMiddleware>

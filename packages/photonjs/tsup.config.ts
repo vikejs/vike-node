@@ -1,7 +1,8 @@
 import { builtinModules } from 'node:module'
 import { defineConfig } from 'tsup'
+import virtualApply from './src/unplugin/esbuild.js'
 
-const externalServers: string[] = ['elysia', 'fastify', 'h3', 'hono']
+const externalServers: (string | RegExp)[] = ['elysia', 'fastify', 'h3', 'hono']
 
 export default defineConfig([
   {
@@ -37,7 +38,11 @@ export default defineConfig([
     esbuildOptions(opts) {
       opts.outbase = 'src'
     },
-    external: externalServers.concat(...builtinModules.flatMap((e) => [e, `node:${e}`])),
+    esbuildPlugins: [virtualApply()],
+    external: externalServers
+      .concat(...builtinModules.flatMap((e) => [e, `node:${e}`]))
+      .concat(/^photonjs:get-middlewares:/)
+      .concat('@photonjs/core/dev'),
     dts: true,
     outDir: 'dist',
     bundle: true,
@@ -59,24 +64,5 @@ export default defineConfig([
     dts: true,
     outDir: 'dist',
     treeshake: true
-  },
-  {
-    entry: {
-      esbuild: './src/unplugin/esbuild.ts'
-    },
-    format: ['esm'],
-    platform: 'node',
-    target: 'es2022',
-    esbuildOptions(opts) {
-      opts.outbase = 'src'
-    },
-    dts: true,
-    outDir: 'dist',
-    treeshake: true,
-    banner: {
-      js: `import { createRequire as topLevelCreateRequire } from 'module';
-const require = topLevelCreateRequire(import.meta.url);
-`
-    }
   }
 ])

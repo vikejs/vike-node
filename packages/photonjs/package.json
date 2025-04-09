@@ -8,7 +8,6 @@
     "./config": "./dist/config.js",
     "./plugin": "./dist/plugin.js",
     "./api": "./dist/api.js",
-    "./esbuild": "./dist/esbuild.js",
     "./dev": "./dist/dev.js",
     ".": "./dist/index.js",
     "./universal-middlewares": {
@@ -25,6 +24,86 @@
       },
       "import": "./dist/universal.js",
       "default": "./dist/universal.js"
+    },
+    "./hono": {
+      "types": "./dist/hono.d.ts",
+      "development": {
+        "types": "./dist/hono.dev.d.ts",
+        "import": "./dist/hono.dev.js",
+        "default": "./dist/hono.dev.js"
+      },
+      "worker": {
+        "types": "./dist/hono.edge.d.ts",
+        "import": "./dist/hono.edge.js",
+        "default": "./dist/hono.edge.js"
+      },
+      "import": "./dist/hono.js",
+      "default": "./dist/hono.js"
+    },
+    "./express": {
+      "types": "./dist/express.d.ts",
+      "development": {
+        "types": "./dist/express.dev.d.ts",
+        "import": "./dist/express.dev.js",
+        "default": "./dist/express.dev.js"
+      },
+      "import": "./dist/express.js",
+      "default": "./dist/express.js"
+    },
+    "./hattip": {
+      "types": "./dist/hattip.d.ts",
+      "development": {
+        "types": "./dist/hattip.dev.d.ts",
+        "import": "./dist/hattip.dev.js",
+        "default": "./dist/hattip.dev.js"
+      },
+      "worker": {
+        "types": "./dist/hattip.edge.d.ts",
+        "import": "./dist/hattip.edge.js",
+        "default": "./dist/hattip.edge.js"
+      },
+      "import": "./dist/hattip.js",
+      "default": "./dist/hattip.js"
+    },
+    "./fastify": {
+      "types": "./dist/fastify.d.ts",
+      "development": {
+        "types": "./dist/fastify.dev.d.ts",
+        "import": "./dist/fastify.dev.js",
+        "default": "./dist/fastify.dev.js"
+      },
+      "import": "./dist/fastify.js",
+      "default": "./dist/fastify.js"
+    },
+    "./h3": {
+      "types": "./dist/h3.d.ts",
+      "development": {
+        "types": "./dist/h3.dev.d.ts",
+        "import": "./dist/h3.dev.js",
+        "default": "./dist/h3.dev.js"
+      },
+      "worker": {
+        "types": "./dist/h3.edge.d.ts",
+        "import": "./dist/h3.edge.js",
+        "default": "./dist/h3.edge.js"
+      },
+      "import": "./dist/h3.js",
+      "default": "./dist/h3.js"
+    },
+    "./elysia": {
+      "types": "./dist/elysia.d.ts",
+      "development": {
+        "types": "./dist/elysia.dev.d.ts",
+        "import": "./dist/elysia.dev.js",
+        "default": "./dist/elysia.dev.js"
+      },
+      "worker": {
+        "types": "./dist/elysia.edge.d.ts",
+        "import": "./dist/elysia.edge.js",
+        "default": "./dist/elysia.edge.js"
+      },
+      "import": "./dist/elysia.js",
+      "default": "./dist/elysia.js"
     },
     "./hono/serve": {
       "types": "./dist/hono/serve.d.ts",

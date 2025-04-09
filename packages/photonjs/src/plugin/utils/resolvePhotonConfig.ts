@@ -1,7 +1,7 @@
-import { asPhotonEntryId } from './entry.js'
-import { PhotonConfig, PhotonConfigResolved, PhotonEntry } from '../../types.js'
 import { match, type } from 'arktype'
 import type { BuildOptions } from 'esbuild'
+import { PhotonConfig, PhotonConfigResolved, PhotonEntry } from '../../types.js'
+import { asPhotonEntryId } from './entry.js'
 
 function entryToPhoton(entry: string | typeof PhotonEntry.infer): PhotonEntry {
   if (typeof entry === 'string')
@@ -56,18 +56,25 @@ export function resolvePhotonConfig(config: PhotonConfig | undefined): PhotonCon
 
     const toStandalone = match
       .in<PhotonConfig>()
-      .case({ standalone: 'boolean' }, (v) => v)
-      .case({ standalone: 'object' }, (v) => v as type.cast<Omit<BuildOptions, 'manifest'>>)
+      .case({ standalone: 'boolean' }, (v) => v.standalone)
+      .case({ standalone: 'object' }, (v) => v.standalone as type.cast<Omit<BuildOptions, 'manifest'>>)
       .default(() => false)
+
+    const toMiddlewares = match
+      .in<PhotonConfig>()
+      .case({ middlewares: 'object' }, (v) => v.middlewares)
+      .default(() => [])
 
     const entry = toPhotonEntry(c)
     const hmr = toHmr(c)
     const standalone = toStandalone(c)
+    const middlewares = toMiddlewares(c)
 
     return {
       entry,
       hmr,
-      standalone
+      standalone,
+      middlewares
     }
   }, PhotonConfigResolved)(config)
 

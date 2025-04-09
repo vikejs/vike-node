@@ -5,9 +5,9 @@ import { getUniversalMiddlewares } from './utils.js'
 
 const vikeMiddlewares = await getUniversalMiddlewares()
 
-const renderPageUniversal: Get<[options?: VikeOptions & VikeOptionsInternal], UniversalMiddleware[]> = (options?) => [
+export const getMiddlewares: Get<[options?: VikeOptions & VikeOptionsInternal], UniversalMiddleware[]> = (options?) => [
   ...vikeMiddlewares,
   renderPageHandler(options)
 ]
 
-export default renderPageUniversal
+export default getMiddlewares

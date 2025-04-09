@@ -1,7 +1,8 @@
 import type { Server } from 'node:http'
+import { apply, type RuntimeAdapter } from '@photonjs/core/hono'
 import { serve } from '@photonjs/core/hono/serve'
 import { Hono } from 'hono'
-import { apply, type RuntimeAdapter } from 'vike-server/hono'
+import { getMiddlewares } from 'vike-server/universal-middlewares'
 import { init } from '../database/todoItems'
 
 async function startServer() {
@@ -19,13 +20,16 @@ async function startServer() {
     ctx.header('x-test', 'test')
   })
 
-  apply(app, {
-    pageContext(runtime: RuntimeAdapter) {
-      return {
-        xRuntime: runtime.hono.get('xRuntime')
+  apply(
+    app,
+    getMiddlewares({
+      pageContext(runtime: RuntimeAdapter) {
+        return {
+          xRuntime: runtime.hono.get('xRuntime')
+        }
       }
-    }
-  })
+    })
+  )
 
   return serve(app, {
     port: +port,
