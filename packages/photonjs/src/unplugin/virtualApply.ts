@@ -22,13 +22,11 @@ function compile(id: string) {
   //language=ts
   const code = `import { apply as applyAdapter } from '@universal-middleware/${match.server}';
 import getUniversalMiddlewares from 'photonjs:get-middlewares:${match.condition}:${match.server}${match.rest}';
-import type { RuntimeAdapterTarget, UniversalMiddleware } from '@universal-middleware/core';
+import { type RuntimeAdapterTarget, type UniversalMiddleware, getUniversalProp, nameSymbol } from '@universal-middleware/core';
 ${match.condition === 'dev' ? 'import { devServerMiddleware } from "@photonjs/core/dev";' : ''}
 
-const nameSymbol = Symbol.for("unName");
-
 function isValidUniversalMiddleware(middleware: unknown): asserts middleware is UniversalMiddleware {
-  if (!(nameSymbol in middleware)) {
+  if (!getUniversalProp(middleware, nameSymbol)) {
     throw new TypeError("[photonjs] All middlewares require a name. Use enhance helper as described in the documentation: https://universal-middleware.dev/helpers/enhance");
   }
 }
@@ -44,7 +42,7 @@ export function apply(app: Parameters<typeof applyAdapter>[0], additionalMiddlew
   if (additionalMiddlewares) {
     for (const middleware of additionalMiddlewares) {
       isValidUniversalMiddleware(middleware);
-      const i = middlewares.findIndex(m => m[nameSymbol] === middleware[nameSymbol]);
+      const i = middlewares.findIndex(m => getUniversalProp(m, nameSymbol) === getUniversalProp(middleware, nameSymbol));
       if (i !== -1) {
         middlewares.splice(i, 1);
       }
