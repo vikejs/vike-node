@@ -1,5 +1,6 @@
 import oxc from 'oxc-transform'
 import type { UnpluginFactory } from 'unplugin'
+import { assert } from '../utils/assert.js'
 
 const re = /^photonjs:virtual-apply:(?<condition>dev|edge|node):(?<server>[^:]+)(?<rest>.*)/
 interface MatchGroups {
@@ -50,8 +51,6 @@ export function apply(app: Parameters<typeof applyAdapter>[0], additionalMiddlew
       middlewares.push(middleware);
     }
   }
-
-  console.log('APPLY', middlewares)
   
   applyAdapter(app, middlewares);
 
@@ -73,10 +72,28 @@ export type RuntimeAdapter = RuntimeAdapterTarget<${JSON.stringify(match.server)
   }
 }
 
-// TODO add option to support emitting multiple files per condition/server combo
-//  with ids like "photonjs:virtual-apply:dev:elysia:1"
+const entries = {
+  // dev
+  'elysia/apply.dev': 'photonjs:virtual-apply:dev:elysia',
+  'express/apply.dev': 'photonjs:virtual-apply:dev:express',
+  'fastify/apply.dev': 'photonjs:virtual-apply:dev:fastify',
+  'h3/apply.dev': 'photonjs:virtual-apply:dev:h3',
+  'hattip/apply.dev': 'photonjs:virtual-apply:dev:hattip',
+  'hono/apply.dev': 'photonjs:virtual-apply:dev:hono',
+  // edge
+  'elysia/apply.edge': 'photonjs:virtual-apply:edge:elysia',
+  'h3/apply.edge': 'photonjs:virtual-apply:edge:h3',
+  'hattip/apply.edge': 'photonjs:virtual-apply:edge:hattip',
+  'hono/apply.edge': 'photonjs:virtual-apply:edge:hono',
+  // node
+  'elysia/apply': 'photonjs:virtual-apply:node:elysia',
+  'express/apply': 'photonjs:virtual-apply:node:express',
+  'fastify/apply': 'photonjs:virtual-apply:node:fastify',
+  'h3/apply': 'photonjs:virtual-apply:node:h3',
+  'hattip/apply': 'photonjs:virtual-apply:node:hattip',
+  'hono/apply': 'photonjs:virtual-apply:node:hono'
+}
 
-// TODO option to opt-in to auto update of package.json file
 export const virtualApplyFactory: UnpluginFactory<undefined> = () => {
   return {
     name: 'photonjs:virtual-apply',
@@ -84,29 +101,8 @@ export const virtualApplyFactory: UnpluginFactory<undefined> = () => {
     esbuild: {
       config(opts) {
         opts.entryPoints ??= {}
-        if (Array.isArray(opts.entryPoints)) {
-          // TODO copy from from universal-middleware
-          throw new Error('TODO')
-        }
-        // dev
-        opts.entryPoints['elysia.dev'] = 'photonjs:virtual-apply:dev:elysia'
-        opts.entryPoints['express.dev'] = 'photonjs:virtual-apply:dev:express'
-        opts.entryPoints['fastify.dev'] = 'photonjs:virtual-apply:dev:fastify'
-        opts.entryPoints['h3.dev'] = 'photonjs:virtual-apply:dev:h3'
-        opts.entryPoints['hattip.dev'] = 'photonjs:virtual-apply:dev:hattip'
-        opts.entryPoints['hono.dev'] = 'photonjs:virtual-apply:dev:hono'
-        // edge
-        opts.entryPoints['elysia.edge'] = 'photonjs:virtual-apply:edge:elysia'
-        opts.entryPoints['h3.edge'] = 'photonjs:virtual-apply:edge:h3'
-        opts.entryPoints['hattip.edge'] = 'photonjs:virtual-apply:edge:hattip'
-        opts.entryPoints['hono.edge'] = 'photonjs:virtual-apply:edge:hono'
-        // node
-        opts.entryPoints.elysia = 'photonjs:virtual-apply:node:elysia'
-        opts.entryPoints.express = 'photonjs:virtual-apply:node:express'
-        opts.entryPoints.fastify = 'photonjs:virtual-apply:node:fastify'
-        opts.entryPoints.h3 = 'photonjs:virtual-apply:node:h3'
-        opts.entryPoints.hattip = 'photonjs:virtual-apply:node:hattip'
-        opts.entryPoints.hono = 'photonjs:virtual-apply:node:hono'
+        assert(!Array.isArray(opts.entryPoints))
+        Object.assign(opts.entryPoints, entries)
       }
     },
 
@@ -125,10 +121,12 @@ export const virtualApplyFactory: UnpluginFactory<undefined> = () => {
       if (!match) return
 
       const compiled = compile(id)
+      const fileName = Object.entries(entries).find(([, v]) => v === id)?.[0]
+      assert(fileName)
 
       this.emitFile({
         type: 'asset',
-        fileName: match.condition === 'node' ? `${match.server}.d.ts` : `${match.server}.${match.condition}.d.ts`,
+        fileName: `${fileName}.d.ts`,
         // biome-ignore lint/style/noNonNullAssertion: <explanation>
         source: compiled.declaration!
       })
