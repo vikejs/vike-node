@@ -5,7 +5,6 @@ import type {
   ServerOptions as ServerOptionsHTTP,
   ServerResponse
 } from 'node:http'
-import type { createServer as createServerHTTPS, ServerOptions as ServerOptionsHTTPS } from 'node:https'
 import type {
   createSecureServer as createServerHTTP2,
   Http2SecureServer,
@@ -14,6 +13,7 @@ import type {
   Http2ServerResponse,
   SecureServerOptions as ServerOptionsHTTP2
 } from 'node:http2'
+import type { createServer as createServerHTTPS, ServerOptions as ServerOptionsHTTPS } from 'node:https'
 import type { Socket } from 'node:net'
 import { assert } from '../utils/assert.js'
 
@@ -72,7 +72,7 @@ export function onReady(options: { port: number; isHttps?: boolean; onReady?: Ca
     if (import.meta.hot) {
       if (import.meta.hot.data.vikeServerStarted) {
         // @ts-ignore conflict between bun and vite types
-        import.meta.hot.send('vike-server:reloaded')
+        import.meta.hot.send('photonjs:reloaded')
         return
       }
       import.meta.hot.data.vikeServerStarted = true
@@ -155,7 +155,7 @@ function _installServerHMR(server: Server | Http2Server | Http2SecureServer) {
           resolve()
           // Signal that the server is properly closed, so that we can continue the hot-reload process
           // @ts-ignore conflict between bun and vite types
-          import.meta.hot?.send('vike-server:server-closed')
+          import.meta.hot?.send('photonjs:server-closed')
         })
       }
 
@@ -164,7 +164,7 @@ function _installServerHMR(server: Server | Http2Server | Http2SecureServer) {
 
       // Sent when vite server restarts
       // biome-ignore lint/style/noNonNullAssertion: <explanation>
-      import.meta.hot!.on('vike-server:close-server', callback)
+      import.meta.hot!.on('photonjs:close-server', callback)
     })
   }
 }
