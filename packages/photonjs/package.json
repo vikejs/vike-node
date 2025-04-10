@@ -10,6 +10,12 @@
     "./api": "./dist/api.js",
     "./dev": "./dist/dev.js",
     ".": "./dist/index.js",
+    "./hono": "./dist/hono.js",
+    "./express": "./dist/express.js",
+    "./hattip": "./dist/hattip.js",
+    "./fastify": "./dist/fastify.js",
+    "./h3": "./dist/h3.js",
+    "./elysia": "./dist/elysia.js",
     "./universal-middlewares": {
       "types": "./dist/universal.d.ts",
       "development": {
@@ -25,7 +31,7 @@
       "import": "./dist/universal.js",
       "default": "./dist/universal.js"
     },
-    "./hono": {
+    "./hono/apply": {
       "types": "./dist/hono/apply.d.ts",
       "development": {
         "types": "./dist/hono/apply.dev.d.ts",
@@ -40,7 +46,7 @@
       "import": "./dist/hono/apply.js",
       "default": "./dist/hono/apply.js"
     },
-    "./express": {
+    "./express/apply": {
       "types": "./dist/express/apply.d.ts",
       "development": {
         "types": "./dist/express/apply.dev.d.ts",
@@ -50,7 +56,7 @@
       "import": "./dist/express/apply.js",
       "default": "./dist/express/apply.js"
     },
-    "./hattip": {
+    "./hattip/apply": {
       "types": "./dist/hattip/apply.d.ts",
       "development": {
         "types": "./dist/hattip/apply.dev.d.ts",
@@ -65,7 +71,7 @@
       "import": "./dist/hattip/apply.js",
       "default": "./dist/hattip/apply.js"
     },
-    "./fastify": {
+    "./fastify/apply": {
       "types": "./dist/fastify/apply.d.ts",
       "development": {
         "types": "./dist/fastify/apply.dev.d.ts",
@@ -75,7 +81,7 @@
       "import": "./dist/fastify/apply.js",
       "default": "./dist/fastify/apply.js"
     },
-    "./h3": {
+    "./h3/apply": {
       "types": "./dist/h3/apply.d.ts",
       "development": {
         "types": "./dist/h3/apply.dev.d.ts",
@@ -90,7 +96,7 @@
       "import": "./dist/h3/apply.js",
       "default": "./dist/h3/apply.js"
     },
-    "./elysia": {
+    "./elysia/apply": {
       "types": "./dist/elysia/apply.d.ts",
       "development": {
         "types": "./dist/elysia/apply.dev.d.ts",

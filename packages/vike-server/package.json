@@ -24,7 +24,7 @@
       "import": "./dist/universal.js",
       "default": "./dist/universal.js"
     },
-    "./hono": {
+    "./hono/apply": {
       "types": "./dist/hono.d.ts",
       "development": {
         "types": "./dist/hono.dev.d.ts",
@@ -39,7 +39,7 @@
       "import": "./dist/hono.js",
       "default": "./dist/hono.js"
     },
-    "./express": {
+    "./express/apply": {
       "types": "./dist/express.d.ts",
       "development": {
         "types": "./dist/express.dev.d.ts",
@@ -49,7 +49,7 @@
       "import": "./dist/express.js",
       "default": "./dist/express.js"
     },
-    "./hattip": {
+    "./hattip/apply": {
       "types": "./dist/hattip.d.ts",
       "development": {
         "types": "./dist/hattip.dev.d.ts",
@@ -64,7 +64,7 @@
       "import": "./dist/hattip.js",
       "default": "./dist/hattip.js"
     },
-    "./fastify": {
+    "./fastify/apply": {
       "types": "./dist/fastify.d.ts",
       "development": {
         "types": "./dist/fastify.dev.d.ts",
@@ -74,7 +74,7 @@
       "import": "./dist/fastify.js",
       "default": "./dist/fastify.js"
     },
-    "./h3": {
+    "./h3/apply": {
       "types": "./dist/h3.d.ts",
       "development": {
         "types": "./dist/h3.dev.d.ts",
@@ -89,7 +89,7 @@
       "import": "./dist/h3.js",
       "default": "./dist/h3.js"
     },
-    "./elysia": {
+    "./elysia/apply": {
       "types": "./dist/elysia.d.ts",
       "development": {
         "types": "./dist/elysia.dev.d.ts",

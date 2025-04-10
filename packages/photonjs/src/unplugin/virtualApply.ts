@@ -2,21 +2,22 @@ import oxc from 'oxc-transform'
 import type { UnpluginFactory } from 'unplugin'
 import { assert } from '../utils/assert.js'
 
-const re = /^photonjs:virtual-apply:(?<condition>dev|edge|node):(?<server>[^:]+)(?<rest>.*)/
+const re_apply = /^photonjs:virtual-apply:(?<condition>dev|edge|node):(?<server>[^:]+)(?<rest>.*)/
+const re_index = /^photonjs:virtual-index:(?<server>[^:]+)(?<rest>.*)/
 interface MatchGroups {
-  condition: 'dev' | 'edge' | 'node'
+  condition?: 'dev' | 'edge' | 'node'
   server: string
   rest: string
 }
 
-function test(id: string): MatchGroups | null {
+function test(id: string, re: RegExp): MatchGroups | null {
   const match = id.match(re)
   if (!match) return null
   return match.groups as unknown as MatchGroups
 }
 
-function compile(id: string) {
-  const match = test(id)
+function compileApply(id: string) {
+  const match = test(id, re_apply)
   if (!match) throw new Error(`Invalid id ${id}`)
 
   //language=ts
@@ -70,7 +71,29 @@ export type RuntimeAdapter = RuntimeAdapterTarget<${JSON.stringify(match.server)
   }
 }
 
+function compileIndex(id: string) {
+  const match = test(id, re_index)
+  if (!match) throw new Error(`Invalid id ${id}`)
+
+  //language=ts
+  const code = `export { apply, type RuntimeAdapter } from '@photonjs/core/${match.server}/apply'
+export { serve } from '@photonjs/core/${match.server}/serve'
+`
+  const result = oxc.transform(`${match.server}.ts`, code, {
+    sourcemap: true,
+    typescript: {
+      declaration: {}
+    }
+  })
+
+  return {
+    ...match,
+    ...result
+  }
+}
+
 const entries = {
+  // -- apply
   // dev
   'elysia/apply.dev': 'photonjs:virtual-apply:dev:elysia',
   'express/apply.dev': 'photonjs:virtual-apply:dev:express',
@@ -89,7 +112,14 @@ const entries = {
   'fastify/apply': 'photonjs:virtual-apply:node:fastify',
   'h3/apply': 'photonjs:virtual-apply:node:h3',
   'hattip/apply': 'photonjs:virtual-apply:node:hattip',
-  'hono/apply': 'photonjs:virtual-apply:node:hono'
+  'hono/apply': 'photonjs:virtual-apply:node:hono',
+  // -- index,
+  elysia: 'photonjs:virtual-index:elysia',
+  express: 'photonjs:virtual-index:express',
+  fastify: 'photonjs:virtual-index:fastify',
+  h3: 'photonjs:virtual-index:h3',
+  hattip: 'photonjs:virtual-index:hattip',
+  hono: 'photonjs:virtual-index:hono'
 }
 
 export const virtualApplyFactory: UnpluginFactory<undefined> = () => {
@@ -101,38 +131,75 @@ export const virtualApplyFactory: UnpluginFactory<undefined> = () => {
         opts.entryPoints ??= {}
         assert(!Array.isArray(opts.entryPoints))
         Object.assign(opts.entryPoints, entries)
+
+        opts.external ??= []
+        opts.external.push('@photonjs/core/elysia/apply')
+        opts.external.push('@photonjs/core/elysia/serve')
+        opts.external.push('@photonjs/core/express/apply')
+        opts.external.push('@photonjs/core/express/serve')
+        opts.external.push('@photonjs/core/fastify/apply')
+        opts.external.push('@photonjs/core/fastify/serve')
+        opts.external.push('@photonjs/core/h3/apply')
+        opts.external.push('@photonjs/core/h3/serve')
+        opts.external.push('@photonjs/core/hattip/apply')
+        opts.external.push('@photonjs/core/hattip/serve')
+        opts.external.push('@photonjs/core/hono/apply')
+        opts.external.push('@photonjs/core/hono/serve')
       }
     },
 
     async resolveId(id) {
-      if (test(id)) {
+      if (test(id, re_apply) || test(id, re_index)) {
         return id
       }
     },
 
     loadInclude(id) {
-      return Boolean(test(id))
+      return Boolean(test(id, re_apply) || test(id, re_index))
     },
 
     load(id) {
-      const match = test(id)
-      if (!match) return
+      {
+        const match = test(id, re_apply)
+        if (match) {
+          const compiled = compileApply(id)
+          const fileName = Object.entries(entries).find(([, v]) => v === id)?.[0]
+          assert(fileName)
 
-      const compiled = compile(id)
-      const fileName = Object.entries(entries).find(([, v]) => v === id)?.[0]
-      assert(fileName)
+          this.emitFile({
+            type: 'asset',
+            fileName: `${fileName}.d.ts`,
+            // biome-ignore lint/style/noNonNullAssertion: <explanation>
+            source: compiled.declaration!
+          })
 
-      this.emitFile({
-        type: 'asset',
-        fileName: `${fileName}.d.ts`,
-        // biome-ignore lint/style/noNonNullAssertion: <explanation>
-        source: compiled.declaration!
-      })
+          return {
+            code: compiled.code,
+            // biome-ignore lint/style/noNonNullAssertion: <explanation>
+            map: compiled.map!
+          }
+        }
+      }
+      {
+        const match = test(id, re_index)
+        if (match) {
+          const compiled = compileIndex(id)
+          const fileName = Object.entries(entries).find(([, v]) => v === id)?.[0]
+          assert(fileName)
 
-      return {
-        code: compiled.code,
-        // biome-ignore lint/style/noNonNullAssertion: <explanation>
-        map: compiled.map!
+          this.emitFile({
+            type: 'asset',
+            fileName: `${fileName}.d.ts`,
+            // biome-ignore lint/style/noNonNullAssertion: <explanation>
+            source: compiled.declaration!
+          })
+
+          return {
+            code: compiled.code,
+            // biome-ignore lint/style/noNonNullAssertion: <explanation>
+            map: compiled.map!
+          }
+        }
       }
     }
   }

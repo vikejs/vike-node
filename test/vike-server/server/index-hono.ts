@@ -1,6 +1,5 @@
 import type { Server } from 'node:http'
-import { apply, type RuntimeAdapter } from '@photonjs/core/hono'
-import { serve } from '@photonjs/core/hono/serve'
+import { apply, type RuntimeAdapter, serve } from '@photonjs/core/hono'
 import { Hono } from 'hono'
 import { getMiddlewares } from 'vike-server/universal-middlewares'
 import { init } from '../database/todoItems'
