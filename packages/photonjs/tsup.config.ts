@@ -46,7 +46,8 @@ export default defineConfig([
     dts: true,
     outDir: 'dist',
     bundle: true,
-    treeshake: true
+    treeshake: true,
+    removeNodeProtocol: false
   },
   {
     entry: {
@@ -63,6 +64,7 @@ export default defineConfig([
     },
     dts: true,
     outDir: 'dist',
-    treeshake: true
+    treeshake: true,
+    removeNodeProtocol: false
   }
 ])
