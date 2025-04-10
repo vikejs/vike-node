@@ -1,6 +1,6 @@
 import type { Plugin } from 'vite'
-import { resolvePhotonConfig } from '../utils/resolvePhotonConfig.js'
 import type { PhotonConfig } from '../../types.js'
+import { resolvePhotonConfig } from '../utils/resolvePhotonConfig.js'
 
 export function resolvePhotonConfigPlugin(userConfig?: typeof PhotonConfig.infer): Plugin {
   return {
@@ -10,7 +10,7 @@ export function resolvePhotonConfigPlugin(userConfig?: typeof PhotonConfig.infer
     config() {
       if (userConfig) {
         return {
-          photonjs: userConfig
+          photonjs: resolvePhotonConfig(userConfig)
         }
       }
     },

@@ -90,14 +90,11 @@ export type GetPhotonCondition = (condition: 'dev' | 'edge' | 'node', server: st
 export function defineEntries(name: string, fn: GetPhotonCondition): Plugin {
   return {
     name: `photonjs:define-entries:${name}`,
-    // @ts-ignore
-    config() {
-      return {
-        photonjs: {
-          // TODO check if those are properly merged by Vite
-          middlewares: [fn]
-        }
-      }
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    config(userConfig: any) {
+      userConfig.photonjs ??= {}
+      userConfig.photonjs.middlewares ??= []
+      userConfig.photonjs.middlewares.push(fn)
     }
   }
 }
