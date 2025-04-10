@@ -1,10 +1,10 @@
+import type { Server } from 'node:http'
 import { Worker } from 'node:worker_threads'
+import { apply, serve } from '@photonjs/core/express'
 import express from 'express'
-import { apply } from 'vike-server/express'
-import { serve } from 'vike-server/express/serve'
+import { getMiddlewares } from 'vike-server/universal-middlewares'
 import { init } from '../database/todoItems.js'
 import { two } from './shared-chunk.js'
-import type { Server } from 'node:http'
 
 if (two() !== 2) {
   throw new Error()
@@ -21,14 +21,17 @@ async function startServer() {
     next()
   })
 
-  apply(app, {
-    pageContext(runtime) {
-      return {
-        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-        xRuntime: (runtime.req as any).xRuntime
+  apply(
+    app,
+    getMiddlewares<'express'>({
+      pageContext(runtime) {
+        return {
+          // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+          xRuntime: (runtime.req as any).xRuntime
+        }
       }
-    }
-  })
+    })
+  )
 
   const port = process.env.PORT || 3000
 

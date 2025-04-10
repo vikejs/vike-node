@@ -20,6 +20,8 @@ function compileApply(id: string) {
   const match = test(id, re_apply)
   if (!match) throw new Error(`Invalid id ${id}`)
 
+  const isAsync = match.server === 'fastify'
+
   //language=ts
   const code = `import { apply as applyAdapter } from '@universal-middleware/${match.server}';
 import getUniversalMiddlewares from 'photonjs:get-middlewares:${match.condition}:${match.server}${match.rest}';
@@ -32,7 +34,7 @@ function isValidUniversalMiddleware(middleware: unknown): asserts middleware is 
   }
 }
 
-export function apply(app: Parameters<typeof applyAdapter>[0], additionalMiddlewares?: UniversalMiddleware[]): Parameters<typeof applyAdapter>[0] {
+export ${isAsync ? 'async' : ''} function apply(app: Parameters<typeof applyAdapter>[0], additionalMiddlewares?: UniversalMiddleware[]): ${isAsync ? 'Promise<Parameters<typeof applyAdapter>[0]>' : 'Parameters<typeof applyAdapter>[0]'} {
   const middlewares = getUniversalMiddlewares();
   ${match.condition === 'dev' ? 'middlewares.unshift(devServerMiddleware());' : ''}
 
@@ -50,8 +52,8 @@ export function apply(app: Parameters<typeof applyAdapter>[0], additionalMiddlew
       middlewares.push(middleware);
     }
   }
-  
-  applyAdapter(app, middlewares);
+
+  ${isAsync ? 'await' : ''} applyAdapter(app, middlewares);
 
   return app;
 }

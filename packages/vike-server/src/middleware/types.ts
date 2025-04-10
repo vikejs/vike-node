@@ -9,8 +9,3 @@ export type VikeOptions<T = unknown> = {
   static?: boolean | string | { root?: string; cache?: boolean }
   onError?: (err: unknown) => void
 }
-
-/**
- * @internal
- */
-export type VikeOptionsInternal = { vite?: { middlewareMode?: boolean } }

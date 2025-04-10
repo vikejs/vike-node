@@ -1,8 +1,8 @@
-import { createApp, createRouter, eventHandler } from 'h3'
-import { apply } from 'vike-server/h3'
-import { serve } from 'vike-server/h3/serve'
-import { init } from '../database/todoItems'
 import type { Server } from 'node:http'
+import { apply, serve } from '@photonjs/core/h3'
+import { createApp, createRouter, eventHandler } from 'h3'
+import { init } from '../database/todoItems'
+import { getMiddlewares } from 'vike-server/universal-middlewares'
 
 async function startServer() {
   await init()
@@ -20,13 +20,16 @@ async function startServer() {
     })
   )
 
-  apply(app, {
-    pageContext(runtime) {
-      return {
-        xRuntime: runtime.h3.context.xRuntime
+  apply(
+    app,
+    getMiddlewares<'h3'>({
+      pageContext(runtime) {
+        return {
+          xRuntime: runtime.h3.context.xRuntime
+        }
       }
-    }
-  })
+    })
+  )
 
   return serve(app, {
     port: +port,

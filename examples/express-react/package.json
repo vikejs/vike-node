@@ -5,6 +5,7 @@
     "prod": "vike build && cross-env NODE_ENV=production node dist/server/index.js"
   },
   "dependencies": {
+    "@photonjs/core": "^0",
     "@vitejs/plugin-react": "^4.3.4",
     "cross-env": "^7.0.3",
     "express": "^5.1.0",
