@@ -9,7 +9,6 @@
     "./plugin": "./dist/plugin.js",
     "./api": "./dist/api.js",
     "./dev": "./dist/dev.js",
-    "./fallback": "./fallback.js",
     ".": "./dist/index.js",
     "./hono": "./dist/hono.js",
     "./express": "./dist/express.js",
@@ -287,8 +286,7 @@
     "vite": "^6.2.5"
   },
   "files": [
-    "dist/",
-    "fallback.js"
+    "dist/"
   ],
   "repository": "github:vikejs/vike-server",
   "license": "MIT"
