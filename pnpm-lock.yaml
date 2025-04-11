@@ -128,9 +128,9 @@ importers:
       arktype:
         specifier: ^2.1.18
         version: 2.1.18
-      esbuild:
-        specifier: ^0.25.2
-        version: 0.25.2
+      hono:
+        specifier: ^4.7.5
+        version: 4.7.5
       oxc-transform:
         specifier: ^0.63.0
         version: 0.63.0
@@ -159,15 +159,15 @@ importers:
       elysia:
         specifier: ^1.2.25
         version: 1.2.25(@sinclair/typebox@0.34.33)(typescript@5.8.3)
+      esbuild:
+        specifier: ^0.25.2
+        version: 0.25.2
       fastify:
         specifier: ^5.2.2
         version: 5.2.2
       h3:
         specifier: ^1.15.1
         version: 1.15.1
-      hono:
-        specifier: ^4.7.5
-        version: 4.7.5
       magic-string:
         specifier: ^0.30.17
         version: 0.30.17

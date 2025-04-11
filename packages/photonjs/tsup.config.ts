@@ -1,11 +1,25 @@
 import { builtinModules } from 'node:module'
-import { defineConfig } from 'tsup'
+import { defineConfig, type Options as TsupOptions } from 'tsup'
 import virtualApply from './src/unplugin/esbuild.js'
 
 const externalServers: (string | RegExp)[] = ['elysia', 'fastify', 'h3', 'hono']
 
+const commonOptions: TsupOptions = {
+  format: ['esm'],
+  target: 'es2022',
+  esbuildOptions(opts) {
+    opts.outbase = 'src'
+  },
+  dts: true,
+  outDir: 'dist',
+  treeshake: true,
+  removeNodeProtocol: false
+}
+
 export default defineConfig([
   {
+    ...commonOptions,
+    platform: 'neutral',
     entry: {
       // serve (noop)
       'elysia/serve': './src/serve/noop/elysia.ts',
@@ -32,39 +46,20 @@ export default defineConfig([
       'hattip/serve.node': './src/serve/node/hattip.ts',
       'hono/serve.node': './src/serve/node/hono.ts'
     },
-    format: ['esm'],
-    platform: 'neutral',
-    target: 'es2022',
-    esbuildOptions(opts) {
-      opts.outbase = 'src'
-    },
     esbuildPlugins: [virtualApply()],
     external: externalServers
       .concat(...builtinModules.flatMap((e) => [e, `node:${e}`]))
       .concat(/^photonjs:get-middlewares:/)
-      .concat('@photonjs/core/dev'),
-    dts: true,
-    outDir: 'dist',
-    bundle: true,
-    treeshake: true,
-    removeNodeProtocol: false
+      .concat('@photonjs/core/dev')
   },
   {
+    ...commonOptions,
+    platform: 'node',
     entry: {
       plugin: './src/plugin/index.ts',
       api: './src/api.ts',
       dev: './src/dev.ts',
       index: './src/index.ts'
-    },
-    format: ['esm'],
-    platform: 'node',
-    target: 'es2022',
-    esbuildOptions(opts) {
-      opts.outbase = 'src'
-    },
-    dts: true,
-    outDir: 'dist',
-    treeshake: true,
-    removeNodeProtocol: false
+    }
   }
 ])

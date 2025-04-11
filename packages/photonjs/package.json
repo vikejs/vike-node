@@ -9,6 +9,7 @@
     "./plugin": "./dist/plugin.js",
     "./api": "./dist/api.js",
     "./dev": "./dist/dev.js",
+    "./fallback": "./fallback.js",
     ".": "./dist/index.js",
     "./hono": "./dist/hono.js",
     "./express": "./dist/express.js",
@@ -253,7 +254,7 @@
     "@universal-middleware/hono": "^0.4.8",
     "@universal-middleware/sirv": "^0.1.18",
     "arktype": "^2.1.18",
-    "esbuild": "^0.25.2",
+    "hono": "^4.7.5",
     "oxc-transform": "^0.63.0"
   },
   "peerDependencies": {
@@ -274,9 +275,9 @@
     "@types/deno": "^2.2.0",
     "@types/node": "^20.17.30",
     "elysia": "^1.2.25",
+    "esbuild": "^0.25.2",
     "fastify": "^5.2.2",
     "h3": "^1.15.1",
-    "hono": "^4.7.5",
     "magic-string": "^0.30.17",
     "rollup": "4.38.0",
     "tsup": "^8.4.0",
@@ -286,7 +287,8 @@
     "vite": "^6.2.5"
   },
   "files": [
-    "dist/"
+    "dist/",
+    "fallback.js"
   ],
   "repository": "github:vikejs/vike-server",
   "license": "MIT"
