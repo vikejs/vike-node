@@ -1,5 +1,4 @@
 import type { Plugin } from 'vite'
-import { assertUsage } from '../../utils/assert.js'
 
 export type GetPhotonCondition = (condition: 'dev' | 'edge' | 'node', server: string) => string
 
@@ -19,13 +18,10 @@ export function definePhotonLib(name: string, options?: DefinePhotonLibOptions):
 
           if (!resolved) {
             const resolvedPkg = await this.resolve(name)
-
-            assertUsage(
-              resolvedPkg,
-              `Cannot resolve "${name}". Make sure photonjs Vite plugin is initialized with a valid package name`
-            )
-
-            return this.resolve(id, resolvedPkg.id, opts)
+            // Multiple libs can try to resolve this
+            if (resolvedPkg) {
+              return this.resolve(id, resolvedPkg.id, opts)
+            }
           }
         }
       }
