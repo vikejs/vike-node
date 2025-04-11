@@ -15,7 +15,6 @@ function commonConfig(): Plugin[] {
         }
         return {
           resolve: {
-            dedupe: ['@photonjs/core'],
             noExternal: '@photonjs/core',
             externalConditions:
               config.consumer === 'server'

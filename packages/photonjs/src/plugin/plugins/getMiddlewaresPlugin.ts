@@ -83,18 +83,3 @@ export function getMiddlewaresPlugin(): Plugin[] {
     }
   ]
 }
-
-export type GetPhotonCondition = (condition: 'dev' | 'edge' | 'node', server: string) => string
-
-// TODO move as part of the API
-export function defineEntries(name: string, fn: GetPhotonCondition): Plugin {
-  return {
-    name: `photonjs:define-entries:${name}`,
-    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-    config(userConfig: any) {
-      userConfig.photonjs ??= {}
-      userConfig.photonjs.middlewares ??= []
-      userConfig.photonjs.middlewares.push(fn)
-    }
-  }
-}
