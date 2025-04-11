@@ -18,7 +18,7 @@ export function resolvePhotonConfigPlugin(userConfig?: typeof PhotonConfig.infer
     configResolved: {
       order: 'pre',
       handler(config) {
-        config.photonjs = resolvePhotonConfig(config.photonjs)
+        config.photonjs = resolvePhotonConfig(config.photonjs, true)
       }
     }
   }

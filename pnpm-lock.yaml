@@ -57,6 +57,39 @@ importers:
         specifier: ^6.2.5
         version: 6.2.5(@types/node@20.17.30)
 
+  examples/fallback-react:
+    dependencies:
+      '@photonjs/core':
+        specifier: ^0
+        version: link:../../packages/photonjs
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.3.4(vite@6.2.5(@types/node@20.17.30))
+      cross-env:
+        specifier: ^7.0.3
+        version: 7.0.3
+      hono:
+        specifier: ^4.7.5
+        version: 4.7.5
+      react:
+        specifier: ^18.3.1
+        version: 18.3.1
+      react-dom:
+        specifier: ^18.3.1
+        version: 18.3.1(react@18.3.1)
+      vike:
+        specifier: ^0.4.228
+        version: 0.4.228(react-streaming@0.4.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@6.2.5(@types/node@20.17.30))
+      vike-react:
+        specifier: ^0.6.1
+        version: 0.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.228(react-streaming@0.4.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@6.2.5(@types/node@20.17.30)))
+      vike-server:
+        specifier: ^1.0.14
+        version: link:../../packages/vike-server
+      vite:
+        specifier: ^6.2.5
+        version: 6.2.5(@types/node@20.17.30)
+
   examples/hono-react:
     dependencies:
       '@photonjs/core':

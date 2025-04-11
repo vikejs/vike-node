@@ -29,7 +29,7 @@ export type PhotonEntry = typeof PhotonEntry.infer
 export type GetPhotonCondition = (condition: 'dev' | 'edge' | 'node', server: string) => string
 
 export const PhotonConfig = type('string').or({
-  entry: PhotonEntry.or({
+  'entry?': PhotonEntry.or({
     index: type('string').or(PhotonEntry),
     '[string]': type('string').or(PhotonEntry)
   }).or('string'),

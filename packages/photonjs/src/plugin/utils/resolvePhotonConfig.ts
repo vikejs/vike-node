@@ -27,16 +27,16 @@ function entriesToPhoton(
   return Object.fromEntries(Object.entries(entry).map(([key, value]) => [key, entryToPhoton(value)]))
 }
 
-export function resolvePhotonConfig(config: PhotonConfig | undefined): PhotonConfigResolved {
+export function resolvePhotonConfig(config: PhotonConfig | undefined, fallback?: boolean): PhotonConfigResolved {
   const out = PhotonConfig.pipe.try((c) => {
     const toPhotonEntry = match
       .in<PhotonConfig>()
       .match({
         string: (v) => entriesToPhoton(v)
       })
-      .default(
+      .case(
+        { entry: 'unknown' },
         match
-          .in<PhotonConfig>()
           .at('entry')
           .match({
             string: (v) => entriesToPhoton(v.entry)
@@ -45,6 +45,17 @@ export function resolvePhotonConfig(config: PhotonConfig | undefined): PhotonCon
           .case({ '[string]': 'string' }, (v) => entriesToPhoton(v.entry))
           .case({ '[string]': PhotonEntry }, (v) => entriesToPhoton(v.entry))
           .default('assert')
+      )
+      .default(
+        fallback
+          ? // Fallback to a simple Hono server for now for simplicity
+            () =>
+              entriesToPhoton({
+                id: '@photonjs/core/fallback',
+                type: 'server',
+                server: 'hono'
+              })
+          : 'assert'
       )
 
     const toHmr = match
