@@ -7,7 +7,7 @@ export interface DefinePhotonLibOptions {
 }
 
 export function definePhotonLib(name: string, options?: DefinePhotonLibOptions): Plugin[] {
-  return [
+  const plugins: Plugin[] = [
     {
       name: `photonjs:resolve-virtual-importer:${name}`,
       enforce: 'post',
@@ -25,8 +25,11 @@ export function definePhotonLib(name: string, options?: DefinePhotonLibOptions):
           }
         }
       }
-    },
-    {
+    }
+  ]
+
+  if (options?.resolveMiddlewares) {
+    plugins.push({
       name: `photonjs:define-middlewares:${name}`,
       config() {
         if (options?.resolveMiddlewares) {
@@ -37,6 +40,8 @@ export function definePhotonLib(name: string, options?: DefinePhotonLibOptions):
           }
         }
       }
-    }
-  ]
+    })
+  }
+
+  return plugins
 }
