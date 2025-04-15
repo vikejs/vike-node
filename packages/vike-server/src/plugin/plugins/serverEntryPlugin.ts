@@ -65,7 +65,7 @@ export function serverEntryPlugin(): Plugin[] {
       },
 
       buildEnd() {
-        assert(serverEntryInjected)
+        assertUsage(serverEntryInjected, 'Failed to inject virtual server entry.')
       },
 
       transform(code, id) {
