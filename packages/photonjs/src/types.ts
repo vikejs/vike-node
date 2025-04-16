@@ -1,58 +1,23 @@
-import { type } from 'arktype'
-import type { BuildOptions } from 'esbuild'
+import type {
+  PhotonConfig,
+  PhotonConfigResolved,
+  PhotonEntryAuto,
+  PhotonEntryBase,
+  PhotonEntryServer,
+  PhotonEntryUniversalHandler
+} from './validators/types.js'
 
-export const SupportedServers = type("'hono' | 'hattip' | 'elysia' | 'express' | 'fastify' | 'h3'")
+declare global {
+  export namespace Photon {
+    export interface Config extends PhotonConfig {}
 
-export type SupportedServers = typeof SupportedServers.infer
+    export interface ConfigResolved extends PhotonConfigResolved {}
 
-export const PhotonEntryServer = type({
-  id: 'string',
-  'resolvedId?': 'string',
-  type: "'server'",
-  server: SupportedServers
-})
+    export interface EntryBase extends PhotonEntryBase {}
+    export interface EntryAuto extends EntryBase, PhotonEntryAuto {}
+    export interface EntryServer extends EntryBase, PhotonEntryServer {}
+    export interface EntryUniversalHandler extends EntryBase, PhotonEntryUniversalHandler {}
 
-export const PhotonEntryUniversalHandler = type({
-  id: 'string',
-  'resolvedId?': 'string',
-  type: "'universal-handler'"
-})
-
-export const PhotonEntry = type(PhotonEntryServer).or(PhotonEntryUniversalHandler).or({
-  id: 'string',
-  'resolvedId?': 'string',
-  'type?': "'auto'"
-})
-
-export type PhotonEntry = typeof PhotonEntry.infer
-
-export type GetPhotonCondition = (condition: 'dev' | 'edge' | 'node', server: string) => string
-
-export const PhotonConfig = type('string').or({
-  'entry?': PhotonEntry.or({
-    index: type('string').or(PhotonEntry),
-    '[string]': type('string').or(PhotonEntry)
-  }).or('string'),
-  'hmr?': "boolean | 'prefer-restart'",
-  // TODO remove
-  'standalone?': type('boolean').or({
-    esbuild: 'object' as type.cast<Omit<BuildOptions, 'manifest'>>
-  }),
-  'middlewares?': 'object' as type.cast<GetPhotonCondition[]>
-})
-
-export type PhotonConfig = typeof PhotonConfig.infer
-
-export const PhotonConfigResolved = type({
-  entry: {
-    index: PhotonEntry,
-    '[string]': PhotonEntry
-  },
-  hmr: "boolean | 'prefer-restart'",
-  standalone: type('boolean').or({
-    esbuild: 'object' as type.cast<Omit<BuildOptions, 'manifest'>>
-  }),
-  'middlewares?': 'object' as type.cast<GetPhotonCondition[]>
-})
-
-export type PhotonConfigResolved = typeof PhotonConfigResolved.infer
+    export type Entry = EntryAuto | EntryServer | EntryUniversalHandler
+  }
+}

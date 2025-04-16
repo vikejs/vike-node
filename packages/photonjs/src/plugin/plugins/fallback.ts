@@ -8,6 +8,7 @@ function fallback(): Plugin {
 
     resolveId(id) {
       if (id === 'photonjs:fallback-entry') {
+        // FIXME
         return id
       }
     },

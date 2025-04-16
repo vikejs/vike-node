@@ -1,9 +1,10 @@
 import { match, type } from 'arktype'
 import type { BuildOptions } from 'esbuild'
-import { PhotonConfig, PhotonConfigResolved, PhotonEntry } from '../../types.js'
-import { asPhotonEntryId } from './entry.js'
+import { asPhotonEntryId } from '../plugin/utils/entry.js'
+import type { PhotonConfig, PhotonConfigResolved, PhotonEntry } from './types.js'
+import * as Validators from './validators.js'
 
-function entryToPhoton(entry: string | typeof PhotonEntry.infer): PhotonEntry {
+function entryToPhoton(entry: string | PhotonEntry): PhotonEntry {
   if (typeof entry === 'string')
     return {
       id: asPhotonEntryId(entry),
@@ -28,7 +29,7 @@ function entriesToPhoton(
 }
 
 export function resolvePhotonConfig(config: PhotonConfig | undefined, fallback?: boolean): PhotonConfigResolved {
-  const out = PhotonConfig.pipe.try((c) => {
+  const out = Validators.PhotonConfig.pipe.try((c) => {
     const toPhotonEntry = match
       .in<PhotonConfig>()
       .match({
@@ -43,7 +44,7 @@ export function resolvePhotonConfig(config: PhotonConfig | undefined, fallback?:
           })
           .case({ id: 'string' }, (v) => entriesToPhoton(v.entry))
           .case({ '[string]': 'string' }, (v) => entriesToPhoton(v.entry))
-          .case({ '[string]': PhotonEntry }, (v) => entriesToPhoton(v.entry))
+          .case({ '[string]': Validators.PhotonEntry }, (v) => entriesToPhoton(v.entry))
           .default('assert')
       )
       .default(
@@ -60,9 +61,7 @@ export function resolvePhotonConfig(config: PhotonConfig | undefined, fallback?:
 
     const toHmr = match
       .in<PhotonConfig>()
-      .match({
-        'boolean | "prefer-restart"': (v) => v
-      })
+      .case({ hmr: 'boolean | "prefer-restart"' }, (v) => v.hmr)
       .default(() => true)
 
     const toStandalone = match
@@ -76,18 +75,29 @@ export function resolvePhotonConfig(config: PhotonConfig | undefined, fallback?:
       .case({ middlewares: 'object' }, (v) => v.middlewares)
       .default(() => [])
 
+    const toRest = match
+      .in<PhotonConfig>()
+      .case({ '[string]': 'unknown' }, (v) => {
+        const { entry, hmr, standalone, middlewares, ...rest } = v
+        return rest
+      })
+      .default(() => ({}))
+
     const entry = toPhotonEntry(c)
     const hmr = toHmr(c)
     const standalone = toStandalone(c)
     const middlewares = toMiddlewares(c)
+    // Allows Photon targets to add custom options
+    const rest = toRest(c)
 
     return {
       entry,
       hmr,
       standalone,
-      middlewares
+      middlewares,
+      ...rest
     }
-  }, PhotonConfigResolved)(config)
+  }, Validators.PhotonConfigResolved)(config)
 
   if (out instanceof type.errors) return out.throw()
   return out

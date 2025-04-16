@@ -1,7 +1,7 @@
 import type { ModuleInfo, PluginContext } from 'rollup'
 import type { Plugin } from 'vite'
-import type { PhotonEntryServer, SupportedServers } from '../../types.js'
 import { assert, assertUsage } from '../../utils/assert.js'
+import type { PhotonEntryServer, SupportedServers } from '../../validators/types.js'
 import { assertPhotonEntryId, isPhotonEntryId, isPhotonMeta, stripPhotonEntryId } from '../utils/entry.js'
 
 const idsToServers: Record<string, SupportedServers> = {
@@ -55,7 +55,7 @@ function computePhotonMeta(
     info.meta.photonjs.type = 'server'
     info.meta.photonjs.server = found
     entry.type = info.meta.photonjs.type
-    ;(entry as typeof PhotonEntryServer.infer).server = info.meta.photonjs.server
+    ;(entry as PhotonEntryServer).server = info.meta.photonjs.server
   } else if (info.hasDefaultExport) {
     info.meta.photonjs.type = 'universal-handler'
     entry.type = info.meta.photonjs.type

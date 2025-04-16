@@ -3,7 +3,6 @@ import esbuild, { type BuildOptions } from 'esbuild'
 import type { Plugin, ResolvedConfig, Rollup } from 'vite'
 import { assert } from '../../utils/assert.js'
 import { toPosixPath } from '../utils/filesystemPathHandling.js'
-import type { PhotonConfigResolved } from '@photonjs/core/api'
 
 const OPTIONAL_NPM_IMPORTS = [
   '@nestjs/microservices',
@@ -114,7 +113,7 @@ function createStandaloneIgnorePlugin(rollupResolve: (...args: any[]) => Promise
   }
 }
 
-function findRollupBundleEntries(bundle: Rollup.OutputBundle, vikeServerConfig: PhotonConfigResolved) {
+function findRollupBundleEntries(bundle: Rollup.OutputBundle, vikeServerConfig: Photon.ConfigResolved) {
   const entries = Object.keys(vikeServerConfig.entry)
 
   const chunks: Rollup.OutputChunk[] = []

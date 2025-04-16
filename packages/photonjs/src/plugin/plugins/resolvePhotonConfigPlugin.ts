@@ -1,8 +1,7 @@
 import type { Plugin } from 'vite'
-import type { PhotonConfig } from '../../types.js'
-import { resolvePhotonConfig } from '../utils/resolvePhotonConfig.js'
+import { resolvePhotonConfig } from '../../validators/coerce.js'
 
-export function resolvePhotonConfigPlugin(userConfig?: typeof PhotonConfig.infer): Plugin {
+export function resolvePhotonConfigPlugin(userConfig?: Photon.Config): Plugin {
   return {
     name: 'photonjs:resolve-config',
     enforce: 'pre',

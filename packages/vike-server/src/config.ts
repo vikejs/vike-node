@@ -1,4 +1,3 @@
-import type { PhotonConfig } from '@photonjs/core/api'
 import { photonjs } from '@photonjs/core/plugin'
 import type { Config } from 'vike/types'
 import { vikeServer } from './plugin/index.js'
@@ -25,7 +24,7 @@ const config = {
 declare global {
   namespace Vike {
     interface Config {
-      server?: PhotonConfig
+      server?: Photon.Config
     }
   }
 }

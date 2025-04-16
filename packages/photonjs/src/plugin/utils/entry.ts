@@ -1,6 +1,6 @@
-import { assert } from '../../utils/assert.js'
 import type { CustomPluginOptions } from 'rollup'
-import type { SupportedServers } from '../../types.js'
+import { assert } from '../../utils/assert.js'
+import type { SupportedServers } from '../../validators/types.js'
 
 export const virtualPhotonEntry = 'photonjs:entry'
 
