@@ -14,7 +14,7 @@ function photonjs(config?: Photon.Config) {
     resolvePhotonConfigPlugin(config),
     ...photonEntry(),
     fallback(),
-    devServer(),
+    devServer(config),
     getMiddlewaresPlugin()
   ]
 }

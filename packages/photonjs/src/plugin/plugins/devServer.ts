@@ -20,7 +20,7 @@ const VITE_HMR_PATH = '/__vite_hmr'
 const RESTART_EXIT_CODE = 33
 const IS_RESTARTER_SET_UP = '__PHOTON__IS_RESTARTER_SET_UP'
 
-export function devServer(): Plugin {
+export function devServer(config?: Photon.Config): Plugin {
   let resolvedEntryId: string
   let HMRServer: ReturnType<typeof createServer> | undefined
   let viteDevServer: ViteDevServer
@@ -114,7 +114,9 @@ export function devServer(): Plugin {
         setupErrorHandlers()
       }
       patchViteServer(vite)
-      initializeServerEntry(vite)
+      if (config?.autoServeIndex !== false) {
+        initializeServerEntry(vite)
+      }
     }
   }
 

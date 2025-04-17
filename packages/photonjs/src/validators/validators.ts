@@ -39,7 +39,8 @@ export const PhotonConfig = type({
   'standalone?': type('boolean').or({
     esbuild: 'object' as type.cast<Omit<BuildOptions, 'manifest'>>
   }),
-  'middlewares?': 'object' as type.cast<GetPhotonCondition[]>
+  'middlewares?': 'object' as type.cast<GetPhotonCondition[]>,
+  'autoServeIndex?': 'boolean'
 })
 
 export const PhotonConfigResolved = type({
