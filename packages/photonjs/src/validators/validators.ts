@@ -7,6 +7,7 @@ export const SupportedServers = type("'hono' | 'hattip' | 'elysia' | 'express' |
 
 export const PhotonEntryBase = type({
   id: 'string',
+  'route?': 'string',
   'resolvedId?': 'string'
 })
 
