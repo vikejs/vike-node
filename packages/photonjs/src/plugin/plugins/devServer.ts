@@ -7,12 +7,12 @@ import {
   type ViteDevServer
 } from 'vite'
 
+import { fork } from 'node:child_process'
+import pc from '@brillout/picocolors'
 import { globalStore } from '../../runtime/globalStore.js'
 import { assert, assertUsage } from '../../utils/assert.js'
 import { isBun } from '../utils/isBun.js'
 import { logViteInfo } from '../utils/logVite.js'
-import { fork } from 'node:child_process'
-import pc from '@brillout/picocolors'
 
 let fixApplied = false
 
@@ -50,6 +50,12 @@ export function devServer(): Plugin {
             path: VITE_HMR_PATH
           }
         }
+      }
+    },
+
+    configResolved(config) {
+      if (config.photonjs.hmr === 'prefer-restart') {
+        return setupProcessRestarter()
       }
     },
 
@@ -103,7 +109,8 @@ export function devServer(): Plugin {
       globalStore.setupHMRProxy = setupHMRProxy
       if (!fixApplied) {
         fixApplied = true
-        setupErrorStackRewrite(vite)
+        // FIXME properly test this before enabling it, it currently swallows errors
+        // setupErrorStackRewrite(vite)
         setupErrorHandlers()
       }
       patchViteServer(vite)
@@ -111,15 +118,13 @@ export function devServer(): Plugin {
     }
   }
 
+  // Bypass "vite dev" CLI checks on usage
   function patchViteServer(vite: ViteDevServer) {
-    const bindCLIShortcuts = vite.bindCLIShortcuts
-    vite.bindCLIShortcuts = (...args) => {
-      // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-      vite.httpServer = { on: () => {} } as any
-      bindCLIShortcuts(...args)
-      vite.httpServer = null
-      return
-    }
+    // @ts-ignore
+    vite.httpServer = { on: () => {} }
+    // @ts-ignore
+    vite.listen = () => {}
+    vite.printUrls = () => {}
   }
 
   function invalidateEntry(
