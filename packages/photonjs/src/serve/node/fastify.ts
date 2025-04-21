@@ -7,7 +7,8 @@ export function serve<App extends Parameters<typeof applyAdapter>[0]>(app: App, 
     const port = getPort(options)
     app.listen(
       {
-        port
+        port,
+        host: options?.hostname
       },
       onReady({ ...options, port })
     )

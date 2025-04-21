@@ -1,5 +1,5 @@
-import type { apply as applyAdapter } from '@universal-middleware/hono'
 import { serve as honoServe } from '@hono/node-server'
+import type { apply as applyAdapter } from '@universal-middleware/hono'
 import { getPort, installServerHMR, onReady } from '../utils.js'
 import type { MergedHonoServerOptions } from '../noop/hono-types.js'
 
@@ -14,6 +14,7 @@ export function serve<App extends Parameters<typeof applyAdapter>[0]>(app: App, 
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         ...(options as any),
         port,
+        hostname: options?.hostname,
         fetch: app.fetch
       },
       onReady({ isHttps, ...options, port })
