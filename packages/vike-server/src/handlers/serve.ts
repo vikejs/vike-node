@@ -5,7 +5,6 @@ import type {
   ServerOptions as ServerOptionsHTTP,
   ServerResponse
 } from 'node:http'
-import type { createServer as createServerHTTPS, ServerOptions as ServerOptionsHTTPS } from 'node:https'
 import type {
   createSecureServer as createServerHTTP2,
   Http2SecureServer,
@@ -14,6 +13,7 @@ import type {
   Http2ServerResponse,
   SecureServerOptions as ServerOptionsHTTP2
 } from 'node:http2'
+import type { createServer as createServerHTTPS, ServerOptions as ServerOptionsHTTPS } from 'node:https'
 import type { Socket } from 'node:net'
 import { assert } from '../utils/assert.js'
 
@@ -42,6 +42,10 @@ export interface ServerOptionsBase {
    * Server port
    */
   port?: number
+  /**
+   * Server hostname. Defaults to `localhost`.
+   */
+  hostname?: string
   /**
    * Callback triggered when the server is listening for connections.
    * By default, it prints a message to the console.
@@ -95,7 +99,8 @@ export function nodeServe(options: ServerOptions, handler: NodeHandler): ServerT
   options.onCreate?.(server)
   const isHttps = Boolean('cert' in serverOptions && serverOptions.cert)
   const port = getPort(options)
-  server.listen(port, onReady({ isHttps, ...options, port }))
+  const hostname = getHost(options)
+  server.listen(port, hostname, onReady({ isHttps, ...options, port }))
   return server
 }
 
@@ -103,7 +108,11 @@ export function denoServe(options: ServerOptions, handler: Handler) {
   const denoOptions = options.deno ?? {}
   const isHttps = 'cert' in denoOptions ? Boolean(denoOptions.cert) : false
   const port = getPort(options)
-  const server = Deno.serve({ ...denoOptions, port, onListen: onReady({ isHttps, ...options, port }) }, handler)
+  const hostname = getHost(options)
+  const server = Deno.serve(
+    { ...denoOptions, port, hostname, onListen: onReady({ isHttps, ...options, port }) },
+    handler
+  )
   // onCreate hook
   options.onCreate?.(server)
 }
@@ -112,7 +121,8 @@ export function bunServe(options: ServerOptions, handler: Handler) {
   const bunOptions = options.bun ?? {}
   const isHttps = 'tls' in bunOptions ? Boolean(bunOptions.tls) : false
   const port = getPort(options)
-  const server = Bun.serve({ ...options.bun, port, fetch: handler } as Parameters<typeof Bun.serve>[0])
+  const hostname = getHost(options)
+  const server = Bun.serve({ ...options.bun, port, hostname, fetch: handler } as Parameters<typeof Bun.serve>[0])
   // onCreate hook
   options.onCreate?.(server)
   onReady({ isHttps, ...options, port })()
@@ -120,6 +130,10 @@ export function bunServe(options: ServerOptions, handler: Handler) {
 
 export function getPort(options: ServerOptions) {
   return options.port ?? 3000
+}
+
+export function getHost(options: ServerOptions) {
+  return options.hostname ?? 'localhost'
 }
 
 /**

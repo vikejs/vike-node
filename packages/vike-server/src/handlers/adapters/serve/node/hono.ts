@@ -1,6 +1,6 @@
-import type { apply as applyAdapter } from '@universal-middleware/hono'
 import { serve as honoServe } from '@hono/node-server'
-import { getPort, installServerHMR, onReady } from '../../../serve.js'
+import type { apply as applyAdapter } from '@universal-middleware/hono'
+import { getHost, getPort, installServerHMR, onReady } from '../../../serve.js'
 import type { MergedHonoServerOptions } from '../hono-types.js'
 
 export function serve<App extends Parameters<typeof applyAdapter>[0]>(app: App, options: MergedHonoServerOptions) {
@@ -8,12 +8,14 @@ export function serve<App extends Parameters<typeof applyAdapter>[0]>(app: App, 
   const isHttps = Boolean('cert' in serverOptions && serverOptions.cert)
   function _serve() {
     const port = getPort(options)
+    const hostname = getHost(options)
     const server = honoServe(
       {
         overrideGlobalObjects: options?.overrideGlobalObjects ?? false,
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         ...(options as any),
         port,
+        hostname,
         fetch: app.fetch
       },
       onReady({ isHttps, ...options, port })
