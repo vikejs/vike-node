@@ -1,15 +1,14 @@
 import pc from '@brillout/picocolors'
 import type { apply as applyAdapter } from '@universal-middleware/fastify'
-import { getHost, getPort, installServerHMR, onReady, type ServerOptionsBase } from '../../../serve.js'
+import { getPort, installServerHMR, onReady, type ServerOptionsBase } from '../../../serve.js'
 
 export function serve<App extends Parameters<typeof applyAdapter>[0]>(app: App, options: ServerOptionsBase) {
   const _serve = () => {
     const port = getPort(options)
-    const host = getHost(options)
     app.listen(
       {
         port,
-        host
+        host: options?.hostname
       },
       onReady({ ...options, port })
     )

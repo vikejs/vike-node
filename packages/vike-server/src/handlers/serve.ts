@@ -43,7 +43,7 @@ export interface ServerOptionsBase {
    */
   port?: number
   /**
-   * Server hostname. Defaults to `localhost`.
+   * Server hostname. Defaults to the server default value.
    */
   hostname?: string
   /**
@@ -99,8 +99,12 @@ export function nodeServe(options: ServerOptions, handler: NodeHandler): ServerT
   options.onCreate?.(server)
   const isHttps = Boolean('cert' in serverOptions && serverOptions.cert)
   const port = getPort(options)
-  const hostname = getHost(options)
-  server.listen(port, hostname, onReady({ isHttps, ...options, port }))
+  if (options?.hostname) {
+    server.listen(port, options.hostname, onReady({ isHttps, ...options, port }))
+  } else {
+    server.listen(port, onReady({ isHttps, ...options, port }))
+  }
+
   return server
 }
 
@@ -108,9 +112,8 @@ export function denoServe(options: ServerOptions, handler: Handler) {
   const denoOptions = options.deno ?? {}
   const isHttps = 'cert' in denoOptions ? Boolean(denoOptions.cert) : false
   const port = getPort(options)
-  const hostname = getHost(options)
   const server = Deno.serve(
-    { ...denoOptions, port, hostname, onListen: onReady({ isHttps, ...options, port }) },
+    { ...denoOptions, port, hostname: options?.hostname, onListen: onReady({ isHttps, ...options, port }) },
     handler
   )
   // onCreate hook
@@ -121,8 +124,9 @@ export function bunServe(options: ServerOptions, handler: Handler) {
   const bunOptions = options.bun ?? {}
   const isHttps = 'tls' in bunOptions ? Boolean(bunOptions.tls) : false
   const port = getPort(options)
-  const hostname = getHost(options)
-  const server = Bun.serve({ ...options.bun, port, hostname, fetch: handler } as Parameters<typeof Bun.serve>[0])
+  const server = Bun.serve({ ...options.bun, port, hostname: options?.hostname, fetch: handler } as Parameters<
+    typeof Bun.serve
+  >[0])
   // onCreate hook
   options.onCreate?.(server)
   onReady({ isHttps, ...options, port })()
@@ -130,10 +134,6 @@ export function bunServe(options: ServerOptions, handler: Handler) {
 
 export function getPort(options: ServerOptions) {
   return options.port ?? 3000
-}
-
-export function getHost(options: ServerOptions) {
-  return options.hostname ?? 'localhost'
 }
 
 /**
