@@ -1,3 +1,12 @@
+## [1.0.15](https://github.com/vikejs/vike-server/compare/v1.0.14...v1.0.15) (2025-04-21)
+
+
+### Features
+
+* add `hostname` option to `serve` util ([27052a1](https://github.com/vikejs/vike-server/commit/27052a1e52b2089fa69ed043f6c8894b7726c36c))
+
+
+
 ## [1.0.14](https://github.com/vikejs/vike-server/compare/v1.0.13...v1.0.14) (2025-04-06)
 
 
