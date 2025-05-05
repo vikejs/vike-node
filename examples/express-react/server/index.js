@@ -1,8 +1,6 @@
 import { apply, serve } from '@photonjs/core/express'
 import express from 'express'
 
-startServer()
-
 function startServer() {
   const app = express()
   apply(app)
@@ -10,3 +8,5 @@ function startServer() {
 
   return serve(app, { port })
 }
+
+export default startServer()

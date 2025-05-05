@@ -1,4 +1,4 @@
-import { definePhotonLib } from '@photonjs/core/api'
+import { installPhoton } from '@photonjs/core/vite'
 import type { Plugin } from 'vite'
 import { serverEntryPlugin } from './plugins/serverEntryPlugin.js'
 import { standalonePlugin } from './plugins/standalonePlugin.js'
@@ -11,7 +11,7 @@ function vikeServer(): Plugin[] {
     vikeServerConfigToPhotonPlugin(),
     ...serverEntryPlugin(),
     standalonePlugin(),
-    ...definePhotonLib('vike-server', {
+    ...installPhoton('vike-server', {
       resolveMiddlewares() {
         return 'vike-server/universal-middlewares'
       }

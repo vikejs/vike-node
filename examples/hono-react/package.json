@@ -2,10 +2,10 @@
   "scripts": {
     "dev": "vike dev",
     "build": "vike build",
-    "prod": "vike build && cross-env NODE_ENV=production node dist/server/index.js"
+    "prod": "vike build && cross-env NODE_ENV=production node dist/server/index.mjs"
   },
   "dependencies": {
-    "@photonjs/core": "^0",
+    "@photonjs/core": "0.0.1-commit-54dbf6e",
     "@vitejs/plugin-react": "^4.3.4",
     "cross-env": "^7.0.3",
     "hono": "^4.7.5",

@@ -25,7 +25,7 @@ export function standalonePlugin(): Plugin {
     apply: 'build',
     applyToEnvironment(env) {
       if (env.name === 'ssr') {
-        return Boolean(env.config.photonjs.standalone)
+        return Boolean(env.config.photon.standalone)
       }
       return false
     },
@@ -37,7 +37,7 @@ export function standalonePlugin(): Plugin {
       root = toPosixPath(config.root)
       outDir = toPosixPath(config.build.outDir)
       outDirAbs = path.isAbsolute(outDir) ? outDir : path.posix.join(root, outDir)
-      const vikeServerConfig = this.environment.config.photonjs
+      const vikeServerConfig = this.environment.config.photon
       const entries = findRollupBundleEntries(bundle, vikeServerConfig)
       rollupEntryFilePaths = entries.reduce(
         (acc, cur) => {
@@ -49,7 +49,7 @@ export function standalonePlugin(): Plugin {
     },
     enforce: 'post',
     async closeBundle() {
-      const vikeServerConfig = this.environment.config.photonjs
+      const vikeServerConfig = this.environment.config.photon
       const userEsbuildOptions =
         typeof vikeServerConfig.standalone === 'object' && vikeServerConfig.standalone !== null
           ? vikeServerConfig.standalone.esbuild

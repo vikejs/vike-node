@@ -1,8 +1,6 @@
 import { apply, serve } from '@photonjs/core/hono'
 import { Hono } from 'hono'
 
-startServer()
-
 function startServer() {
   const app = new Hono()
   apply(app)
@@ -10,3 +8,5 @@ function startServer() {
 
   return serve(app, { port })
 }
+
+export default startServer()
