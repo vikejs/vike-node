@@ -12,6 +12,7 @@
     "noUncheckedIndexedAccess": true,
     "strict": true,
     "declaration": true,
+    "exactOptionalPropertyTypes": true,
     "outDir": "./dist/"
   }
 }

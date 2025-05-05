@@ -1,6 +1,6 @@
-import { vikeServer } from './plugin/index.js'
-import type { ConfigVikeServer } from './types.js'
+import { photon } from '@photonjs/core/vite'
 import type { Config } from 'vike/types'
+import { vikeServer } from './plugin/index.js'
 
 export { config as default }
 
@@ -10,14 +10,12 @@ const config = {
     vike: '>=0.4.228'
   },
   vite: {
-    plugins: [vikeServer()]
+    plugins: [photon(), vikeServer()]
   },
   vite6BuilderApp: true,
   meta: {
     server: {
       env: { config: true },
-      // The server entry can be overriden by vike-cloudflare and such
-      cumulative: true,
       global: true
     }
   }
@@ -26,10 +24,7 @@ const config = {
 declare global {
   namespace Vike {
     interface Config {
-      server?: ConfigVikeServer['server']
-    }
-    interface ConfigResolved {
-      server?: ConfigVikeServer['server'][]
+      server?: Photon.Config
     }
   }
 }

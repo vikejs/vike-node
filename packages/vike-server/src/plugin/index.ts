@@ -1,16 +1,20 @@
-export { vikeServer, vikeServer as default }
-
-import { commonConfig } from './plugins/commonConfig.js'
-import { devServerPlugin } from './plugins/devServerPlugin.js'
+import { installPhoton } from '@photonjs/core/vite'
+import type { Plugin } from 'vite'
 import { serverEntryPlugin } from './plugins/serverEntryPlugin.js'
 import { standalonePlugin } from './plugins/standalonePlugin.js'
+import { vikeServerConfigToPhotonPlugin } from './plugins/vikeServerConfigToPhotonPlugin.js'
 
-function vikeServer() {
+export { vikeServer, vikeServer as default }
+
+function vikeServer(): Plugin[] {
   return [
-    //
-    ...commonConfig(),
+    vikeServerConfigToPhotonPlugin(),
     ...serverEntryPlugin(),
-    devServerPlugin(),
-    standalonePlugin()
+    standalonePlugin(),
+    ...installPhoton('vike-server', {
+      resolveMiddlewares() {
+        return 'vike-server/universal-middlewares'
+      }
+    })
   ]
 }

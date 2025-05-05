@@ -29,10 +29,5 @@
   "engines": {
     "node": ">=20"
   },
-  "pnpm": {
-    "overrides": {
-      "rollup": "4.38.0"
-    }
-  },
   "packageManager": "pnpm@9.15.5"
 }

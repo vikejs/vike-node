@@ -1,8 +1,5 @@
+import { apply, serve } from '@photonjs/core/express'
 import express from 'express'
-import { apply } from 'vike-server/express'
-import { serve } from 'vike-server/express/serve'
-
-startServer()
 
 function startServer() {
   const app = express()
@@ -11,3 +8,5 @@ function startServer() {
 
   return serve(app, { port })
 }
+
+export default startServer()

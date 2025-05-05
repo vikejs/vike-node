@@ -1,8 +1,5 @@
+import { apply, serve } from '@photonjs/core/hono'
 import { Hono } from 'hono'
-import { apply } from 'vike-server/hono'
-import { serve } from 'vike-server/hono/serve'
-
-startServer()
 
 function startServer() {
   const app = new Hono()
@@ -11,3 +8,5 @@ function startServer() {
 
   return serve(app, { port })
 }
+
+export default startServer()
