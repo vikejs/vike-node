@@ -3,11 +3,12 @@
     "dev": "vike dev",
     "build": "vike build",
     "prepare": "pnpm prisma generate && pnpm prisma db push",
-    "prod": "pnpm run build && cross-env NODE_ENV=production node build/server/index.js"
+    "prod": "pnpm run build && cross-env NODE_ENV=production node build/server/index.mjs"
   },
   "dependencies": {
     "@hono/node-server": "^1.14.0",
     "@node-rs/argon2": "^2.0.2",
+    "@photonjs/core": "0.0.1-commit-54dbf6e",
     "@prisma/client": "^6.5.0",
     "@types/express": "^5.0.1",
     "@types/node": "^20.17.30",
