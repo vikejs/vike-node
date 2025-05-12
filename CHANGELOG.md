@@ -1,3 +1,12 @@
+## [1.0.16](https://github.com/vikejs/vike-server/compare/v1.0.15...v1.0.16) (2025-05-12)
+
+
+### Bug Fixes
+
+* better detection of runnable server-side environment ([56e5a4b](https://github.com/vikejs/vike-server/commit/56e5a4b99818fff9bbc3ac0984b608186c6475c2))
+
+
+
 ## [1.0.15](https://github.com/vikejs/vike-server/compare/v1.0.14...v1.0.15) (2025-04-21)
 
 
