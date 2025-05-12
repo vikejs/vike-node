@@ -15,7 +15,7 @@ export default {
 }
 ```
 
-#### `+config.ts`
+#### `pages/+config.ts`
 ```diff
 +import vikeServer from 'vike-server/config'
 
