@@ -5,12 +5,12 @@ Replace `vike-node` Vite plugin by `vike-server` Vike extension:
 
 #### `vite.config.ts`
 ```diff
-+import vike from 'vike/plugin'
+import vike from 'vike/plugin'
 -import vikeNode from 'vike-node/plugin'
 
 export default {
   // ...
--  plugins: [vikeNode('server/index.js')]
+-  plugins: [vike(), vikeNode('server/index.js')]
 +  plugins: [vike()]
 }
 ```
