@@ -12,8 +12,8 @@ importers:
         specifier: ^1.9.4
         version: 1.9.4
       '@brillout/test-e2e':
-        specifier: ^0.6.8
-        version: 0.6.8
+        specifier: ^0.6.10
+        version: 0.6.10
       '@brillout/test-types':
         specifier: ^0.1.15
         version: 0.1.15(typescript@5.8.3)
@@ -48,7 +48,7 @@ importers:
         specifier: ^0.6.1
         version: 0.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.228(react-streaming@0.4.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@6.3.5(@types/node@20.17.30)))
       vike-server:
-        specifier: ^1.0.15
+        specifier: ^1.0.16
         version: link:../../packages/vike-server
       vite:
         specifier: ^6.3.5
@@ -111,7 +111,7 @@ importers:
         specifier: ^0.6.1
         version: 0.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.228(react-streaming@0.4.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@6.3.5(@types/node@20.17.30)))
       vike-server:
-        specifier: ^1.0.15
+        specifier: ^1.0.16
         version: link:../../packages/vike-server
       vite:
         specifier: ^6.3.5
@@ -459,8 +459,8 @@ packages:
   '@brillout/require-shim@0.1.2':
     resolution: {integrity: sha512-3I4LRHnVZXoSAsEoni5mosq9l6eiJED58d9V954W4CIZ88AUfYBanWGBGbJG3NztaRTpFHEA6wB3Hn93BmmJdg==}
 
-  '@brillout/test-e2e@0.6.8':
-    resolution: {integrity: sha512-U22qsQSnPeRPrqlrXk4FgihUpkbziO2neD6kK8mbEq9pG+qivfU1fkLbTGrmjJ7b+L8keqD+xVp+zKuGufHVeA==}
+  '@brillout/test-e2e@0.6.10':
+    resolution: {integrity: sha512-eVXMzIXiw7M5TMMAmWmSry5DGWjioXFOkU8J74sjaTNLQjC8qkNp8Mi3/wI0KUlZLMmfo5QWV3z2ToCRAE5TGA==}
     hasBin: true
 
   '@brillout/test-types@0.1.15':
@@ -3261,7 +3261,7 @@ snapshots:
 
   '@brillout/require-shim@0.1.2': {}
 
-  '@brillout/test-e2e@0.6.8':
+  '@brillout/test-e2e@0.6.10':
     dependencies:
       '@brillout/part-regex': 0.1.4
       '@brillout/picocolors': 1.0.26
