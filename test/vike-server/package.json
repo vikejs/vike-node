@@ -30,7 +30,7 @@
     "typescript": "^5.8.3",
     "vike": "^0.4.228",
     "vike-server": "workspace:*",
-    "vite": "^6.2.5"
+    "vite": "^6.3.5"
   },
   "type": "module",
   "devDependencies": {

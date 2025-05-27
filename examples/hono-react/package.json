@@ -14,7 +14,7 @@
     "vike": "^0.4.228",
     "vike-react": "^0.6.1",
     "vike-server": "^1.0.15",
-    "vite": "^6.2.5"
+    "vite": "^6.3.5"
   },
   "type": "module"
 }
