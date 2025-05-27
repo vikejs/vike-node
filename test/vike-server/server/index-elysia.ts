@@ -33,4 +33,4 @@ async function startServer() {
   })
 }
 
-export default startServer()
+export default await startServer()

@@ -6,6 +6,7 @@ import { getTodoItems } from '../../database/todoItems'
 
 const onBeforeRender: OnBeforeRenderAsync = async (pageContext): ReturnType<OnBeforeRenderAsync> => {
   const todoItemsInitial = await getTodoItems()
+
   return {
     pageContext: {
       pageProps: {

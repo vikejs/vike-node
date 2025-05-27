@@ -1,5 +1,4 @@
 import type { Server } from 'node:http'
-import { Worker } from 'node:worker_threads'
 import { apply, serve } from '@photonjs/core/express'
 import express from 'express'
 import { getMiddlewares } from 'vike-server/universal-middlewares'
@@ -9,7 +8,6 @@ import { two } from './shared-chunk.js'
 if (two() !== 2) {
   throw new Error()
 }
-new Worker(new URL('./worker.js', import.meta.url))
 
 async function startServer() {
   await init()
@@ -47,4 +45,4 @@ async function startServer() {
   })
 }
 
-export default startServer()
+export default await startServer()

@@ -10,7 +10,7 @@ export function vikeServerConfigToPhotonPlugin(): Plugin {
 
       if (vikeConfig.config.server) {
         return {
-          photon: resolvePhotonConfig(vikeConfig.config.server ?? {})
+          photon: resolvePhotonConfig(vikeConfig.config.server)
         }
       }
     }

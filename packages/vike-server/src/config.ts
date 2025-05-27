@@ -1,5 +1,6 @@
 import { photon } from '@photonjs/core/vite'
 import type { Config } from 'vike/types'
+import type { BuildOptions } from 'esbuild'
 import { vikeServer } from './plugin/index.js'
 
 export { config as default }
@@ -24,7 +25,7 @@ const config = {
 declare global {
   namespace Vike {
     interface Config {
-      server?: Photon.Config
+      server?: Photon.Config & { standalone?: boolean | null | { esbuild: BuildOptions } }
     }
   }
 }

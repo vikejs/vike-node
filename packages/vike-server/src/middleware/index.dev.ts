@@ -9,4 +9,4 @@ export function getMiddlewares<T = unknown>(options?: VikeOptions<T>): Universal
   return [...vikeMiddlewares, renderPageHandler(options)]
 }
 
-export default getMiddlewares
+export default getMiddlewares()

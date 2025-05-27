@@ -1,8 +1,8 @@
 import type { Server } from 'node:http'
 import { apply, serve } from '@photonjs/core/h3'
 import { createApp, createRouter, eventHandler } from 'h3'
-import { init } from '../database/todoItems'
 import { getMiddlewares } from 'vike-server/universal-middlewares'
+import { init } from '../database/todoItems'
 
 async function startServer() {
   await init()
@@ -43,4 +43,4 @@ async function startServer() {
   })
 }
 
-export default startServer()
+export default await startServer()
