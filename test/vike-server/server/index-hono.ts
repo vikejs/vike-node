@@ -1,8 +1,8 @@
-import { Hono } from 'hono'
-import { apply } from 'vike-server/hono'
-import { serve } from 'vike-server/hono/serve'
-import { init } from '../database/todoItems'
 import type { Server } from 'node:http'
+import { apply, serve } from '@photonjs/core/hono'
+import { Hono } from 'hono'
+import { getMiddlewares } from 'vike-server/universal-middlewares'
+import { init } from '../database/todoItems'
 
 async function startServer() {
   await init()
@@ -19,13 +19,16 @@ async function startServer() {
     ctx.header('x-test', 'test')
   })
 
-  apply(app, {
-    pageContext(runtime) {
-      return {
-        xRuntime: runtime.hono.get('xRuntime')
+  apply(
+    app,
+    getMiddlewares<'hono'>({
+      pageContext(runtime) {
+        return {
+          xRuntime: runtime.hono.get('xRuntime')
+        }
       }
-    }
-  })
+    })
+  )
 
   return serve(app, {
     port: +port,
@@ -39,4 +42,4 @@ async function startServer() {
   })
 }
 
-export default startServer()
+export default await startServer()

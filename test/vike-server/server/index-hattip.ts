@@ -1,8 +1,8 @@
-import { createRouter, type RouterContext } from '@hattip/router'
-import { apply } from 'vike-server/hattip'
-import { serve } from 'vike-server/hattip/serve'
-import { init } from '../database/todoItems'
 import type { Server } from 'node:http'
+import { createRouter, type RouterContext } from '@hattip/router'
+import { apply, serve } from '@photonjs/core/hattip'
+import { getMiddlewares } from 'vike-server/universal-middlewares'
+import { init } from '../database/todoItems'
 
 declare module '@hattip/compose' {
   interface Locals {
@@ -22,13 +22,16 @@ async function startServer() {
     return response
   })
 
-  apply(app, {
-    pageContext(runtime) {
-      return {
-        xRuntime: (runtime.hattip as RouterContext).locals.xRuntime
+  apply(
+    app,
+    getMiddlewares<'hattip'>({
+      pageContext(runtime) {
+        return {
+          xRuntime: (runtime.hattip as RouterContext).locals.xRuntime
+        }
       }
-    }
-  })
+    })
+  )
 
   return serve(app, {
     port: +port,
@@ -42,4 +45,4 @@ async function startServer() {
   })
 }
 
-export default startServer()
+export default await startServer()

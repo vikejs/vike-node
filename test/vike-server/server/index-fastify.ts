@@ -1,9 +1,8 @@
 import type { Server } from 'node:http'
-import { Worker } from 'node:worker_threads'
+import { apply, serve } from '@photonjs/core/fastify'
 import fastify from 'fastify'
 import rawBody from 'fastify-raw-body'
-import { apply } from 'vike-server/fastify'
-import { serve } from 'vike-server/fastify/serve'
+import { getMiddlewares } from 'vike-server/universal-middlewares'
 import { init } from '../database/todoItems.js'
 import { two } from './shared-chunk.js'
 
@@ -12,8 +11,6 @@ Error.stackTraceLimit = Number.POSITIVE_INFINITY
 if (two() !== 2) {
   throw new Error()
 }
-
-new Worker(new URL('./worker.js', import.meta.url))
 
 async function startServer() {
   await init()
@@ -36,14 +33,17 @@ async function startServer() {
     done()
   })
 
-  await apply(app, {
-    pageContext(runtime) {
-      return {
-        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-        xRuntime: (runtime.fastify.request.routeOptions.config as any).xRuntime
+  await apply(
+    app,
+    getMiddlewares<'fastify'>({
+      pageContext(runtime) {
+        return {
+          // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+          xRuntime: (runtime.fastify.request.routeOptions.config as any).xRuntime
+        }
       }
-    }
-  })
+    })
+  )
 
   const port = process.env.PORT || 3000
   return serve(app, {
@@ -58,4 +58,4 @@ async function startServer() {
   })
 }
 
-export default startServer()
+export default await startServer()

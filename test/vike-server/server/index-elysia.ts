@@ -1,6 +1,6 @@
+import { apply, serve } from '@photonjs/core/elysia'
 import { Elysia } from 'elysia'
-import { apply } from 'vike-server/elysia'
-import { serve } from 'vike-server/elysia/serve'
+import { getMiddlewares } from 'vike-server/universal-middlewares'
 import { init } from '../database/todoItems'
 
 async function startServer() {
@@ -13,13 +13,16 @@ async function startServer() {
     ctx.set.headers['x-test'] = 'test'
   })
 
-  apply(app, {
-    pageContext(runtime) {
-      return {
-        xRuntime: (runtime.elysia.store as { xRuntime: string }).xRuntime
+  apply(
+    app,
+    getMiddlewares<'elysia'>({
+      pageContext(runtime) {
+        return {
+          xRuntime: (runtime.elysia.store as { xRuntime: string }).xRuntime
+        }
       }
-    }
-  })
+    })
+  )
 
   return serve(app, {
     port: +port,
@@ -30,4 +33,4 @@ async function startServer() {
   })
 }
 
-export default startServer()
+export default await startServer()

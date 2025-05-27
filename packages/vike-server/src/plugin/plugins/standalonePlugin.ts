@@ -1,10 +1,9 @@
 import path from 'node:path'
 import esbuild, { type BuildOptions } from 'esbuild'
+import { getVikeConfig } from 'vike/plugin'
 import type { Plugin, ResolvedConfig, Rollup } from 'vite'
-import type { ConfigVikeServerResolved } from '../../types.js'
 import { assert } from '../../utils/assert.js'
 import { toPosixPath } from '../utils/filesystemPathHandling.js'
-import { getVikeServerConfig } from '../utils/getVikeServerConfig.js'
 
 const OPTIONAL_NPM_IMPORTS = [
   '@nestjs/microservices',
@@ -27,7 +26,8 @@ export function standalonePlugin(): Plugin {
     apply: 'build',
     applyToEnvironment(env) {
       if (env.name === 'ssr') {
-        return Boolean(getVikeServerConfig(env.config).standalone)
+        const vikeConfig = getVikeConfig(env.config)
+        return Boolean(vikeConfig.config.server?.standalone)
       }
       return false
     },
@@ -39,7 +39,7 @@ export function standalonePlugin(): Plugin {
       root = toPosixPath(config.root)
       outDir = toPosixPath(config.build.outDir)
       outDirAbs = path.isAbsolute(outDir) ? outDir : path.posix.join(root, outDir)
-      const vikeServerConfig = getVikeServerConfig(config)
+      const vikeServerConfig = this.environment.config.photon
       const entries = findRollupBundleEntries(bundle, vikeServerConfig)
       rollupEntryFilePaths = entries.reduce(
         (acc, cur) => {
@@ -51,11 +51,9 @@ export function standalonePlugin(): Plugin {
     },
     enforce: 'post',
     async closeBundle() {
-      const vikeServerConfig = getVikeServerConfig(this.environment.config)
-      const userEsbuildOptions =
-        typeof vikeServerConfig.standalone === 'object' && vikeServerConfig.standalone !== null
-          ? vikeServerConfig.standalone.esbuild
-          : {}
+      const vikeConfig = getVikeConfig(this.environment.config)
+      const standalone = vikeConfig.config.server?.standalone
+      const userEsbuildOptions = typeof standalone === 'object' && standalone !== null ? standalone.esbuild : {}
 
       await buildWithEsbuild(userEsbuildOptions, this.environment.config)
     },
@@ -115,8 +113,8 @@ function createStandaloneIgnorePlugin(rollupResolve: (...args: any[]) => Promise
   }
 }
 
-function findRollupBundleEntries(bundle: Rollup.OutputBundle, vikeServerConfig: ConfigVikeServerResolved) {
-  const entries = Object.keys(vikeServerConfig.entry)
+function findRollupBundleEntries(bundle: Rollup.OutputBundle, vikeServerConfig: Photon.ConfigResolved) {
+  const entries = ['index', ...Object.keys(vikeServerConfig.handlers)]
 
   const chunks: Rollup.OutputChunk[] = []
   for (const key in bundle) {
