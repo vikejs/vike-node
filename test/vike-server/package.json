@@ -8,7 +8,7 @@
   "dependencies": {
     "@hono/node-server": "^1.14.0",
     "@node-rs/argon2": "^2.0.2",
-    "@photonjs/core": "0.0.1-commit-a096397",
+    "@photonjs/core": "0.0.1-commit-b6c66d7",
     "@prisma/client": "^6.5.0",
     "@types/express": "^5.0.1",
     "@types/node": "^20.17.30",
