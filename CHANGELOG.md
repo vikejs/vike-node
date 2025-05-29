@@ -6,12 +6,12 @@
 * set default stream type to Web Stream ([#120](https://github.com/vikejs/vike-server/issues/120)) ([6c18620](https://github.com/vikejs/vike-server/commit/6c18620847796a230b323c7c64b47899e9452b50))
 
 
-### BREAKING CHANGES
+### Minor breaking changes
 
 * If you're using `vike-{react,vue,solid}`, update to:
- - `vike-react@0.6.4` or above
- - `vike-vue@0.9.2` or above
- - `vike-solid@0.7.11` or above
+  - `vike-react@0.6.4` or above
+  - `vike-vue@0.9.2` or above
+  - `vike-solid@0.7.11` or above
 
 
 
