@@ -8,13 +8,13 @@
 
 ### MINOR BREAKING CHANGES
 
-> [!NOTE]
-> We recommend always updating `vike` and `vike-*` extensions together.
-
 * If you're using `vike-{react,vue,solid}`, update to:
   - `vike-react@0.6.4` or above
   - `vike-vue@0.9.2` or above
   - `vike-solid@0.7.11` or above
+
+> [!NOTE]
+> We recommend always updating `vike` and `vike-*` extensions together.
 
 
 
