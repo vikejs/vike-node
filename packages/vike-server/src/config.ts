@@ -13,12 +13,22 @@ const config = {
     plugins: [vikeServer()]
   },
   vite6BuilderApp: true,
+  // @ts-ignore
+  stream: {
+    enable: null,
+    type: 'web'
+  },
   meta: {
     server: {
       env: { config: true },
       // The server entry can be overriden by vike-cloudflare and such
       cumulative: true,
       global: true
+    },
+    // +stream is already defined by vike-{react,vue,solid} but we define it again here to avoid Vike throwing the "unknown config" error if the user doesn't use vike-{react,vue,solid}
+    stream: {
+      env: { server: true },
+      cumulative: true
     }
   }
 } satisfies Config
