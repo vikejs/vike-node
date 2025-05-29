@@ -15,7 +15,7 @@ const config = {
   vite6BuilderApp: true,
   // @ts-ignore
   stream: {
-    enable: true,
+    enable: null,
     type: 'web'
   },
   meta: {
