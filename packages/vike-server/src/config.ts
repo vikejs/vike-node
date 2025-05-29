@@ -25,7 +25,7 @@ const config = {
       cumulative: true,
       global: true
     },
-    // +stream is already defined by vike-{react,vue,solid} but we define it again here to avoid Vike throwing the "unkown config" error if the user doesn't use vike-{react,vue,solid}
+    // +stream is already defined by vike-{react,vue,solid} but we define it again here to avoid Vike throwing the "unknown config" error if the user doesn't use vike-{react,vue,solid}
     stream: {
       env: { server: true },
       cumulative: true
