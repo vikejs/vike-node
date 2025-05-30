@@ -7,9 +7,12 @@
 * set +stream as config defined by peer dependency ([6ca1f64](https://github.com/vikejs/vike-server/commit/6ca1f64ff365b074b2e7902b4c40635d53597dd8))
 
 
-### BREAKING CHANGES
+### MINOR BREAKING CHANGES
 
 * Update `vike` to `0.4.231` or above.
+
+> [!NOTE]
+> We recommend always updating `vike` and `vike-*` extensions together.
 
 
 
