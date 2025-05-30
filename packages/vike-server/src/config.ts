@@ -7,7 +7,7 @@ export { config as default }
 const config = {
   name: 'vike-server',
   require: {
-    vike: '>=0.4.228',
+    vike: '>=0.4.231',
     ['vike-react']: {
       version: '>=0.6.4',
       optional: true

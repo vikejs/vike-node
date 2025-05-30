@@ -232,7 +232,7 @@
     "esbuild": "^0.25.2"
   },
   "peerDependencies": {
-    "vike": ">=0.4.228",
+    "vike": ">=0.4.231",
     "vite": ">=6"
   },
   "peerDependenciesMeta": {
