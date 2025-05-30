@@ -1,3 +1,18 @@
+## [1.0.18](https://github.com/vikejs/vike-server/compare/v1.0.17...v1.0.18) (2025-05-30)
+
+
+### Bug Fixes
+
+* add vike-{react,vue,solid} optional peer deps ([#122](https://github.com/vikejs/vike-server/issues/122)) ([b44a784](https://github.com/vikejs/vike-server/commit/b44a7846a4297a903f23d45ea213e5bfca1db0b2))
+* set +stream as config defined by peer dependency ([6ca1f64](https://github.com/vikejs/vike-server/commit/6ca1f64ff365b074b2e7902b4c40635d53597dd8))
+
+
+### BREAKING CHANGES
+
+* Update `vike` to `0.4.231` or above.
+
+
+
 ## [1.0.17](https://github.com/vikejs/vike-server/compare/v1.0.16...v1.0.17) (2025-05-29)
 
 
