@@ -1,3 +1,12 @@
+## [1.0.19](https://github.com/vikejs/vike-server/compare/v1.0.18...v1.0.19) (2025-06-10)
+
+
+### Bug Fixes
+
+* fix export conditions for bun and deno ([72b23bd](https://github.com/vikejs/vike-server/commit/72b23bd9a75163dc4d5ed7e6a15a7b75a0e2ce17))
+
+
+
 ## [1.0.18](https://github.com/vikejs/vike-server/compare/v1.0.17...v1.0.18) (2025-05-30)
 
 
