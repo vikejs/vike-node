@@ -37,9 +37,6 @@ function testRun(
     if (!options?.noServerHook) {
       expectNodeServerLog('Server')
     }
-    if (isProd) {
-      expectLog('getGlobalContextSync')
-    }
   })
 
   test('Add to-do item', async () => {

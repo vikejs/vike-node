@@ -130,7 +130,7 @@
     "esbuild": "^0.25.2"
   },
   "peerDependencies": {
-    "vike": "^0.4.228",
+    "vike": "0.4.235-commit-16164c3",
     "vite": ">=6"
   },
   "peerDependenciesMeta": {
@@ -154,7 +154,7 @@
     "rollup": "4.38.0",
     "tsup": "^8.4.0",
     "typescript": "^5.8.3",
-    "vike": "^0.4.228",
+    "vike": "0.4.235-commit-16164c3",
     "vite": "^6.3.5"
   },
   "files": [
