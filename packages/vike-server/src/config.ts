@@ -1,6 +1,7 @@
+import type { Photon } from '@photonjs/core'
 import { photon } from '@photonjs/core/vite'
-import type { Config } from 'vike/types'
 import type { BuildOptions } from 'esbuild'
+import type { Config } from 'vike/types'
 import { vikeServer } from './plugin/index.js'
 
 export { config as default }
