@@ -3,13 +3,14 @@ import { fileURLToPath } from 'node:url'
 import type { Get, UniversalMiddleware } from '@universal-middleware/core'
 import { cloneRequest, enhance, url as getUrl } from '@universal-middleware/core'
 import { getGlobalContext } from 'vike/server'
+import type { GlobalContextServer } from 'vike/types'
 import { isVercel } from '../../utils/isVercel.js'
 import type { VikeOptions } from '../types.js'
 
 async function removeBaseUrl(req: Request) {
   if (!req.url) return req
-  const globalContext = await getGlobalContext()
-  const baseAssets = globalContext.baseAssets as string
+  const globalContext = (await getGlobalContext()) as GlobalContextServer
+  const baseAssets = globalContext.baseAssets
   // Don't choke on older Vike versions
   if (baseAssets === undefined) return req
   const url = getUrl(req)

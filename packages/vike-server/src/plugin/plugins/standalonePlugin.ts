@@ -4,6 +4,7 @@ import { getVikeConfig } from 'vike/plugin'
 import type { Plugin, ResolvedConfig, Rollup } from 'vite'
 import { assert } from '../../utils/assert.js'
 import { toPosixPath } from '../utils/filesystemPathHandling.js'
+import type { Photon } from '@photonjs/core'
 
 const OPTIONAL_NPM_IMPORTS = [
   '@nestjs/microservices',
