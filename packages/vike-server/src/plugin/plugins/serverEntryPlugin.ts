@@ -1,8 +1,8 @@
-import MagicString from 'magic-string'
 import { serverEntryVirtualId, type VitePluginServerEntryOptions } from '@brillout/vite-plugin-server-entry/plugin'
+import { isPhotonMeta } from '@photonjs/core/api'
+import MagicString from 'magic-string'
 import type { Plugin } from 'vite'
 import { assertUsage } from '../../utils/assert.js'
-import { isPhotonMeta } from '@photonjs/core/api'
 
 declare module 'vite' {
   interface UserConfig {
@@ -26,20 +26,25 @@ export function serverEntryPlugin(): Plugin[] {
         assertUsage(serverEntryInjected, 'Failed to inject virtual server entry.')
       },
 
-      transform(code, id) {
-        if (isPhotonMeta(this.getModuleInfo(id)?.meta)) {
-          const ms = new MagicString(code)
-          ms.prepend(`import "${serverEntryVirtualId}";\n`)
-          serverEntryInjected = true
-          return {
-            code: ms.toString(),
-            map: ms.generateMap({
-              hires: true,
-              source: id
-            })
+      transform: {
+        order: 'post',
+        handler(code, id) {
+          const meta = this.getModuleInfo(id)?.meta
+          if (isPhotonMeta(meta) || meta?.photonConfig?.isTargetEntry) {
+            const ms = new MagicString(code)
+            ms.prepend(`import "${serverEntryVirtualId}";\n`)
+            serverEntryInjected = true
+            return {
+              code: ms.toString(),
+              map: ms.generateMap({
+                hires: true,
+                source: id
+              })
+            }
           }
         }
       },
+
       sharedDuringBuild: true
     },
     {
@@ -56,6 +61,7 @@ export function serverEntryPlugin(): Plugin[] {
           }
         }
       },
+
       sharedDuringBuild: true
     }
   ]
